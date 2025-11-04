@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h2>Lorem Ipsum</h2>
+                <nav class="sidebar-nav">
+                    <ol>
+                        <li><a href="#">Aenean Facili</a></li>
+                        <li><a href="#">Mauris Lan</a></li>
+                        <li><a href="#">Quisque Vita Est</a></li>
+                        <li><a href="#">Sed Eget Metus</a></li>
+                        <li><a href="#">Vestibulum Ante</a></li>
+                        <li><a href="#">Primis In Faucibus</a></li>
+                        <li><a href="#">Orci Luctus</a></li>
+                        <li><a href="#">Ultrices Posuere</a></li>
+                        <li><a href="#">Cubilia Curae</a></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <h2>Information</h2>
+                <ul class="sidebar-info">
+                    <li><a href="mailto:your@email.com">Email</a></li>
+                    <li><a href="https://instagram.com/yourusername" target="_blank">Instagram</a></li>
+                </ul>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header>
+                <h1>Donec faucibus, neque est.</h1>
+            </header>
+            
+            <div id="posts-grid" class="posts-grid">
+                <!-- Posts will be dynamically loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modal" class="modal">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close" aria-label="Close modal">&times;</button>
+            <div id="modal-body" class="modal-body">
+                <!-- Post content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
