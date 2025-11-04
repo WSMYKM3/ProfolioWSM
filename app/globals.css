@@ -86,7 +86,7 @@ body {
     flex: 1;
     padding: 40px 60px 40px 80px; /* 增加左右内边距：左80px留白，右60px留白 */
     max-width: calc(100% - 200px - 60px); /* 调整最大宽度：减去侧边栏宽度和左边距 */
-    margin-left: 40px; /* 在侧边栏和内容之间增加留白 */
+    margin-left: 80px; /* 在侧边栏和内容之间增加更多留白 - 从40px增加到80px */
 }
 
 header {
@@ -124,7 +124,7 @@ header h1 {
 /* 在这里修改post card的尺寸 */
 /* 高质量内容 - 大尺寸 (像小红书的高质量帖子) */
 .post-card-high img {
-    min-height: 400px; /* 高质量图片最小高度 - 在这里修改大尺寸的高度 */
+    min-height: 500px; /* 高质量图片最小高度 - 增加到500px让卡片更长 */
 }
 
 .post-card-high .post-card-content {
@@ -134,7 +134,7 @@ header h1 {
 
 /* 中等质量内容 - 中等尺寸 */
 .post-card-medium img {
-    min-height: 300px; /* 中等质量图片最小高度 - 在这里修改中等尺寸的高度 */
+    min-height: 400px; /* 中等质量图片最小高度 - 增加到400px让卡片更长 */
 }
 
 .post-card-medium .post-card-content {
@@ -144,7 +144,7 @@ header h1 {
 
 /* 低质量内容 - 小尺寸 */
 .post-card-low img {
-    min-height: 250px; /* 低质量图片最小高度 - 在这里修改小尺寸的高度 */
+    min-height: 320px; /* 低质量图片最小高度 - 增加到320px让卡片更长 */
 }
 
 .post-card-low .post-card-content {
