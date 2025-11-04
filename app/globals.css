@@ -121,35 +121,41 @@ header h1 {
 }
 
 /* ========== Post Card尺寸控制 - 根据内容质量设置不同尺寸 ========== */
-/* 在这里修改post card的尺寸 */
+/* 在这里修改post card的尺寸 - 让post card高度大于宽度（竖长卡片） */
 /* 高质量内容 - 大尺寸 (像小红书的高质量帖子) */
 .post-card-high img {
-    min-height: 500px; /* 高质量图片最小高度 - 增加到500px让卡片更长 */
+    aspect-ratio: 2 / 3; /* 设置宽高比为2:3，确保高度>宽度（竖长） */
+    min-height: 450px; /* 最小高度，确保卡片足够高 */
+    object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
 .post-card-high .post-card-content {
-    padding: 20px; /* 增加内边距 - 在这里修改大尺寸的内边距 */
-    min-height: 80px; /* 内容区域最小高度 */
+    padding: 16px; /* 内容区域保持原样 */
+    min-height: 60px; /* 内容区域保持原样 */
 }
 
 /* 中等质量内容 - 中等尺寸 */
 .post-card-medium img {
-    min-height: 400px; /* 中等质量图片最小高度 - 增加到400px让卡片更长 */
+    aspect-ratio: 3 / 4; /* 设置宽高比为3:4，确保高度>宽度（竖长） */
+    min-height: 400px; /* 最小高度，确保卡片足够高 */
+    object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
 .post-card-medium .post-card-content {
-    padding: 16px; /* 标准内边距 - 在这里修改中等尺寸的内边距 */
-    min-height: 60px; /* 内容区域最小高度 */
+    padding: 16px; /* 内容区域保持原样 */
+    min-height: 60px; /* 内容区域保持原样 */
 }
 
 /* 低质量内容 - 小尺寸 */
 .post-card-low img {
-    min-height: 320px; /* 低质量图片最小高度 - 增加到320px让卡片更长 */
+    aspect-ratio: 4 / 5; /* 设置宽高比为4:5，确保高度>宽度（竖长） */
+    min-height: 350px; /* 最小高度，确保卡片足够高 */
+    object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
 .post-card-low .post-card-content {
-    padding: 12px; /* 减少内边距 - 在这里修改小尺寸的内边距 */
-    min-height: 50px; /* 内容区域最小高度 */
+    padding: 16px; /* 内容区域保持原样 */
+    min-height: 60px; /* 内容区域保持原样 */
 }
 
 /* 如果想要更明显的尺寸差异，可以调整column-width (但CSS columns不支持不同宽度的item) */
@@ -165,7 +171,7 @@ header h1 {
     width: 100%;
     height: auto;
     display: block;
-    object-fit: cover;
+    object-fit: cover; /* 保持图片比例，填充容器 */
     background-color: #e0e0e0;
     min-height: 200px; /* 默认最小高度，会被quality类覆盖 */
 }
