@@ -124,8 +124,8 @@ header h1 {
 /* 在这里修改post card的尺寸 - 让post card高度大于宽度（竖长卡片） */
 /* 高质量内容 - 大尺寸 (像小红书的高质量帖子) */
 .post-card-high img {
-    aspect-ratio: 2 / 3; /* 设置宽高比为2:3，确保高度>宽度（竖长） */
     height: 280px; /* 固定高度，让卡片更小 - 高质量卡片较大 */
+    width: 100%; /* 确保宽度填满容器 */
     object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
@@ -136,8 +136,8 @@ header h1 {
 
 /* 中等质量内容 - 中等尺寸 */
 .post-card-medium img {
-    aspect-ratio: 3 / 4; /* 设置宽高比为3:4，确保高度>宽度（竖长） */
     height: 240px; /* 固定高度，让卡片更小 - 中等质量卡片中等大小 */
+    width: 100%; /* 确保宽度填满容器 */
     object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
@@ -148,8 +148,8 @@ header h1 {
 
 /* 低质量内容 - 小尺寸 */
 .post-card-low img {
-    aspect-ratio: 4 / 5; /* 设置宽高比为4:5，确保高度>宽度（竖长） */
     height: 200px; /* 固定高度，让卡片更小 - 低质量卡片最小 */
+    width: 100%; /* 确保宽度填满容器 */
     object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
@@ -169,7 +169,6 @@ header h1 {
 
 .post-card img {
     width: 100%;
-    height: auto; /* 会被quality类的固定height覆盖 */
     display: block;
     object-fit: cover; /* 保持图片比例，填充容器 */
     background-color: #e0e0e0;
