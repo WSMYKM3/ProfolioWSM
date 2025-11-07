@@ -102,8 +102,8 @@ header h1 {
 /* Masonry Grid Layout */
 .posts-grid {
     position: relative;
-    column-count: 3;
-    column-gap: 20px;
+    column-count: 3; /* 3列Masonry布局 */
+    column-gap: 20px; /* 列间距 */
     width: 100%;
 }
 
@@ -113,8 +113,8 @@ header h1 {
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    break-inside: avoid;
-    margin-bottom: 20px;
+    break-inside: avoid; /* 防止卡片被分割到两列 */
+    margin-bottom: 20px; /* 行间距 */
     display: inline-block;
     width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -125,37 +125,37 @@ header h1 {
 /* 高质量内容 - 大尺寸 (像小红书的高质量帖子) */
 .post-card-high img {
     aspect-ratio: 2 / 3; /* 设置宽高比为2:3，确保高度>宽度（竖长） */
-    min-height: 450px; /* 最小高度，确保卡片足够高 */
+    height: 280px; /* 固定高度，让卡片更小 - 高质量卡片较大 */
     object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
 .post-card-high .post-card-content {
-    padding: 16px; /* 内容区域保持原样 */
-    min-height: 60px; /* 内容区域保持原样 */
+    padding: 12px; /* 减小内边距 */
+    min-height: 50px; /* 减小内容区域高度 */
 }
 
 /* 中等质量内容 - 中等尺寸 */
 .post-card-medium img {
     aspect-ratio: 3 / 4; /* 设置宽高比为3:4，确保高度>宽度（竖长） */
-    min-height: 400px; /* 最小高度，确保卡片足够高 */
+    height: 240px; /* 固定高度，让卡片更小 - 中等质量卡片中等大小 */
     object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
 .post-card-medium .post-card-content {
-    padding: 16px; /* 内容区域保持原样 */
-    min-height: 60px; /* 内容区域保持原样 */
+    padding: 12px; /* 减小内边距 */
+    min-height: 50px; /* 减小内容区域高度 */
 }
 
 /* 低质量内容 - 小尺寸 */
 .post-card-low img {
     aspect-ratio: 4 / 5; /* 设置宽高比为4:5，确保高度>宽度（竖长） */
-    min-height: 350px; /* 最小高度，确保卡片足够高 */
+    height: 200px; /* 固定高度，让卡片更小 - 低质量卡片最小 */
     object-fit: cover; /* 保持图片比例，裁剪多余部分 */
 }
 
 .post-card-low .post-card-content {
-    padding: 16px; /* 内容区域保持原样 */
-    min-height: 60px; /* 内容区域保持原样 */
+    padding: 12px; /* 减小内边距 */
+    min-height: 50px; /* 减小内容区域高度 */
 }
 
 /* 如果想要更明显的尺寸差异，可以调整column-width (但CSS columns不支持不同宽度的item) */
@@ -169,11 +169,10 @@ header h1 {
 
 .post-card img {
     width: 100%;
-    height: auto;
+    height: auto; /* 会被quality类的固定height覆盖 */
     display: block;
     object-fit: cover; /* 保持图片比例，填充容器 */
     background-color: #e0e0e0;
-    min-height: 200px; /* 默认最小高度，会被quality类覆盖 */
 }
 
 .post-card img[src=""],

@@ -25,7 +25,7 @@ export default function Home() {
       <Sidebar />
       <main className="main-content">
         <header>
-          <h1>Donec faucibus, neque est.</h1>
+          <h1>Siming Wang - Creative Technologist</h1>
         </header>
         <PostGrid posts={posts} onPostClick={handlePostClick} />
       </main>

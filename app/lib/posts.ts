@@ -9,6 +9,7 @@ export interface Post {
 }
 
 export const posts: Post[] = [
+  // 第一行（从左到右）
   {
     id: "post-1",
     title: "Sample Project 1",
@@ -16,10 +17,29 @@ export const posts: Post[] = [
     file: "post-1",
     date: "2024-01-15",
     tags: ["design", "web"],
-    quality: "high" // 高质量内容，显示为大尺寸
+    quality: "medium" // 高质量内容，显示为大尺寸
   },
   {
     id: "post-2",
+    title: "Mixed Media Project",
+    thumbnail: "https://via.placeholder.com/400x700/cccccc/666666?text=Mixed+Media",
+    file: "post-3",
+    date: "2024-02-01",
+    tags: ["design", "video", "photography"],
+    quality: "low" // 高质量内容，显示为大尺寸
+  },
+  {
+    id: "post-3",
+    title: "Tall Project",
+    thumbnail: "https://via.placeholder.com/400x800/cccccc/666666?text=Tall+Project",
+    file: "post-1",
+    date: "2024-02-15",
+    tags: ["design"],
+    quality: "high" // 高质量内容，显示为大尺寸
+  },
+  // 第二行（从左到右）
+  {
+    id: "post-4",
     title: "Video Showcase",
     thumbnail: "https://via.placeholder.com/400x450/cccccc/666666?text=Video+Project",
     file: "post-2",
@@ -28,31 +48,13 @@ export const posts: Post[] = [
     quality: "medium" // 中等质量，显示为中等尺寸
   },
   {
-    id: "post-3",
-    title: "Mixed Media Project",
-    thumbnail: "https://via.placeholder.com/400x700/cccccc/666666?text=Mixed+Media",
-    file: "post-3",
-    date: "2024-02-01",
-    tags: ["design", "video", "photography"],
-    quality: "high" // 高质量内容，显示为大尺寸
-  },
-  {
-    id: "post-4",
+    id: "post-5",
     title: "Text-Based Project",
     thumbnail: "https://via.placeholder.com/400x400/cccccc/666666?text=Text+Project",
     file: "post-4",
     date: "2024-02-10",
     tags: ["writing", "content"],
     quality: "low" // 低质量内容，显示为小尺寸
-  },
-  {
-    id: "post-5",
-    title: "Tall Project",
-    thumbnail: "https://via.placeholder.com/400x800/cccccc/666666?text=Tall+Project",
-    file: "post-1",
-    date: "2024-02-15",
-    tags: ["design"],
-    quality: "high" // 高质量内容，显示为大尺寸
   },
   {
     id: "post-6",
