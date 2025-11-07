@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
 
 interface PostCardProps {
@@ -27,9 +28,13 @@ export default function PostCard({ post, onClick }: PostCardProps) {
 
   return (
     <div className={`post-card post-card-${qualityClass}`} onClick={onClick}>
-      <img 
+      <Image 
         src={post.thumbnail} 
         alt={post.title}
+        width={400}
+        height={600}
+        className="post-card-image"
+        style={{ width: '100%' }}
         loading="lazy"
       />
       <div className="post-card-content">
