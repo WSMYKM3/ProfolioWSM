@@ -16,6 +16,17 @@ function formatDate(dateString: string): string {
   return `${month}/${day}/${year}`;
 }
 
+// Helper function to add basePath for GitHub Pages
+function getImageSrc(src: string): string {
+  // If it's already a full URL (http/https), return as is
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  // Add basePath for local images (GitHub Pages subdirectory)
+  const basePath = '/ProfolioWSM';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+}
+
 export default function PostCard({ post, onClick }: PostCardProps) {
   const formattedDate = formatDate(post.date);
   
@@ -26,10 +37,12 @@ export default function PostCard({ post, onClick }: PostCardProps) {
   const qualityClass = post.quality || 'medium'; // 默认中等尺寸
   // ===========================================
 
+  const imageSrc = getImageSrc(post.thumbnail);
+
   return (
     <div className={`post-card post-card-${qualityClass}`} onClick={onClick}>
       <Image 
-        src={post.thumbnail} 
+        src={imageSrc} 
         alt={post.title}
         width={400}
         height={600}
