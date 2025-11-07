@@ -121,19 +121,36 @@ This creates classes like:
 
 **Note**: Due to masonry layout, the visual order may vary based on card heights, but the array order is as listed above.
 
-## Image Placeholder System
+## Image System
 
-### Placeholder URLs: `app/lib/posts.ts`
+### Image Paths: `app/lib/posts.ts`
 
-Placeholder images use `via.placeholder.com`:
+Images can be:
+- **External URLs** (placeholder services): `"https://via.placeholder.com/400x600/..."`
+- **Local images** (from `public/` folder): `"/linkedinthumbnail.png"`
+
+### Image Component: `app/components/PostCard.tsx`
+
+**Lines 19-28**: Helper function `getImageSrc()` handles GitHub Pages basePath:
 ```typescript
-thumbnail: "https://via.placeholder.com/400x600/cccccc/666666?text=Project+1"
+function getImageSrc(src: string): string {
+  // If it's already a full URL (http/https), return as is
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  // Add basePath for local images (GitHub Pages subdirectory)
+  const basePath = '/ProfolioWSM';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+}
 ```
 
-### Image Display: `app/globals.css` Lines 170-175
+**Important**: This function automatically adds `/ProfolioWSM` prefix to local images for GitHub Pages deployment, while leaving external URLs unchanged.
+
+### Image Display: `app/globals.css` Lines 170-176
 
 ```css
-.post-card img {
+.post-card img,
+.post-card-image {
     width: 100%;
     display: block;
     object-fit: cover; /* Maintains aspect ratio, crops if needed */
@@ -145,6 +162,7 @@ thumbnail: "https://via.placeholder.com/400x600/cccccc/666666?text=Project+1"
 - Do NOT use `aspect-ratio` together with fixed `height` - it causes conflicts
 - Use `height` + `width: 100%` + `object-fit: cover` for proper image display
 - The `height` is set in quality-specific classes (lines 127, 139, 151)
+- Next.js Image component is used (imported in `PostCard.tsx`) for better optimization
 
 ## Sidebar Configuration
 
@@ -206,8 +224,41 @@ app/
 3. **Layout**: Masonry layout (CSS columns) may reorder cards based on heights
 4. **Post Order**: Defined in `app/lib/posts.ts` array order
 5. **Size Modification**: Edit `height` values in `app/globals.css` lines 127, 139, 151
+6. **GitHub Pages Images**: Local images automatically get basePath prefix via `getImageSrc()` function in `PostCard.tsx` (line 19-28). External URLs are left unchanged.
+7. **BasePath**: Must match repository name in `next.config.js`. If repo is `username.github.io`, remove basePath.
+
+## GitHub Pages Configuration
+
+### BasePath Setup: `next.config.js`
+
+```javascript
+const nextConfig = {
+  reactStrictMode: true,
+  output: 'export',
+  basePath: '/ProfolioWSM', // Required for GitHub Pages when repo name is not username.github.io
+  images: {
+    unoptimized: true,
+  },
+}
+```
+
+**Important**: The `basePath` must match your repository name. If your repo is `username.github.io`, remove the `basePath` line.
+
+### Image Path Handling for GitHub Pages
+
+When using GitHub Pages with a subdirectory (repo name ≠ `username.github.io`):
+- Local images need the `basePath` prefix
+- The `getImageSrc()` helper function in `PostCard.tsx` handles this automatically
+- External URLs (like placeholders) are left unchanged
 
 ## Common Issues and Solutions
+
+### Issue: Images not showing on GitHub Pages (but work locally)
+**Solution**: 
+1. Ensure `basePath` is set correctly in `next.config.js` (must match repository name)
+2. The `getImageSrc()` function in `PostCard.tsx` should handle local images automatically
+3. Check that image files are committed and pushed to GitHub
+4. Verify the image exists in `public/` folder and is copied to `out/` after build
 
 ### Issue: Placeholder images not showing
 **Solution**: Remove `aspect-ratio` if using fixed `height`. Use only `height` + `width: 100%` + `object-fit: cover`
