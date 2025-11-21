@@ -250,6 +250,18 @@ This ensures:
 ### Issue: Images work locally but not on GitHub Pages
 **Solution**: Verify that `getImageSrc()` in `PostCard.tsx` adds basePath when `process.env.NODE_ENV === 'production'`. With static export, basePath must be manually added for production builds.
 
+### Issue: "Cannot find module './819.js'" or similar webpack chunk errors
+**Solution**: This is usually caused by a corrupted Next.js build cache. Fix by:
+1. Stop the dev server (Ctrl+C)
+2. Delete the `.next` directory: `Remove-Item -Recurse -Force .next` (PowerShell) or `rm -rf .next` (Bash)
+3. Restart the dev server: `npm run dev`
+4. If the issue persists, do a clean reinstall:
+   ```bash
+   rm -rf node_modules .next
+   npm install
+   npm run dev
+   ```
+
 ### Issue: Placeholder images not showing
 **Solution**: Remove `aspect-ratio` if using fixed `height`. Use only `height` + `width: 100%` + `object-fit: cover`
 

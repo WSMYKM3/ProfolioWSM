@@ -4,25 +4,33 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+    overflow: hidden; /* 禁止页面滚动 */
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background-color: #ffffff;
-    color: #333333;
+    background-color: #2a2d35; /* 深色莫兰迪色 - 深灰蓝 */
+    color: #e8e8e8; /* 浅色文字 */
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
 /* Layout Structure */
 .layout {
     display: flex;
-    min-height: 100vh;
+    height: 100vh; /* 固定高度，防止滚动 */
+    overflow: hidden; /* 禁止滚动 */
 }
 
 /* Sidebar */
 .sidebar {
     width: 200px; /* 缩小侧边栏宽度，让它更靠左 */
     padding: 40px 16px; /* 减少内边距 */
-    background-color: #ffffff;
-    border-right: 1px solid #e0e0e0;
+    background-color: #2a2d35; /* 深色莫兰迪色 */
+    border-right: 1px solid #3a3d45;
     position: sticky;
     top: 0;
     height: 100vh;
@@ -37,7 +45,7 @@ body {
 .sidebar-section h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
     margin-bottom: 16px;
 }
 
@@ -51,14 +59,14 @@ body {
 }
 
 .sidebar-nav a {
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.2s ease;
 }
 
 .sidebar-nav a:hover {
-    color: #666666;
+    color: #b0b0b0; /* 稍浅的灰色 */
 }
 
 .sidebar-info {
@@ -71,99 +79,146 @@ body {
 }
 
 .sidebar-info a {
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.2s ease;
 }
 
 .sidebar-info a:hover {
-    color: #666666;
+    color: #b0b0b0; /* 稍浅的灰色 */
 }
 
 /* Main Content */
 .main-content {
     flex: 1;
-    padding: 40px 60px 40px 80px; /* 增加左右内边距：左80px留白，右60px留白 */
+    padding: 0; /* 移除padding，让PostGrid自己控制 */
     max-width: calc(100% - 200px - 60px); /* 调整最大宽度：减去侧边栏宽度和左边距 */
     margin-left: 80px; /* 在侧边栏和内容之间增加更多留白 - 从40px增加到80px */
+    overflow: hidden; /* 禁止滚动 */
+    height: 100vh; /* 固定高度 */
+    position: relative;
 }
 
 header {
-    margin-bottom: 40px;
+    display: none; /* 隐藏header，因为PostGrid现在是全屏显示 */
 }
 
 header h1 {
     font-size: 2rem;
     font-weight: 400;
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
 }
 
-/* Masonry Grid Layout */
-.posts-grid {
-    position: relative;
-    column-count: 3; /* 3列Masonry布局 */
-    column-gap: 20px; /* 列间距 */
+/* Slot Machine Grid Layout - 老虎机风格布局 */
+.slot-machine-container {
+    position: absolute; /* 相对于main-content定位 */
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%; /* 相对于父容器高度 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    overflow: hidden;
+    padding: 60px 20px;
+}
+
+.slot-machine-grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    position: relative;
 }
 
 .post-card {
-    background-color: #f5f5f5;
-    border-radius: 8px;
+    background-color: #3a3d45; /* 深色莫兰迪色卡片背景 */
+    border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    break-inside: avoid; /* 防止卡片被分割到两列 */
-    margin-bottom: 20px; /* 行间距 */
-    display: inline-block;
+    display: block;
     width: 100%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    max-width: 450px; /* 增大卡片宽度 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
-/* ========== Post Card尺寸控制 - 根据内容质量设置不同尺寸 ========== */
-/* 在这里修改post card的尺寸 - 让post card高度大于宽度（竖长卡片） */
-/* 高质量内容 - 大尺寸 (像小红书的高质量帖子) */
-.post-card-high img,
-.post-card-high .post-card-image {
-    height: 280px; /* 固定高度，让卡片更小 - 高质量卡片较大 */
-    width: 100%; /* 确保宽度填满容器 */
-    object-fit: cover; /* 保持图片比例，裁剪多余部分 */
+/* 统一所有postcard大小 - 使用大尺寸 */
+.post-card img,
+.post-card .post-card-image {
+    height: 450px; /* 统一高度，增大尺寸 */
+    width: 100%;
+    object-fit: cover;
 }
 
-.post-card-high .post-card-content {
-    padding: 12px; /* 减小内边距 */
-    min-height: 50px; /* 减小内容区域高度 */
+.post-card .post-card-content {
+    padding: 16px;
+    min-height: 60px;
+    background-color: #3a3d45;
 }
 
-/* 中等质量内容 - 中等尺寸 */
-.post-card-medium img,
-.post-card-medium .post-card-image {
-    height: 240px; /* 固定高度，让卡片更小 - 中等质量卡片中等大小 */
-    width: 100%; /* 确保宽度填满容器 */
-    object-fit: cover; /* 保持图片比例，裁剪多余部分 */
+.post-card .post-card-title {
+    color: #e8e8e8; /* 浅色文字 */
 }
 
-.post-card-medium .post-card-content {
-    padding: 12px; /* 减小内边距 */
-    min-height: 50px; /* 减小内容区域高度 */
+.post-card .post-card-meta {
+    color: #b0b0b0; /* 稍浅的灰色 */
 }
 
-/* 低质量内容 - 小尺寸 */
-.post-card-low img,
-.post-card-low .post-card-image {
-    height: 200px; /* 固定高度，让卡片更小 - 低质量卡片最小 */
-    width: 100%; /* 确保宽度填满容器 */
-    object-fit: cover; /* 保持图片比例，裁剪多余部分 */
+.post-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-.post-card-low .post-card-content {
-    padding: 12px; /* 减小内边距 */
-    min-height: 50px; /* 减小内容区域高度 */
+/* 响应式设计 - 移动端适配 */
+@media (max-width: 768px) {
+    .slot-machine-grid {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px 10px;
+    }
+    
+    .slot-machine-grid > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .post-card {
+        max-width: 100%;
+    }
+    
+    .main-content {
+        padding: 20px 15px;
+        margin-left: 0;
+        max-width: 100%;
+    }
+    
+    .sidebar {
+        display: none; /* 移动端隐藏侧边栏 */
+    }
 }
 
-/* 如果想要更明显的尺寸差异，可以调整column-width (但CSS columns不支持不同宽度的item) */
-/* 或者使用grid布局配合grid-row-end来实现不同高度的卡片 */
-/* ================================================================ */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .slot-machine-grid {
+        max-width: 900px;
+        gap: 12px;
+    }
+    
+    .post-card {
+        max-width: 400px;
+    }
+}
+
+/* 所有postcard统一大小，已在上面的.post-card样式中定义 */
 
 .post-card:hover {
     transform: translateY(-4px);
@@ -192,13 +247,13 @@ header h1 {
 .post-card-title {
     font-size: 1rem;
     font-weight: 500;
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
     margin-bottom: 8px;
 }
 
 .post-card-meta {
     font-size: 0.875rem;
-    color: #666666;
+    color: #b0b0b0; /* 稍浅的灰色 */
 }
 
 /* Modal Styles */
@@ -236,7 +291,7 @@ header h1 {
     position: relative;
     max-width: 90%;
     max-height: 90vh;
-    background-color: #ffffff;
+    background-color: #3a3d45; /* 深色莫兰迪色 */
     border-radius: 12px;
     overflow: hidden;
     z-index: 1001;
@@ -260,7 +315,7 @@ header h1 {
     position: absolute;
     top: 16px;
     right: 16px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(58, 61, 69, 0.9); /* 深色背景 */
     border: none;
     width: 40px;
     height: 40px;
@@ -272,7 +327,7 @@ header h1 {
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s ease;
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
 }
 
 .modal-close:hover {
@@ -307,18 +362,18 @@ header h1 {
 .modal-body .text-content h2 {
     font-size: 1.5rem;
     margin-bottom: 12px;
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
 }
 
 .modal-body .text-content h3 {
     font-size: 1.25rem;
     margin-bottom: 10px;
-    color: #333333;
+    color: #e8e8e8; /* 浅色文字 */
 }
 
 .modal-body .text-content p {
     margin-bottom: 16px;
-    color: #555555;
+    color: #d0d0d0; /* 稍浅的灰色 */
     line-height: 1.8;
 }
 
@@ -326,7 +381,7 @@ header h1 {
 .modal-body .text-content ol {
     margin-bottom: 16px;
     padding-left: 24px;
-    color: #555555;
+    color: #d0d0d0; /* 稍浅的灰色 */
 }
 
 .modal-body .text-content li {
@@ -412,6 +467,6 @@ header h1 {
 .loading {
     text-align: center;
     padding: 40px;
-    color: #666666;
+    color: #b0b0b0; /* 稍浅的灰色 */
 }
 

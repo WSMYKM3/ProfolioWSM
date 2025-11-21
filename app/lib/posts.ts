@@ -26,7 +26,7 @@ export const posts: Post[] = [
     file: "post-3",
     date: "2024-02-01",
     tags: ["design", "video", "photography"],
-    quality: "low" // 高质量内容，显示为大尺寸
+    quality: "low" // 
   },
   {
     id: "post-3",

@@ -137,6 +137,13 @@ npm run build
 
 ## Troubleshooting
 
+### Build Errors
+
+**"Cannot find module './819.js'" or similar webpack chunk errors:**
+- This is usually caused by a corrupted Next.js build cache
+- Solution: Delete `.next` directory and restart dev server
+- If persists: Delete `node_modules` and `.next`, then run `npm install` and `npm run build`
+
 ### Site shows 404 or blank page
 - Check that `basePath` in `next.config.js` matches your repository name
 - Ensure GitHub Pages is enabled and using the correct source
