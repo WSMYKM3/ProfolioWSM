@@ -211,12 +211,12 @@ app/
 
 ### Image Path Handling: `app/components/PostCard.tsx`
 
-**Important**: Next.js Image component automatically handles `basePath` from `next.config.js`. 
+**Important**: With static export (`output: 'export'`), Next.js Image component does NOT automatically handle `basePath`. We need to manually add basePath in production builds.
 
-The `getImageSrc()` function in `PostCard.tsx` should:
-- Return external URLs (http/https) as-is
-- Return local image paths as-is (e.g., `/linkedinthumbnail.png`)
-- **Do NOT manually add basePath** - Next.js handles it automatically
+The `getImageSrc()` function in `PostCard.tsx`:
+- Returns external URLs (http/https) as-is
+- Adds basePath conditionally for production builds
+- Keeps paths unchanged in development (no basePath)
 
 ```typescript
 function getImageSrc(src: string): string {
@@ -224,8 +224,10 @@ function getImageSrc(src: string): string {
   if (src.startsWith('http://') || src.startsWith('https://')) {
     return src;
   }
-  // Local images: return as-is - Next.js handles basePath automatically
-  return src;
+  // Add basePath only in production builds (for GitHub Pages)
+  // In development, basePath is empty so images work at localhost:3000
+  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 ```
 
@@ -243,7 +245,10 @@ This ensures:
 ## Common Issues and Solutions
 
 ### Issue: Images showing 404 with basePath prefix in development
-**Solution**: Ensure `next.config.js` has conditional basePath (empty in dev). Do NOT manually add basePath to image paths - Next.js Image component handles it automatically.
+**Solution**: Ensure `next.config.js` has conditional basePath (empty in dev). The `getImageSrc()` function conditionally adds basePath only in production, so images work correctly in both environments.
+
+### Issue: Images work locally but not on GitHub Pages
+**Solution**: Verify that `getImageSrc()` in `PostCard.tsx` adds basePath when `process.env.NODE_ENV === 'production'`. With static export, basePath must be manually added for production builds.
 
 ### Issue: Placeholder images not showing
 **Solution**: Remove `aspect-ratio` if using fixed `height`. Use only `height` + `width: 100%` + `object-fit: cover`

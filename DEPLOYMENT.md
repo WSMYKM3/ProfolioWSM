@@ -146,8 +146,9 @@ npm run build
 - Make sure images are in the `public/` directory
 - Use relative paths: `/images/photo.jpg` not `./images/photo.jpg`
 - For external images, ensure they allow embedding
-- **Important**: Next.js Image component automatically handles `basePath` from `next.config.js`. Do NOT manually add basePath to image paths in your code - let Next.js handle it automatically
-- If you see 404 errors for images with basePath prefix in development, check that `next.config.js` has conditional basePath: `basePath: process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : ''`
+- **Important**: With static export, the `getImageSrc()` function in `PostCard.tsx` conditionally adds basePath for production builds. This ensures images work in both development (localhost) and production (GitHub Pages)
+- If images work locally but not on GitHub Pages, verify that `getImageSrc()` adds basePath when `process.env.NODE_ENV === 'production'`
+- Ensure `next.config.js` has conditional basePath: `basePath: process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : ''`
 
 ### Styles not working
 - Check browser console for errors
