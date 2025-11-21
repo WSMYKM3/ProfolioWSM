@@ -2,7 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
-  basePath: '/ProfolioWSM', // Required for GitHub Pages when repo name is not username.github.io
+  // Only use basePath in production builds (for GitHub Pages)
+  // In development, basePath is empty so routes work at localhost:3000/work
+  basePath: process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '',
   images: {
     unoptimized: true,
   },

@@ -207,7 +207,43 @@ app/
 4. **Post Order**: Defined in `app/lib/posts.ts` array order
 5. **Size Modification**: Edit `height` values in `app/globals.css` lines 127, 139, 151
 
+## BasePath and Image Handling
+
+### Image Path Handling: `app/components/PostCard.tsx`
+
+**Important**: Next.js Image component automatically handles `basePath` from `next.config.js`. 
+
+The `getImageSrc()` function in `PostCard.tsx` should:
+- Return external URLs (http/https) as-is
+- Return local image paths as-is (e.g., `/linkedinthumbnail.png`)
+- **Do NOT manually add basePath** - Next.js handles it automatically
+
+```typescript
+function getImageSrc(src: string): string {
+  // External URLs: return as-is
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  // Local images: return as-is - Next.js handles basePath automatically
+  return src;
+}
+```
+
+### BasePath Configuration: `next.config.js`
+
+For development and production compatibility:
+```javascript
+basePath: process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '',
+```
+
+This ensures:
+- **Development**: Routes work at `localhost:3000/work` (no basePath)
+- **Production**: Routes work at `yoursite.github.io/ProfolioWSM/work` (with basePath)
+
 ## Common Issues and Solutions
+
+### Issue: Images showing 404 with basePath prefix in development
+**Solution**: Ensure `next.config.js` has conditional basePath (empty in dev). Do NOT manually add basePath to image paths - Next.js Image component handles it automatically.
 
 ### Issue: Placeholder images not showing
 **Solution**: Remove `aspect-ratio` if using fixed `height`. Use only `height` + `width: 100%` + `object-fit: cover`

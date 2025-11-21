@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Sidebar() {
   return (
     <aside className="sidebar">
@@ -5,6 +7,7 @@ export default function Sidebar() {
         <h2>Lorem Ipsum</h2>
         <nav className="sidebar-nav">
           <ol>
+            <li><Link href="/work">Work</Link></li>
             <li><a href="#">Aenean Facili</a></li>
             <li><a href="#">Mauris Lan</a></li>
             <li><a href="#">Quisque Vita Est</a></li>

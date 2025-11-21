@@ -16,15 +16,15 @@ function formatDate(dateString: string): string {
   return `${month}/${day}/${year}`;
 }
 
-// Helper function to add basePath for GitHub Pages
+// Helper function - Next.js Image component handles basePath automatically
+// We just need to return the path as-is for local images
 function getImageSrc(src: string): string {
   // If it's already a full URL (http/https), return as is
   if (src.startsWith('http://') || src.startsWith('https://')) {
     return src;
   }
-  // Add basePath for local images (GitHub Pages subdirectory)
-  const basePath = '/ProfolioWSM';
-  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+  // Return the path as-is - Next.js will handle basePath based on next.config.js
+  return src;
 }
 
 export default function PostCard({ post, onClick }: PostCardProps) {
