@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import * as React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
@@ -32,18 +33,34 @@ function formatDate(dateString: string): string {
 
 export default function PostSection({ post, index, onPostClick }: PostSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = React.useState(false);
+  
+  // Detect mobile device
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
 
-  // Parallax effects
-  const postcardY = useTransform(scrollYProgress, [0, 1], [50, -50]);
-  const videoY = useTransform(scrollYProgress, [0, 1], [-30, 30]);
-  // Intro section opacity: start visible and fade in more as you scroll
-  // Minimum opacity of 0.7 ensures it's always visible
-  const introOpacity = useTransform(scrollYProgress, [0, 1], [0.7, 1]);
-  const introY = useTransform(scrollYProgress, [0, 1], [10, 0]);
+  // Parallax effects - always call hooks, but use values conditionally
+  const postcardYTransform = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const videoYTransform = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+  const introOpacityTransform = useTransform(scrollYProgress, [0, 1], [0.7, 1]);
+  const introYTransform = useTransform(scrollYProgress, [0, 1], [10, 0]);
+  
+  // Use conditional values based on mobile detection
+  const postcardY = isMobile ? 0 : postcardYTransform;
+  const videoY = isMobile ? 0 : videoYTransform;
+  const introOpacity = isMobile ? 1 : introOpacityTransform;
+  const introY = isMobile ? 0 : introYTransform;
 
   // Default video URL if not provided
   const videoUrl = post.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
@@ -61,10 +78,10 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         <motion.div
           className="post-section-left"
           style={{ y: postcardY }}
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+          viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
+          transition={{ duration: isMobile ? 0.4 : 0.8, ease: [0.4, 0, 0.2, 1] }}
         >
           <div className="post-section-card" onClick={() => onPostClick?.(post)}>
             <Image
@@ -91,10 +108,10 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           <motion.div
             className="post-section-video"
             style={{ y: videoY }}
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: isMobile ? 0 : 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
+            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.4, 0, 0.2, 1] }}
           >
             <div className="video-wrapper">
               {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
@@ -130,9 +147,9 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           <motion.div
             className="post-section-intro"
             style={{ opacity: introOpacity, y: introY }}
-            initial={{ opacity: 0.7, y: 10 }}
+            initial={{ opacity: isMobile ? 1 : 0.7, y: isMobile ? 0 : 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.4, ease: [0.4, 0, 0.2, 1] }}
           >
             {/* Software Icons Row */}
             <div className="intro-icons-row">
