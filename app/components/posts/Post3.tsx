@@ -6,7 +6,7 @@ export default function Post3() {
         <p>This post combines images, videos, and text content to showcase a comprehensive project.</p>
       </div>
       <img src="https://via.placeholder.com/800x500/cccccc/666666?text=Image+1" alt="Project Image 1" />
-      <p style={{ marginBottom: '20px', color: '#555555' }}>First image description or caption goes here.</p>
+      <p className="image-caption">First image description or caption goes here.</p>
       
       <iframe 
         src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
@@ -17,7 +17,7 @@ export default function Post3() {
       />
       
       <img src="https://via.placeholder.com/800x400/cccccc/666666?text=Image+2" alt="Project Image 2" />
-      <p style={{ marginBottom: '20px', color: '#555555' }}>Second image description or caption goes here.</p>
+      <p className="image-caption">Second image description or caption goes here.</p>
       
       <div className="text-content">
         <h3>Project Details</h3>

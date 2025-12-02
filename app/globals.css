@@ -37,12 +37,75 @@ html, body {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: #2a2d35; /* 深色莫兰迪色 - 深灰蓝 */
     color: #e8e8e8; /* 浅色文字 */
+    font-size: 16px;
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    font-weight: 400;
+}
+
+/* Typography Scale */
+h1, .h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-family: var(--font-inter), sans-serif;
+}
+
+h2, .h2 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    font-family: var(--font-inter), sans-serif;
+}
+
+h3, .h3 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    font-family: var(--font-inter), sans-serif;
+}
+
+h4, .h4 {
+    font-size: clamp(1.25rem, 2vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.4;
+    font-family: var(--font-inter), sans-serif;
+}
+
+h5, .h5 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    font-family: var(--font-inter), sans-serif;
+}
+
+h6, .h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    font-family: var(--font-inter), sans-serif;
+}
+
+p {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    font-family: var(--font-inter), sans-serif;
+}
+
+small, .small {
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    font-family: var(--font-inter), sans-serif;
 }
 
 /* Layout Structure */
@@ -74,10 +137,11 @@ body {
     color: #e8e8e8;
     text-decoration: none;
     font-size: 0.95rem;
-    font-weight: 400;
-    letter-spacing: 0.5px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
     transition: color 0.3s ease;
     position: relative;
+    font-family: var(--font-inter), sans-serif;
 }
 
 .top-nav-link:hover {
@@ -129,9 +193,13 @@ header {
 }
 
 header h1 {
-    font-size: 2rem;
-    font-weight: 400;
-    color: #e8e8e8; /* 浅色文字 */
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #e8e8e8;
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.1;
+    text-transform: uppercase;
 }
 
 /* Scroll Snapping Container */
@@ -204,11 +272,13 @@ header h1 {
 }
 
 .post-section-title {
-    font-size: 1.75rem;
-    font-weight: 600;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
     color: #e8e8e8;
     margin-bottom: 12px;
-    line-height: 1.3;
+    line-height: 1.2;
+    font-family: var(--font-inter), sans-serif;
 }
 
 .post-section-meta {
@@ -310,6 +380,8 @@ header h1 {
     line-height: 1.7;
     color: #d0d0d0;
     margin: 0;
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 400;
 }
 
 .post-card {
@@ -567,14 +639,19 @@ header h1 {
 
 .post-card-title {
     font-size: 1rem;
-    font-weight: 500;
-    color: #e8e8e8; /* 浅色文字 */
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: #e8e8e8;
     margin-bottom: 8px;
+    font-family: var(--font-inter), sans-serif;
+    line-height: 1.4;
 }
 
 .post-card-meta {
     font-size: 0.875rem;
-    color: #b0b0b0; /* 稍浅的灰色 */
+    color: #b0b0b0;
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 400;
 }
 
 /* Modal Styles */
@@ -715,6 +792,416 @@ header h1 {
     margin-bottom: 8px;
 }
 
+/* Placeholder Pages */
+.placeholder-content {
+    padding: 120px 60px 60px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100vh - 100px);
+}
+
+.placeholder-content h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #e8e8e8;
+    font-family: var(--font-inter), sans-serif;
+}
+
+/* Gradient Utilities */
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-hover:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s ease;
+}
+
+/* Work Page Styles */
+.work-page {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #2a2d35;
+    color: #e8e8e8;
+    padding-top: 100px;
+}
+
+/* Work Hero Section */
+.work-hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 60px 80px 60px;
+}
+
+.work-hero-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.work-hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.work-hero-tagline {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #b0b0b0;
+    font-family: var(--font-inter), sans-serif;
+    margin-bottom: 8px;
+}
+
+.work-hero-title {
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    color: #e8e8e8;
+    font-family: var(--font-inter), sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.work-hero-title span {
+    display: block;
+}
+
+.work-hero-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: rgba(58, 61, 69, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #e8e8e8;
+    font-family: var(--font-inter), sans-serif;
+    width: fit-content;
+    margin-top: 16px;
+}
+
+.work-hero-right {
+    position: relative;
+}
+
+.work-hero-visual {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.work-hero-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.work-hero-badges {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+}
+
+.work-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #2a2d35;
+    font-family: var(--font-inter), sans-serif;
+    backdrop-filter: blur(10px);
+}
+
+/* Work Projects Grid */
+.work-projects {
+    padding: 80px 60px;
+    background-color: #2a2d35;
+}
+
+.work-projects-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+}
+
+.work-project-card {
+    background-color: #3a3d45;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.work-project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.work-project-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.work-project-image-wrapper {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    background-color: #1a1d25;
+}
+
+.work-project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.work-project-card:hover .work-project-image {
+    transform: scale(1.05);
+}
+
+.work-project-content {
+    padding: 24px;
+}
+
+.work-project-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #e8e8e8;
+    margin-bottom: 12px;
+    font-family: var(--font-inter), sans-serif;
+    line-height: 1.2;
+    transition: color 0.3s ease;
+}
+
+.work-project-link:hover .work-project-title {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.work-project-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #b0b0b0;
+    margin-bottom: 16px;
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 400;
+}
+
+.work-project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.work-project-date {
+    font-size: 0.875rem;
+    color: #b0b0b0;
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 400;
+}
+
+.work-project-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.work-project-tag {
+    padding: 4px 12px;
+    background-color: rgba(58, 61, 69, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #e8e8e8;
+    font-family: var(--font-inter), sans-serif;
+}
+
+/* Masonry Grid Layout (Xiaohongshu/Pinterest style) */
+.masonry-page {
+    padding: 0 60px;
+}
+
+.masonry-container {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.masonry-grid {
+    column-count: 3;
+    column-gap: 20px;
+    width: 100%;
+    position: relative;
+}
+
+/* Post Card Base Styles for Masonry */
+.masonry-grid .post-card {
+    background-color: #3a3d45;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+    width: 100%;
+    break-inside: avoid;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.masonry-grid .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.masonry-grid .post-card-image {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+/* Quality-based Sizing */
+.masonry-grid .post-card-high .post-card-image {
+    height: 400px;
+}
+
+.masonry-grid .post-card-medium .post-card-image {
+    height: 300px;
+}
+
+.masonry-grid .post-card-low .post-card-image {
+    height: 200px;
+}
+
+.masonry-grid .post-card-content {
+    padding: 16px;
+    background-color: #3a3d45;
+}
+
+.masonry-grid .post-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: #e8e8e8;
+    margin-bottom: 8px;
+    font-family: var(--font-inter), sans-serif;
+    line-height: 1.4;
+}
+
+.masonry-grid .post-card-meta {
+    font-size: 0.875rem;
+    color: #b0b0b0;
+}
+
+/* Responsive Masonry Layout */
+@media (max-width: 1024px) {
+    .masonry-grid {
+        column-count: 2;
+    }
+    
+    .masonry-page {
+        padding: 0 20px;
+    }
+    
+    /* Work Page Tablet */
+    .work-hero {
+        padding: 100px 40px 60px 40px;
+    }
+    
+    .work-hero-container {
+        gap: 60px;
+    }
+    
+    .work-projects {
+        padding: 60px 40px;
+    }
+    
+    .work-projects-container {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .masonry-grid {
+        column-count: 1;
+        column-gap: 16px;
+    }
+    
+    .masonry-page {
+        padding: 0 12px;
+    }
+    
+    .placeholder-content {
+        padding: 100px 20px 40px 20px;
+    }
+    
+    .placeholder-content h1 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+    
+    /* Work Page Responsive */
+    .work-hero {
+        padding: 100px 20px 60px 20px;
+        min-height: auto;
+    }
+    
+    .work-hero-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .work-hero-title {
+        font-size: clamp(3rem, 10vw, 6rem);
+    }
+    
+    .work-projects {
+        padding: 60px 20px;
+    }
+    
+    .work-projects-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .work-project-image-wrapper {
+        height: 250px;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
     .posts-grid {
@@ -794,5 +1281,244 @@ header h1 {
     text-align: center;
     padding: 40px;
     color: #b0b0b0; /* 稍浅的灰色 */
+}
+
+/* Project Detail Page - White Rounded Container */
+.project-content-wrapper {
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
+
+/* Project Detail Grid Layout */
+.project-detail-grid {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: 48px;
+    width: 100%;
+}
+
+/* Left Column: PostCard */
+.project-detail-left {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.project-detail-card {
+    background-color: #f8f8f8;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.project-detail-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.project-detail-card-content {
+    padding: 24px;
+    background-color: #ffffff;
+}
+
+.project-detail-card-title {
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #2a2d35;
+    margin-bottom: 12px;
+    font-family: var(--font-inter), sans-serif;
+    line-height: 1.2;
+}
+
+.project-detail-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #666666;
+}
+
+.project-detail-card-date {
+    font-weight: 500;
+    color: #666666;
+}
+
+.project-detail-card-tags {
+    font-size: 0.85rem;
+    color: #888888;
+}
+
+/* Right Column: Video + Content */
+.project-detail-right {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.project-detail-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #000000;
+}
+
+.project-detail-video .video-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.project-detail-video .video-iframe,
+.project-detail-video .video-element {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.project-detail-tools {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.project-detail-tools .software-icon {
+    color: #2a2d35;
+}
+
+.project-detail-tools .software-icon svg {
+    color: #2a2d35;
+}
+
+.project-detail-tools .software-icon-label {
+    color: #666666;
+}
+
+.project-detail-tools .software-icon:hover .software-icon-label {
+    color: #2a2d35;
+}
+
+.project-detail-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #3a3d45;
+    font-family: var(--font-inter), sans-serif;
+    margin: 0;
+}
+
+/* Post Content Styles for Project Detail */
+.project-content-wrapper .post-content {
+    width: 100%;
+    color: #2a2d35;
+}
+
+.post-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 24px 0;
+    display: block;
+}
+
+.post-content iframe {
+    width: 100%;
+    border-radius: 12px;
+    margin: 24px 0;
+    display: block;
+    min-height: 400px;
+}
+
+.post-content .text-content {
+    margin: 24px 0;
+}
+
+.post-content .text-content h2,
+.post-content .text-content h3 {
+    color: #2a2d35;
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.post-content .text-content p {
+    color: #3a3d45;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.post-content .text-content ul,
+.post-content .text-content ol {
+    color: #3a3d45;
+    margin: 16px 0;
+    padding-left: 24px;
+}
+
+.post-content .text-content li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.post-content .image-caption {
+    color: #666666;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    text-align: center;
+    font-style: italic;
+}
+
+/* Responsive adjustments for project detail */
+@media (max-width: 1024px) {
+    .project-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .project-detail-left {
+        order: 1;
+    }
+    
+    .project-detail-right {
+        order: 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-content-wrapper {
+        padding: 32px 24px;
+        border-radius: 16px;
+    }
+    
+    .project-detail-grid {
+        gap: 24px;
+    }
+    
+    .project-detail-card-content {
+        padding: 20px;
+    }
+    
+    .project-detail-right {
+        gap: 24px;
+    }
+    
+    .post-content img,
+    .post-content iframe {
+        margin: 16px 0;
+        border-radius: 8px;
+    }
+    
+    .post-content .text-content {
+        margin: 16px 0;
+    }
+    
+    .project-detail-tools {
+        gap: 12px;
+    }
 }
 

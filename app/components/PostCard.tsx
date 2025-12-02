@@ -2,9 +2,10 @@
 
 import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
+import { DailyPracticePost } from '@/app/lib/dailyPractice';
 
 interface PostCardProps {
-  post: Post;
+  post: Post | DailyPracticePost;
   onClick: () => void;
 }
 
@@ -31,12 +32,15 @@ function getImageSrc(src: string): string {
 
 export default function PostCard({ post, onClick }: PostCardProps) {
   const formattedDate = formatDate(post.date);
-  
-  // 所有卡片统一使用相同大小
   const imageSrc = getImageSrc(post.thumbnail);
+  
+  // Get quality class for masonry layout (if quality exists)
+  const quality = 'quality' in post ? post.quality : undefined;
+  const qualityClass = quality ? `post-card-${quality}` : '';
+  const cardClassName = `post-card ${qualityClass}`.trim();
 
   return (
-    <div className="post-card" onClick={onClick}>
+    <div className={cardClassName} onClick={onClick}>
       <Image 
         src={imageSrc} 
         alt={post.title}
