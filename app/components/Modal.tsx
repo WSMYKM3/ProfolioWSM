@@ -25,13 +25,27 @@ export default function Modal({ post, isOpen, onClose }: ModalProps) {
 
   useEffect(() => {
     if (isOpen) {
+      // Only prevent scrolling on the body, not the main-content
       document.body.style.overflow = 'hidden';
+      // Ensure main-content can still scroll if needed
+      const mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        (mainContent as HTMLElement).style.overflow = 'hidden';
+      }
     } else {
       document.body.style.overflow = '';
+      const mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        (mainContent as HTMLElement).style.overflow = '';
+      }
     }
 
     return () => {
       document.body.style.overflow = '';
+      const mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        (mainContent as HTMLElement).style.overflow = '';
+      }
     };
   }, [isOpen]);
 

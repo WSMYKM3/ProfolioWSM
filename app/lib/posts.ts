@@ -6,6 +6,9 @@ export interface Post {
   date: string;
   tags: string[];
   quality?: 'high' | 'medium' | 'low'; // 内容质量等级，用于控制post card尺寸 (high=大, medium=中, low=小)
+  videoUrl?: string; // YouTube/Vimeo embed URL or local MP4 path
+  description?: string; // Project description for intro section
+  softwareTools?: string[]; // Array of software tool names (e.g., ["Unity", "Unreal", "Blender"])
 }
 
 export const posts: Post[] = [
@@ -13,11 +16,14 @@ export const posts: Post[] = [
   {
     id: "post-1",
     title: "Sample Project 1",
-    thumbnail: "/linkedinthumbnail.png", // Local image from public folder
+    thumbnail: "/1.png", // Local image from public folder
     file: "post-1",
     date: "2024-01-15",
     tags: ["design", "web"],
-    quality: "medium" // 高质量内容，显示为大尺寸
+    quality: "medium", // 高质量内容，显示为大尺寸
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    description: "An immersive XR experience combining interactive design with cutting-edge technology.",
+    softwareTools: ["Unity", "Blender", "TouchDesigner"]
   },
   {
     id: "post-2",
@@ -26,7 +32,10 @@ export const posts: Post[] = [
     file: "post-3",
     date: "2024-02-01",
     tags: ["design", "video", "photography"],
-    quality: "low" // 
+    quality: "low",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    description: "A creative exploration of mixed media combining video, photography, and interactive elements.",
+    softwareTools: ["After Effects", "Premiere Pro", "Photoshop"]
   },
   {
     id: "post-3",
@@ -35,7 +44,10 @@ export const posts: Post[] = [
     file: "post-1",
     date: "2024-02-15",
     tags: ["design"],
-    quality: "high" // 高质量内容，显示为大尺寸
+    quality: "high", // 高质量内容，显示为大尺寸
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    description: "A vertical format project showcasing innovative design solutions.",
+    softwareTools: ["Figma", "Illustrator", "Cinema 4D"]
   },
   // 第二行（从左到右）
   {
@@ -45,7 +57,10 @@ export const posts: Post[] = [
     file: "post-2",
     date: "2024-01-20",
     tags: ["video", "production"],
-    quality: "medium" // 中等质量，显示为中等尺寸
+    quality: "medium", // 中等质量，显示为中等尺寸
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    description: "A comprehensive video production showcasing motion graphics and visual storytelling.",
+    softwareTools: ["After Effects", "Premiere Pro", "DaVinci Resolve"]
   },
   {
     id: "post-5",
@@ -54,7 +69,10 @@ export const posts: Post[] = [
     file: "post-4",
     date: "2024-02-10",
     tags: ["writing", "content"],
-    quality: "low" // 低质量内容，显示为小尺寸
+    quality: "low", // 低质量内容，显示为小尺寸
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    description: "A content-focused project exploring narrative and textual expression.",
+    softwareTools: ["Notion", "Markdown"]
   },
   {
     id: "post-6",
@@ -63,7 +81,10 @@ export const posts: Post[] = [
     file: "post-2",
     date: "2024-02-20",
     tags: ["photography"],
-    quality: "medium" // 中等质量，显示为中等尺寸
+    quality: "medium", // 中等质量，显示为中等尺寸
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    description: "A wide-format photography project capturing expansive landscapes and architectural details.",
+    softwareTools: ["Lightroom", "Photoshop", "Capture One"]
   }
 ];
 
