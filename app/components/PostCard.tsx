@@ -41,15 +41,17 @@ export default function PostCard({ post, onClick }: PostCardProps) {
 
   return (
     <div className={cardClassName} onClick={onClick}>
-      <Image 
-        src={imageSrc} 
-        alt={post.title}
-        width={400}
-        height={600}
-        className="post-card-image"
-        style={{ width: '100%' }}
-        loading="lazy"
-      />
+      <div className="post-card-image-wrapper">
+        <Image 
+          src={imageSrc} 
+          alt={post.title}
+          width={400}
+          height={600}
+          className="post-card-image"
+          style={{ width: '100%', height: 'auto' }}
+          loading="lazy"
+        />
+      </div>
       <div className="post-card-content">
         <div className="post-card-title">{post.title}</div>
         <div className="post-card-meta">{formattedDate}</div>
