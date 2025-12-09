@@ -23,15 +23,19 @@ This is a modern portfolio website built with **Next.js 14** (App Router) featur
 - **Deployment**: Static export for GitHub Pages
 - **Styling**: Custom CSS with dark Morandi color scheme
 - **Animations**: Framer Motion for 3D card flip effects
-- **Layout**: Fixed sidebar + centered card display (slot machine effect)
+- **Layout**: Scroll-snapping full-viewport sections (home) + masonry waterfall (daily practice)
 - **Image Handling**: Next.js Image component with conditional basePath for dev/prod
 
 ### Current State
 
-- ✅ Home page with slot machine card display
-- ✅ Work page with tunnel effect (optional)
+- ✅ Home page with scroll-snapping layout (full-viewport sections)
+- ✅ Daily Practice page with Xiaohongshu-style masonry waterfall layout
+- ✅ Work page with project grid
 - ✅ Individual project detail pages
 - ✅ Modal system for post content
+- ✅ Video support with titles and multiple videos per project
+- ✅ Gradient background with cloud overlay
+- ✅ Frosted glass header design
 - ✅ Responsive design (mobile, tablet, desktop)
 - ✅ GitHub Pages deployment configured
 
@@ -112,15 +116,22 @@ ProfolioWSM/
 │   ├── globals.css               # Global styles (dark Morandi theme)
 │   │
 │   ├── components/               # React components
-│   │   ├── Sidebar.tsx          # Left sidebar navigation
+│   │   ├── TopNav.tsx           # Top navigation bar
 │   │   ├── PostCard.tsx         # Individual post card component
-│   │   ├── PostGrid.tsx         # Slot machine grid (main display)
+│   │   ├── PostSection.tsx      # Full-viewport post section (home page)
+│   │   ├── PostScrollContainer.tsx  # Container for scroll-snapping sections
+│   │   ├── PostGrid.tsx         # Grid layout (work page)
+│   │   ├── MasonryGrid.tsx      # Waterfall masonry layout (daily practice)
 │   │   ├── Modal.tsx            # Modal overlay for post details
+│   │   ├── SoftwareIcon.tsx     # Software tool icon component
 │   │   └── posts/               # Post content components
 │   │       ├── Post1.tsx
 │   │       ├── Post2.tsx
 │   │       ├── Post3.tsx
 │   │       └── Post4.tsx
+│   │
+│   ├── daily-practice/          # Daily Practice page
+│   │   └── page.tsx             # Masonry waterfall layout page
 │   │
 │   ├── lib/
 │   │   └── posts.ts             # Post data structure & utilities
@@ -154,31 +165,51 @@ ProfolioWSM/
 
 #### `app/page.tsx` (Home Page)
 - **Type**: Client Component (`'use client'`)
-- **Purpose**: Main portfolio page with slot machine card display
+- **Purpose**: Main portfolio page with scroll-snapping full-viewport sections
 - **Key Features**:
   - Manages modal state (`selectedPost`, `isModalOpen`)
-  - Renders `Sidebar` and `PostGrid`
+  - Renders `TopNav` and `PostScrollContainer`
+  - Each project occupies full viewport height
+  - Scroll-snapping for smooth navigation
   - Handles post click events
 
-#### `app/components/PostGrid.tsx` (Slot Machine Display)
+#### `app/components/PostSection.tsx` (Post Section Component)
 - **Type**: Client Component
-- **Purpose**: Implements the slot machine effect (2 cards at center, preview cards above/below)
+- **Purpose**: Individual full-viewport post section with two-column layout
+- **Layout**:
+  - **Left Column**: Postcard (thumbnail, title, metadata)
+  - **Right Column**: Video player(s) + Intro section (software icons, description)
 - **Key Features**:
-  - Scroll wheel event handling (prevents page scroll)
-  - Touch event support (mobile)
-  - 3D flip animations (rotateY)
-  - Preview cards with reduced opacity/scale/blur
-  - Fixed positioning relative to main content area
+  - Parallax scroll effects (Framer Motion)
+  - Supports single or multiple videos (e.g., Datnie has 2 videos)
+  - Video titles displayed above each video
+  - Software tool icons with hover effects
+  - Responsive: stacks vertically on mobile
 
-**Critical Implementation Details**:
-```typescript
-// Prevents page scrolling, only switches cards
-window.addEventListener('wheel', handleWheel, { passive: false });
-window.addEventListener('touchmove', handleTouchMove, { passive: false });
+#### `app/components/PostScrollContainer.tsx`
+- **Type**: Client Component
+- **Purpose**: Container for all post sections with scroll-snapping
+- **Features**: Maps posts array to PostSection components
 
-// Card positioning: absolute relative to main-content
-position: 'absolute'  // Not 'fixed' - relative to parent
-```
+#### `app/daily-practice/page.tsx` (Daily Practice Page)
+- **Type**: Client Component
+- **Purpose**: Xiaohongshu-style masonry waterfall layout
+- **Key Features**:
+  - CSS column-based masonry layout (3 columns desktop, 2 tablet, 1 mobile)
+  - Cards auto-size based on image aspect ratio
+  - Compact spacing (12px gaps)
+  - Images maintain original aspect ratio
+  - Responsive column count
+
+#### `app/components/MasonryGrid.tsx` (Waterfall Layout)
+- **Type**: Client Component
+- **Purpose**: Implements Xiaohongshu-style masonry waterfall layout
+- **Key Features**:
+  - CSS `column-count` for automatic column distribution
+  - Cards break naturally based on content height
+  - Responsive: 3 columns (desktop) → 2 columns (tablet) → 1 column (mobile)
+  - Compact spacing with `column-gap` and `margin-bottom`
+  - Images maintain aspect ratio (no fixed heights)
 
 #### `app/components/PostCard.tsx`
 - **Type**: Client Component
@@ -213,9 +244,21 @@ export interface Post {
   file: string;            // File identifier (used for routing)
   date: string;            // ISO date string (e.g., "2024-01-15")
   tags: string[];          // Array of tags
-  quality?: 'high' | 'medium' | 'low';  // Optional (not used in current implementation)
+  quality?: 'high' | 'medium' | 'low';  // Optional (for masonry layout sizing)
+  videoUrl?: string;        // Single video URL (YouTube/Vimeo embed or local MP4)
+  videoTitle?: string;      // Title displayed above video
+  videoUrls?: string[];     // Array of video URLs (for multiple videos, e.g., Datnie)
+  videoTitles?: string[];   // Array of video titles corresponding to videoUrls
+  description?: string;    // Project description for intro section
+  softwareTools?: string[]; // Array of software tool names (e.g., ["Unity", "Blender"])
 }
 ```
+
+**Special Case - Multiple Videos**:
+- Datnie (post-1) uses `videoUrls` array for two videos side-by-side
+- Left video: 4:3 aspect ratio, larger size
+- Right video: 16:9 aspect ratio, smaller size
+- Responsive: stacks vertically on mobile
 
 #### `app/work/[slug]/page.tsx` (Dynamic Route)
 - **Type**: Server Component
@@ -231,55 +274,76 @@ export function generateStaticParams() {
 #### `app/globals.css`
 - **Purpose**: Global styles and theme
 - **Key Styles**:
-  - Dark Morandi color scheme (`#2a2d35` background)
-  - Fixed sidebar (200px width, 60px left margin)
-  - Main content area (absolute positioning, left: 260px)
-  - Slot machine container (absolute, centered in main content)
-  - Post card styles (450x450px uniform size)
-  - Responsive breakpoints (mobile, tablet)
+  - **Background**: Gradient from dark (`#2a2d35`) to white (`#ffffff`) with cloud overlay (`/cloud.png`)
+  - **Header**: Frosted glass effect with rounded corners (backdrop-filter blur)
+  - **Main content**: Scroll-snapping full-viewport sections
+  - **Post sections**: Two-column grid (0.7fr postcard, 1.3fr video+intro)
+  - **Masonry layout**: CSS columns (3 desktop, 2 tablet, 1 mobile)
+  - **Video containers**: Responsive sizing with aspect ratios
+  - **Responsive breakpoints**: Mobile (768px), Tablet (1024px)
 
 ---
 
 ## Key Features & Implementation
 
-### 1. Slot Machine Card Display
+### 1. Scroll-Snapping Full-Viewport Layout
 
-**Location**: `app/components/PostGrid.tsx`
+**Location**: `app/components/PostSection.tsx` + `app/components/PostScrollContainer.tsx`
 
 **How It Works**:
-1. **Card State Management**:
-   - `currentIndex`: Tracks which pair of cards is currently displayed
-   - `isAnimating`: Prevents rapid scrolling during animations
+1. **Section Structure**:
+   - Each post occupies full viewport height (`100vh`)
+   - Scroll-snapping enabled (`scroll-snap-type: y mandatory`)
+   - Smooth scroll behavior
 
-2. **Card Layout**:
-   - **Top Preview**: 2 cards (opacity: 0.15, scale: 0.5, blur: 3px)
-   - **Center Display**: 2 cards (opacity: 1, scale: 1, no blur)
-   - **Bottom Preview**: 2 cards (opacity: 0.15, scale: 0.5, blur: 3px)
+2. **Two-Column Layout**:
+   - **Left Column (0.7fr)**: Postcard with thumbnail, title, metadata
+   - **Right Column (1.3fr)**: Video player(s) + Intro section
+   - Grid layout: `grid-template-columns: 0.7fr 1.3fr`
 
-3. **Scroll Handling**:
-   - `handleWheel`: Intercepts mouse wheel events
-   - Prevents default page scrolling (`e.preventDefault()`)
-   - Debounced navigation (100ms timeout)
-   - Switches cards in pairs (2 at a time)
+3. **Parallax Effects**:
+   - Uses Framer Motion `useScroll` and `useTransform`
+   - Postcard moves vertically on scroll
+   - Video container has opposite parallax direction
+   - Intro section fades in/out based on scroll position
 
-4. **3D Flip Animation**:
-   - Uses `framer-motion` with `rotateY` transform
-   - Center cards flip in/out (90° rotation)
-   - Preview cards fade in/out smoothly
+4. **Video Support**:
+   - Single video: Standard 16:9 aspect ratio
+   - Multiple videos (Datnie): Side-by-side layout
+     - Left: 4:3 aspect ratio, larger (flex: 1.2)
+     - Right: 16:9 aspect ratio, smaller (flex: 1)
+   - Video titles displayed above each video
+   - Responsive: Stacks vertically on mobile
 
-**Code Structure**:
-```typescript
-const getVisibleCards = () => {
-  // Returns array of cards with positions: 'top' | 'center' | 'bottom'
-  // Handles edge cases (beginning/end of posts array)
-}
+5. **Intro Section**:
+   - Software tool icons (SVG) with hover effects
+   - Project description text
+   - Frosted glass background (backdrop-filter blur)
 
-const handleNavigation = (direction: 'up' | 'down') => {
-  // Updates currentIndex by ±2
-  // Sets isAnimating flag
-  // Resets after animation completes (800ms)
-}
-```
+### 2. Daily Practice - Masonry Waterfall Layout
+
+**Location**: `app/daily-practice/page.tsx` + `app/components/MasonryGrid.tsx`
+
+**How It Works**:
+1. **CSS Columns Layout**:
+   - Uses `column-count: 3` (desktop)
+   - Automatic distribution based on card heights
+   - Compact spacing: `column-gap: 12px`, `margin-bottom: 12px`
+
+2. **Card Sizing**:
+   - Cards auto-size based on image aspect ratio
+   - No fixed heights (removed quality-based sizing)
+   - Images use `height: auto` to maintain aspect ratio
+
+3. **Responsive Behavior**:
+   - Desktop: 3 columns
+   - Tablet (≤1024px): 2 columns
+   - Mobile (≤768px): 1 column
+
+4. **Image Handling**:
+   - Images wrapped in `post-card-image-wrapper`
+   - `object-fit: contain` to preserve aspect ratio
+   - Placeholder images will auto-resize when replaced with real images
 
 ### 2. Image Path Handling
 
@@ -306,29 +370,76 @@ export function generateStaticParams() {
 }
 ```
 
-### 4. Dark Morandi Theme
+### 4. Background Design
+
+**Gradient Background** (defined in `app/globals.css`):
+- **Base**: Linear gradient from `#2a2d35` (dark) to `#ffffff` (white), top to bottom
+- **Overlay**: Cloud image (`/cloud.png`) positioned at center top
+- **Effect**: Fixed attachment for parallax-like effect
+- **Implementation**:
+```css
+background: 
+  url('/cloud.png') no-repeat center top / cover,
+  linear-gradient(to bottom, #2a2d35 0%, #ffffff 100%);
+background-attachment: fixed, scroll;
+```
+
+### 5. Header Design
+
+**Frosted Glass Effect**:
+- **Background**: `rgba(58, 61, 69, 0.6)` with `backdrop-filter: blur(10px)`
+- **Border**: `1px solid rgba(255, 255, 255, 0.1)`
+- **Border Radius**: `16px` (rounded corners)
+- **Shadow**: Subtle box-shadow for depth
+- **Typography**: Smaller font size (`clamp(1.25rem, 3.5vw, 2rem)`)
+
+### 6. Dark Morandi Theme
 
 **Color Palette** (defined in `app/globals.css`):
-- Background: `#2a2d35` (dark blue-grey)
+- Background: Gradient from `#2a2d35` (dark blue-grey) to white
 - Cards: `#3a3d45` (slightly lighter)
 - Text: `#e8e8e8` (light grey)
 - Secondary Text: `#b0b0b0` (medium grey)
 - Borders: `#3a3d45` (subtle)
 
 **Implementation**:
-- Applied to `body`, `.sidebar`, `.post-card`, `.modal-content`
+- Applied to `body`, `.post-card`, `.modal-content`, `.post-section-intro`
 - Ensures consistent dark theme across all components
 
-### 5. Responsive Design
+### 7. Video Features
+
+**Video Titles**:
+- Each video displays a title above the player
+- Styled with `.video-title` class
+- Font size: `1rem`, weight: `600`
+
+**Multiple Videos Support**:
+- Datnie project demonstrates two-video layout
+- Uses `videoUrls` and `videoTitles` arrays
+- Different aspect ratios: 4:3 (left) and 16:9 (right)
+- Responsive: Stacks vertically on mobile devices
+
+**Video Embedding**:
+- Supports YouTube/Vimeo iframes
+- Supports local MP4/WebM files
+- Automatic detection based on URL pattern
+
+### 8. Responsive Design
 
 **Breakpoints** (in `app/globals.css`):
-- **Mobile**: `@media (max-width: 768px)`
-  - Sidebar: Hidden or collapsed
-  - Cards: Single column, smaller size
-  - Touch events: Swipe gestures
-- **Tablet**: `@media (max-width: 1024px)`
+- **Mobile** (`@media (max-width: 768px)`):
+  - Post sections: Single column layout (stacks vertically)
+  - Videos: Stack vertically (if multiple)
+  - Masonry: 1 column
+  - TopNav: Smaller padding and font sizes
+  - Header: Reduced padding
+- **Tablet** (`@media (max-width: 1024px)`):
+  - Masonry: 2 columns
   - Adjusted spacing and card sizes
+  - Post sections: Maintain two-column layout
 - **Desktop**: Default (full layout)
+  - Masonry: 3 columns
+  - Post sections: Two-column grid
 
 ---
 
@@ -522,53 +633,71 @@ npm install
 npm run dev
 ```
 
-### Issue 3: Page Still Scrolls (Slot Machine Effect)
+### Issue 3: Scroll Snapping Not Working
 
 **Symptoms**:
-- Page scrollbar moves when scrolling cards
-- Cards not staying in fixed position
+- Sections don't snap to viewport
+- Smooth scrolling not working
 
-**Cause**: Global scroll not prevented
+**Cause**: Scroll-snap CSS not applied correctly
 
 **Solution**:
 1. Check `app/globals.css`:
    ```css
-   html, body {
-     height: 100%;
-     overflow: hidden;  /* Prevent global scrolling */
+   .main-content {
+     scroll-snap-type: y mandatory;
+     scroll-behavior: smooth;
+   }
+   
+   .post-section {
+     scroll-snap-align: start;
    }
    ```
 
-2. Verify `PostGrid.tsx`:
-   ```typescript
-   window.addEventListener('wheel', handleWheel, { passive: false });
-   window.addEventListener('touchmove', handleTouchMove, { passive: false });
+2. Verify sections have `100vh` height:
+   ```css
+   .post-section {
+     min-height: 100vh;
+   }
    ```
 
-### Issue 4: Cards Not Centered
+### Issue 4: Videos Not Displaying Side-by-Side
 
 **Symptoms**:
-- Cards appear too far left or right
-- Not centered relative to sidebar
+- Multiple videos stack vertically instead of horizontally
+- Videos appear too large or too small
 
-**Cause**: Incorrect positioning calculations
+**Cause**: CSS flexbox not applied correctly
 
 **Solution**:
-1. Check `.main-content` positioning in `globals.css`:
+1. Check `.post-section-videos-container`:
    ```css
-   .main-content {
-     position: absolute;
-     left: 260px;  /* Sidebar width (200px) + margin (60px) */
-     width: calc(100% - 260px);
+   .post-section-videos-container {
+     display: flex;
+     flex-direction: row;  /* Horizontal layout */
+     gap: 16px;
    }
    ```
 
-2. Verify `.slot-machine-container`:
+2. Verify video sizing:
    ```css
-   .slot-machine-container {
-     position: absolute;  /* Relative to main-content */
-     width: 100%;
-     height: 100%;
+   .post-section-video-large {
+     flex: 1.2;
+     aspect-ratio: 4 / 3;
+   }
+   
+   .post-section-video-small {
+     flex: 1;
+     aspect-ratio: 16 / 9;
+   }
+   ```
+
+3. Check mobile responsive:
+   ```css
+   @media (max-width: 768px) {
+     .post-section-videos-container {
+       flex-direction: column;  /* Stack on mobile */
+     }
    }
    ```
 
@@ -624,9 +753,43 @@ npm run dev
 
 ### Adding New Posts
 
-1. **Create Post Component** (`app/components/posts/Post5.tsx`):
+1. **Add Post Data** (`app/lib/posts.ts`):
+   ```typescript
+   {
+     id: "post-7",
+     title: "My New Project",
+     thumbnail: "/images/thumbnail.jpg",
+     file: "post-7",
+     date: "2024-03-01",
+     tags: ["design", "web"],
+     quality: "medium",
+     videoUrl: "https://www.youtube.com/embed/VIDEO_ID",
+     videoTitle: "Project Video Title",
+     description: "A brief description of the project.",
+     softwareTools: ["Figma", "React", "TypeScript"]
+   }
+   ```
+
+2. **For Multiple Videos** (like Datnie):
+   ```typescript
+   {
+     id: "post-8",
+     title: "Multi-Video Project",
+     // ... other fields
+     videoUrls: [
+       "https://www.youtube.com/embed/VIDEO_1",
+       "https://www.youtube.com/embed/VIDEO_2"
+     ],
+     videoTitles: [
+       "Main Video Title",
+       "Secondary Video Title"
+     ]
+   }
+   ```
+
+3. **Create Post Component** (for Modal content, `app/components/posts/Post7.tsx`):
    ```tsx
-   export default function Post5() {
+   export default function Post7() {
      return (
        <div className="post-content">
          <img src="/images/my-image.jpg" alt="Description" />
@@ -639,37 +802,35 @@ npm run dev
    }
    ```
 
-2. **Add Post Data** (`app/lib/posts.ts`):
+4. **Register Component** (`app/components/Modal.tsx`):
    ```typescript
-   {
-     id: "post-5",
-     title: "My Post Title",
-     thumbnail: "/images/thumbnail.jpg",
-     file: "post-5",
-     date: "2024-01-01",
-     tags: ["design", "web"]
-   }
-   ```
-
-3. **Register Component** (`app/components/Modal.tsx`):
-   ```typescript
-   import Post5 from './posts/Post5';
+   import Post7 from './posts/Post7';
    
    const postComponents = {
      // ... existing
-     'post-5': Post5,
+     'post-7': Post7,
    };
    ```
 
-### Modifying Card Display
+### Modifying Post Section Layout
 
-**Location**: `app/components/PostGrid.tsx`
+**Location**: `app/components/PostSection.tsx` + `app/globals.css`
 
 **Common Modifications**:
-- **Card Size**: Change `width: 450px` in `PostCard.tsx` and `globals.css`
-- **Cards Per View**: Modify `currentIndex` increment (currently ±2)
+- **Column Ratios**: Change `grid-template-columns: 0.7fr 1.3fr` in `.post-section-container`
+- **Video Size**: Adjust `flex` values in `.post-section-video-large` and `.post-section-video-small`
+- **Video Aspect Ratio**: Change `aspect-ratio` values (e.g., `4 / 3`, `16 / 9`)
+- **Parallax Intensity**: Modify `useTransform` ranges in `PostSection.tsx`
 - **Animation Speed**: Adjust `duration` in `motion.div` transitions
-- **Preview Opacity**: Change `opacity: 0.15` in preview card styles
+
+### Modifying Masonry Layout
+
+**Location**: `app/globals.css`
+
+**Common Modifications**:
+- **Column Count**: Change `column-count: 3` in `.masonry-grid`
+- **Spacing**: Adjust `column-gap` and `margin-bottom` values
+- **Card Size**: Modify image wrapper styles (currently auto-sizing)
 
 ### Changing Theme Colors
 
@@ -848,7 +1009,34 @@ When working on this project in Antigravity IDE Gemini 3 Pro:
 
 ---
 
-**Last Updated**: 2024-01-XX
+**Last Updated**: 2024-12-XX
 **Maintained By**: AI Development Team
 **Project Status**: Active Development
+
+---
+
+## Recent Updates (Current Stage)
+
+### Layout Changes
+- ✅ Migrated from slot machine to scroll-snapping full-viewport layout
+- ✅ Added Daily Practice page with Xiaohongshu-style masonry waterfall
+- ✅ Implemented two-column post sections (postcard + video/intro)
+
+### Design Updates
+- ✅ Gradient background (dark to white) with cloud overlay
+- ✅ Frosted glass header design
+- ✅ Compact masonry spacing (12px gaps)
+
+### Feature Additions
+- ✅ Video titles above each video player
+- ✅ Multiple video support (side-by-side layout)
+- ✅ Software tool icons with hover effects
+- ✅ Project descriptions in intro sections
+- ✅ Responsive video layouts (stacks on mobile)
+
+### Technical Improvements
+- ✅ Framer Motion parallax effects
+- ✅ Scroll-snapping for smooth navigation
+- ✅ Auto-sizing images in masonry layout
+- ✅ Enhanced mobile responsiveness
 
