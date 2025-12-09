@@ -64,8 +64,58 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
 
   // Default video URL if not provided
   const videoUrl = post.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  const videoTitle = post.videoTitle || 'Video Title Placeholder';
   const description = post.description || 'A creative project showcasing innovative design and technology.';
   const softwareTools = post.softwareTools || ['Unity', 'Blender'];
+  
+  // Check if this post has multiple videos (e.g., Datnie)
+  const hasMultipleVideos = post.videoUrls && post.videoUrls.length > 0;
+  const videoUrls = post.videoUrls || [];
+  const videoTitles = post.videoTitles || [];
+
+  // Helper function to render a video
+  const renderVideo = (url: string, title: string, className: string = 'post-section-video') => {
+    return (
+      <motion.div
+        className={className}
+        style={{ y: videoY }}
+        initial={{ opacity: 0, x: isMobile ? 0 : 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
+        transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.4, 0, 0.2, 1] }}
+      >
+        <div className="video-title">{title}</div>
+        <div className="video-wrapper">
+          {url.includes('youtube.com') || url.includes('youtu.be') ? (
+            <iframe
+              src={url}
+              title={`${post.title} - ${title}`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="video-iframe"
+            />
+          ) : url.endsWith('.mp4') || url.endsWith('.webm') ? (
+            <video
+              src={url}
+              controls
+              className="video-element"
+              playsInline
+            />
+          ) : (
+            <iframe
+              src={url}
+              title={`${post.title} - ${title}`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="video-iframe"
+            />
+          )}
+        </div>
+      </motion.div>
+    );
+  };
 
   return (
     <section
@@ -104,44 +154,24 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
 
         {/* Right Column: Video + Intro */}
         <div className="post-section-right">
-          {/* Video Player */}
-          <motion.div
-            className="post-section-video"
-            style={{ y: videoY }}
-            initial={{ opacity: 0, x: isMobile ? 0 : 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
-            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <div className="video-wrapper">
-              {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
-                <iframe
-                  src={videoUrl}
-                  title={`${post.title} Video`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="video-iframe"
-                />
-              ) : videoUrl.endsWith('.mp4') || videoUrl.endsWith('.webm') ? (
-                <video
-                  src={videoUrl}
-                  controls
-                  className="video-element"
-                  playsInline
-                />
-              ) : (
-                <iframe
-                  src={videoUrl}
-                  title={`${post.title} Video`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="video-iframe"
-                />
+          {/* Multiple Videos (for Datnie) */}
+          {hasMultipleVideos ? (
+            <div className="post-section-videos-container">
+              {renderVideo(
+                videoUrls[0] || videoUrl,
+                videoTitles[0] || videoTitle,
+                'post-section-video post-section-video-large'
+              )}
+              {videoUrls.length > 1 && renderVideo(
+                videoUrls[1],
+                videoTitles[1] || 'Secondary Video Title',
+                'post-section-video post-section-video-small'
               )}
             </div>
-          </motion.div>
+          ) : (
+            /* Single Video Player */
+            renderVideo(videoUrl, videoTitle)
+          )}
 
           {/* Intro Section (Bottom Right) */}
           <motion.div

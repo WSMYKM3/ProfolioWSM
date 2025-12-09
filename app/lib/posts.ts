@@ -7,6 +7,9 @@ export interface Post {
   tags: string[];
   quality?: 'high' | 'medium' | 'low'; // 内容质量等级，用于控制post card尺寸 (high=大, medium=中, low=小)
   videoUrl?: string; // YouTube/Vimeo embed URL or local MP4 path
+  videoTitle?: string; // Title text displayed above video
+  videoUrls?: string[]; // Array of video URLs for multiple videos (e.g., for Datnie)
+  videoTitles?: string[]; // Array of video titles corresponding to videoUrls
   description?: string; // Project description for intro section
   softwareTools?: string[]; // Array of software tool names (e.g., ["Unity", "Unreal", "Blender"])
 }
@@ -15,13 +18,15 @@ export const posts: Post[] = [
   // 第一行（从左到右）
   {
     id: "post-1",
-    title: "Sample Project 1",
+    title: "Datnie",
     thumbnail: "/1.png", // Local image from public folder
     file: "post-1",
     date: "2024-01-15",
     tags: ["design", "web"],
     quality: "medium", // 高质量内容，显示为大尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrls: ["https://www.youtube.com/embed/dQw4w9WgXcQ", "https://www.youtube.com/embed/dQw4w9WgXcQ"], // Two videos for Datnie
+    videoTitles: ["Main Video Title", "Secondary Video Title"], // Titles for the two videos
     description: "An immersive XR experience combining interactive design with cutting-edge technology.",
     softwareTools: ["Unity", "Blender", "TouchDesigner"]
   },
@@ -34,6 +39,7 @@ export const posts: Post[] = [
     tags: ["design", "video", "photography"],
     quality: "low",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoTitle: "Mixed Media Video Title",
     description: "A creative exploration of mixed media combining video, photography, and interactive elements.",
     softwareTools: ["After Effects", "Premiere Pro", "Photoshop"]
   },
@@ -46,6 +52,7 @@ export const posts: Post[] = [
     tags: ["design"],
     quality: "high", // 高质量内容，显示为大尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoTitle: "Tall Project Video Title",
     description: "A vertical format project showcasing innovative design solutions.",
     softwareTools: ["Figma", "Illustrator", "Cinema 4D"]
   },
@@ -59,6 +66,7 @@ export const posts: Post[] = [
     tags: ["video", "production"],
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoTitle: "Video Showcase Title",
     description: "A comprehensive video production showcasing motion graphics and visual storytelling.",
     softwareTools: ["After Effects", "Premiere Pro", "DaVinci Resolve"]
   },
@@ -71,6 +79,7 @@ export const posts: Post[] = [
     tags: ["writing", "content"],
     quality: "low", // 低质量内容，显示为小尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoTitle: "Text Project Video Title",
     description: "A content-focused project exploring narrative and textual expression.",
     softwareTools: ["Notion", "Markdown"]
   },
@@ -83,6 +92,7 @@ export const posts: Post[] = [
     tags: ["photography"],
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoTitle: "Wide Project Video Title",
     description: "A wide-format photography project capturing expansive landscapes and architectural details.",
     softwareTools: ["Lightroom", "Photoshop", "Capture One"]
   }
