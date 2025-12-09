@@ -1,7 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import * as React from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
@@ -33,10 +32,10 @@ function formatDate(dateString: string): string {
 
 export default function PostSection({ post, index, onPostClick }: PostSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = React.useState(false);
-  
+  const [isMobile, setIsMobile] = useState(false);
+
   // Detect mobile device
-  React.useEffect(() => {
+  useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -44,156 +43,239 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
 
-  // Parallax effects - always call hooks, but use values conditionally
-  const postcardYTransform = useTransform(scrollYProgress, [0, 1], [50, -50]);
-  const videoYTransform = useTransform(scrollYProgress, [0, 1], [-30, 30]);
-  const introOpacityTransform = useTransform(scrollYProgress, [0, 1], [0.7, 1]);
-  const introYTransform = useTransform(scrollYProgress, [0, 1], [10, 0]);
-  
-  // Use conditional values based on mobile detection
-  const postcardY = isMobile ? 0 : postcardYTransform;
-  const videoY = isMobile ? 0 : videoYTransform;
-  const introOpacity = isMobile ? 1 : introOpacityTransform;
-  const introY = isMobile ? 0 : introYTransform;
+  // Parallax effects
+  const yBackground = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+  const opacityOverlay = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
 
   // Default video URL if not provided
-  const videoUrl = post.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
-  const videoTitle = post.videoTitle || 'Video Title Placeholder';
+  const videoUrl = post.videoUrl;
+  const videoTitle = post.videoTitle || post.title;
   const description = post.description || 'A creative project showcasing innovative design and technology.';
-  const softwareTools = post.softwareTools || ['Unity', 'Blender'];
-  
-  // Check if this post has multiple videos (e.g., Datnie)
+  const softwareTools = post.softwareTools || [];
+
+  // Check if this post has multiple videos
   const hasMultipleVideos = post.videoUrls && post.videoUrls.length > 0;
   const videoUrls = post.videoUrls || [];
-  const videoTitles = post.videoTitles || [];
-
-  // Helper function to render a video
-  const renderVideo = (url: string, title: string, className: string = 'post-section-video') => {
-    return (
-      <motion.div
-        className={className}
-        style={{ y: videoY }}
-        initial={{ opacity: 0, x: isMobile ? 0 : 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
-        transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.4, 0, 0.2, 1] }}
-      >
-        <div className="video-title">{title}</div>
-        <div className="video-wrapper">
-          {url.includes('youtube.com') || url.includes('youtu.be') ? (
-            <iframe
-              src={url}
-              title={`${post.title} - ${title}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="video-iframe"
-            />
-          ) : url.endsWith('.mp4') || url.endsWith('.webm') ? (
-            <video
-              src={url}
-              controls
-              className="video-element"
-              playsInline
-            />
-          ) : (
-            <iframe
-              src={url}
-              title={`${post.title} - ${title}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="video-iframe"
-            />
-          )}
-        </div>
-      </motion.div>
-    );
-  };
 
   return (
     <section
       ref={sectionRef}
-      className="post-section"
-      style={{ scrollSnapAlign: 'start' }}
+      className="post-section-cinematic"
+      style={{
+        scrollSnapAlign: 'start',
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#050505'
+      }}
     >
-      <div className="post-section-container">
-        {/* Left Column: Postcard */}
-        <motion.div
-          className="post-section-left"
-          style={{ y: postcardY }}
-          initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
-          transition={{ duration: isMobile ? 0.4 : 0.8, ease: [0.4, 0, 0.2, 1] }}
-        >
-          <div className="post-section-card" onClick={() => onPostClick?.(post)}>
+      {/* Background Media Layer */}
+      <motion.div
+        className="cinematic-background"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '120%', // Taller for parallax
+          y: isMobile ? 0 : yBackground,
+          zIndex: 0
+        }}
+      >
+        {videoUrl ? (
+          <div className="video-background-wrapper" style={{ width: '100%', height: '100%', position: 'relative' }}>
+            {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
+              <iframe
+                src={`${videoUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoUrl.split('/').pop()}`}
+                title={videoTitle}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }}
+              />
+            ) : (
+              <video
+                src={videoUrl}
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            )}
+            {/* Overlay gradient to ensure text readability */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%)',
+              zIndex: 1
+            }} />
+          </div>
+        ) : (
+          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Image
               src={getImageSrc(post.thumbnail)}
               alt={post.title}
-              width={600}
-              height={800}
-              className="post-section-image"
-              loading="lazy"
+              fill
+              style={{ objectFit: 'cover' }}
+              priority={index < 2}
             />
-            <div className="post-section-card-content">
-              <h2 className="post-section-title">{post.title}</h2>
-              <div className="post-section-meta">
-                <span className="post-section-date">{formatDate(post.date)}</span>
-                <span className="post-section-tags">{post.tags.join(', ')}</span>
-              </div>
-            </div>
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%)',
+              zIndex: 1
+            }} />
           </div>
+        )}
+      </motion.div>
+
+      {/* Content Layer */}
+      <div className="cinematic-content-container" style={{
+        position: 'relative',
+        zIndex: 10,
+        width: '100%',
+        maxWidth: '1400px',
+        padding: isMobile ? '20px' : '60px',
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: isMobile ? 'flex-end' : 'center',
+        justifyContent: 'space-between',
+        height: '100%',
+        pointerEvents: 'none' // Let clicks pass through to background if needed, but we'll enable for children
+      }}>
+
+        {/* Text Content */}
+        <motion.div
+          className="cinematic-text"
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{
+            flex: 1,
+            maxWidth: isMobile ? '100%' : '600px',
+            pointerEvents: 'auto',
+            marginBottom: isMobile ? '40px' : '0'
+          }}
+        >
+          <div style={{ marginBottom: '20px' }}>
+            <span style={{
+              display: 'inline-block',
+              padding: '6px 12px',
+              borderRadius: '20px',
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(10px)',
+              fontSize: '0.85rem',
+              color: '#ccc',
+              marginBottom: '16px',
+              border: '1px solid rgba(255,255,255,0.1)'
+            }}>
+              {formatDate(post.date)}
+            </span>
+          </div>
+
+          <h2 style={{
+            fontSize: isMobile ? '2.5rem' : '4rem',
+            fontWeight: 800,
+            lineHeight: 1.1,
+            marginBottom: '24px',
+            color: '#fff',
+            textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+            letterSpacing: '-0.02em'
+          }}>
+            {post.title}
+          </h2>
+
+          <p style={{
+            fontSize: isMobile ? '1rem' : '1.125rem',
+            lineHeight: 1.6,
+            color: 'rgba(255,255,255,0.8)',
+            marginBottom: '32px',
+            maxWidth: '90%'
+          }}>
+            {description}
+          </p>
+
+          <div className="software-icons" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            {softwareTools.map((tool, idx) => (
+              <SoftwareIcon key={`${post.id}-${tool}-${idx}`} name={tool} size={isMobile ? 30 : 40} />
+            ))}
+          </div>
+
+          <button
+            onClick={() => onPostClick?.(post)}
+            style={{
+              marginTop: '40px',
+              padding: '16px 32px',
+              backgroundColor: '#fff',
+              color: '#000',
+              border: 'none',
+              borderRadius: '30px',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'transform 0.2s ease',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+          </button>
         </motion.div>
 
-        {/* Right Column: Video + Intro */}
-        <div className="post-section-right">
-          {/* Multiple Videos (for Datnie) */}
-          {hasMultipleVideos ? (
-            <div className="post-section-videos-container">
-              {renderVideo(
-                videoUrls[0] || videoUrl,
-                videoTitles[0] || videoTitle,
-                'post-section-video post-section-video-large'
-              )}
-              {videoUrls.length > 1 && renderVideo(
-                videoUrls[1],
-                videoTitles[1] || 'Secondary Video Title',
-                'post-section-video post-section-video-small'
-              )}
-            </div>
-          ) : (
-            /* Single Video Player */
-            renderVideo(videoUrl, videoTitle)
-          )}
-
-          {/* Intro Section (Bottom Right) */}
+        {/* Optional: Secondary Visual or Detail (Hidden on mobile to save space) */}
+        {!isMobile && (
           <motion.div
-            className="post-section-intro"
-            style={{ opacity: introOpacity, y: introY }}
-            initial={{ opacity: isMobile ? 1 : 0.7, y: isMobile ? 0 : 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="cinematic-extra"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            onClick={() => onPostClick?.(post)}
+            style={{
+              width: '400px',
+              height: '300px',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              backgroundColor: 'rgba(20,20,20,0.5)',
+              backdropFilter: 'blur(20px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'transform 0.3s ease'
+            }}
+            whileHover={{ scale: 1.02 }}
           >
-            {/* Software Icons Row */}
-            <div className="intro-icons-row">
-              {softwareTools.map((tool, idx) => (
-                <SoftwareIcon key={`${post.id}-${tool}-${idx}`} name={tool} size={40} />
-              ))}
-            </div>
-
-            {/* Description Text */}
-            <p className="intro-description">{description}</p>
+            {/* If there's a second video or just a nice detail shot */}
+            {hasMultipleVideos && videoUrls[1] ? (
+              <video src={videoUrls[1]} autoPlay muted loop playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '10px', opacity: 0.3 }}>+</div>
+                <div>More Details</div>
+              </div>
+            )}
           </motion.div>
-        </div>
+        )}
+
       </div>
     </section>
   );
 }
-

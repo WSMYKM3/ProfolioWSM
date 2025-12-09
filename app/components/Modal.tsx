@@ -13,12 +13,7 @@ interface ModalProps {
   onClose: () => void;
 }
 
-const postComponents: Record<string, React.ComponentType> = {
-  'post-1': Post1,
-  'post-2': Post2,
-  'post-3': Post3,
-  'post-4': Post4,
-};
+import PostDetailView from './PostDetailView';
 
 export default function Modal({ post, isOpen, onClose }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -62,27 +57,27 @@ export default function Modal({ post, isOpen, onClose }: ModalProps) {
 
   if (!isOpen || !post) return null;
 
-  const PostContent = postComponents[post.id] || Post1;
-
   return (
-    <div 
+    <div
       className={`modal ${isOpen ? 'active' : ''}`}
       ref={modalRef}
     >
       <div className="modal-backdrop" onClick={onClose} />
       <div className="modal-content">
-        <button 
-          className="modal-close" 
+        <button
+          className="modal-close"
           onClick={onClose}
           aria-label="Close modal"
         >
           &times;
         </button>
         <div className="modal-body">
-          <PostContent />
+          <PostDetailView post={post} />
         </div>
       </div>
     </div>
   );
 }
+
+
 
