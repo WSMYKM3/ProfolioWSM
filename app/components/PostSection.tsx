@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
 import SoftwareIcon from './SoftwareIcon';
@@ -27,7 +27,7 @@ function formatDate(dateString: string): string {
   if (/^\d{4}$/.test(dateString.trim())) {
     return dateString.trim();
   }
-  
+
   // Handle full date format
   const date = new Date(dateString);
   // Check if date is valid
@@ -63,15 +63,40 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
   const yBackground = useTransform(scrollYProgress, [0, 1], [-50, 50]);
   const opacityOverlay = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
 
+  // Tilt Effect Logic
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   // Helper function to convert YouTube watch URL to embed URL
   const convertToEmbedUrl = (url: string): string => {
     if (!url) return url;
-    
+
     // If already an embed URL, return as is
     if (url.includes('/embed/')) {
       return url;
     }
-    
+
     // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
     if (url.includes('youtube.com/watch')) {
       const videoId = url.split('v=')[1]?.split('&')[0];
@@ -79,7 +104,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         return `https://www.youtube.com/embed/${videoId}`;
       }
     }
-    
+
     // Convert short URL (https://youtu.be/VIDEO_ID) to embed URL
     if (url.includes('youtu.be/')) {
       const videoId = url.split('youtu.be/')[1]?.split('?')[0];
@@ -87,7 +112,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         return `https://www.youtube.com/embed/${videoId}`;
       }
     }
-    
+
     // Return original URL if no conversion needed
     return url;
   };
@@ -120,7 +145,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         backgroundColor: '#050505'
       }}
     >
-      {/* Background Media Layer */}
+      {/* Background Media Layer - Always use image */}
       <motion.div
         className="cinematic-background"
         style={{
@@ -133,57 +158,24 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           zIndex: 0
         }}
       >
-        {embedUrl ? (
-          <div className="video-background-wrapper" style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be') ? (
-              <iframe
-                src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/embed/')[1]?.split('?')[0]}`}
-                title={videoTitle}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }}
-              />
-            ) : (
-              <video
-                src={embedUrl}
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            )}
-            {/* Overlay gradient to ensure text readability */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%)',
-              zIndex: 1
-            }} />
-          </div>
-        ) : (
-          <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <Image
-              src={getImageSrc(post.thumbnail)}
-              alt={post.title}
-              fill
-              style={{ objectFit: 'cover' }}
-              priority={index < 2}
-            />
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%)',
-              zIndex: 1
-            }} />
-          </div>
-        )}
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+          <Image
+            src={getImageSrc(post.thumbnail)}
+            alt={post.title}
+            fill
+            style={{ objectFit: 'cover' }}
+            priority={index < 2}
+          />
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%)',
+            zIndex: 1
+          }} />
+        </div>
       </motion.div>
 
       {/* Content Layer */}
@@ -274,6 +266,15 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             {post.title}
           </h2>
 
+          {/* Horizontal divider line under project title */}
+          <div style={{
+            width: '100%',
+            height: '1px',
+            backgroundColor: 'rgba(255,255,255,0.2)',
+            marginBottom: '24px',
+            maxWidth: '90%'
+          }} />
+
           <p style={{
             fontSize: isMobile ? '1rem' : '1.125rem',
             lineHeight: 1.6,
@@ -320,41 +321,80 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             onClick={() => onPostClick?.(post)}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             style={{
-              width: '400px',
+              width: '500px', // Increased width, height remains the same
               height: '300px',
               borderRadius: '16px',
-              overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              backgroundColor: 'rgba(20,20,20,0.5)',
-              backdropFilter: 'blur(20px)',
+              // overflow: 'hidden', // Allow 3D effect to extend? Actually hidden is good for content
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              transition: 'transform 0.3s ease'
+              perspective: '1000px',
+              transformStyle: 'preserve-3d',
             }}
-            whileHover={{ scale: 1.02 }}
           >
-            {/* Display GIF if available */}
-            {post.gifUrl ? (
-              <img 
-                src={getImageSrc(post.gifUrl)} 
-                alt={`${post.title} GIF`}
-                style={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  objectFit: 'cover',
-                  display: 'block'
-                }} 
-              />
-            ) : (
-              <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
-                <div style={{ fontSize: '4rem', marginBottom: '10px', opacity: 0.3 }}>+</div>
-                <div>More Details</div>
-              </div>
-            )}
+            <motion.div
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                backgroundColor: 'rgba(20,20,20,0.5)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+                rotateX,
+                rotateY,
+              }}
+              whileHover={{ scale: 1.05 }}
+            >
+              {/* Display Video if available, otherwise show placeholder */}
+              {embedUrl ? (
+                <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
+                  {embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be') ? (
+                    <iframe
+                      src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/embed/')[1]?.split('?')[0]}`}
+                      title={videoTitle}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{ 
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        width: '177.78%', // 16:9 aspect ratio (16/9 = 1.7778) to fill width
+                        height: '100%',
+                        transform: 'translate(-50%, -50%)',
+                        border: 'none',
+                        pointerEvents: 'none'
+                      }}
+                    />
+                  ) : (
+                    <video
+                      src={embedUrl}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      style={{ 
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }}
+                    />
+                  )}
+                </div>
+              ) : (
+                <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
+                  <div style={{ fontSize: '4rem', marginBottom: '10px', opacity: 0.3 }}>+</div>
+                  <div>More Details</div>
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         )}
 

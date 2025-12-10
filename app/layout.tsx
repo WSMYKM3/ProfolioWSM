@@ -20,7 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        <div className="grain-overlay" />
+        {children}
+      </body>
     </html>
   )
 }

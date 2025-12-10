@@ -14,6 +14,7 @@ export interface Post {
   description?: string; // Project description for intro section
   softwareTools?: string[]; // Array of software tool names (e.g., ["Unity", "Unreal", "Blender"])
   features?: string[]; // Array of feature tags (e.g., ["#XR Hands", "#Trailer Animation"])
+  galleryImages?: string[]; // Array of image URLs for the detail view gallery
   role?: string; // Project contribution/role (e.g., "UX/XR Lead")
 }
 
@@ -22,7 +23,7 @@ export const posts: Post[] = [
   {
     id: "post-1",
     title: "Datnie",
-    thumbnail: "/1.png", // Local image from public folder
+    thumbnail: "/datniethumb.png", // Local image from public folder
     file: "post-1",
     date: "2025",
     tags: ["design", "web"],
@@ -33,6 +34,12 @@ export const posts: Post[] = [
     description: "With Datnie, we don't want to pair you with an 'another' crush, no more repeated conversation as we catch your next crush's frequency answers from past coversations, and so do yours to pair you better.",
     softwareTools: ["Unity6- XR develop", "Unreal Engine- Trailer animation", "Blender- chracter groom"],
     features: ["#XR Hands", "#Trailer Animation all in UE, No AI", "#Motion Capture and motion refining"],
+    galleryImages: [
+      "/1.png",
+      "https://via.placeholder.com/600x400/2a2a2a/888888?text=Process+1",
+      "https://via.placeholder.com/600x400/2a2a2a/888888?text=Process+2",
+      "https://via.placeholder.com/600x800/2a2a2a/888888?text=Vertical+Process"
+    ],
     role: "Role -XR developer, Director, Animator"
   },
   {

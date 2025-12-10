@@ -156,7 +156,7 @@ small,
     font-family: var(--font-inter), sans-serif;
 }
 
-.top-nav-link:hover:not(.active) {
+.top-nav-link:hover {
     color: #b0b0b0;
 }
 
@@ -171,24 +171,8 @@ small,
     transition: width 0.3s ease;
 }
 
-.top-nav-link:hover:not(.active)::after {
+.top-nav-link:hover::after {
     width: 100%;
-}
-
-/* Active link styles */
-.top-nav-link.active {
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.top-nav-link.active::after {
-    width: 100%;
-    background-color: #ffffff;
-    height: 1.5px;
-}
-
-.top-nav-link.active:hover {
-    color: #ffffff;
 }
 
 /* Main Content */
