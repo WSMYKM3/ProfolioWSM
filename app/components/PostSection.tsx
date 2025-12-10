@@ -23,7 +23,17 @@ function getImageSrc(src: string): string {
 
 // Helper function to format date
 function formatDate(dateString: string): string {
+  // Handle year-only format (e.g., "2025")
+  if (/^\d{4}$/.test(dateString.trim())) {
+    return dateString.trim();
+  }
+  
+  // Handle full date format
   const date = new Date(dateString);
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return dateString; // Return original string if invalid
+  }
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -53,8 +63,38 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
   const yBackground = useTransform(scrollYProgress, [0, 1], [-50, 50]);
   const opacityOverlay = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 1, 0]);
 
+  // Helper function to convert YouTube watch URL to embed URL
+  const convertToEmbedUrl = (url: string): string => {
+    if (!url) return url;
+    
+    // If already an embed URL, return as is
+    if (url.includes('/embed/')) {
+      return url;
+    }
+    
+    // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
+    if (url.includes('youtube.com/watch')) {
+      const videoId = url.split('v=')[1]?.split('&')[0];
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    }
+    
+    // Convert short URL (https://youtu.be/VIDEO_ID) to embed URL
+    if (url.includes('youtu.be/')) {
+      const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    }
+    
+    // Return original URL if no conversion needed
+    return url;
+  };
+
   // Default video URL if not provided
   const videoUrl = post.videoUrl;
+  const embedUrl = videoUrl ? convertToEmbedUrl(videoUrl) : null;
   const videoTitle = post.videoTitle || post.title;
   const description = post.description || 'A creative project showcasing innovative design and technology.';
   const softwareTools = post.softwareTools || [];
@@ -92,11 +132,11 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           zIndex: 0
         }}
       >
-        {videoUrl ? (
+        {embedUrl ? (
           <div className="video-background-wrapper" style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
+            {embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be') ? (
               <iframe
-                src={`${videoUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoUrl.split('/').pop()}`}
+                src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/embed/')[1]?.split('?')[0]}`}
                 title={videoTitle}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -104,7 +144,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
               />
             ) : (
               <video
-                src={videoUrl}
+                src={embedUrl}
                 autoPlay
                 muted
                 loop
@@ -176,11 +216,11 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           <div style={{ marginBottom: '20px' }}>
             <span style={{
               display: 'inline-block',
-              padding: '6px 12px',
+              padding: '8px 16px',
               borderRadius: '20px',
               backgroundColor: 'rgba(255,255,255,0.1)',
               backdropFilter: 'blur(10px)',
-              fontSize: '0.85rem',
+              fontSize: '1.1rem',
               color: '#ccc',
               marginBottom: '16px',
               border: '1px solid rgba(255,255,255,0.1)'
@@ -211,7 +251,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             {description}
           </p>
 
-          <div className="software-icons" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+          <div className="software-icons-glass">
             {softwareTools.map((tool, idx) => (
               <SoftwareIcon key={`${post.id}-${tool}-${idx}`} name={tool} size={isMobile ? 30 : 40} />
             ))}
@@ -235,6 +275,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
+            Check Project Details
           </button>
         </motion.div>
 
@@ -263,9 +304,18 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             }}
             whileHover={{ scale: 1.02 }}
           >
-            {/* If there's a second video or just a nice detail shot */}
-            {hasMultipleVideos && videoUrls[1] ? (
-              <video src={videoUrls[1]} autoPlay muted loop playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {/* Display GIF if available */}
+            {post.gifUrl ? (
+              <img 
+                src={getImageSrc(post.gifUrl)} 
+                alt={`${post.title} GIF`}
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover',
+                  display: 'block'
+                }} 
+              />
             ) : (
               <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
                 <div style={{ fontSize: '4rem', marginBottom: '10px', opacity: 0.3 }}>+</div>

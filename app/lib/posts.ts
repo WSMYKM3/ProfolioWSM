@@ -10,6 +10,7 @@ export interface Post {
   videoTitle?: string; // Title text displayed above video
   videoUrls?: string[]; // Array of video URLs for multiple videos (e.g., for Datnie)
   videoTitles?: string[]; // Array of video titles corresponding to videoUrls
+  gifUrl?: string; // GIF image URL for cinematic-extra section
   description?: string; // Project description for intro section
   softwareTools?: string[]; // Array of software tool names (e.g., ["Unity", "Unreal", "Blender"])
 }
@@ -21,18 +22,18 @@ export const posts: Post[] = [
     title: "Datnie",
     thumbnail: "/1.png", // Local image from public folder
     file: "post-1",
-    date: "2024-01-15",
+    date: "2025",
     tags: ["design", "web"],
     quality: "medium", // 高质量内容，显示为大尺寸
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoUrls: ["https://www.youtube.com/embed/dQw4w9WgXcQ", "https://www.youtube.com/embed/dQw4w9WgXcQ"], // Two videos for Datnie
-    videoTitles: ["Main Video Title", "Secondary Video Title"], // Titles for the two videos
-    description: "An immersive XR experience combining interactive design with cutting-edge technology.",
-    softwareTools: ["Unity", "Blender", "TouchDesigner"]
+    videoUrl: "https://www.youtube.com/watch?v=TrJPls4p5ak",
+    videoTitle: "Datnie- XR Dating app",
+    gifUrl: "/gifs/datnie.gif", // GIF for cinematic-extra section
+    description: "With Datnie, we don't want to pair you with an 'another' crush, no more repeated conversation as we catch your next crush's frequency answers from past coversations, and so do yours to pair you better.",
+    softwareTools: ["Unity6- XR develop", "Unreal Engine- Trailer animation", "Blender- chracter groom"]
   },
   {
     id: "post-2",
-    title: "Mixed Media Project",
+    title: "Signie",
     thumbnail: "https://via.placeholder.com/400x700/cccccc/666666?text=Mixed+Media",
     file: "post-3",
     date: "2024-02-01",
@@ -40,6 +41,7 @@ export const posts: Post[] = [
     quality: "low",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Mixed Media Video Title",
+    gifUrl: "/gifs/mixed-media.gif", // GIF for cinematic-extra section
     description: "A creative exploration of mixed media combining video, photography, and interactive elements.",
     softwareTools: ["After Effects", "Premiere Pro", "Photoshop"]
   },
@@ -53,6 +55,7 @@ export const posts: Post[] = [
     quality: "high", // 高质量内容，显示为大尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Tall Project Video Title",
+    gifUrl: "/gifs/tall-project.gif", // GIF for cinematic-extra section
     description: "A vertical format project showcasing innovative design solutions.",
     softwareTools: ["Figma", "Illustrator", "Cinema 4D"]
   },
@@ -67,6 +70,7 @@ export const posts: Post[] = [
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Video Showcase Title",
+    gifUrl: "/gifs/video-showcase.gif", // GIF for cinematic-extra section
     description: "A comprehensive video production showcasing motion graphics and visual storytelling.",
     softwareTools: ["After Effects", "Premiere Pro", "DaVinci Resolve"]
   },
@@ -80,6 +84,7 @@ export const posts: Post[] = [
     quality: "low", // 低质量内容，显示为小尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Text Project Video Title",
+    gifUrl: "/gifs/text-project.gif", // GIF for cinematic-extra section
     description: "A content-focused project exploring narrative and textual expression.",
     softwareTools: ["Notion", "Markdown"]
   },
@@ -93,6 +98,7 @@ export const posts: Post[] = [
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Wide Project Video Title",
+    gifUrl: "/gifs/wide-project.gif", // GIF for cinematic-extra section
     description: "A wide-format photography project capturing expansive landscapes and architectural details.",
     softwareTools: ["Lightroom", "Photoshop", "Capture One"]
   }

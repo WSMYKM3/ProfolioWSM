@@ -419,6 +419,27 @@ header h1 {
     align-items: center;
 }
 
+.software-icons-glass {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    background-color: rgba(58, 61, 69, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 16px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: fit-content;
+    transition: all 0.3s ease;
+}
+
+.software-icons-glass:hover {
+    background-color: rgba(58, 61, 69, 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
 .software-icon {
     display: flex;
     flex-direction: column;
@@ -434,7 +455,7 @@ header h1 {
 }
 
 .software-icon-label {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     color: #b0b0b0;
     text-align: center;
     opacity: 1;
@@ -1496,11 +1517,32 @@ header h1 {
     color: #2a2d35;
 }
 
+.project-detail-tools .software-icon-glass {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-detail-tools .software-icon:hover .software-icon-glass {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
 .project-detail-tools .software-icon svg {
     color: #2a2d35;
 }
 
 .project-detail-tools .software-icon-label {
+    font-size: 0.95rem;
     color: #666666;
 }
 
