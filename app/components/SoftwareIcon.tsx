@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 interface SoftwareIconProps {
   name: string;
@@ -16,12 +15,22 @@ const getBaseToolName = (name: string): string => {
   return baseName.replace(/\d+$/, '').trim();
 };
 
+// Helper function to add basePath for GitHub Pages
+function getIconSrc(src: string): string {
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+}
+
 // Mapping of tool names to SVG file paths
 const iconImages: Record<string, string> = {
   Unity: '/icons/unity.svg',
   Unreal: '/icons/unrealengine.svg',
   'Unreal Engine': '/icons/unrealengine.svg',
   Blender: '/icons/blender.svg',
+  TouchDesigner: '/icons/touchdesigner.svg',
   GitHub: '/icons/github.svg',
   Github: '/icons/github.svg',
   // Add more mappings as needed
@@ -30,7 +39,8 @@ const iconImages: Record<string, string> = {
 
 export default function SoftwareIcon({ name, size = 32 }: SoftwareIconProps) {
   const baseName = getBaseToolName(name);
-  const iconSrc = iconImages[baseName] || iconImages[name] || '/icons/unity.svg'; // Default fallback
+  const iconPath = iconImages[baseName] || iconImages[name] || '/icons/unity.svg'; // Default fallback
+  const iconSrc = getIconSrc(iconPath);
 
   return (
     <motion.div
@@ -39,14 +49,15 @@ export default function SoftwareIcon({ name, size = 32 }: SoftwareIconProps) {
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
       title={name}
     >
-      <Image
+      <img
         src={iconSrc}
         alt={name}
         width={size}
         height={size}
         style={{
           objectFit: 'contain',
-          opacity: 0.9
+          opacity: 0.9,
+          display: 'block'
         }}
       />
       <span className="software-icon-label">{name}</span>

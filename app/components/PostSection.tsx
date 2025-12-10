@@ -41,7 +41,7 @@ function formatDate(dateString: string): string {
 }
 
 export default function PostSection({ post, index, onPostClick }: PostSectionProps) {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   // Detect mobile device
@@ -98,6 +98,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
   const videoTitle = post.videoTitle || post.title;
   const description = post.description || 'A creative project showcasing innovative design and technology.';
   const softwareTools = post.softwareTools || [];
+  const features = post.features || [];
 
   // Check if this post has multiple videos
   const hasMultipleVideos = post.videoUrls && post.videoUrls.length > 0;
@@ -210,23 +211,44 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             flex: 1,
             maxWidth: isMobile ? '100%' : '600px',
             pointerEvents: 'auto',
-            marginBottom: isMobile ? '40px' : '0'
+            marginBottom: isMobile ? '40px' : '0',
+            display: 'flex',
+            flexDirection: 'column'
           }}
         >
           <div style={{ marginBottom: '20px' }}>
-            <span style={{
-              display: 'inline-block',
-              padding: '8px 16px',
-              borderRadius: '20px',
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              backdropFilter: 'blur(10px)',
-              fontSize: '1.1rem',
-              color: '#ccc',
-              marginBottom: '16px',
-              border: '1px solid rgba(255,255,255,0.1)'
-            }}>
-              {formatDate(post.date)}
-            </span>
+            <div style={{ marginBottom: '12px' }}>
+              <span style={{
+                display: 'inline-block',
+                padding: '8px 16px',
+                borderRadius: '20px',
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(10px)',
+                fontSize: '1.1rem',
+                color: '#ccc',
+                border: '1px solid rgba(255,255,255,0.1)'
+              }}>
+                {formatDate(post.date)}
+              </span>
+            </div>
+            {features.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>
+                {features.map((feature, idx) => (
+                  <span
+                    key={`${post.id}-feature-${idx}`}
+                    style={{
+                      fontSize: isMobile ? '0.9rem' : '1rem',
+                      color: 'rgba(255,255,255,0.7)',
+                      fontWeight: 400,
+                      letterSpacing: '0.02em',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <h2 style={{
