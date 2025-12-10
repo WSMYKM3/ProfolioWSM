@@ -185,6 +185,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         width: '100%',
         maxWidth: '1400px',
         padding: isMobile ? '20px' : '60px',
+        paddingTop: isMobile && index === 0 ? '80px' : (isMobile ? '20px' : '60px'), // Add extra padding for first section on mobile
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         alignItems: isMobile ? 'flex-end' : 'center',

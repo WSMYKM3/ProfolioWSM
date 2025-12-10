@@ -23,7 +23,7 @@ export const posts: Post[] = [
   {
     id: "post-1",
     title: "Datnie",
-    thumbnail: "/datniethumb.png", // Local image from public folder
+    thumbnail: "/datnie.png", // Local image from public folder
     file: "post-1",
     date: "2025",
     tags: ["design", "web"],
