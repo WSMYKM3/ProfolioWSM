@@ -217,7 +217,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           }}
         >
           <div style={{ marginBottom: '20px' }}>
-            <div style={{ marginBottom: '12px' }}>
+            <div style={{ marginBottom: '12px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>
               <span style={{
                 display: 'inline-block',
                 padding: '8px 16px',
@@ -230,6 +230,17 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
               }}>
                 {formatDate(post.date)}
               </span>
+              {post.role && (
+                <span style={{
+                  fontSize: isMobile ? '0.95rem' : '1rem',
+                  color: 'rgba(255,255,255,0.9)',
+                  fontWeight: 400,
+                  letterSpacing: '0.02em',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {post.role}
+                </span>
+              )}
             </div>
             {features.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>

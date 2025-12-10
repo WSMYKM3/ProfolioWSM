@@ -14,6 +14,7 @@ export interface Post {
   description?: string; // Project description for intro section
   softwareTools?: string[]; // Array of software tool names (e.g., ["Unity", "Unreal", "Blender"])
   features?: string[]; // Array of feature tags (e.g., ["#XR Hands", "#Trailer Animation"])
+  role?: string; // Project contribution/role (e.g., "UX/XR Lead")
 }
 
 export const posts: Post[] = [
@@ -31,7 +32,8 @@ export const posts: Post[] = [
     gifUrl: "/gifs/datnie.gif", // GIF for cinematic-extra section
     description: "With Datnie, we don't want to pair you with an 'another' crush, no more repeated conversation as we catch your next crush's frequency answers from past coversations, and so do yours to pair you better.",
     softwareTools: ["Unity6- XR develop", "Unreal Engine- Trailer animation", "Blender- chracter groom"],
-    features: ["#XR Hands", "#Trailer Animation all in UE, No AI", "#Motion Capture and motion refining"]
+    features: ["#XR Hands", "#Trailer Animation all in UE, No AI", "#Motion Capture and motion refining"],
+    role: "Role -XR developer, Director, Animator"
   },
   {
     id: "post-2",
@@ -46,7 +48,8 @@ export const posts: Post[] = [
     gifUrl: "/gifs/mixed-media.gif", // GIF for cinematic-extra section
     description: "A creative exploration of mixed media combining video, photography, and interactive elements.",
     softwareTools: ["Unity6- XR develop", "Virtual hands", "Photoshop"],
-    features: ["#XR Hands", "#Motion Capture and motion refining"]
+    features: ["#XR Hands", "#Motion Capture and motion refining"],
+    role: "Creative Technologist"
   },
   {
     id: "post-3",
@@ -61,7 +64,8 @@ export const posts: Post[] = [
     gifUrl: "/gifs/tall-project.gif", // GIF for cinematic-extra section
     description: "A vertical format project showcasing innovative design solutions.",
     softwareTools: ["Figma", "Illustrator", "Cinema 4D"],
-    features: ["#Trailer Animation all in UE, No AI"]
+    features: ["#Trailer Animation all in UE, No AI"],
+    role: "Design Lead"
   },
   // 第二行（从左到右）
   {
@@ -77,7 +81,8 @@ export const posts: Post[] = [
     gifUrl: "/gifs/video-showcase.gif", // GIF for cinematic-extra section
     description: "A comprehensive video production showcasing motion graphics and visual storytelling.",
     softwareTools: ["After Effects", "Premiere Pro", "DaVinci Resolve"],
-    features: ["#Motion Capture and motion refining"]
+    features: ["#Motion Capture and motion refining"],
+    role: "Video Producer"
   },
   {
     id: "post-5",
@@ -92,7 +97,8 @@ export const posts: Post[] = [
     gifUrl: "/gifs/text-project.gif", // GIF for cinematic-extra section
     description: "A content-focused project exploring narrative and textual expression.",
     softwareTools: ["Notion", "Markdown"],
-    features: []
+    features: [],
+    role: "Content Creator"
   },
   {
     id: "post-6",
@@ -107,7 +113,8 @@ export const posts: Post[] = [
     gifUrl: "/gifs/wide-project.gif", // GIF for cinematic-extra section
     description: "A wide-format photography project capturing expansive landscapes and architectural details.",
     softwareTools: ["Lightroom", "Photoshop", "Capture One"],
-    features: ["#Trailer Animation all in UE, No AI", "#Motion Capture and motion refining"]
+    features: ["#Trailer Animation all in UE, No AI", "#Motion Capture and motion refining"],
+    role: "Photographer"
   }
 ];
 
