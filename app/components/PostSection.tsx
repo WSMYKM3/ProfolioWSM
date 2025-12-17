@@ -276,6 +276,76 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             maxWidth: '90%'
           }} />
 
+          {/* Mobile Video - Show below title on mobile only */}
+          {isMobile && embedUrl && (
+            <motion.div
+              className="cinematic-extra-mobile"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              onClick={() => onPostClick?.(post)}
+              style={{
+                width: '100%',
+                height: '200px',
+                borderRadius: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                marginBottom: '24px',
+              }}
+            >
+              <motion.div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  backgroundColor: 'rgba(20,20,20,0.5)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+                }}
+              >
+                <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
+                  {embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be') ? (
+                    <iframe
+                      src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/embed/')[1]?.split('?')[0]}`}
+                      title={videoTitle}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{ 
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        width: '177.78%',
+                        height: '100%',
+                        transform: 'translate(-50%, -50%)',
+                        border: 'none',
+                        pointerEvents: 'none'
+                      }}
+                    />
+                  ) : (
+                    <video
+                      src={embedUrl}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      style={{ 
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }}
+                    />
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+
           <p style={{
             fontSize: isMobile ? '1rem' : '1.125rem',
             lineHeight: 1.6,
@@ -314,7 +384,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           </button>
         </motion.div>
 
-        {/* Optional: Secondary Visual or Detail (Hidden on mobile to save space) */}
+        {/* Optional: Secondary Visual or Detail - Desktop only */}
         {!isMobile && (
           <motion.div
             className="cinematic-extra"
@@ -325,18 +395,17 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{
-              width: '500px', // Increased width, height remains the same
-              height: '300px',
-              borderRadius: '16px',
-              // overflow: 'hidden', // Allow 3D effect to extend? Actually hidden is good for content
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              perspective: '1000px',
-              transformStyle: 'preserve-3d',
-            }}
-          >
+                width: '500px',
+                height: '300px',
+                borderRadius: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                perspective: '1000px',
+                transformStyle: 'preserve-3d',
+              }}
+            >
             <motion.div
               style={{
                 width: '100%',
