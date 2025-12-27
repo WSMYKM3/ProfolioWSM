@@ -55,6 +55,10 @@ export default function SoftwareIcon({ name, size = 32 }: SoftwareIconProps) {
         width={size}
         height={size}
         style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          maxWidth: `${size}px`,
+          maxHeight: `${size}px`,
           objectFit: 'contain',
           opacity: 0.9,
           display: 'block'

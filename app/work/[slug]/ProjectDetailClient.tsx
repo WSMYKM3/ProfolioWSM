@@ -36,7 +36,17 @@ function getImageSrc(src: string): string {
 
 // Helper function to format date
 function formatDate(dateString: string): string {
+  // Handle custom date strings (e.g., "1 month for XRCC 2025 hackathon")
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString.trim())) {
+    return dateString;
+  }
+  
   const date = new Date(dateString);
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return dateString; // Return original string if invalid
+  }
+  
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();

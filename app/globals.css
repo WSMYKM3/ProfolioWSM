@@ -495,6 +495,13 @@ header h1 {
     transition: all 0.3s ease;
 }
 
+.post-content .software-icon img {
+    width: 100px !important;
+    height: 100px !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
+}
+
 .software-icon svg {
     color: #e8e8e8;
     transition: all 0.3s ease;

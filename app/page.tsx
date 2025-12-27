@@ -26,10 +26,7 @@ export default function Home() {
     if (selectedFilter === 'all') {
       return posts;
     }
-    if (selectedFilter === 'featured') {
-      return posts.filter(post => post.quality === 'high');
-    }
-    // Filter by tag
+    // Filter by tag (including 'featured')
     return posts.filter(post => 
       post.tags.some(tag => tag.toLowerCase() === selectedFilter.toLowerCase())
     );

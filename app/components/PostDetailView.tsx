@@ -3,6 +3,17 @@
 import { Post } from '@/app/lib/posts';
 import SoftwareIcon from './SoftwareIcon';
 import Image from 'next/image';
+import Post1 from './posts/Post1';
+import Post2 from './posts/Post2';
+import Post3 from './posts/Post3';
+import Post4 from './posts/Post4';
+
+const postComponents: Record<string, React.ComponentType> = {
+  'post-1': Post1,
+  'post-2': Post2,
+  'post-3': Post3,
+  'post-4': Post4,
+};
 
 interface PostDetailViewProps {
     post: Post;
@@ -17,20 +28,56 @@ function getImageSrc(src: string): string {
     return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
+// Helper function to convert YouTube watch URL to embed URL
+function convertToEmbedUrl(url: string): string {
+    if (!url) return url;
+
+    // If already an embed URL, return as is
+    if (url.includes('/embed/')) {
+        return url;
+    }
+
+    // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
+    if (url.includes('youtube.com/watch')) {
+        const videoId = url.split('v=')[1]?.split('&')[0];
+        if (videoId) {
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+    }
+
+    // Convert short URL (https://youtu.be/VIDEO_ID) to embed URL
+    if (url.includes('youtu.be/')) {
+        const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+        if (videoId) {
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+    }
+
+    // Return original URL if no conversion needed
+    return url;
+}
+
 export default function PostDetailView({ post }: PostDetailViewProps) {
     // Use the first video if available, otherwise the main videoUrl
-    const videoUrl = (post.videoUrls && post.videoUrls.length > 0) ? post.videoUrls[0] : post.videoUrl;
+    const rawVideoUrl = (post.videoUrls && post.videoUrls.length > 0) ? post.videoUrls[0] : post.videoUrl;
+    const videoUrl = rawVideoUrl ? convertToEmbedUrl(rawVideoUrl) : null;
+    
+    // Get the Post component for detailed content
+    const PostContent = postComponents[post.id] || null;
 
     return (
         <div className="post-detail-view" style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
             {/* 1. Hero Video/Image */}
             <div className="detail-video-container" style={{
-                width: '100%',
+                width: '90%',
+                maxWidth: '1200px',
                 aspectRatio: '16/9',
                 backgroundColor: '#000',
                 borderRadius: '16px',
                 overflow: 'hidden',
                 marginBottom: '40px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
             }}>
                 {videoUrl ? (
@@ -73,7 +120,8 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                     marginBottom: '32px',
                     lineHeight: 1.1,
                     letterSpacing: '-0.02em',
-                    color: '#fff'
+                    color: '#fff',
+                    textAlign: 'center'
                 }}>
                     {post.title}
                 </h1>
@@ -97,20 +145,30 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                     </div>
                     <div>
                         <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tools</div>
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
                             {post.softwareTools?.map(tool => (
-                                <span key={tool} style={{
-                                    fontSize: '0.9rem',
-                                    color: '#ccc',
-                                    backgroundColor: 'rgba(255,255,255,0.1)',
-                                    padding: '4px 10px',
-                                    borderRadius: '4px'
-                                }}>
-                                    {tool.split('-')[0].trim()}
-                                </span>
+                                <SoftwareIcon key={tool} name={tool} size={24} />
                             ))}
                         </div>
                     </div>
+                    {post.features && post.features.length > 0 && (
+                        <div>
+                            <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Features</div>
+                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                {post.features.map(feature => (
+                                    <span key={feature} style={{
+                                        fontSize: '0.9rem',
+                                        color: '#ccc',
+                                        backgroundColor: 'rgba(255,255,255,0.1)',
+                                        padding: '4px 10px',
+                                        borderRadius: '4px'
+                                    }}>
+                                        {feature}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -120,34 +178,44 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                 lineHeight: 1.8,
                 color: '#d0d0d0',
                 maxWidth: '100%',
-                marginBottom: '60px'
+                marginBottom: '60px',
+                textAlign: 'center'
             }}>
-                <p style={{ marginBottom: '24px', maxWidth: '800px' }}>
+                <h2 style={{
+                    fontSize: '1.75rem',
+                    fontWeight: 700,
+                    color: '#fff',
+                    marginBottom: '24px',
+                    borderBottom: '2px solid rgba(255,255,255,0.2)',
+                    paddingBottom: '12px',
+                    textAlign: 'center'
+                }}>
+                    Intro
+                </h2>
+                <p style={{ 
+                    fontSize: '20px',
+                    marginBottom: '53px', 
+                    maxWidth: '800px', 
+                    marginLeft: 'auto', 
+                    marginRight: 'auto' 
+                }}>
                     {post.description || "Project description placeholder."}
                 </p>
-                {post.features && post.features.length > 0 && (
-                    <div style={{ marginTop: '24px' }}>
-                        <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>Key Features</h3>
-                        <ul style={{ listStyle: 'none', padding: 0 }}>
-                            {post.features.map(f => (
-                                <li key={f} style={{
-                                    marginBottom: '8px',
-                                    color: '#aaa',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '12px'
-                                }}>
-                                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#fff' }}></span>
-                                    {f}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
             </div>
 
-            {/* 5. Gallery / Process */}
-            {post.galleryImages && post.galleryImages.length > 0 && (
+            {/* 5. Detailed Post Content (for projects with Post components) */}
+            {PostContent && (
+                <div style={{
+                    marginTop: '60px',
+                    paddingTop: '40px',
+                    borderTop: '1px solid rgba(255,255,255,0.1)'
+                }}>
+                    <PostContent />
+                </div>
+            )}
+
+            {/* 6. Gallery / Process (fallback if no Post component) */}
+            {!PostContent && post.galleryImages && post.galleryImages.length > 0 && (
                 <div className="detail-gallery">
                     <h3 style={{
                         fontSize: '1.5rem',

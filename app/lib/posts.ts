@@ -25,30 +25,30 @@ export const posts: Post[] = [
     title: "Datnie",
     thumbnail: "/datnie.png", // Local image from public folder
     file: "post-1",
-    date: "2025",
-    tags: ["design", "web"],
+    date: "1 month for XRCC 2025 hackathon",
+    tags: ["xr", "featured", "animation"],
     quality: "medium", // 高质量内容，显示为大尺寸
-    videoUrl: "https://www.youtube.com/watch?v=TrJPls4p5ak",
+    videoUrl: "https://www.youtube.com/embed/TrJPls4p5ak",
     videoTitle: "Datnie- XR Dating app",
     gifUrl: "/gifs/datnie.gif", // GIF for cinematic-extra section
-    description: "With Datnie, we don't want to pair you with an 'another' crush, no more repeated conversation as we catch your next crush's frequency answers from past coversations, and so do yours to pair you better.",
-    softwareTools: ["Unity6- XR develop", "Unreal Engine- Trailer animation", "Blender- chracter groom"],
-    features: ["#XR Hands", "#Trailer Animation all in UE, No AI", "#Motion Capture and motion refining"],
+    description: "With Datnie, we don't want to pair you with an 'another' crush, no more repeated conversation as we catch your next crush's frequency answers from past coversations, and so do yours to pair better.",
+    softwareTools: ["Unity6", "Unreal Engine", "Blender"],
+    features: ["Mixed Reality", "Spatial Design", "XR Hands"],
     galleryImages: [
       "/1.png",
       "https://via.placeholder.com/600x400/2a2a2a/888888?text=Process+1",
       "https://via.placeholder.com/600x400/2a2a2a/888888?text=Process+2",
       "https://via.placeholder.com/600x800/2a2a2a/888888?text=Vertical+Process"
     ],
-    role: "Role -XR developer, Director, Animator"
+    role: "XR developer, Director, Animator"
   },
   {
     id: "post-2",
     title: "Signie",
-    thumbnail: "https://via.placeholder.com/400x700/cccccc/666666?text=Mixed+Media",
+    thumbnail: "linkedinthumbnail.png",
     file: "post-3",
     date: "2024-02-01",
-    tags: ["design", "video", "photography"],
+    tags: ["xr"],
     quality: "low",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Mixed Media Video Title",
@@ -60,11 +60,11 @@ export const posts: Post[] = [
   },
   {
     id: "post-3",
-    title: "Tall Project",
-    thumbnail: "https://via.placeholder.com/400x800/cccccc/666666?text=Tall+Project",
+    title: "I AND AI: MIRROR",
+    thumbnail: "/iandaithumb.jpg",
     file: "post-1",
     date: "2024-02-15",
-    tags: ["design"],
+    tags: ["ai", "exploration","featured"],
     quality: "high", // 高质量内容，显示为大尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Tall Project Video Title",
@@ -77,11 +77,11 @@ export const posts: Post[] = [
   // 第二行（从左到右）
   {
     id: "post-4",
-    title: "Video Showcase",
+    title: "The Shadow of Horizon",
     thumbnail: "https://via.placeholder.com/400x450/cccccc/666666?text=Video+Project",
     file: "post-2",
     date: "2024-01-20",
-    tags: ["video", "production"],
+    tags: ["animation"],
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Video Showcase Title",
@@ -93,11 +93,11 @@ export const posts: Post[] = [
   },
   {
     id: "post-5",
-    title: "Text-Based Project",
+    title: "The Tool Box",
     thumbnail: "https://via.placeholder.com/400x400/cccccc/666666?text=Text+Project",
     file: "post-4",
     date: "2024-02-10",
-    tags: ["writing", "content"],
+    tags: ["xr", "ai"],
     quality: "low", // 低质量内容，显示为小尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Text Project Video Title",
@@ -109,11 +109,11 @@ export const posts: Post[] = [
   },
   {
     id: "post-6",
-    title: "Wide Project",
+    title: "Aether Tag",
     thumbnail: "https://via.placeholder.com/400x350/cccccc/666666?text=Wide+Project",
     file: "post-2",
     date: "2024-02-20",
-    tags: ["photography"],
+    tags: ["xr"],
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoTitle: "Wide Project Video Title",

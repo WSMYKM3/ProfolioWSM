@@ -8,10 +8,10 @@ interface ProjectFilterProps {
 const filterOptions = [
   { id: 'all', label: '#All' },
   { id: 'featured', label: '#Featured' },
-  { id: 'design', label: '#Design' },
-  { id: 'web', label: '#Web' },
-  { id: 'video', label: '#Video' },
-  { id: 'photography', label: '#Photography' },
+  { id: 'xr', label: '#XR' },
+  { id: 'ai', label: '#AI+' },
+  { id: 'animation', label: '#Animation' },
+  { id: 'exploration', label: '#Exploration' },
 ];
 
 export default function ProjectFilter({ selectedFilter, onFilterChange }: ProjectFilterProps) {
