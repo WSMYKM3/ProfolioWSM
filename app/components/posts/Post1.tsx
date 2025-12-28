@@ -53,6 +53,10 @@ export default function Post1() {
     if (imageSrc.includes('/Datnieideation.png')) {
       return 1.0; // No scale for Datnieideation.png
     }
+    // Stage2 images that are too large when scaled
+    if (imageSrc.includes('/DatnieStage2/uinavigator.gif') || imageSrc.includes('/DatnieStage2/uiunity.png')) {
+      return 1.0; // No scale for these large Stage2 images
+    }
     return 2; // Default scale for other images/gifs
   };
 
@@ -301,7 +305,8 @@ export default function Post1() {
             color: '#d0d0d0', 
             marginBottom: '24px',
             marginTop: '16px',
-            scrollMarginTop: '100px'
+            scrollMarginTop: '100px',
+            textAlign: 'center'
           }}>
             Stage1: Animation Trailer(UE) production
           </h3>
@@ -331,7 +336,7 @@ export default function Post1() {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '12px'
+                  gap: '20px'
                 }}
               >
                 <div
@@ -393,15 +398,15 @@ export default function Post1() {
             marginRight: 'auto',
             padding: isMobile ? '0 16px' : '0'
           }}>
-            {/* Stage 2 Items - Placeholders */}
+            {/* Stage 2 Items */}
             {[
-              { path: '/gifs/unity-placeholder-1.gif', description: 'Unity Development Placeholder 1' },
-              { path: '/gifs/unity-placeholder-2.gif', description: 'Unity Development Placeholder 2' },
-              { path: '/images/unity-placeholder-3.png', description: 'Unity Development Placeholder 3' },
-              { path: '/gifs/unity-placeholder-4.gif', description: 'Unity Development Placeholder 4' },
-              { path: '/images/unity-placeholder-5.png', description: 'Unity Development Placeholder 5' },
-              { path: '/gifs/unity-placeholder-6.gif', description: 'Unity Development Placeholder 6' },
-              { path: '/images/unity-placeholder-7.png', description: 'Unity Development Placeholder 7' },
+              { path: '/DatnieStage2/uiunity.png', description: 'Unity Meta SDK' },
+              { path: '/DatnieStage2/pivot.gif', description: 'prototype a Pivot to switch profile card' },
+              { path: '/DatnieStage2/uinavigator.gif', description: 'UI navigator debug by keyboard first, then replaced by hand microgesture' },
+              { path: '/gifs/grabcloud.gif', description: 'I prototype a cloth simulation cloud first to pop up more infomation from profile card although not been used finally' },
+              { path: '/DatnieStage2/grabcard.gif', description: 'Make every info card interactable, and easy to grab' },
+              { path: '/DatnieStage2/addtop.gif', description: 'Frequent answer propmted to be added to profile of the user' },
+              { path: '/gifs/unity-placeholder-7.gif', description: 'Unity Development Placeholder 7' },
               { path: '/gifs/unity-placeholder-8.gif', description: 'Unity Development Placeholder 8' }
             ].map((item, index) => (
               <div
@@ -409,7 +414,7 @@ export default function Post1() {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '12px'
+                  gap: '20px'
                 }}
               >
                 <div

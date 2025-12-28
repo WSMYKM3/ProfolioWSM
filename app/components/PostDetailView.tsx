@@ -101,6 +101,25 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
             ];
         }
         
+        if (post.id === 'post-3') {
+            return [
+                ...baseSections,
+                { id: 'achievement', label: 'Achievement' },
+                { id: 'tools', label: 'Tools' },
+                { id: 'contributions', label: 'My Contributions' },
+                {
+                    id: 'process',
+                    label: 'Process',
+                    subsections: [
+                        { id: 'process-stage1', label: 'Stage1: Touchdesigner-Unreal Engine Communication Prototype' },
+                        { id: 'process-stage2', label: 'Stage2: State machine Prototype' },
+                        { id: 'process-stage3', label: 'Stage3: Metahuman realtime Speech/Lipsync' },
+                        { id: 'process-stage4', label: 'Stage4: Wake Words & localhost interactive interface' }
+                    ]
+                }
+            ];
+        }
+        
         return baseSections;
     };
 

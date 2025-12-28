@@ -62,17 +62,17 @@ export const posts: Post[] = [
     id: "post-3",
     title: "I AND AI: MIRROR",
     thumbnail: "/iandaithumb.jpg",
-    file: "post-1",
-    date: "2024-02-15",
+    file: "post-3",
+    date: "Apr–Oct 2025, and is updating for confirmed future exhibition",
     tags: ["ai", "exploration","featured"],
     quality: "high", // 高质量内容，显示为大尺寸
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoTitle: "Tall Project Video Title",
+    videoUrl: "", // Will be updated with actual YouTube URL
+    videoTitle: "I AND AI: MIRROR",
     gifUrl: "/gifs/tall-project.gif", // GIF for cinematic-extra section
-    description: "A vertical format project showcasing innovative design solutions.",
-    softwareTools: ["Figma", "Illustrator", "Cinema 4D"],
-    features: ["#Trailer Animation all in UE, No AI"],
-    role: "Design Lead"
+    description: "AI can be a collaborator or a mirror—mentor, listener, lover. Before AI becomes anything, we assign it an \"AI\"dentity. What if identity itself is co-authored between \"I\" and \"AI\"? I & AI: Mirror is an immersive experience exploring human–AI intimacy. Audiences engage with a generative mirror-self that listens, learns, and reflects their presence, transforming interactions into real-time, shared expressions of identity.",
+    softwareTools: ["Unreal Engine", "Touchdesigner", "Blender", "Python"],
+    features: ["Real-time Metahuman lipsync", "Touchdesigner-UE communication"],
+    role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)"
   },
   // 第二行（从左到右）
   {
