@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Post } from '@/app/lib/posts';
 import SoftwareIcon from './SoftwareIcon';
 import Image from 'next/image';
@@ -7,6 +8,7 @@ import Post1 from './posts/Post1';
 import Post2 from './posts/Post2';
 import Post3 from './posts/Post3';
 import Post4 from './posts/Post4';
+import PostSidebar from './PostSidebar';
 
 const postComponents: Record<string, React.ComponentType> = {
   'post-1': Post1,
@@ -65,12 +67,49 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
     // Get the Post component for detailed content
     const PostContent = postComponents[post.id] || null;
 
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Define sections for sidebar based on post
+    const getSections = () => {
+        const baseSections = [
+            { id: 'project-title', label: post.title },
+            { id: 'intro', label: 'Intro' }
+        ];
+        
+        if (post.id === 'post-1') {
+            return [
+                ...baseSections,
+                { id: 'ideation', label: 'Ideation' },
+                { id: 'ux-design', label: 'UX Design' },
+                {
+                    id: 'prototype',
+                    label: 'Prototype',
+                    subsections: [
+                        { id: 'prototype-stage1', label: 'Stage1: Animation Trailer(UE) production' },
+                        { id: 'prototype-stage2', label: 'Stage2: Unity Development' }
+                    ]
+                }
+            ];
+        }
+        
+        return baseSections;
+    };
+
     return (
         <div className="post-detail-view" style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
             {/* 1. Hero Video/Image */}
             <div className="detail-video-container" style={{
-                width: '90%',
-                maxWidth: '1200px',
+                width: '80%',
+                maxWidth: '1000px',
                 aspectRatio: '16/9',
                 backgroundColor: '#000',
                 borderRadius: '16px',
@@ -113,7 +152,7 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
             </div>
 
             {/* 2. Header & Quick Info */}
-            <div className="detail-header" style={{ marginBottom: '40px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '32px' }}>
+            <div className="detail-header" id="project-title" style={{ marginBottom: '40px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '32px', scrollMarginTop: '100px' }}>
                 <h1 style={{
                     fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                     fontWeight: 800,
@@ -172,47 +211,64 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                 </div>
             </div>
 
-            {/* 4. Description */}
-            <div className="detail-content" style={{
-                fontSize: '1.15rem',
-                lineHeight: 1.8,
-                color: '#d0d0d0',
-                maxWidth: '100%',
-                marginBottom: '60px',
-                textAlign: 'center'
+            {/* 4. Description with Sidebar Layout */}
+            <div style={{
+                display: 'flex',
+                gap: '40px',
+                maxWidth: '1400px',
+                margin: '0 auto',
+                padding: isMobile ? '0 16px' : '0 40px'
             }}>
-                <h2 style={{
-                    fontSize: '1.75rem',
-                    fontWeight: 700,
-                    color: '#fff',
-                    marginBottom: '24px',
-                    borderBottom: '2px solid rgba(255,255,255,0.2)',
-                    paddingBottom: '12px',
-                    textAlign: 'center'
-                }}>
-                    Intro
-                </h2>
-                <p style={{ 
-                    fontSize: '20px',
-                    marginBottom: '53px', 
-                    maxWidth: '800px', 
-                    marginLeft: 'auto', 
-                    marginRight: 'auto' 
-                }}>
-                    {post.description || "Project description placeholder."}
-                </p>
-            </div>
+                {/* Sidebar Navigation */}
+                {!isMobile && (
+                    <PostSidebar
+                        sections={getSections()}
+                    />
+                )}
+                
+                {/* Main Content */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div id="intro" className="detail-content" style={{
+                        fontSize: '1.15rem',
+                        lineHeight: 1.8,
+                        color: '#d0d0d0',
+                        maxWidth: '100%',
+                        marginBottom: '60px',
+                        textAlign: 'center',
+                        scrollMarginTop: '100px'
+                    }}>
+                        <h2 style={{
+                            fontSize: '1.75rem',
+                            fontWeight: 700,
+                            color: '#fff',
+                            marginBottom: '40px',
+                            textAlign: 'center'
+                        }}>
+                            Intro
+                        </h2>
+                        <p style={{ 
+                            fontSize: '20px',
+                            marginBottom: '53px', 
+                            maxWidth: '800px', 
+                            marginLeft: 'auto', 
+                            marginRight: 'auto' 
+                        }}>
+                            {post.description || "Project description placeholder."}
+                        </p>
+                    </div>
 
-            {/* 5. Detailed Post Content (for projects with Post components) */}
-            {PostContent && (
-                <div style={{
-                    marginTop: '60px',
-                    paddingTop: '40px',
-                    borderTop: '1px solid rgba(255,255,255,0.1)'
-                }}>
-                    <PostContent />
+                    {/* 5. Detailed Post Content (for projects with Post components) */}
+                    {PostContent && (
+                        <div style={{
+                            marginTop: '60px',
+                            paddingTop: '40px',
+                            borderTop: '1px solid rgba(255,255,255,0.1)'
+                        }}>
+                            <PostContent />
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
 
             {/* 6. Gallery / Process (fallback if no Post component) */}
             {!PostContent && post.galleryImages && post.galleryImages.length > 0 && (

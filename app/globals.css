@@ -774,13 +774,13 @@ header h1 {
 
     .modal-content {
         max-width: 95%;
-        max-height: 85vh;
+        max-height: 90vh;
         border-radius: 8px;
     }
 
     .modal-body {
         padding: 20px;
-        max-height: calc(85vh - 60px);
+        max-height: calc(90vh - 60px);
     }
 }
 
@@ -876,7 +876,7 @@ header h1 {
 .modal-content {
     position: relative;
     max-width: 90%;
-    max-height: 90vh;
+    max-height: 95vh;
     width: 100%;
     background-color: #3a3d45;
     /* 深色莫兰迪色 */
@@ -930,7 +930,7 @@ header h1 {
 .modal-body {
     padding: 40px;
     overflow-y: auto;
-    max-height: calc(90vh - 80px);
+    max-height: calc(95vh - 80px);
 }
 
 .modal-body img {
@@ -2147,5 +2147,18 @@ header h1 {
 
     .about-project-content {
         padding: 20px;
+    }
+}
+
+/* Post Sidebar Navigation Styles */
+.post-sidebar-nav {
+    position: sticky;
+    top: 120px;
+    align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+    .post-sidebar-nav {
+        display: none;
     }
 }
