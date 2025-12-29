@@ -120,12 +120,24 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
             ];
         }
         
+        if (post.id === 'post-4') {
+            return [
+                { id: 'project-title', label: post.title },
+                { id: 'videos', label: 'Videos' },
+                { id: 'intro', label: 'Intro' },
+                { id: 'tools', label: 'Tools' },
+                { id: 'motion-capture', label: 'Motion Capture + Motion Data Cleaning' },
+                { id: 'metahuman', label: 'Metahuman' }
+            ];
+        }
+        
         return baseSections;
     };
 
     return (
         <div className="post-detail-view" style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
-            {/* 1. Hero Video/Image */}
+            {/* 1. Hero Video/Image - Hide for post-4 as videos are in Post4 component */}
+            {post.id !== 'post-4' && (
             <div className="detail-video-container" style={{
                 width: '80%',
                 maxWidth: '1000px',
@@ -169,6 +181,7 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                     </div>
                 )}
             </div>
+            )}
 
             {/* 2. Header & Quick Info */}
             <div className="detail-header" id="project-title" style={{ marginBottom: '40px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '32px', scrollMarginTop: '100px' }}>
@@ -230,7 +243,75 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                 </div>
             </div>
 
-            {/* 4. Description with Sidebar Layout */}
+            {/* 4. Videos Section (for post-4 only) */}
+            {post.id === 'post-4' && (
+                <div id="videos" style={{ 
+                    marginBottom: '60px', 
+                    scrollMarginTop: '100px',
+                    maxWidth: '1400px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    padding: isMobile ? '0 16px' : '0 40px'
+                }}>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                        gap: isMobile ? '24px' : '40px',
+                        marginBottom: '24px'
+                    }}>
+                        {/* Left Video: Behind the scenes */}
+                        <div>
+                            <iframe
+                                src={convertToEmbedUrl('https://www.youtube.com/watch?v=J0UV4jHnues')}
+                                title="Behind the scenes"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                style={{
+                                    width: '100%',
+                                    aspectRatio: '16/9',
+                                    borderRadius: '12px',
+                                    marginBottom: '12px'
+                                }}
+                            />
+                            <p style={{
+                                fontSize: '0.95rem',
+                                color: '#d0d0d0',
+                                textAlign: 'center',
+                                margin: 0
+                            }}>
+                                Behind the scenes
+                            </p>
+                        </div>
+                        {/* Right Video: Full length video */}
+                        <div>
+                            <iframe
+                                src={convertToEmbedUrl('https://www.youtube.com/watch?v=f7mk4TVj1jA')}
+                                title="Full length video"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                style={{
+                                    width: '100%',
+                                    aspectRatio: '16/9',
+                                    borderRadius: '12px',
+                                    marginBottom: '12px'
+                                }}
+                            />
+                            <p style={{
+                                fontSize: '0.95rem',
+                                color: '#d0d0d0',
+                                textAlign: 'center',
+                                margin: 0
+                            }}>
+                                Full length video
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 5. Description with Sidebar Layout */}
             <div style={{
                 display: 'flex',
                 gap: '40px',
@@ -276,7 +357,7 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                         </p>
                     </div>
 
-                    {/* 5. Detailed Post Content (for projects with Post components) */}
+                    {/* 6. Detailed Post Content (for projects with Post components) */}
                     {PostContent && (
                         <div style={{
                             marginTop: '60px',

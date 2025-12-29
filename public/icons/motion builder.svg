@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="796" viewBox="0 0 760 796" role="img" aria-label="MBLD logo (vector recreation)">
+  <defs>
+    <style>
+      .front{fill:#8aa746;}
+      .fold{fill:#a7c26c;}
+      .shadow{fill:#3a461d;}
+      .bar{fill:#3a461d;}
+      .txt{fill:#ffffff;font-family:Arial,Helvetica,sans-serif;font-weight:800;}
+    </style>
+  </defs>
+
+  <!-- Left fold -->
+  <path class="fold" d="M 11 74 L 134 1 L 134 558 L 11 626 Z"/>
+
+  <!-- Main top block -->
+  <path class="front" d="M 134 1 L 682 6 L 701 123 L 756 124 L 756 558 L 134 558 Z"/>
+
+  <!-- Right shadow (behind) -->
+  <path class="shadow" d="M 701 123 L 756 124 L 756 558 L 701 558 Z"/>
+
+  <!-- Bottom bar -->
+  <path class="bar" d="M 11 626 L 75 596 L 756 596 L 756 790 L 90 782 Z"/>
+
+  <!-- Text -->
+  <text class="txt" x="440" y="410" font-size="340" text-anchor="middle" dominant-baseline="middle">M</text>
+  <text class="txt" x="420" y="700" font-size="170" text-anchor="middle" dominant-baseline="middle" letter-spacing="8">BLD</text>
+</svg>

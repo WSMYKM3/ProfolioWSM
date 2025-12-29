@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getImageScale } from '@/app/lib/imageScaleUtils';
 
 // Helper function to add basePath for GitHub Pages
 function getImageSrc(src: string): string {
@@ -41,22 +42,6 @@ export default function Post3() {
 
   const handleCloseEnlarged = () => {
     setEnlargedImage(null);
-  };
-
-  // Determine scale factor based on image path
-  const getImageScale = (imageSrc: string): number => {
-    // Large images that should not be scaled up much
-    if (imageSrc.includes('/brainstorm.png')) {
-      return 0.9;
-    }
-    if (imageSrc.includes('/Datnieideation.png')) {
-      return 1.0;
-    }
-    // Stage2 images that are too large when scaled
-    if (imageSrc.includes('/DatnieStage2/uinavigator.gif') || imageSrc.includes('/DatnieStage2/uiunity.png')) {
-      return 1.0;
-    }
-    return 2; // Default scale for other images/gifs
   };
 
   return (

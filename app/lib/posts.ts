@@ -79,17 +79,17 @@ export const posts: Post[] = [
     id: "post-4",
     title: "The Shadow of Horizon",
     thumbnail: "https://via.placeholder.com/400x450/cccccc/666666?text=Video+Project",
-    file: "post-2",
-    date: "2024-01-20",
+    file: "post-4",
+    date: "3 months in 2024",
     tags: ["animation"],
     quality: "medium", // 中等质量，显示为中等尺寸
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoTitle: "Video Showcase Title",
+    videoUrl: "https://www.youtube.com/embed/J0UV4jHnues",
+    videoTitle: "Behind the scenes",
     gifUrl: "/gifs/video-showcase.gif", // GIF for cinematic-extra section
-    description: "A comprehensive video production showcasing motion graphics and visual storytelling.",
-    softwareTools: ["After Effects", "Premiere Pro", "DaVinci Resolve"],
-    features: ["#Motion Capture and motion refining"],
-    role: "Video Producer"
+    description: "A comprehensive video production showcasing motion capture and Metahuman animation.",
+    softwareTools: ["Unreal Engine", "Motion Builder", "Optitrack Motion Capture"],
+    features: ["Motion Capture", "Metahuman Animation"],
+    role: "Metahuman Prototyper, Animator"
   },
   {
     id: "post-5",

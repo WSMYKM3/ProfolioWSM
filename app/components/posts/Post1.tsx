@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import SoftwareIcon from '../SoftwareIcon';
+import { getImageScale } from '@/app/lib/imageScaleUtils';
 
 // Helper function to add basePath for GitHub Pages
 function getImageSrc(src: string): string {
@@ -42,22 +43,6 @@ export default function Post1() {
 
   const handleCloseEnlarged = () => {
     setEnlargedImage(null);
-  };
-
-  // Determine scale factor based on image path
-  const getImageScale = (imageSrc: string): number => {
-    // Large images that should not be scaled up much
-    if (imageSrc.includes('/brainstorm.png')) {
-      return 0.9; // Even smaller scale for brainstorm.png
-    }
-    if (imageSrc.includes('/Datnieideation.png')) {
-      return 1.0; // No scale for Datnieideation.png
-    }
-    // Stage2 images that are too large when scaled
-    if (imageSrc.includes('/DatnieStage2/uinavigator.gif') || imageSrc.includes('/DatnieStage2/uiunity.png')) {
-      return 1.0; // No scale for these large Stage2 images
-    }
-    return 2; // Default scale for other images/gifs
   };
 
   return (

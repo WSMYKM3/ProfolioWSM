@@ -15,6 +15,11 @@ const getBaseToolName = (name: string): string => {
   return baseName.replace(/\d+$/, '').trim();
 };
 
+// Helper function to normalize tool name for matching
+const normalizeToolName = (name: string): string => {
+  return name.toLowerCase().trim();
+};
+
 // Helper function to add basePath for GitHub Pages
 function getIconSrc(src: string): string {
   if (src.startsWith('http://') || src.startsWith('https://')) {
@@ -24,23 +29,58 @@ function getIconSrc(src: string): string {
   return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
-// Mapping of tool names to SVG file paths
+// Mapping of tool names to SVG file paths (normalized lowercase for matching)
 const iconImages: Record<string, string> = {
+  'unity': '/icons/unity.svg',
+  'unreal': '/icons/unrealengine.svg',
+  'unreal engine': '/icons/unrealengine.svg',
+  'blender': '/icons/blender.svg',
+  'touchdesigner': '/icons/touchdesigner.svg',
+  'touch designer': '/icons/touchdesigner.svg',
+  'github': '/icons/github.svg',
+  'python': '/icons/python.svg',
+  'motion builder': '/icons/motion builder.svg',
+  'motionbuilder': '/icons/motion builder.svg',
+  'adobe premiere': '/icons/adobe-premiere.svg',
+  'premiere pro': '/icons/adobe-premiere.svg',
+  'premiere': '/icons/adobe-premiere.svg',
+  'optitrack': '/icons/optiTrack.svg',
+  'optitrack motion capture': '/icons/optiTrack.svg',
+  'optitrack motion': '/icons/optiTrack.svg',
+  // Keep original case for backward compatibility
   Unity: '/icons/unity.svg',
   Unreal: '/icons/unrealengine.svg',
   'Unreal Engine': '/icons/unrealengine.svg',
   Blender: '/icons/blender.svg',
   TouchDesigner: '/icons/touchdesigner.svg',
+  Touchdesigner: '/icons/touchdesigner.svg',
   GitHub: '/icons/github.svg',
   Github: '/icons/github.svg',
-  // Add more mappings as needed
-  // Default fallback icons can be added here
+  Python: '/icons/python.svg',
+  'Motion Builder': '/icons/motion builder.svg',
+  'MotionBuilder': '/icons/motion builder.svg',
+  'Adobe Premiere': '/icons/adobe-premiere.svg',
+  'Premiere Pro': '/icons/adobe-premiere.svg',
+  'Optitrack': '/icons/optiTrack.svg',
+  'Optitrack Motion Capture': '/icons/optiTrack.svg',
+  'Optitrack Motion': '/icons/optiTrack.svg',
 };
 
 export default function SoftwareIcon({ name, size = 32 }: SoftwareIconProps) {
   const baseName = getBaseToolName(name);
-  const iconPath = iconImages[baseName] || iconImages[name] || '/icons/unity.svg'; // Default fallback
+  const normalizedBaseName = normalizeToolName(baseName);
+  const normalizedName = normalizeToolName(name);
+  
+  // Try to find icon by normalized base name first, then by full normalized name
+  const iconPath = iconImages[normalizedBaseName] || iconImages[normalizedName] || iconImages[baseName] || iconImages[name] || '/icons/unity.svg'; // Default fallback
   const iconSrc = getIconSrc(iconPath);
+
+  // Check if this is Optitrack icon (wide SVG that needs special scaling)
+  const isOptitrack = iconPath.includes('optiTrack.svg');
+  
+  // For Optitrack, use a larger width to accommodate the wide aspect ratio
+  const iconWidth = isOptitrack ? `${size * 1.8}px` : `${size}px`;
+  const iconHeight = `${size}px`;
 
   return (
     <motion.div
@@ -55,10 +95,10 @@ export default function SoftwareIcon({ name, size = 32 }: SoftwareIconProps) {
         width={size}
         height={size}
         style={{
-          width: `${size}px`,
-          height: `${size}px`,
-          maxWidth: `${size}px`,
-          maxHeight: `${size}px`,
+          width: iconWidth,
+          height: iconHeight,
+          maxWidth: iconWidth,
+          maxHeight: iconHeight,
           objectFit: 'contain',
           opacity: 0.9,
           display: 'block'

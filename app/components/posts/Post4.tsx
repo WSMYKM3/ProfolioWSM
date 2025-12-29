@@ -1,26 +1,313 @@
-export default function Post4() {
-  return (
-    <div className="post-content">
-      <div className="text-content">
-        <h2>Text-Based Project</h2>
-        <p>This post focuses primarily on textual content, demonstrating how text-heavy projects can be displayed.</p>
-        
-        <h3>Introduction</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        
-        <h3>Key Points</h3>
-        <ol>
-          <li>First important point with detailed explanation and context.</li>
-          <li>Second important point that expands on the concept.</li>
-          <li>Third important point that concludes the discussion.</li>
-        </ol>
-        
-        <h3>Conclusion</h3>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        
-        <p>You can add as much text content as needed, including paragraphs, headings, lists, and other HTML elements.</p>
-      </div>
-    </div>
-  );
+'use client';
+
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { getImageScale } from '@/app/lib/imageScaleUtils';
+
+// Helper function to add basePath for GitHub Pages
+function getImageSrc(src: string): string {
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
+export default function Post4() {
+  const [isMobile, setIsMobile] = useState(false);
+  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && enlargedImage) {
+        setEnlargedImage(null);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [enlargedImage]);
+
+  const handleImageClick = (src: string, alt: string) => {
+    setEnlargedImage({ src, alt });
+  };
+
+  const handleCloseEnlarged = () => {
+    setEnlargedImage(null);
+  };
+
+  return (
+    <>
+      {/* Enlarged Image Overlay */}
+      {enlargedImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            padding: '20px'
+          }}
+          onClick={handleCloseEnlarged}
+        >
+          <div
+            style={{
+              position: 'relative',
+              width: '90vw',
+              height: '90vh',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={getImageSrc(enlargedImage.src)}
+              alt={enlargedImage.alt}
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                width: 'auto',
+                height: 'auto',
+                objectFit: 'contain',
+                borderRadius: '8px',
+                transform: `scale(${getImageScale(enlargedImage.src)})`,
+                transformOrigin: 'center center'
+              }}
+            />
+            <button
+              onClick={handleCloseEnlarged}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                color: '#fff',
+                fontSize: '24px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'background 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+
+    <div className="post-content">
+      <div className="text-content">
+          {/* Tools Section */}
+          <section id="tools" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+            <h2 style={{ 
+              fontSize: '1.75rem', 
+              fontWeight: 700, 
+              color: '#fff', 
+              marginBottom: '40px',
+              textAlign: 'center'
+            }}>
+              Tools
+            </h2>
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '16px',
+              justifyContent: 'center',
+              maxWidth: '800px',
+              margin: '0 auto'
+            }}>
+              {['Unreal Engine', 'Motion Builder', 'Optitrack Motion Capture'].map((tool, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: '12px 24px',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    borderRadius: '8px',
+                    color: '#d0d0d0',
+                    fontSize: '1rem',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}
+                >
+                  {tool}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Motion Capture + Motion Data Cleaning Section */}
+          <section id="motion-capture" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+            <h2 style={{ 
+              fontSize: '1.75rem', 
+              fontWeight: 700, 
+              color: '#fff', 
+              marginBottom: '40px',
+              textAlign: 'center'
+            }}>
+              Motion Capture + Motion Data Cleaning
+            </h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+              gap: isMobile ? '40px' : '60px',
+              marginTop: '24px',
+              maxWidth: '1400px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              padding: isMobile ? '0 16px' : '0'
+            }}>
+              {[
+                
+                { path: '/mocapgifs/mocapclean.png', description: 'Overview' },
+                { path: '/mocapgifs/motioncapture.gif', description: 'Motion Capture' },
+                { path: '/mocapgifs/mb1.gif', description: 'Retargetting' },
+                { path: '/mocapgifs/mb2.gif', description: '  Data cleaning' },
+                { path: '/mocapgifs/mb3.gif', description: 'It works' },
+                { path: '/mocapgifs/realtimevcam.gif', description: 'Real-time VCam Testing' }
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      aspectRatio: '16/9',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => handleImageClick(item.path, item.description)}
+                  >
+                    <Image
+                      src={getImageSrc(item.path)}
+                      alt={item.description}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                      }}
+                    />
+                  </div>
+                  <p style={{
+                    fontSize: '0.95rem',
+                    color: '#d0d0d0',
+                    textAlign: 'center',
+                    margin: 0,
+                    lineHeight: 1.5
+                  }}>
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Metahuman Section */}
+          <section id="metahuman" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+            <h2 style={{ 
+              fontSize: '1.75rem', 
+              fontWeight: 700, 
+              color: '#fff', 
+              marginBottom: '40px',
+              textAlign: 'center'
+            }}>
+              Metahuman
+            </h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+              gap: isMobile ? '40px' : '40px',
+              marginTop: '24px',
+              maxWidth: '1400px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              padding: isMobile ? '0 16px' : '0'
+            }}>
+              {[
+                { path: '/mocapgifs/facialmotion.gif', description: 'Facial Motion' },
+                { path: '/mocapgifs/facemesh.png', description: 'Face Mesh' },
+                { path: '/mocapgifs/sequence.gif', description: 'Sequence' }
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      aspectRatio: '16/9',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => handleImageClick(item.path, item.description)}
+                  >
+                    <Image
+                      src={getImageSrc(item.path)}
+                      alt={item.description}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                      }}
+                    />
+                  </div>
+                  <p style={{
+                    fontSize: '0.95rem',
+                    color: '#d0d0d0',
+                    textAlign: 'center',
+                    margin: 0,
+                    lineHeight: 1.5
+                  }}>
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </>
+  );
+}
