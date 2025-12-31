@@ -30,8 +30,8 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
             <Image
               src={getImageSrc(post.thumbnail)}
               alt={post.title}
-              width={600}
-              height={400}
+              width={1920}
+              height={1080}
               className="about-project-image"
               loading="lazy"
             />

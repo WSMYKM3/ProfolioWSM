@@ -16,6 +16,8 @@ export interface Post {
   features?: string[]; // Array of feature tags (e.g., ["#XR Hands", "#Trailer Animation"])
   galleryImages?: string[]; // Array of image URLs for the detail view gallery
   role?: string; // Project contribution/role (e.g., "UX/XR Lead")
+  achievement?: string; // Project achievement or recognition (e.g., "AWE 2025 USA presentation")
+  stage3VideoUrl?: string; // Stage 3 video URL for Signie project
 }
 
 export const posts: Post[] = [
@@ -46,17 +48,24 @@ export const posts: Post[] = [
     id: "post-2",
     title: "Signie",
     thumbnail: "linkedinthumbnail.png",
-    file: "post-3",
-    date: "2024-02-01",
-    tags: ["xr"],
-    quality: "low",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoTitle: "Mixed Media Video Title",
-    gifUrl: "/gifs/mixed-media.gif", // GIF for cinematic-extra section
-    description: "A creative exploration of mixed media combining video, photography, and interactive elements.",
-    softwareTools: ["Unity6- XR develop", "Virtual hands", "Photoshop"],
-    features: ["#XR Hands", "#Motion Capture and motion refining"],
-    role: "Creative Technologist"
+    file: "post-2",
+    date: "March–Jun 2025",
+    tags: ["xr", "featured"],
+    quality: "high",
+    videoUrls: [
+      "https://www.youtube.com/watch?v=BpG5c0Rr4E8",
+      "https://www.youtube.com/watch?v=GxtJhHQGz3o"
+    ],
+    videoTitles: [
+      "Trailer",
+      "Fullplay video"
+    ],
+    description: "Signie is an immersive ASL learning and real-time translation system powered by hand tracking, micro-gestures, and AI feedback. It evolved from concept validation to interactive learning experiences, and ultimately to AI-glasses-based live translation.",
+    softwareTools: ["Unity6", "Blender"],
+    features: ["Hand Tracking", "Gesture Recognition", "Micro-Gestures", "Voice-to-Text", "Virtual Guide", "Animation State Machine"],
+    role: "XXR developer",
+    achievement: "AWE 2025 USA presentation",
+    stage3VideoUrl: "" // Add Stage 3 YouTube video URL here when available
   },
   {
     id: "post-3",
@@ -78,7 +87,7 @@ export const posts: Post[] = [
   {
     id: "post-4",
     title: "The Shadow of Horizon",
-    thumbnail: "https://via.placeholder.com/400x450/cccccc/666666?text=Video+Project",
+    thumbnail: "/mocapthumbnail.png",
     file: "post-4",
     date: "3 months in 2024",
     tags: ["animation"],

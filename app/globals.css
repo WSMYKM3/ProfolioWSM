@@ -545,11 +545,11 @@ header h1 {
     backface-visibility: hidden;
 }
 
-/* 统一所有postcard大小 - 使用大尺寸 */
+/* 统一所有postcard大小 - 使用16:9比例 (1920x1080) */
 .post-card img,
 .post-card .post-card-image {
-    height: 450px;
-    /* 统一高度，增大尺寸 */
+    aspect-ratio: 16 / 9;
+    /* 使用16:9比例，匹配1920x1080的thumbnail */
     width: 100%;
     object-fit: cover;
 }
@@ -1515,6 +1515,7 @@ header h1 {
 .project-detail-image {
     width: 100%;
     height: auto;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
 }
@@ -2025,7 +2026,7 @@ header h1 {
 .about-project-image-wrapper {
     width: 100%;
     height: 0;
-    padding-bottom: 66.67%; /* 3:2 aspect ratio */
+    padding-bottom: 56.25%; /* 16:9 aspect ratio (1920x1080) */
     position: relative;
     overflow: hidden;
     background-color: #0a0a0a;

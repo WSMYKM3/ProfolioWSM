@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -54,6 +55,17 @@ function formatDate(dateString: string): string {
 }
 
 export default function ProjectDetailClient({ slug }: { slug: string }) {
+  const [isMobile, setIsMobile] = useState(false)
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   // Find the post by slug (file identifier)
   const postId = fileToPostId[slug]
   const post = postId ? getPostById(postId) : undefined
@@ -111,6 +123,106 @@ export default function ProjectDetailClient({ slug }: { slug: string }) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="project-content-wrapper"
           >
+            {/* Title and Videos for post-2 at the top */}
+            {post.id === 'post-2' && (
+              <>
+                {/* Project Title */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  style={{
+                    fontSize: isMobile ? '3rem' : '4.5rem',
+                    fontWeight: 800,
+                    color: '#fff',
+                    textAlign: 'center',
+                    marginBottom: '40px',
+                    letterSpacing: '-0.02em',
+                    width: '100%'
+                  }}
+                >
+                  {post.title}
+                </motion.h1>
+                
+                {/* Two Videos at the top - left and right */}
+                {post.videoUrls && Array.isArray(post.videoUrls) && post.videoUrls.length >= 2 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                      gap: '24px',
+                      marginBottom: '48px',
+                      width: '100%'
+                    }}
+                  >
+                    {post.videoUrls.slice(0, 2).map((videoUrl, idx) => {
+                      // Convert YouTube URL to embed format
+                      let embedUrl = '';
+                      if (videoUrl.includes('/embed/')) {
+                        embedUrl = videoUrl;
+                      } else if (videoUrl.includes('youtube.com/watch')) {
+                        const videoId = videoUrl.split('v=')[1]?.split('&')[0];
+                        if (videoId) {
+                          embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                        }
+                      } else if (videoUrl.includes('youtu.be/')) {
+                        const videoId = videoUrl.split('youtu.be/')[1]?.split('?')[0];
+                        if (videoId) {
+                          embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                        }
+                      } else {
+                        embedUrl = videoUrl;
+                      }
+                      
+                      const videoTitle = post.videoTitles?.[idx] || `${post.title} Video ${idx + 1}`;
+                      
+                      return (
+                        <div key={idx} style={{ width: '100%' }}>
+                          <div style={{
+                            position: 'relative',
+                            width: '100%',
+                            paddingBottom: '56.25%', // 16:9 aspect ratio
+                            height: 0,
+                            overflow: 'hidden',
+                            borderRadius: '12px',
+                            backgroundColor: '#000',
+                            marginBottom: '12px'
+                          }}>
+                            <iframe
+                              src={embedUrl}
+                              title={videoTitle}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                border: 'none'
+                              }}
+                            />
+                          </div>
+                          <p style={{
+                            fontSize: '0.875rem',
+                            color: 'rgba(255,255,255,0.7)',
+                            textAlign: 'center',
+                            margin: 0
+                          }}>
+                            {videoTitle}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </>
+            )}
+
             <div className="project-detail-grid">
               {/* Left Column: PostCard */}
               <motion.div
@@ -123,13 +235,15 @@ export default function ProjectDetailClient({ slug }: { slug: string }) {
                   <Image
                     src={getImageSrc(post.thumbnail)}
                     alt={post.title}
-                    width={600}
-                    height={800}
+                    width={1920}
+                    height={1080}
                     className="project-detail-image"
                     priority
                   />
                   <div className="project-detail-card-content">
-                    <h2 className="project-detail-card-title">{post.title}</h2>
+                    {post.id !== 'post-2' && (
+                      <h2 className="project-detail-card-title">{post.title}</h2>
+                    )}
                     <div className="project-detail-card-meta">
                       <span className="project-detail-card-date">{formatDate(post.date)}</span>
                       <span className="project-detail-card-tags">{post.tags.join(', ')}</span>
@@ -145,8 +259,8 @@ export default function ProjectDetailClient({ slug }: { slug: string }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                {/* Video Player */}
-                {post.videoUrl && (
+                {/* Single Video Player (for other posts) */}
+                {post.id !== 'post-2' && post.videoUrl && (
                   <div className="project-detail-video">
                     <div className="video-wrapper">
                       {post.videoUrl.includes('youtube.com') || post.videoUrl.includes('youtu.be') ? (

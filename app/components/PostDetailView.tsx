@@ -101,6 +101,24 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
             ];
         }
         
+        if (post.id === 'post-2') {
+            return [
+                ...baseSections,
+                { id: 'tools', label: 'Tools' },
+                { id: 'ideation', label: 'Ideation' },
+                { id: 'contributions', label: 'My Contributions' },
+                {
+                    id: 'process',
+                    label: 'Process',
+                    subsections: [
+                        { id: 'process-stage1', label: 'Stage1. Prototype - Solve animation of tutors(hand & full body)' },
+                        { id: 'process-stage2', label: 'Stage2. Develop learning and testing function' },
+                        { id: 'process-stage3', label: 'Stage3. AI Glasses: Live ASL Translation' }
+                    ]
+                }
+            ];
+        }
+        
         if (post.id === 'post-3') {
             return [
                 ...baseSections,
@@ -328,6 +346,86 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                 
                 {/* Main Content */}
                 <div style={{ flex: 1, minWidth: 0 }}>
+                    {/* Two YouTube Videos above Intro for post-2 */}
+                    {post.id === 'post-2' && post.videoUrls && post.videoUrls.length >= 2 && (
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                            gap: '24px',
+                            marginBottom: '48px',
+                            width: '100%'
+                        }}>
+                            {post.videoUrls.slice(0, 2).map((videoUrl, idx) => {
+                                const embedUrl = convertToEmbedUrl(videoUrl);
+                                const videoTitle = post.videoTitles?.[idx] || `${post.title} Video ${idx + 1}`;
+                                
+                                return (
+                                    <div key={idx} style={{ width: '100%' }}>
+                                        <div style={{
+                                            position: 'relative',
+                                            width: '100%',
+                                            paddingBottom: '56.25%', // 16:9 aspect ratio
+                                            height: 0,
+                                            overflow: 'hidden',
+                                            borderRadius: '12px',
+                                            backgroundColor: '#000',
+                                            marginBottom: '12px'
+                                        }}>
+                                            {embedUrl ? (
+                                                <iframe
+                                                    src={embedUrl}
+                                                    title={videoTitle}
+                                                    frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        left: 0,
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        border: 'none'
+                                                    }}
+                                                />
+                                            ) : (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    backgroundColor: 'rgba(255,255,255,0.05)',
+                                                    border: '1px dashed rgba(255,255,255,0.2)'
+                                                }}>
+                                                    <p style={{
+                                                        fontSize: '0.95rem',
+                                                        color: '#888',
+                                                        textAlign: 'center',
+                                                        margin: 0,
+                                                        padding: '20px'
+                                                    }}>
+                                                        YouTube video placeholder
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <p style={{
+                                            fontSize: '0.875rem',
+                                            color: 'rgba(255,255,255,0.7)',
+                                            textAlign: 'center',
+                                            margin: 0
+                                        }}>
+                                            {videoTitle}
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                    
                     <div id="intro" className="detail-content" style={{
                         fontSize: '1.15rem',
                         lineHeight: 1.8,
