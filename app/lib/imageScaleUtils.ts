@@ -30,6 +30,10 @@ export function getImageScale(imageSrc: string): number {
   if (imageSrc.includes('/gifs/process-placeholder')) {
     return 1.2;
   }
+  // Signie large images - use smaller scale
+  if (imageSrc.includes('/Signiepics/handrecord.png') || imageSrc.includes('/Signiepics/mixwords.png')) {
+    return 0.8; // No scale for these large images
+  }
   // Default scale for other images/gifs
   return 2;
 }

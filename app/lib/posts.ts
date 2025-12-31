@@ -65,7 +65,7 @@ export const posts: Post[] = [
     features: ["Hand Tracking", "Gesture Recognition", "Micro-Gestures", "Voice-to-Text", "Virtual Guide", "Animation State Machine"],
     role: "XXR developer",
     achievement: "AWE 2025 USA presentation",
-    stage3VideoUrl: "" // Add Stage 3 YouTube video URL here when available
+    stage3VideoUrl: "https://www.youtube.com/watch?v=j6PK1TTSxV0"
   },
   {
     id: "post-3",

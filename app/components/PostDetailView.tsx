@@ -104,7 +104,6 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
         if (post.id === 'post-2') {
             return [
                 ...baseSections,
-                { id: 'tools', label: 'Tools' },
                 { id: 'ideation', label: 'Ideation' },
                 { id: 'contributions', label: 'My Contributions' },
                 {

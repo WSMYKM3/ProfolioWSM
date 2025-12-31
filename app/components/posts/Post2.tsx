@@ -157,45 +157,8 @@ export default function Post2() {
 
       <div className="post-content">
         <div className="text-content">
-          {/* Tools Section */}
-          <section id="tools" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
-            <h2 style={{ 
-              fontSize: '1.75rem', 
-              fontWeight: 700, 
-              color: '#fff', 
-              marginBottom: '40px',
-              textAlign: 'center'
-            }}>
-              Tools
-            </h2>
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '16px',
-              justifyContent: 'center',
-              maxWidth: '800px',
-              margin: '0 auto'
-            }}>
-              {['Unity6(C#)', 'Blender'].map((tool, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: '12px 24px',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    borderRadius: '8px',
-                    color: '#d0d0d0',
-                    fontSize: '1rem',
-                    border: '1px solid rgba(255,255,255,0.1)'
-                  }}
-                >
-                  {tool}
-                </div>
-              ))}
-            </div>
-          </section>
-
           {/* Ideation Section */}
-          <section id="ideation" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+          <section id="ideation" style={{ marginBottom: '72px', scrollMarginTop: '100px' }}>
             <h2 style={{ 
               fontSize: '1.75rem', 
               fontWeight: 700, 
@@ -221,7 +184,7 @@ export default function Post2() {
           </section>
 
           {/* My Contributions Section */}
-          <section id="contributions" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+          <section id="contributions" style={{ marginBottom: '72px', scrollMarginTop: '100px' }}>
             <h2 style={{ 
               fontSize: '1.75rem', 
               fontWeight: 700, 
@@ -266,7 +229,7 @@ export default function Post2() {
           </section>
 
           {/* Process Section */}
-          <section id="process" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+          <section id="process" style={{ marginBottom: '72px', scrollMarginTop: '100px' }}>
             <h2 style={{ 
               fontSize: '1.75rem', 
               fontWeight: 700, 
@@ -332,7 +295,7 @@ export default function Post2() {
                       aspectRatio: '16/9',
                       borderRadius: '12px',
                       overflow: 'hidden',
-                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
                     onClick={() => handleImageClick(item.path, item.description)}
@@ -341,7 +304,7 @@ export default function Post2() {
                       src={getImageSrc(item.path)}
                       alt={item.description}
                       fill
-                      style={{ objectFit: 'contain' }}
+                      style={{ objectFit: 'cover' }}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
@@ -349,11 +312,11 @@ export default function Post2() {
                     />
                   </div>
                   <p style={{
-                    fontSize: '0.85rem',
+                    fontSize: '1rem',
                     color: '#d0d0d0',
                     textAlign: 'center',
                     margin: 0,
-                    lineHeight: 1.4
+                    lineHeight: 1.5
                   }}>
                     {item.description}
                   </p>
@@ -401,7 +364,7 @@ export default function Post2() {
                       aspectRatio: '16/9',
                       borderRadius: '12px',
                       overflow: 'hidden',
-                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
                     onClick={() => handleImageClick(item.path, item.description)}
@@ -410,7 +373,7 @@ export default function Post2() {
                       src={getImageSrc(item.path)}
                       alt={item.description}
                       fill
-                      style={{ objectFit: 'contain' }}
+                      style={{ objectFit: 'cover' }}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
@@ -418,11 +381,11 @@ export default function Post2() {
                     />
                   </div>
                   <p style={{
-                    fontSize: '0.85rem',
+                    fontSize: '1rem',
                     color: '#d0d0d0',
                     textAlign: 'center',
                     margin: 0,
-                    lineHeight: 1.4
+                    lineHeight: 1.5
                   }}>
                     {item.description}
                   </p>
@@ -464,13 +427,13 @@ export default function Post2() {
             }}>
               {/* 6 pictures and a gif */}
               {[
-                { path: '/signie/stage2-1.png', description: 'Word mixing interface 1' },
-                { path: '/signie/stage2-2.png', description: 'Word mixing interface 2' },
-                { path: '/signie/stage2-3.png', description: 'Familiarity levels 1' },
-                { path: '/signie/stage2-4.png', description: 'Familiarity levels 2' },
-                { path: '/signie/stage2-5.png', description: 'Learning progress 1' },
-                { path: '/signie/stage2-6.png', description: 'Learning progress 2' },
-                { path: '/signie/stage2-demo.gif', description: 'Learning and testing demonstration' }
+                { path: '/Signiepics/mixwords.png', description: 'Pattern of learning and testing with mixed mechanism' },
+                { path: '/Signiepics/manager.jpg', description: 'Manager prefab for a learning a new word' },
+                { path: '/Signiepics/learn.gif', description: 'Follow the tutor animation to learn' },
+                { path: '/Signiepics/test1.gif', description: 'Test1: Hand Gesture Test' },
+                { path: '/Signiepics/test2.gif', description: 'Test2: A rhythm game-like testing to test ASL alphabet' },
+                { path: '/Signiepics/test3.gif', description: 'Test3: Pick correct lines based on animation played by tutor' }
+                
               ].map((item, index) => (
                 <div
                   key={`stage2-${index}`}
@@ -487,7 +450,7 @@ export default function Post2() {
                       aspectRatio: '16/9',
                       borderRadius: '12px',
                       overflow: 'hidden',
-                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
                     onClick={() => handleImageClick(item.path, item.description)}
@@ -496,7 +459,7 @@ export default function Post2() {
                       src={getImageSrc(item.path)}
                       alt={item.description}
                       fill
-                      style={{ objectFit: 'contain' }}
+                      style={{ objectFit: 'cover' }}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
@@ -504,11 +467,11 @@ export default function Post2() {
                     />
                   </div>
                   <p style={{
-                    fontSize: '0.85rem',
+                    fontSize: '1rem',
                     color: '#d0d0d0',
                     textAlign: 'center',
                     margin: 0,
-                    lineHeight: 1.4
+                    lineHeight: 1.5
                   }}>
                     {item.description}
                   </p>
@@ -577,12 +540,12 @@ export default function Post2() {
                 height: 0,
                 overflow: 'hidden',
                 borderRadius: '12px',
-                backgroundColor: '#000',
+                backgroundColor: 'transparent',
                 marginBottom: '12px'
               }}>
                 {stage3VideoUrl ? (
                   <iframe
-                    src={convertToEmbedUrl(stage3VideoUrl)}
+                    src={`${convertToEmbedUrl(stage3VideoUrl)}?autoplay=1&mute=1&loop=1&playlist=${stage3VideoUrl.includes('watch?v=') ? stage3VideoUrl.split('v=')[1]?.split('&')[0] : stage3VideoUrl.split('/embed/')[1]?.split('?')[0]}`}
                     title="Live ASL Translation Demonstration"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -593,7 +556,8 @@ export default function Post2() {
                       left: 0,
                       width: '100%',
                       height: '100%',
-                      border: 'none'
+                      border: 'none',
+                      borderRadius: '12px'
                     }}
                   />
                 ) : (
