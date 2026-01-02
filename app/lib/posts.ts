@@ -63,7 +63,7 @@ export const posts: Post[] = [
     description: "Signie is an immersive ASL learning and real-time translation system powered by hand tracking, micro-gestures, and AI feedback. It evolved from concept validation to interactive learning experiences, and ultimately to AI-glasses-based live translation.",
     softwareTools: ["Unity6", "Blender"],
     features: ["Hand Tracking", "Gesture Recognition", "Micro-Gestures", "Voice-to-Text", "Virtual Guide", "Animation State Machine"],
-    role: "XXR developer",
+    role: "XR developer",
     achievement: "AWE 2025 USA presentation",
     stage3VideoUrl: "https://www.youtube.com/watch?v=j6PK1TTSxV0"
   },
