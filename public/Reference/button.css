@@ -1,0 +1,65 @@
+body {
+    background-color: #e5e1dc;
+    font-family: "Jura", sans-serif;
+  }
+  
+  .container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #toggle1 {
+    display: none;
+  }
+  
+  #toggle1 + .btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #eae6e3;
+    width: 150px;
+    height: 150px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 1px 1px 2.6px white,
+      inset -1px -1px 2.6px rgba(0, 0, 0, 0.2), 2px 2px 4px rgba(0, 0, 0, 0.2),
+      4px 4px 8px rgba(0, 0, 0, 0.14), 6px 6px 12px rgba(0, 0, 0, 0.12),
+      8px 8px 16px rgba(0, 0, 0, 0.1), 10px 10px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(120, 120, 120, 0.1);
+    transition: box-shadow 0.3s ease;
+    user-select: none;
+  }
+  
+  #toggle1:checked + .btn {
+    box-shadow: inset 0.5px 0.5px 1.4px white,
+      inset -0.5px -0.5px 1.4px rgba(0, 0, 0, 0.1), 1px 1px 2px rgba(0, 0, 0, 0.1),
+      2px 2px 4px rgba(0, 0, 0, 0.12), 4px 4px 8px rgba(0, 0, 0, 0.1),
+      6px 6px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  #toggle1 + .btn .top {
+    font-size: 30px;
+    font-weight: 600;
+  }
+  
+  #toggle1 + .btn .bottom .dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-color: rgba(122, 122, 120, 0.2);
+    border-radius: 50%;
+    transition: 0.3s ease;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  #toggle1:checked + .btn .bottom .dot {
+    background-color: #71bd81;
+    box-shadow: inset 0 0 0 transparent, 0 0 2px #71bd81, 0 0 4px #71bd81;
+  }
+  

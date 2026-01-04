@@ -2,55 +2,41 @@
 
 import { useState } from 'react';
 import TopNav from '@/app/components/TopNav';
-import MasonryGrid from '@/app/components/MasonryGrid';
-import Modal from '@/app/components/Modal';
+import HorizontalPostGrid from '@/app/components/HorizontalPostGrid';
+import ProjectPreview from '@/app/components/ProjectPreview';
 import { dailyPracticePosts, DailyPracticePost } from '@/app/lib/dailyPractice';
 import { Post } from '@/app/lib/posts';
 
 export default function DailyPractice() {
-  const [selectedPost, setSelectedPost] = useState<Post | DailyPracticePost | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Initialize with first post
+  const [selectedPost, setSelectedPost] = useState<Post | DailyPracticePost | null>(
+    dailyPracticePosts.length > 0 ? dailyPracticePosts[0] : null
+  );
+  const [viewedPosts, setViewedPosts] = useState<Set<string>>(new Set());
 
   const handlePostClick = (post: Post | DailyPracticePost) => {
-    // Convert DailyPracticePost to Post format for Modal if needed
-    if ('file' in post && post.file) {
-      // Create a Post-like object for the modal
-      const modalPost: Post = {
-        id: post.id,
-        title: post.title,
-        thumbnail: post.thumbnail,
-        file: post.file,
-        date: post.date,
-        tags: post.tags,
-        quality: post.quality,
-      };
-      setSelectedPost(modalPost);
-    } else {
-      setSelectedPost(post as Post);
-    }
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedPost(null);
+    // Mark post as viewed
+    setViewedPosts(prev => new Set(prev).add(post.id));
+    
+    // Update selected post to show in preview
+    setSelectedPost(post);
   };
 
   return (
     <div className="layout">
       <TopNav />
-      <main className="main-content masonry-page">
+      <main className="main-content daily-practice-page">
         <header>
           <h1>Daily Practice</h1>
         </header>
-        <div className="masonry-container">
-          <MasonryGrid posts={dailyPracticePosts} onPostClick={handlePostClick} />
+        <div className="daily-practice-container">
+          <ProjectPreview post={selectedPost} />
+          <HorizontalPostGrid 
+            posts={dailyPracticePosts} 
+            onPostClick={handlePostClick}
+            viewedPosts={viewedPosts}
+          />
         </div>
-        <Modal 
-          post={selectedPost as Post} 
-          isOpen={isModalOpen} 
-          onClose={handleCloseModal} 
-        />
       </main>
     </div>
   );

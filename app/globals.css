@@ -1261,29 +1261,64 @@ header h1 {
     position: relative;
 }
 
-/* Post Card Base Styles for Masonry */
+/* Post Card Base Styles for Masonry - Neumorphic Button Style */
 .masonry-grid .post-card {
-    background-color: #3a3d45;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: inline-block;
     width: 100%;
+    max-width: 100%;
     break-inside: avoid;
     margin-bottom: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+    transform: scale(0.9);
+    backface-visibility: visible;
 }
 
 .masonry-grid .post-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: scale(0.95);
+}
+
+.masonry-grid .post-card input[type="checkbox"] {
+    display: none;
+}
+
+.masonry-grid .post-card .btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #2a2a2a;
+    width: 100%;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 1px 1px 2.6px rgba(255, 255, 255, 0.1),
+      inset -1px -1px 2.6px rgba(0, 0, 0, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.3),
+      4px 4px 8px rgba(0, 0, 0, 0.25), 6px 6px 12px rgba(0, 0, 0, 0.2),
+      8px 8px 16px rgba(0, 0, 0, 0.15), 10px 10px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(120, 120, 120, 0.2);
+    transition: box-shadow 0.3s ease;
+    user-select: none;
+    overflow: hidden;
+}
+
+.masonry-grid .post-card input[type="checkbox"]:checked + .btn {
+    box-shadow: inset 0.5px 0.5px 1.4px rgba(255, 255, 255, 0.15),
+      inset -0.5px -0.5px 1.4px rgba(0, 0, 0, 0.4), 1px 1px 2px rgba(0, 0, 0, 0.2),
+      2px 2px 4px rgba(0, 0, 0, 0.18), 4px 4px 8px rgba(0, 0, 0, 0.15),
+      6px 6px 12px rgba(0, 0, 0, 0.12);
 }
 
 .masonry-grid .post-card-image-wrapper {
     width: 100%;
     display: block;
     overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
 }
 
 .masonry-grid .post-card-image {
@@ -1291,26 +1326,426 @@ header h1 {
     height: auto;
     display: block;
     object-fit: contain;
+    border-radius: 8px;
 }
 
-.masonry-grid .post-card-content {
-    padding: 16px;
-    background-color: #3a3d45;
-}
-
-.masonry-grid .post-card-title {
+.masonry-grid .post-card .top {
     font-size: 1rem;
     font-weight: 600;
-    letter-spacing: -0.005em;
-    color: #e8e8e8;
+    color: #e0e0e0;
     margin-bottom: 8px;
+    flex-shrink: 0;
     font-family: var(--font-inter), sans-serif;
     line-height: 1.4;
 }
 
-.masonry-grid .post-card-meta {
-    font-size: 0.875rem;
-    color: #b0b0b0;
+.masonry-grid .post-card .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.masonry-grid .post-card .bottom .dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-color: rgba(122, 122, 120, 0.2);
+    border-radius: 50%;
+    transition: 0.3s ease;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.masonry-grid .post-card input[type="checkbox"]:checked + .btn .bottom .dot {
+    background-color: #71bd81;
+    box-shadow: inset 0 0 0 transparent, 0 0 2px #71bd81, 0 0 4px #71bd81;
+}
+
+/* Daily Practice Page - New Layout Styles */
+.daily-practice-page {
+    padding: 0;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.daily-practice-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 159px 20px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+/* Project Preview Component */
+.project-preview {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.project-preview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.project-preview-media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.project-preview-video {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.project-preview-video iframe,
+.project-preview-video video {
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: cover;
+}
+
+.project-preview-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Mobile optimizations for preview */
+@media (max-width: 768px) {
+    .project-preview-video iframe {
+        /* Ensure iframe is responsive on mobile */
+        max-width: 100%;
+    }
+
+    .project-preview-image {
+        /* Better image display on mobile */
+        min-height: 200px;
+    }
+}
+
+.project-preview-title {
+    text-align: center;
+}
+
+.project-preview-title h2 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.project-preview-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    color: #666;
+    font-size: 1.2rem;
+}
+
+/* Horizontal Post Grid Component */
+.horizontal-post-grid-container {
+    position: relative;
+    width: 100%;
+}
+
+.horizontal-post-grid {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    padding: 0;
+    -webkit-overflow-scrolling: touch;
+    /* Better touch scrolling on mobile */
+    overscroll-behavior-x: contain;
+    /* Prevent vertical bounce on iOS */
+    -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-post-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.horizontal-post-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.horizontal-post-grid::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.horizontal-post-grid::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.horizontal-post-grid .post-card {
+    flex: 0 0 auto;
+    width: 300px;
+    min-width: 300px;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+    transform: scale(0.9);
+    backface-visibility: visible;
+}
+
+.horizontal-post-grid .post-card:hover {
+    transform: scale(0.95);
+}
+
+.horizontal-post-grid .post-card input[type="checkbox"] {
+    display: none;
+}
+
+.horizontal-post-grid .post-card .btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #2a2a2a;
+    width: 100%;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 1px 1px 2.6px rgba(255, 255, 255, 0.1),
+      inset -1px -1px 2.6px rgba(0, 0, 0, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.3),
+      4px 4px 8px rgba(0, 0, 0, 0.25), 6px 6px 12px rgba(0, 0, 0, 0.2),
+      8px 8px 16px rgba(0, 0, 0, 0.15), 10px 10px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(120, 120, 120, 0.2);
+    transition: box-shadow 0.3s ease;
+    user-select: none;
+    overflow: hidden;
+}
+
+.horizontal-post-grid .post-card input[type="checkbox"]:checked + .btn {
+    box-shadow: inset 0.5px 0.5px 1.4px rgba(255, 255, 255, 0.15),
+      inset -0.5px -0.5px 1.4px rgba(0, 0, 0, 0.4), 1px 1px 2px rgba(0, 0, 0, 0.2),
+      2px 2px 4px rgba(0, 0, 0, 0.18), 4px 4px 8px rgba(0, 0, 0, 0.15),
+      6px 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.horizontal-post-grid .post-card-image-wrapper {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.horizontal-post-grid .post-card-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.horizontal-post-grid .post-card .top {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+    font-family: var(--font-inter), sans-serif;
+    line-height: 1.4;
+}
+
+.horizontal-post-grid .post-card .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.horizontal-post-grid .post-card .bottom .dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-color: rgba(122, 122, 120, 0.2);
+    border-radius: 50%;
+    transition: 0.3s ease;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.horizontal-post-grid .post-card input[type="checkbox"]:checked + .btn .bottom .dot {
+    background-color: #71bd81;
+    box-shadow: inset 0 0 0 transparent, 0 0 2px #71bd81, 0 0 4px #71bd81;
+}
+
+/* Arrow Buttons */
+.horizontal-post-grid-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: rgba(42, 42, 42, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.horizontal-post-grid-arrow:hover {
+    background-color: rgba(42, 42, 42, 1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.horizontal-post-grid-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.horizontal-post-grid-arrow-left {
+    left: 10px;
+}
+
+.horizontal-post-grid-arrow-right {
+    right: 10px;
+}
+
+/* Responsive Styles for Daily Practice */
+@media (max-width: 1024px) {
+    .daily-practice-container {
+        padding: 60px 16px 30px 16px;
+        gap: 40px;
+    }
+
+    .project-preview-media {
+        aspect-ratio: 16 / 9;
+    }
+
+    .project-preview-title h2 {
+        font-size: clamp(1.25rem, 3vw, 2rem);
+    }
+
+    .horizontal-post-grid .post-card {
+        width: 260px;
+        min-width: 260px;
+    }
+
+    .horizontal-post-grid-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .horizontal-post-grid-arrow-left {
+        left: 5px;
+    }
+
+    .horizontal-post-grid-arrow-right {
+        right: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .daily-practice-page {
+        /* Ensure proper spacing from header */
+        padding-top: 60px;
+    }
+
+    .daily-practice-container {
+        padding: 50px 0 20px 0;
+        gap: 24px;
+        /* Prevent horizontal overflow */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .project-preview {
+        padding: 0 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .project-preview-content {
+        gap: 16px;
+        width: 100%;
+    }
+
+    .project-preview-media {
+        border-radius: 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .project-preview-title {
+        padding: 0 12px;
+        width: 100%;
+    }
+
+    .project-preview-title h2 {
+        font-size: 1.25rem;
+        line-height: 1.3;
+        word-wrap: break-word;
+    }
+
+    .horizontal-post-grid-container {
+        padding: 0 12px;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+    }
+
+    .horizontal-post-grid {
+        gap: 12px;
+        padding: 12px 0;
+        /* Add padding for better touch scrolling */
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+        /* Ensure smooth scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+    }
+
+    .horizontal-post-grid .post-card {
+        width: 220px;
+        min-width: 220px;
+        max-width: 220px;
+    }
+
+    .horizontal-post-grid .post-card .btn {
+        padding: 16px;
+        min-height: 180px;
+    }
+
+    /* Hide arrows on mobile - users can swipe */
+    .horizontal-post-grid-arrow {
+        display: none;
+    }
 }
 
 /* Responsive Masonry Layout */
