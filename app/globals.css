@@ -1672,27 +1672,49 @@ header h1 {
 
 @media (max-width: 768px) {
     .daily-practice-page {
-        /* Ensure proper spacing from header */
-        padding-top: 60px;
+        /* Ensure proper spacing from header and center content */
+        padding-top: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .daily-practice-page header {
+        text-align: center;
+        padding: 0 0 20px 0;
+        width: 100%;
+    }
+
+    .daily-practice-page header h1 {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+        margin: 0 auto;
     }
 
     .daily-practice-container {
-        padding: 50px 0 20px 0;
-        gap: 24px;
+        padding: 40px 0 40px 0;
+        gap: 32px;
         /* Prevent horizontal overflow */
         max-width: 100%;
         overflow-x: hidden;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .project-preview {
-        padding: 0 12px;
+        padding: 0 16px;
         width: 100%;
         max-width: 100%;
     }
 
     .project-preview-content {
-        gap: 16px;
+        gap: 20px;
         width: 100%;
+        max-width: 100%;
     }
 
     .project-preview-media {
@@ -1702,8 +1724,9 @@ header h1 {
     }
 
     .project-preview-title {
-        padding: 0 12px;
+        padding: 0 16px;
         width: 100%;
+        max-width: 100%;
     }
 
     .project-preview-title h2 {
@@ -1713,7 +1736,7 @@ header h1 {
     }
 
     .horizontal-post-grid-container {
-        padding: 0 12px;
+        padding: 0 16px;
         width: 100%;
         max-width: 100%;
         position: relative;
@@ -2449,18 +2472,86 @@ header h1 {
 }
 
 .about-project-card {
-    background-color: #1a1d25;
+    position: relative;
+    background-color: #1a1717;
     border-radius: 12px;
-    overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: 0.15s ease;
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 1px 1px rgba(255, 255, 255, 0.1), inset 0 1px rgba(255, 255, 255, 0.3), inset 0 1px 12px rgba(0, 0, 0, 0.1),
+        inset 0 -4px 1px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.8),
+        12px 12px 16px rgba(255, 255, 255, 0.03), 24px 24px 32px rgba(255, 255, 255, 0.05);
 }
 
-.about-project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+.about-project-card:active {
+    box-shadow: inset 1px 1px rgba(255, 255, 255, 0.15), inset 0 1px rgba(255, 255, 255, 0.3), inset 0 1px 12px rgba(0, 0, 0, 0.1),
+        inset 0 -4px 1px rgba(0, 0, 0, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.8);
+    margin: 2px -2px -2px 2px;
+    background-color: color-mix(in oklch, #262626, black 12%);
+}
+
+.about-project-card::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 5px 9px 5px 5px;
+    z-index: -1;
+    box-shadow: inset -1.2px -1.2px rgba(255, 255, 255, 0.8), 1px 1px 2px rgba(255, 255, 255, 0.05), 4px 12px 24px -6px rgba(255, 255, 255, 0.06);
+    transition: 0.15s ease;
+    border-radius: 12px;
+}
+
+.about-project-card:active::after {
+    margin: -2px 2px 2px -2px;
+}
+
+/* Keyboard button style for project details button */
+.project-details-button {
+    position: relative;
+    margin-top: 40px;
+    padding: 16px 32px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s ease;
+    outline: none;
+    box-shadow: inset 1px 1px rgba(255, 255, 255, 0.8), inset 0 1px rgba(255, 255, 255, 0.9), inset 0 1px 12px rgba(0, 0, 0, 0.05),
+        inset 0 -4px 1px rgba(0, 0, 0, 0.1), inset -1px -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.project-details-button:active {
+    margin: 2px -2px -2px 2px;
+    background-color: color-mix(in oklch, #fff, black 3%);
+}
+
+.project-details-button::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 5px 9px 5px 5px;
+    z-index: -1;
+    box-shadow: inset -1.2px -1.2px rgba(255, 255, 255, 0.6), 1px 1px 2px rgba(0, 0, 0, 0.2), 
+        12px 12px 16px rgba(0, 0, 0, 0.4), 24px 24px 32px rgba(0, 0, 0, 0.5);
+    transition: 0.15s ease;
+    border-radius: 30px;
+}
+
+.project-details-button:active::after {
+    margin: -2px 2px 2px -2px;
 }
 
 .about-project-image-wrapper {
@@ -2470,6 +2561,7 @@ header h1 {
     position: relative;
     overflow: hidden;
     background-color: #0a0a0a;
+    border-radius: 12px 12px 0 0;
 }
 
 .about-project-image {
@@ -2479,11 +2571,7 @@ header h1 {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.about-project-card:hover .about-project-image {
-    transform: scale(1.05);
+    transition: 0.15s ease;
 }
 
 .about-project-content {
@@ -2501,11 +2589,7 @@ header h1 {
     margin-bottom: 12px;
     font-family: var(--font-inter), sans-serif;
     line-height: 1.2;
-    transition: color 0.3s ease;
-}
-
-.about-project-card:hover .about-project-title {
-    color: #ffffff;
+    transition: 0.15s ease;
 }
 
 .about-project-description {

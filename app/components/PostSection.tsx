@@ -364,21 +364,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
 
           <button
             onClick={() => onPostClick?.(post)}
-            style={{
-              marginTop: '40px',
-              padding: '16px 32px',
-              backgroundColor: '#fff',
-              color: '#000',
-              border: 'none',
-              borderRadius: '30px',
-              fontSize: '1rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'transform 0.2s ease',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            className="project-details-button"
           >
             Check Project Details
           </button>
