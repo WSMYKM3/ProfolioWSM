@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D轮播 - 鼠标控制</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
+            overflow: hidden;
+        }
+
+        /* 定义外层容器样式 */
+        .shell {
+            position: relative;
+            width: 80vw;
+            height: 50vw;
+            max-width: 500px;
+            max-height: 320px;
+            margin: 0;
+            color: white;
+            perspective: 1000px;
+            transform-origin: center;
+        }
+
+        /* 定义内容容器样式 */
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: center;
+            transform-style: preserve-3d;
+            transform: translateZ(-45vw) rotateY(0);
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        /* 定义项目样式 */
+        .item {
+            position: absolute;
+            width: 80vw;
+            height: 50vw;
+            max-width: 500px;
+            max-height: 320px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            background-size: cover;
+            -webkit-box-reflect: below 25px -webkit-linear-gradient(transparent 50%, rgba(255, 255, 255, 0.3));
+        }
+
+        /* 第一个项目样式 */
+        .item:nth-child(1) {
+            background-image: url(./01.jpg);
+            transform: rotateY(0) translateZ(45vw);
+        }
+
+        /* 第二个项目样式 */
+        .item:nth-child(2) {
+            background-image: url(./02.jpg);
+            transform: rotateY(120deg) translateZ(45vw);
+        }
+
+        /* 第三个项目样式 */
+        .item:nth-child(3) {
+            background-image: url(./03.jpg);
+            transform: rotateY(240deg) translateZ(45vw);
+        }
+
+        /* 控制按钮容器 */
+        .controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* 左右按钮样式 */
+        .btn {
+            pointer-events: all;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            user-select: none;
+        }
+
+        .btn-left {
+            margin-left: -90px;
+        }
+
+        .btn-right {
+            margin-right: -90px;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-left::before {
+            content: '‹';
+        }
+
+        .btn-right::before {
+            content: '›';
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <div class="content" id="carousel">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+        <div class="controls">
+            <button class="btn btn-left" id="btnLeft"></button>
+            <button class="btn btn-right" id="btnRight"></button>
+        </div>
+    </div>
+
+    <script>
+        const carousel = document.getElementById('carousel');
+        const btnLeft = document.getElementById('btnLeft');
+        const btnRight = document.getElementById('btnRight');
+
+        let currentIndex = 0; // 当前显示的图片索引 (0, 1, 2)
+        const totalItems = 3; // 总共有3张图片
+        const rotationStep = 120; // 每张图片旋转120度
+        let autoPlayTimer = null; // 自动播放定时器
+        const autoPlayDelay = 5000; // 5秒无操作后自动播放
+
+        // 更新轮播位置
+        function updateCarousel() {
+            const rotation = -currentIndex * rotationStep;
+            carousel.style.transform = `translateZ(-45vw) rotateY(${rotation}deg)`;
+        }
+
+        // 重置自动播放定时器
+        function resetAutoPlay() {
+            // 清除现有定时器
+            if (autoPlayTimer) {
+                clearTimeout(autoPlayTimer);
+            }
+            // 设置新的定时器，5秒后自动播放下一张
+            autoPlayTimer = setTimeout(() => {
+                nextSlide();
+            }, autoPlayDelay);
+        }
+
+        // 下一张
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+            resetAutoPlay(); // 重置自动播放定时器
+        }
+
+        // 上一张
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
+            resetAutoPlay(); // 重置自动播放定时器
+        }
+
+        // 绑定按钮事件
+        btnLeft.addEventListener('click', prevSlide);
+        btnRight.addEventListener('click', nextSlide);
+
+        // 键盘控制（可选）
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        });
+
+        // 初始化：5秒后开始自动播放
+        resetAutoPlay();
+    </script>
+</body>
+
+</html>
+

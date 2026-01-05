@@ -1,7 +1,7 @@
 'use client';
 
 import { Post } from '@/app/lib/posts';
-import PostSection from './PostSection';
+import Carousel3DWrapper from './Carousel3DWrapper';
 
 interface PostScrollContainerProps {
   posts: Post[];
@@ -9,17 +9,6 @@ interface PostScrollContainerProps {
 }
 
 export default function PostScrollContainer({ posts, onPostClick }: PostScrollContainerProps) {
-  return (
-    <div className="post-scroll-container">
-      {posts.map((post, index) => (
-        <PostSection
-          key={post.id}
-          post={post}
-          index={index}
-          onPostClick={onPostClick}
-        />
-      ))}
-    </div>
-  );
+  return <Carousel3DWrapper posts={posts} onPostClick={onPostClick} />;
 }
 
