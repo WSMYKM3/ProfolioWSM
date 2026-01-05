@@ -79,7 +79,7 @@ export default function Carousel3DWrapper({ posts, onPostClick }: Carousel3DWrap
     autoPlayTimerRef.current = setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % totalItems);
     }, autoPlayDelay);
-  }, [totalItems]);
+  }, [totalItems, autoPlayDelay]);
 
   // Next slide
   const nextSlide = useCallback(() => {
@@ -87,8 +87,8 @@ export default function Carousel3DWrapper({ posts, onPostClick }: Carousel3DWrap
       const newIndex = (prev + 1) % totalItems;
       return newIndex;
     });
-    resetAutoPlay();
-  }, [totalItems, resetAutoPlay]);
+    // Timer will be reset automatically when currentIndex changes
+  }, [totalItems]);
 
   // Previous slide
   const prevSlide = useCallback(() => {
@@ -96,8 +96,8 @@ export default function Carousel3DWrapper({ posts, onPostClick }: Carousel3DWrap
       const newIndex = (prev - 1 + totalItems) % totalItems;
       return newIndex;
     });
-    resetAutoPlay();
-  }, [totalItems, resetAutoPlay]);
+    // Timer will be reset automatically when currentIndex changes
+  }, [totalItems]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -122,16 +122,18 @@ export default function Carousel3DWrapper({ posts, onPostClick }: Carousel3DWrap
     }
   }, [currentIndex, translateZ, windowSize, rotationStep, updateCarousel]);
 
-  // Initialize auto-play and cleanup
+  // Reset auto-play timer whenever currentIndex changes (both manual and automatic)
   useEffect(() => {
-    resetAutoPlay();
+    if (totalItems > 0) {
+      resetAutoPlay();
+    }
 
     return () => {
       if (autoPlayTimerRef.current) {
         clearTimeout(autoPlayTimerRef.current);
       }
     };
-  }, [resetAutoPlay]);
+  }, [currentIndex, resetAutoPlay, totalItems]);
 
   if (totalItems === 0) {
     return null;
