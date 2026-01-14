@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Garden - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Filter Tags -->
+    <div class="filter-container">
+        <button class="filter-tag active" data-filter="all">All</button>
+        <button class="filter-tag" data-filter="design">Design</button>
+        <button class="filter-tag" data-filter="photo">Photo</button>
+        <button class="filter-tag" data-filter="article">Article</button>
+        <button class="filter-tag" data-filter="video">Video</button>
+        <button class="filter-tag" data-filter="note">Note</button>
+    </div>
+
+    <!-- Garden Container -->
+    <main class="garden">
+        <div class="garden-container">
+            
+            <!-- Card 1: Design -->
+            <div class="card card-image" data-category="design" style="top: 3%; left: 5%; rotate: -3deg;">
+                <div class="card-content">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=300&fit=crop" alt="Abstract Design" class="card-img">
+                    <div class="card-info">
+                        <span class="card-tag">Design</span>
+                        <h3 class="card-title">Abstract Composition</h3>
+                        <p class="card-date">planted on Dec 15, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Note -->
+            <div class="card card-text" data-category="note" style="top: 5%; left: 45%; rotate: 2deg;">
+                <div class="card-content">
+                    <span class="card-tag">Note</span>
+                    <h3 class="card-title">On Creative Process</h3>
+                    <p class="card-description">The best ideas come when you're not actively searching for them. Let your mind wander...</p>
+                    <p class="card-date">planted on Jan 3, 2026</p>
+                </div>
+            </div>
+
+            <!-- Card 3: Photo -->
+            <div class="card card-image" data-category="photo" style="top: 8%; left: 72%; rotate: 4deg;">
+                <div class="card-content">
+                    <img src="https://images.unsplash.com/photo-1511497584788-876760111969?w=400&h=500&fit=crop" alt="Portrait" class="card-img">
+                    <div class="card-info">
+                        <span class="card-tag">Photo</span>
+                        <h3 class="card-title">Urban Portrait</h3>
+                        <p class="card-date">planted on Nov 20, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Note Quote -->
+            <div class="card card-quote" data-category="note" style="top: 68%; left: 8%; rotate: -4deg;">
+                <div class="card-content">
+                    <span class="card-tag">Quote</span>
+                    <blockquote class="card-quote-text">
+                        "Design is not just what it looks like and feels like. Design is how it works."
+                    </blockquote>
+                    <p class="card-author">— Steve Jobs</p>
+                    <p class="card-date">planted on Oct 10, 2025</p>
+                </div>
+            </div>
+
+            <!-- Card 5: Article -->
+            <div class="card card-link" data-category="article" style="top: 50%; left: 42%; rotate: 1deg;">
+                <div class="card-content">
+                    <span class="card-tag">Article</span>
+                    <h3 class="card-title">Essential Math for Spatial Computing</h3>
+                    <a href="https://medium.com/@olegfrolov/essential-math-for-spatial-computing" class="card-link-url" target="_blank">Read on Medium →</a>
+                    <p class="card-date">planted on Dec 28, 2025</p>
+                </div>
+            </div>
+
+            <!-- Card 6: Design -->
+            <div class="card card-image" data-category="design" style="top: 58%; left: 68%; rotate: -2deg;">
+                <div class="card-content">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop" alt="3D Design" class="card-img">
+                    <div class="card-info">
+                        <span class="card-tag">Design</span>
+                        <h3 class="card-title">3D Experiments</h3>
+                        <p class="card-date">planted on Jan 1, 2026</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7: Video -->
+            <div class="card card-video" data-category="video" style="top: 28%; left: 8%; rotate: 3deg;">
+                <div class="card-content">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=400&h=250&fit=crop" alt="Video">
+                        <div class="play-icon">▶</div>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-tag">Video</span>
+                        <h3 class="card-title">Design Process Behind the Scenes</h3>
+                        <p class="card-date">planted on Dec 5, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8: Photo -->
+            <div class="card card-image" data-category="photo" style="top: 38%; left: 70%; rotate: 2deg;">
+                <div class="card-content">
+                    <img src="https://images.unsplash.com/photo-1501934369218-2dd92e37e8ab?w=400&h=350&fit=crop" alt="Nature" class="card-img">
+                    <div class="card-info">
+                        <span class="card-tag">Photo</span>
+                        <h3 class="card-title">Morning Light</h3>
+                        <p class="card-date">planted on Nov 15, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9: Article -->
+            <div class="card card-link" data-category="article" style="top: 32%; left: 28%; rotate: -1deg;">
+                <div class="card-content">
+                    <span class="card-tag">Article</span>
+                    <h3 class="card-title">UX/UI Design Trends for 2026</h3>
+                    <a href="https://medium.com/@punitweb/ux-ui-design-trends-for-2026" class="card-link-url" target="_blank">Read More →</a>
+                    <p class="card-date">planted on Jan 2, 2026</p>
+                </div>
+            </div>
+
+            <!-- Card 10: Video -->
+            <div class="card card-video" data-category="video" style="top: 70%; left: 48%; rotate: -2deg;">
+                <div class="card-content">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&h=250&fit=crop" alt="Behind the Scenes">
+                        <div class="play-icon">▶</div>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-tag">Video</span>
+                        <h3 class="card-title">Studio Tour & Workflow</h3>
+                        <p class="card-date">planted on Dec 10, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal for Image Viewing -->
+    <div class="modal" id="imageModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <img src="" alt="" class="modal-image">
+            <div class="modal-info">
+                <h3 class="modal-title"></h3>
+                <p class="modal-date"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Cultivated with care 🌱 © 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

@@ -286,13 +286,18 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
               onClick={() => onPostClick?.(post)}
               style={{
                 width: '100%',
-                height: '200px',
-                borderRadius: '16px',
+                maxWidth: '100%',
+                height: '120px',
+                maxHeight: '120px',
+                borderRadius: '12px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                marginBottom: '24px',
+                marginBottom: '16px',
+                overflow: 'hidden',
+                position: 'relative',
+                zIndex: 1,
               }}
             >
               <motion.div
@@ -307,7 +312,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
                   boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
                 }}
               >
-                <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
                   {embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be') ? (
                     <iframe
                       src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/embed/')[1]?.split('?')[0]}`}
@@ -321,9 +326,11 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
                         left: '50%',
                         width: '177.78%',
                         height: '100%',
+                        maxWidth: 'none',
                         transform: 'translate(-50%, -50%)',
                         border: 'none',
-                        pointerEvents: 'none'
+                        pointerEvents: 'none',
+                        overflow: 'hidden'
                       }}
                     />
                   ) : (

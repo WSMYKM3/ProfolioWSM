@@ -1,43 +1,50 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TopNav from '@/app/components/TopNav';
-import HorizontalPostGrid from '@/app/components/HorizontalPostGrid';
-import ProjectPreview from '@/app/components/ProjectPreview';
+import DigitalGarden from '@/app/components/DigitalGarden';
+import DigitalGardenModal from '@/app/components/DigitalGardenModal';
 import { dailyPracticePosts, DailyPracticePost } from '@/app/lib/dailyPractice';
-import { Post } from '@/app/lib/posts';
 
 export default function DailyPractice() {
-  // Initialize with first post
-  const [selectedPost, setSelectedPost] = useState<Post | DailyPracticePost | null>(
-    dailyPracticePosts.length > 0 ? dailyPracticePosts[0] : null
-  );
-  const [viewedPosts, setViewedPosts] = useState<Set<string>>(new Set());
+  const [selectedPost, setSelectedPost] = useState<DailyPracticePost | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handlePostClick = (post: Post | DailyPracticePost) => {
-    // Mark post as viewed
-    setViewedPosts(prev => new Set(prev).add(post.id));
-    
-    // Update selected post to show in preview
+  // Clear old localStorage key on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Remove old key, keep new one
+      localStorage.removeItem('digitalGardenPositions');
+    }
+  }, []);
+
+  const handlePostClick = (post: DailyPracticePost) => {
     setSelectedPost(post);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedPost(null);
   };
 
   return (
     <div className="layout">
       <TopNav />
-      <main className="main-content daily-practice-page">
+      <main className="main-content">
         <header>
           <h1>Daily Practice</h1>
         </header>
-        <div className="daily-practice-container">
-          <ProjectPreview post={selectedPost} />
-          <HorizontalPostGrid 
-            posts={dailyPracticePosts} 
-            onPostClick={handlePostClick}
-            viewedPosts={viewedPosts}
-          />
-        </div>
+        <DigitalGarden 
+          posts={dailyPracticePosts} 
+          onPostClick={handlePostClick}
+        />
       </main>
+      <DigitalGardenModal 
+        post={selectedPost} 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+      />
     </div>
   );
 }
