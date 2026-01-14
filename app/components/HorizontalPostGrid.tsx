@@ -2,12 +2,11 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { Post } from '@/app/lib/posts';
-import { DailyPracticePost } from '@/app/lib/dailyPractice';
 import PostCard from './PostCard';
 
 interface HorizontalPostGridProps {
-  posts: (Post | DailyPracticePost)[];
-  onPostClick: (post: Post | DailyPracticePost) => void;
+  posts: Post[];
+  onPostClick: (post: Post) => void;
   viewedPosts?: Set<string>;
 }
 
