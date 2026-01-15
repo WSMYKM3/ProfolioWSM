@@ -303,6 +303,8 @@ header h1 {
     perspective: 1000px;
     transform-origin: center;
     overflow: hidden;
+    margin-top: 72px;
+    margin-bottom: 72px;
 }
 
 .carousel-3d-wrapper-content {
@@ -1446,6 +1448,57 @@ header h1 {
     font-family: var(--font-inter), sans-serif;
 }
 
+/* Contact Page Styles */
+.contact-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px);
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.contact-email {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #d0d0d0;
+    margin-top: 24px;
+    text-align: center;
+    font-family: var(--font-inter), sans-serif;
+}
+
+.contact-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    flex-wrap: wrap;
+}
+
+.contact-icon {
+    color: #e8e8e8;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-icon-linkedin:hover {
+    color: #0077b5;
+}
+
+.contact-icon-youtube:hover {
+    color: #FF0000;
+}
+
+.contact-icon svg {
+    width: 96px;
+    height: 96px;
+}
+
 /* Gradient Utilities */
 .gradient-text {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -2276,6 +2329,29 @@ header h1 {
 
     .placeholder-content h1 {
         font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+
+    .contact-page {
+        min-height: calc(100vh - 80px);
+        padding: 80px 20px 40px 20px;
+    }
+
+    .contact-header {
+        margin-bottom: 60px;
+    }
+
+    .contact-email {
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        margin-top: 16px;
+    }
+
+    .contact-icons {
+        gap: 48px;
+    }
+
+    .contact-icon svg {
+        width: 64px;
+        height: 64px;
     }
 
     /* Work Page Responsive */
