@@ -585,8 +585,8 @@ header h1 {
     }
 
     .main-content .horizontal-post-grid-container {
-        margin-top: 16px !important;
-        padding-top: 16px !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
 
     .carousel-3d-wrapper-item > section {
@@ -1964,8 +1964,8 @@ header h1 {
 
 /* Spacing for horizontal grid when used below 3D carousel on Work page */
 .main-content .horizontal-post-grid-container {
-    margin-top: 20px;
-    padding-top: 20px;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .horizontal-post-grid {
@@ -2152,6 +2152,11 @@ header h1 {
 
     .project-preview-title h2 {
         font-size: clamp(1.25rem, 3vw, 2rem);
+    }
+
+    .main-content .horizontal-post-grid-container {
+        margin-top: -40px !important;
+        padding-top: 0 !important;
     }
 
     .horizontal-post-grid .post-card {
