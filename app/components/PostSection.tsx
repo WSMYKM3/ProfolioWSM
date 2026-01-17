@@ -42,6 +42,7 @@ function formatDate(dateString: string): string {
 
 export default function PostSection({ post, index, onPostClick }: PostSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   // Detect mobile device
@@ -53,6 +54,8 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Removed duplicate event listener - using only React onClick
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -129,6 +132,17 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
   const hasMultipleVideos = post.videoUrls && post.videoUrls.length > 0;
   const videoUrls = post.videoUrls || [];
 
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('🔵 Button clicked:', post.id, post.title);
+    if (onPostClick) {
+      onPostClick(post);
+    } else {
+      console.error('❌ onPostClick is undefined for:', post.id);
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -142,7 +156,8 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#050505'
+        backgroundColor: '#050505',
+        pointerEvents: 'auto'
       }}
     >
       {/* Background Media Layer - Always use image */}
@@ -155,7 +170,8 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           width: '100%',
           height: '120%', // Taller for parallax
           y: isMobile ? 0 : yBackground,
-          zIndex: 0
+          zIndex: 0,
+          pointerEvents: 'none'
         }}
       >
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -191,7 +207,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         alignItems: isMobile ? 'flex-end' : 'center',
         justifyContent: 'space-between',
         height: '100%',
-        pointerEvents: 'none' // Let clicks pass through to background if needed, but we'll enable for children
+        pointerEvents: 'auto' // Changed to auto to ensure clicks work
       }}>
 
         {/* Text Content */}
@@ -205,8 +221,11 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             maxWidth: isMobile ? '100%' : '600px',
             pointerEvents: 'auto',
             marginBottom: isMobile ? '40px' : '0',
+            marginRight: isMobile ? '0' : '40px',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            position: 'relative',
+            zIndex: 200
           }}
         >
           <div style={{ marginBottom: '20px' }}>
@@ -370,8 +389,24 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
           </div>
 
           <button
-            onClick={() => onPostClick?.(post)}
+            ref={buttonRef}
+            onClick={handleButtonClick}
+            onMouseDown={(e) => {
+              console.log('🟢 MouseDown on button:', post.id);
+              e.stopPropagation();
+            }}
             className="project-details-button"
+            data-post-id={post.id}
+            style={{ 
+              pointerEvents: 'auto !important' as any, 
+              zIndex: 10000,
+              position: 'relative',
+              cursor: 'pointer',
+              touchAction: 'manipulation',
+              isolation: 'isolate'
+            }}
+            type="button"
+            aria-label={`View details for ${post.title}`}
           >
             Check Project Details
           </button>
@@ -384,7 +419,10 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            onClick={() => onPostClick?.(post)}
+            onClick={(e) => {
+              console.log('🟡 Cinematic-extra clicked:', post.id);
+              onPostClick?.(post);
+            }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{
@@ -397,6 +435,10 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
                 cursor: 'pointer',
                 perspective: '1000px',
                 transformStyle: 'preserve-3d',
+                pointerEvents: 'auto',
+                position: 'relative',
+                zIndex: 50,
+                flexShrink: 0
               }}
             >
             <motion.div

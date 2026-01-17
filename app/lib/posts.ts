@@ -119,18 +119,17 @@ export const posts: Post[] = [
   {
     id: "post-6",
     title: "Aether Tag",
-    thumbnail: "https://via.placeholder.com/400x350/cccccc/666666?text=Wide+Project",
-    file: "post-2",
-    date: "2024-02-20",
+    thumbnail: "aetherTagthumb.png",
+    file: "post-6",
+    date: "2 months",
     tags: ["xr"],
     quality: "medium", // 中等质量，显示为中等尺寸
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoTitle: "Wide Project Video Title",
-    gifUrl: "/gifs/wide-project.gif", // GIF for cinematic-extra section
-    description: "A wide-format photography project capturing expansive landscapes and architectural details.",
-    softwareTools: ["Lightroom", "Photoshop", "Capture One"],
-    features: ["#Trailer Animation all in UE, No AI", "#Motion Capture and motion refining"],
-    role: "Photographer"
+    videoUrl: "https://www.youtube.com/watch?v=-4Z7SdWcgyU", // Will be updated with actual YouTube URL
+    videoTitle: "Aether Tag",
+    description: "We aim to create a non-violent laser tag game that can facilitate competitive dynamics without the need for overt violence. In our shooting game, we introduce a mechanism \"elemental counter system\", specifically, Water > Fire > Wind > Water. Therefore, when a superior bullet hits the type of enemy it restrains, the damage is doubled.",
+    softwareTools: ["Unity2022"],
+    features: ["Elemental Counter System"],
+    role: "XR developer"
   }
 ];
 

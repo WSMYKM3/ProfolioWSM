@@ -13,9 +13,8 @@ export default function Work() {
   const [viewedPosts, setViewedPosts] = useState<Set<string>>(new Set());
 
   const handlePostClick = (post: Post) => {
-    // Mark post as viewed
+    console.log('🔴 handlePostClick called:', post.id, post.title);
     setViewedPosts(prev => new Set(prev).add(post.id));
-    
     setSelectedPost(post);
     setIsModalOpen(true);
   };

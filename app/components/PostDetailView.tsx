@@ -8,6 +8,7 @@ import Post1 from './posts/Post1';
 import Post2 from './posts/Post2';
 import Post3 from './posts/Post3';
 import Post4 from './posts/Post4';
+import Post6 from './posts/Post6';
 import PostSidebar from './PostSidebar';
 
 const postComponents: Record<string, React.ComponentType> = {
@@ -15,6 +16,7 @@ const postComponents: Record<string, React.ComponentType> = {
   'post-2': Post2,
   'post-3': Post3,
   'post-4': Post4,
+  'post-6': Post6,
 };
 
 interface PostDetailViewProps {
@@ -148,13 +150,39 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
             ];
         }
         
+        if (post.id === 'post-6') {
+            return [
+                ...baseSections,
+                { id: 'video', label: 'Video' },
+                { id: 'introduction', label: 'Introduction' },
+                {
+                    id: 'game-design',
+                    label: 'Game Design',
+                    subsections: [
+                        { id: 'technical-solution', label: '1.1 Technical solution' },
+                        { id: 'enemies-weapons', label: '1.2 Our three types of enemies and weapons' }
+                    ]
+                },
+                {
+                    id: 'my-prototype',
+                    label: 'My Prototype',
+                    subsections: [
+                        { id: 'ragdoll-scripts', label: '1.1 Ragdoll by scripts' },
+                        { id: 'double-damage', label: '1.2 Double damage by detecting the tag and Projectile.cs' },
+                        { id: 'shield-parts', label: '1.3 Four parts of the shield' },
+                        { id: 'gamemanager', label: '1.4 GameManager' }
+                    ]
+                }
+            ];
+        }
+        
         return baseSections;
     };
 
     return (
         <div className="post-detail-view" style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
-            {/* 1. Hero Video/Image - Hide for post-4 as videos are in Post4 component */}
-            {post.id !== 'post-4' && (
+            {/* 1. Hero Video/Image - Hide for post-4 and post-6 as videos are in Post components */}
+            {post.id !== 'post-4' && post.id !== 'post-6' && (
             <div className="detail-video-container" style={{
                 width: '80%',
                 maxWidth: '1000px',
@@ -334,7 +362,7 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                 gap: '40px',
                 maxWidth: '1400px',
                 margin: '0 auto',
-                padding: isMobile ? '0 16px' : '0 40px'
+                padding: post.id === 'post-6' ? '0' : (isMobile ? '0 16px' : '0 40px')
             }}>
                 {/* Sidebar Navigation */}
                 {!isMobile && (
@@ -344,7 +372,7 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                 )}
                 
                 {/* Main Content */}
-                <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ flex: 1, minWidth: 0, padding: post.id === 'post-6' ? (isMobile ? '0 16px' : '0 40px') : '0' }}>
                     {/* Two YouTube Videos above Intro for post-2 */}
                     {post.id === 'post-2' && post.videoUrls && post.videoUrls.length >= 2 && (
                         <div style={{
@@ -425,41 +453,48 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                         </div>
                     )}
                     
-                    <div id="intro" className="detail-content" style={{
-                        fontSize: '1.15rem',
-                        lineHeight: 1.8,
-                        color: '#d0d0d0',
-                        maxWidth: '100%',
-                        marginBottom: '60px',
-                        textAlign: 'center',
-                        scrollMarginTop: '100px'
-                    }}>
-                        <h2 style={{
-                            fontSize: '1.75rem',
-                            fontWeight: 700,
-                            color: '#fff',
-                            marginBottom: '40px',
-                            textAlign: 'center'
+                    {/* Hide intro section for post-6 as it has its own Introduction section */}
+                    {post.id !== 'post-6' && (
+                        <div id="intro" className="detail-content" style={{
+                            fontSize: '1.15rem',
+                            lineHeight: 1.8,
+                            color: '#d0d0d0',
+                            maxWidth: '100%',
+                            marginBottom: '60px',
+                            textAlign: 'center',
+                            scrollMarginTop: '100px'
                         }}>
-                            Intro
-                        </h2>
-                        <p style={{ 
-                            fontSize: '20px',
-                            marginBottom: '53px', 
-                            maxWidth: '800px', 
-                            marginLeft: 'auto', 
-                            marginRight: 'auto' 
-                        }}>
-                            {post.description || "Project description placeholder."}
-                        </p>
-                    </div>
+                            <h2 style={{
+                                fontSize: '1.75rem',
+                                fontWeight: 700,
+                                color: '#fff',
+                                marginBottom: '40px',
+                                textAlign: 'center'
+                            }}>
+                                Intro
+                            </h2>
+                            <p style={{ 
+                                fontSize: '20px',
+                                marginBottom: '53px', 
+                                maxWidth: '800px', 
+                                marginLeft: 'auto', 
+                                marginRight: 'auto' 
+                            }}>
+                                {post.description || "Project description placeholder."}
+                            </p>
+                        </div>
+                    )}
 
                     {/* 6. Detailed Post Content (for projects with Post components) */}
                     {PostContent && (
                         <div style={{
-                            marginTop: '60px',
-                            paddingTop: '40px',
-                            borderTop: '1px solid rgba(255,255,255,0.1)'
+                            marginTop: post.id === 'post-6' ? '0' : '60px',
+                            paddingTop: post.id === 'post-6' ? '0' : '40px',
+                            borderTop: post.id === 'post-6' ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                            marginLeft: post.id === 'post-6' ? (isMobile ? '-16px' : '-40px') : '0',
+                            marginRight: post.id === 'post-6' ? (isMobile ? '-16px' : '-40px') : '0',
+                            paddingLeft: '0',
+                            paddingRight: '0'
                         }}>
                             <PostContent />
                         </div>
