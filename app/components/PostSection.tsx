@@ -42,7 +42,6 @@ function formatDate(dateString: string): string {
 
 export default function PostSection({ post, index, onPostClick }: PostSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   // Detect mobile device
@@ -120,26 +119,25 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
     return url;
   };
 
-  // Default video URL if not provided
-  const videoUrl = post.videoUrl;
-  const embedUrl = videoUrl ? convertToEmbedUrl(videoUrl) : null;
+  // Get video URL - prefer videoUrls array first, then fall back to videoUrl
+  const videoUrls = post.videoUrls || [];
+  const hasMultipleVideos = videoUrls.length > 0;
+  const videoUrl = hasMultipleVideos ? videoUrls[0] : post.videoUrl;
+  const embedUrl = (videoUrl && videoUrl.trim() !== '') ? convertToEmbedUrl(videoUrl) : null;
   const videoTitle = post.videoTitle || post.title;
   const description = post.description || 'A creative project showcasing innovative design and technology.';
   const softwareTools = post.softwareTools || [];
   const features = post.features || [];
 
-  // Check if this post has multiple videos
-  const hasMultipleVideos = post.videoUrls && post.videoUrls.length > 0;
-  const videoUrls = post.videoUrls || [];
-
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('✅ Button clicked for:', post.id, post.title);
     e.preventDefault();
     e.stopPropagation();
-    console.log('🔵 Button clicked:', post.id, post.title);
     if (onPostClick) {
+      console.log('✅ Calling onPostClick for:', post.id);
       onPostClick(post);
     } else {
-      console.error('❌ onPostClick is undefined for:', post.id);
+      console.error('❌ onPostClick is undefined!');
     }
   };
 
@@ -274,17 +272,25 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             )}
           </div>
 
-          <h2 style={{
-            fontSize: isMobile ? '2.5rem' : '4rem',
-            fontWeight: 800,
-            lineHeight: 1.1,
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
             marginBottom: '24px',
-            color: '#fff',
-            textShadow: '0 4px 20px rgba(0,0,0,0.5)',
-            letterSpacing: '-0.02em'
+            flexWrap: 'wrap'
           }}>
-            {post.title}
-          </h2>
+            <h2 style={{
+              fontSize: isMobile ? '2.5rem' : '4rem',
+              fontWeight: 800,
+              lineHeight: 1.1,
+              margin: 0,
+              color: '#fff',
+              textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+              letterSpacing: '-0.02em'
+            }}>
+              {post.title}
+            </h2>
+          </div>
 
           {/* Horizontal divider line under project title */}
           <div style={{
@@ -387,40 +393,17 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
               <SoftwareIcon key={`${post.id}-${tool}-${idx}`} name={tool} size={isMobile ? 30 : 40} />
             ))}
           </div>
-
-          <button
-            ref={buttonRef}
-            onClick={handleButtonClick}
-            onMouseDown={(e) => {
-              console.log('🟢 MouseDown on button:', post.id);
-              e.stopPropagation();
-            }}
-            className="project-details-button"
-            data-post-id={post.id}
-            style={{ 
-              pointerEvents: 'auto !important' as any, 
-              zIndex: 10000,
-              position: 'relative',
-              cursor: 'pointer',
-              touchAction: 'manipulation',
-              isolation: 'isolate'
-            }}
-            type="button"
-            aria-label={`View details for ${post.title}`}
-          >
-            Check Project Details
-          </button>
         </motion.div>
 
         {/* Optional: Secondary Visual or Detail - Desktop only */}
-        {!isMobile && (
+        {!isMobile && embedUrl && (
           <motion.div
             className="cinematic-extra"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             onClick={(e) => {
-              console.log('🟡 Cinematic-extra clicked:', post.id);
+              e.stopPropagation();
               onPostClick?.(post);
             }}
             onMouseMove={handleMouseMove}

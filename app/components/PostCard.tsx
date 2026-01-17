@@ -9,6 +9,7 @@ interface PostCardProps {
   onClick: () => void;
   isViewed?: boolean;
   checkboxId?: string;
+  isActive?: boolean;
 }
 
 function formatDate(dateString: string): string {
@@ -32,14 +33,15 @@ function getImageSrc(src: string): string {
   return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
-export default function PostCard({ post, onClick, isViewed = false, checkboxId }: PostCardProps) {
+export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false }: PostCardProps) {
   const formattedDate = formatDate(post.date);
   const imageSrc = getImageSrc(post.thumbnail);
   
   // Get quality class for masonry layout (if quality exists)
   const quality = 'quality' in post ? post.quality : undefined;
   const qualityClass = quality ? `post-card-${quality}` : '';
-  const cardClassName = `post-card ${qualityClass}`.trim();
+  const activeClass = isActive ? 'is-active' : '';
+  const cardClassName = `post-card ${qualityClass} ${activeClass}`.trim();
   
   // Generate unique checkbox ID if not provided
   const toggleId = checkboxId || `toggle-${post.id}`;

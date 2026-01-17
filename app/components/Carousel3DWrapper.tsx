@@ -7,9 +7,10 @@ import PostSection from './PostSection';
 interface Carousel3DWrapperProps {
   posts: Post[];
   onPostClick?: (post: Post) => void;
+  onIndexChange?: (index: number) => void;
 }
 
-export default function Carousel3DWrapper({ posts, onPostClick }: Carousel3DWrapperProps) {
+export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange }: Carousel3DWrapperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -135,6 +136,13 @@ export default function Carousel3DWrapper({ posts, onPostClick }: Carousel3DWrap
     };
   }, [currentIndex, resetAutoPlay, totalItems]);
 
+  // Notify parent component when index changes
+  useEffect(() => {
+    if (onIndexChange) {
+      onIndexChange(currentIndex);
+    }
+  }, [currentIndex, onIndexChange]);
+
   if (totalItems === 0) {
     return null;
   }
@@ -160,7 +168,12 @@ export default function Carousel3DWrapper({ posts, onPostClick }: Carousel3DWrap
               <PostSection
                 post={post}
                 index={index}
-                onPostClick={onPostClick}
+                onPostClick={(p) => {
+                  console.log('🔵 Carousel received click for:', p.id, 'isActive:', isActive);
+                  if (onPostClick) {
+                    onPostClick(p);
+                  }
+                }}
               />
             </div>
           );

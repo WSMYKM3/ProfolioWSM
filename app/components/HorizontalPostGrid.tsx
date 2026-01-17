@@ -8,12 +8,14 @@ interface HorizontalPostGridProps {
   posts: Post[];
   onPostClick: (post: Post) => void;
   viewedPosts?: Set<string>;
+  activeIndex?: number;
 }
 
 export default function HorizontalPostGrid({ 
   posts, 
   onPostClick, 
-  viewedPosts = new Set() 
+  viewedPosts = new Set(),
+  activeIndex = 0
 }: HorizontalPostGridProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -75,13 +77,14 @@ export default function HorizontalPostGrid({
         className="horizontal-post-grid" 
         ref={scrollContainerRef}
       >
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <PostCard
             key={post.id}
             post={post}
             onClick={() => onPostClick(post)}
             isViewed={viewedPosts.has(post.id)}
             checkboxId={`toggle-${post.id}`}
+            isActive={index === activeIndex}
           />
         ))}
       </div>

@@ -304,7 +304,7 @@ header h1 {
     transform-origin: center;
     overflow: hidden;
     margin-top: 72px;
-    margin-bottom: 72px;
+    margin-bottom: 0;
 }
 
 .carousel-3d-wrapper-content {
@@ -512,6 +512,7 @@ header h1 {
     left: auto;
 }
 
+
 .carousel-3d-wrapper-btn:hover {
     background-color: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
@@ -631,6 +632,21 @@ header h1 {
         margin-left: 0;
     }
 
+    .check-project-details-button-container {
+        margin: 20px 0 10px 0;
+        padding: 0 20px;
+    }
+
+    .horizontal-post-grid {
+        padding: 20px 0 0 0;
+    }
+
+    .check-project-details-button {
+        padding: 16px 32px;
+        font-size: 14px;
+        min-width: 250px;
+    }
+
     .carousel-3d-wrapper-item .cinematic-content-container {
         padding: 20px !important;
         overflow: visible !important;
@@ -703,6 +719,21 @@ header h1 {
         top: auto;
         transform: none;
         margin-left: 0;
+    }
+
+    .check-project-details-button-container {
+        margin: 15px 0 10px 0;
+        padding: 0 12px;
+    }
+
+    .horizontal-post-grid {
+        padding: 15px 0 0 0;
+    }
+
+    .check-project-details-button {
+        padding: 14px 24px;
+        font-size: 12px;
+        min-width: 200px;
     }
 
     .carousel-3d-wrapper-item .cinematic-extra-mobile {
@@ -1961,6 +1992,46 @@ header h1 {
     font-size: 1.2rem;
 }
 
+/* Check Project Details Button Container */
+.check-project-details-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 10px 0 10px 0;
+    padding: 0 60px;
+    position: relative;
+}
+
+.check-project-details-button {
+    padding: 20px 48px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: var(--font-inter), sans-serif;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    user-select: none;
+    letter-spacing: 0.05em;
+    min-width: 300px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.check-project-details-button:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.08);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+.check-project-details-button:active {
+    transform: scale(1.02);
+}
+
 /* Horizontal Post Grid Component */
 .horizontal-post-grid-container {
     position: relative;
@@ -1977,11 +2048,11 @@ header h1 {
     display: flex;
     gap: 24px;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-    padding: 0;
+    padding: 30px 0 0 0;
     -webkit-overflow-scrolling: touch;
     /* Better touch scrolling on mobile */
     overscroll-behavior-x: contain;
@@ -2022,6 +2093,15 @@ header h1 {
 
 .horizontal-post-grid .post-card:hover {
     transform: scale(0.95);
+}
+
+.horizontal-post-grid .post-card.is-active {
+    transform: scale(1.15);
+    z-index: 10;
+}
+
+.horizontal-post-grid .post-card.is-active:hover {
+    transform: scale(1.2);
 }
 
 .horizontal-post-grid .post-card input[type="checkbox"] {
