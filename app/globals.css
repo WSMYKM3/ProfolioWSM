@@ -3043,7 +3043,7 @@ header h1 {
     background: none;
     border: none;
     color: #b0b0b0;
-    font-family: var(--font-inter), sans-serif;
+    font-family: var(--font-bodoni), 'Bodoni MT', 'Didot', Georgia, serif;
     font-size: 0.95rem;
     font-weight: 500;
     letter-spacing: 0.02em;
@@ -3200,15 +3200,18 @@ header h1 {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background-color: #4f2010;
+    border-radius: 0 0 12px 12px;
 }
 
 .about-project-title {
     font-size: clamp(1.5rem, 2.5vw, 2rem);
     font-weight: 700;
     letter-spacing: -0.01em;
-    color: #e8e8e8;
+    color: #F5F0EB;
     margin-bottom: 12px;
-    font-family: var(--font-inter), sans-serif;
+    font-family: var(--font-bodoni), 'Bodoni MT', 'Didot', Georgia, serif;
+    font-style: normal;
     line-height: 1.2;
     transition: 0.15s ease;
 }
@@ -3216,10 +3219,250 @@ header h1 {
 .about-project-description {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #b0b0b0;
+    color: #D4C8BE;
     font-family: var(--font-inter), sans-serif;
     font-weight: 400;
     margin: 0;
+}
+
+/* ==========================================
+   Strip Card Gallery Layout (shou.html style)
+   ========================================== */
+
+/* Container - horizontal flex layout */
+.strip-gallery {
+    display: flex;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    height: 600px;
+    gap: 16px;
+}
+
+/* Individual card - narrow strip by default */
+.strip-card {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: #1a1717;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.strip-card:hover {
+    flex: 4;
+    overflow: visible;
+    box-shadow: 0 8px 32px rgba(79, 32, 16, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Collapsed layer - visible by default */
+.strip-collapsed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px 10px;
+    background: linear-gradient(180deg, transparent 0%, rgba(79, 32, 16, 0.8) 70%, rgba(79, 32, 16, 0.95) 100%);
+    z-index: 2;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.strip-card:hover .strip-collapsed {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Collapsed thumbnail - cropped/zoomed */
+.strip-collapsed-image {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Collapsed title */
+.strip-collapsed-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    font-family: var(--font-bodoni), 'Bodoni MT', 'Didot', Georgia, serif;
+    margin-bottom: 8px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+}
+
+/* Collapsed description - very brief */
+.strip-collapsed-desc {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    font-family: var(--font-inter), sans-serif;
+    line-height: 1.4;
+    max-height: 60px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Expanded layer - visible on hover */
+.strip-expanded {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.3s ease 0.1s;
+    background-color: #1a1717;
+}
+
+.strip-card:hover .strip-expanded {
+    opacity: 1;
+    z-index: 3;
+}
+
+/* Expanded image wrapper */
+.strip-expanded-image-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-width: 50%;
+}
+
+.strip-expanded-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.strip-card:hover .strip-expanded-image {
+    transform: scale(1);
+}
+
+/* Expanded content area */
+.strip-expanded-content {
+    flex: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #4f2010;
+    min-width: 50%;
+}
+
+.strip-expanded-title {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #F5F0EB;
+    margin-bottom: 16px;
+    font-family: var(--font-bodoni), 'Bodoni MT', 'Didot', Georgia, serif;
+    line-height: 1.2;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
+}
+
+.strip-card:hover .strip-expanded-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.strip-expanded-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #D4C8BE;
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 400;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+}
+
+.strip-card:hover .strip-expanded-desc {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Tags in expanded view */
+.strip-expanded-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.25s, transform 0.3s ease 0.25s;
+}
+
+.strip-card:hover .strip-expanded-tags {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.strip-tag {
+    padding: 4px 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: #D4C8BE;
+    font-family: var(--font-inter), sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Card shadow effects */
+.strip-card::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 5px 9px 5px 5px;
+    z-index: -1;
+    box-shadow: inset -1.2px -1.2px rgba(255, 255, 255, 0.8), 
+                1px 1px 2px rgba(255, 255, 255, 0.05), 
+                4px 12px 24px -6px rgba(255, 255, 255, 0.06);
+    transition: 0.15s ease;
+    border-radius: 12px;
+}
+
+.strip-card:hover::after {
+    box-shadow: inset -1.2px -1.2px rgba(255, 255, 255, 0.8), 
+                1px 1px 2px rgba(255, 255, 255, 0.05), 
+                8px 16px 32px -6px rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive Design */
@@ -3259,6 +3502,29 @@ header h1 {
     .about-project-grid {
         max-width: 100%;
         gap: 32px;
+    }
+
+    /* Strip Gallery - Tablet adjustments */
+    .strip-gallery {
+        height: 500px;
+        gap: 12px;
+    }
+
+    .strip-card:hover {
+        flex: 3;
+    }
+
+    .strip-expanded-content {
+        padding: 20px;
+    }
+
+    .strip-expanded-title {
+        font-size: 1.5rem;
+    }
+
+    .strip-expanded-desc {
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
     }
 }
 
@@ -3321,6 +3587,78 @@ header h1 {
 
     .about-project-content {
         padding: 20px;
+    }
+
+    /* Strip Gallery - Mobile: Vertical stacked layout */
+    .strip-gallery {
+        flex-direction: column;
+        height: auto;
+        gap: 16px;
+    }
+
+    .strip-card {
+        flex: none;
+        height: 120px;
+        width: 100%;
+    }
+
+    .strip-card:hover {
+        flex: none;
+        height: auto;
+        min-height: 300px;
+    }
+
+    /* Collapsed layer adjustments for mobile */
+    .strip-collapsed {
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 16px 20px;
+    }
+
+    .strip-collapsed-title {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+        margin-right: 16px;
+    }
+
+    .strip-collapsed-desc {
+        display: none; /* Hide description in collapsed mobile view */
+    }
+
+    .strip-collapsed-image {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        transform: none;
+    }
+
+    /* Expanded layer adjustments for mobile */
+    .strip-expanded {
+        flex-direction: column;
+    }
+
+    .strip-expanded-image-wrapper {
+        min-width: 100%;
+        min-height: 180px;
+        max-height: 200px;
+    }
+
+    .strip-expanded-content {
+        min-width: 100%;
+        padding: 20px;
+    }
+
+    .strip-expanded-title {
+        font-size: 1.25rem;
+    }
+
+    .strip-expanded-desc {
+        font-size: 0.875rem;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
     }
 }
 

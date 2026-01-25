@@ -1,11 +1,19 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Bodoni_Moda } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   weight: ['300', '400', '500', '600', '700', '800', '900'],
+})
+
+// Bodoni 字体 - 优雅的高对比度衬线体
+const bodoni = Bodoni_Moda({
+  subsets: ['latin'],
+  variable: '--font-bodoni',
+  weight: ['400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
 })
 
 export const metadata: Metadata = {
@@ -19,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${bodoni.variable}`}>
       <body>
         <div className="grain-overlay" />
         {children}
