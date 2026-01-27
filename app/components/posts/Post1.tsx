@@ -307,8 +307,8 @@ export default function Post1() {
           }}>
             {/* Prototype Items - Each with unique path and description */}
             {[
-              { path: '/gifs/groommaking.gif', description: 'Character Groom Blueprint making process, groom binding in blender' },
-              { path: '/gifs/run.gif', description: 'Character running shot' },
+              { path: '/gifs/groommaking1.webm', description: 'Character Groom Blueprint making process, groom binding in blender', isVideo: true },
+              { path: '/gifs/run.webm', description: 'Character running shot', isVideo: true },
               { path: '/gifs/trainshot.gif', description: 'Sequence of talking, here I "fake" the background by a depth image, and here I use Dollars MoCap to do motion capture in blender' },
               { path: '/gifs/train.gif', description: 'Movie cut of talking' },
               { path: '/gifs/trainout.gif', description: 'Sequence of walking' },
@@ -336,17 +336,35 @@ export default function Post1() {
                   }}
                   onClick={() => handleImageClick(item.path, item.description)}
                 >
-                  <Image
-                    src={getImageSrc(item.path)}
-                    alt={item.description}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    onError={(e) => {
-                      // Fallback to placeholder if gif doesn't exist
-                      const target = e.target as HTMLImageElement;
-                      target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                    }}
-                  />
+                  {item.isVideo ? (
+                    <video
+                      src={getImageSrc(item.path)}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain'
+                      }}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <Image
+                      src={getImageSrc(item.path)}
+                      alt={item.description}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      onError={(e) => {
+                        // Fallback to placeholder if gif doesn't exist
+                        const target = e.target as HTMLImageElement;
+                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                      }}
+                    />
+                  )}
                 </div>
                 <p style={{
                   fontSize: '0.95rem',
