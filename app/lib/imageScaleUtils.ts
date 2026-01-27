@@ -34,6 +34,15 @@ export function getImageScale(imageSrc: string): number {
   if (imageSrc.includes('/Signiepics/handrecord.png') || imageSrc.includes('/Signiepics/mixwords.png')) {
     return 0.8; // No scale for these large images
   }
+  // Post3 IandAI images - use moderate scale to avoid over-enlargement
+  if (imageSrc.includes('/IandAI/')) {
+    // PNG files are usually larger, use smaller scale
+    if (imageSrc.includes('.png')) {
+      return 1.0; // No scale for PNG images
+    }
+    // GIF files - use moderate scale
+    return 1.2;
+  }
   // Default scale for other images/gifs
   return 2;
 }

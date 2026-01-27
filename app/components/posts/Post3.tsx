@@ -232,6 +232,54 @@ export default function Post3() {
             </div>
           </section>
 
+          {/* Installation Draft Section */}
+          <section id="installation-draft" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+            <h2 style={{ 
+              fontSize: '1.75rem', 
+              fontWeight: 700, 
+              color: '#fff', 
+              marginBottom: '40px',
+              textAlign: 'center'
+            }}>
+              Installation Draft
+            </h2>
+            <div style={{
+              maxWidth: '1200px',
+              margin: '0 auto',
+              display: 'flex',
+              justifyContent: 'center'
+            }}>
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  maxWidth: '900px',
+                  aspectRatio: '16/9',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  backgroundColor: 'transparent',
+                  cursor: 'pointer'
+                }}
+                onClick={() => handleImageClick('/IandAI/Draft.png', 'Installation Draft Design')}
+              >
+                <Image
+                  src={getImageSrc('/IandAI/Draft.png')}
+                  alt="Installation Draft Design"
+                  fill
+                  style={{ 
+                    objectFit: 'contain',
+                    top: '-47px',
+                    left: '-3px'
+                  }}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://via.placeholder.com/900x506/2a2a2a/888888?text=Installation+Draft';
+                  }}
+                />
+              </div>
+            </div>
+          </section>
+
           {/* Process Section */}
           <section id="process" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
             <h2 style={{ 
@@ -267,10 +315,9 @@ export default function Post3() {
               padding: isMobile ? '0 16px' : '0'
             }}>
               {[
-                { path: '/gifs/process-placeholder-1.gif', description: 'Process Placeholder 1' },
-                { path: '/gifs/process-placeholder-2.gif', description: 'Process Placeholder 2' },
-                { path: '/gifs/process-placeholder-3.gif', description: 'Process Placeholder 3' },
-                { path: '/gifs/process-placeholder-4.gif', description: 'Process Placeholder 4' }
+                { path: '/IandAI/tdcommunication.png', description: 'To support multi-device communication during the exhibition, I set up a shared network address that allowed systems to exchange information in real time.' },
+                { path: '/IandAI/CommunicationPro.gif', description: 'This demonstrates the transfer of data from TouchDesigner to Unreal Engine, enabling MetaHuman to generate output and response to user speech.' }
+                
               ].map((item, index) => (
                 <div
                   key={index}
@@ -339,8 +386,8 @@ export default function Post3() {
               padding: isMobile ? '0 16px' : '0'
             }}>
               {[
-                { path: '/gifs/process-placeholder-5.gif', description: 'Process Placeholder 5' },
-                { path: '/gifs/process-placeholder-6.gif', description: 'Process Placeholder 6' }
+                { path: '/IandAI/statemachine.png', description: 'I used a Switch node in TouchDesigner to control different states sent to Unreal Engine’s MetaHuman, with Python scripts managing greeting, dialogue, and closing states.' },
+                { path: '/IandAI/pythons1.png', description: 'After the user speaks, their input is stored in a table, and my code monitors changes in the table to update the interaction state.' }
               ].map((item, index) => (
                 <div
                   key={`stage2-${index}`}
@@ -409,10 +456,9 @@ export default function Post3() {
               padding: isMobile ? '0 16px' : '0'
             }}>
               {[
-                { path: '/gifs/process-placeholder-7.gif', description: 'Process Placeholder 7' },
-                { path: '/gifs/process-placeholder-8.gif', description: 'Process Placeholder 8' },
-                { path: '/gifs/process-placeholder-9.gif', description: 'Process Placeholder 9' },
-                { path: '/gifs/process-placeholder-10.gif', description: 'Process Placeholder 10' }
+                { path: '/IandAI/lipsync.gif', description: 'MetaHuman lip sync controlled via the Runtime MetaHuman Lip Sync plugin, with OSC-driven speech and mouth animation handled through Blueprints and an Animation Blueprint.' },
+                { path: '/IandAI/mesh data transfer.png', description: 'In Blender, I used the Mesh Data Transfer add-on to ensure that the sculpted MetaHuman mesh shares the same skeletal structure as the original MetaHuman, preserving correct facial deformation and animation.' }
+                
               ].map((item, index) => (
                 <div
                   key={`stage3-${index}`}
@@ -481,8 +527,9 @@ export default function Post3() {
               padding: isMobile ? '0 16px' : '0'
             }}>
               {[
-                { path: '/gifs/process-placeholder-11.gif', description: 'Process Placeholder 11' },
-                { path: '/gifs/process-placeholder-12.gif', description: 'Process Placeholder 12' }
+                { path: '/IandAI/wakenwords detect.gif', description: 'Accent variability was handled by lowering the wake-word detection threshold; successful triggers send a pulse to TouchDesigner for visual switching, using the lightweight vosk-model-small-en-us-0.15 model.' },
+                { path: '/IandAI/wakenwords.png', description: 'Based on a collaborator’s requirement, I implemented a Python-based wake-word detection system that activates the experience and switches scenes when “mirror mirror” is detected.' }
+                
               ].map((item, index) => (
                 <div
                   key={`stage4-${index}`}
