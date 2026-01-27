@@ -50,6 +50,7 @@ export default function About() {
         <section className="about-video-section">
           <div className="about-video-container">
             <div className="about-video-intro">
+              <h1 className="about-name">Xinxin Wang</h1>
               <p className="about-intro-text">
                 Creative Technologist exploring the intersection of design, technology, and interactive experiences. 
                 Passionate about creating immersive digital solutions that bridge the gap between imagination and reality.

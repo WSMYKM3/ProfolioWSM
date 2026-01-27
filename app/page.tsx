@@ -50,9 +50,13 @@ export default function Home() {
         <section className="about-video-section">
           <div className="about-video-container">
             <div className="about-video-intro">
+              <h1 className="about-name">Siming Wang</h1>
               <p className="about-intro-text">
-                Creative Technologist exploring the intersection of design, technology, and interactive experiences. 
-                Passionate about creating immersive digital solutions that bridge the gap between imagination and reality.
+                Hi, I'm a Creative Technologist who values <strong className="highlight">both design and technology</strong>,
+                <br />
+                building <strong className="highlight">real-world</strong> digital solutions through tangible, interactive, multi-media systems.
+                <br />
+                I make <strong className="highlight">games</strong>, <strong className="highlight">XR products</strong>, <strong className="highlight">animation trailers</strong>.
               </p>
             </div>
             <video
