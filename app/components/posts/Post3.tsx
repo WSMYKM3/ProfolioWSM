@@ -15,7 +15,7 @@ function getImageSrc(src: string): string {
 
 export default function Post3() {
   const [isMobile, setIsMobile] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -36,8 +36,8 @@ export default function Post3() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
-  const handleImageClick = (src: string, alt: string) => {
-    setEnlargedImage({ src, alt });
+  const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
+    setEnlargedImage({ src, alt, isVideo });
   };
 
   const handleCloseEnlarged = () => {
@@ -76,20 +76,39 @@ export default function Post3() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={getImageSrc(enlargedImage.src)}
-              alt={enlargedImage.alt}
-              style={{
-                maxWidth: '90vw',
-                maxHeight: '90vh',
-                width: 'auto',
-                height: 'auto',
-                objectFit: 'contain',
-                borderRadius: '8px',
-                transform: `scale(${getImageScale(enlargedImage.src)})`,
-                transformOrigin: 'center center'
-              }}
-            />
+            {enlargedImage.isVideo ? (
+              <video
+                src={getImageSrc(enlargedImage.src)}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px'
+                }}
+              />
+            ) : (
+              <img
+                src={getImageSrc(enlargedImage.src)}
+                alt={enlargedImage.alt}
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  transform: `scale(${getImageScale(enlargedImage.src)})`,
+                  transformOrigin: 'center center'
+                }}
+              />
+            )}
             <button
               onClick={handleCloseEnlarged}
               style={{
@@ -316,7 +335,7 @@ export default function Post3() {
             }}>
               {[
                 { path: '/IandAI/tdcommunication.png', description: 'To support multi-device communication during the exhibition, I set up a shared network address that allowed systems to exchange information in real time.' },
-                { path: '/IandAI/CommunicationPro.gif', description: 'This demonstrates the transfer of data from TouchDesigner to Unreal Engine, enabling MetaHuman to generate output and response to user speech.' }
+                { path: '/webm/Mirrormirror/CommunicationPro.webm', description: 'This demonstrates the transfer of data from TouchDesigner to Unreal Engine, enabling MetaHuman to generate output and response to user speech.', isVideo: true }
                 
               ].map((item, index) => (
                 <div
@@ -337,18 +356,36 @@ export default function Post3() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '0.95rem',
@@ -388,7 +425,9 @@ export default function Post3() {
               {[
                 { path: '/IandAI/statemachine.png', description: 'I used a Switch node in TouchDesigner to control different states sent to Unreal Engine’s MetaHuman, with Python scripts managing greeting, dialogue, and closing states.' },
                 { path: '/IandAI/pythons1.png', description: 'After the user speaks, their input is stored in a table, and my code monitors changes in the table to update the interaction state.' }
-              ].map((item, index) => (
+              ].map((item: any, index) => {
+                const itemWithVideo = { ...item, isVideo: item.isVideo ?? false };
+                return (
                 <div
                   key={`stage2-${index}`}
                   style={{
@@ -407,18 +446,36 @@ export default function Post3() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '0.95rem',
@@ -430,7 +487,8 @@ export default function Post3() {
                     {item.description}
                   </p>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Stage3: Metahuman realtime Speech/Lipsync */}
@@ -456,7 +514,7 @@ export default function Post3() {
               padding: isMobile ? '0 16px' : '0'
             }}>
               {[
-                { path: '/IandAI/lipsync.gif', description: 'MetaHuman lip sync controlled via the Runtime MetaHuman Lip Sync plugin, with OSC-driven speech and mouth animation handled through Blueprints and an Animation Blueprint.' },
+                { path: '/webm/Mirrormirror/lipsync.webm', description: 'MetaHuman lip sync controlled via the Runtime MetaHuman Lip Sync plugin, with OSC-driven speech and mouth animation handled through Blueprints and an Animation Blueprint.', isVideo: true },
                 { path: '/IandAI/mesh data transfer.png', description: 'In Blender, I used the Mesh Data Transfer add-on to ensure that the sculpted MetaHuman mesh shares the same skeletal structure as the original MetaHuman, preserving correct facial deformation and animation.' }
                 
               ].map((item, index) => (
@@ -478,18 +536,36 @@ export default function Post3() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '0.95rem',
@@ -527,7 +603,7 @@ export default function Post3() {
               padding: isMobile ? '0 16px' : '0'
             }}>
               {[
-                { path: '/IandAI/wakenwords detect.gif', description: 'Accent variability was handled by lowering the wake-word detection threshold; successful triggers send a pulse to TouchDesigner for visual switching, using the lightweight vosk-model-small-en-us-0.15 model.' },
+                { path: '/webm/Mirrormirror/wakenwords detect.webm', description: 'Accent variability was handled by lowering the wake-word detection threshold; successful triggers send a pulse to TouchDesigner for visual switching, using the lightweight vosk-model-small-en-us-0.15 model.', isVideo: true },
                 { path: '/IandAI/wakenwords.png', description: 'Based on a collaborator’s requirement, I implemented a Python-based wake-word detection system that activates the experience and switches scenes when “mirror mirror” is detected.' }
                 
               ].map((item, index) => (
@@ -549,18 +625,36 @@ export default function Post3() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '0.95rem',

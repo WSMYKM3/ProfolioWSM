@@ -16,7 +16,7 @@ function getImageSrc(src: string): string {
 
 export default function Post1() {
   const [isMobile, setIsMobile] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -37,8 +37,8 @@ export default function Post1() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
-  const handleImageClick = (src: string, alt: string) => {
-    setEnlargedImage({ src, alt });
+  const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
+    setEnlargedImage({ src, alt, isVideo });
   };
 
   const handleCloseEnlarged = () => {
@@ -77,20 +77,39 @@ export default function Post1() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={getImageSrc(enlargedImage.src)}
-              alt={enlargedImage.alt}
-              style={{
-                maxWidth: '90vw',
-                maxHeight: '90vh',
-                width: 'auto',
-                height: 'auto',
-                objectFit: 'contain',
-                borderRadius: '8px',
-                transform: `scale(${getImageScale(enlargedImage.src)})`,
-                transformOrigin: 'center center'
-              }}
-            />
+            {enlargedImage.isVideo ? (
+              <video
+                src={getImageSrc(enlargedImage.src)}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px'
+                }}
+              />
+            ) : (
+              <img
+                src={getImageSrc(enlargedImage.src)}
+                alt={enlargedImage.alt}
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  transform: `scale(${getImageScale(enlargedImage.src)})`,
+                  transformOrigin: 'center center'
+                }}
+              />
+            )}
             <button
               onClick={handleCloseEnlarged}
               style={{
@@ -256,18 +275,22 @@ export default function Post1() {
                 backgroundColor: 'transparent',
                 cursor: 'pointer'
               }}
-              onClick={() => handleImageClick('/gifs/uxboard.gif', 'Datnie UX Design GIF')}
+              onClick={() => handleImageClick('/webm/Datnie/uxboard.webm', 'Datnie UX Design GIF', true)}
             >
-              <Image
-                src={getImageSrc('/gifs/uxboard.gif')}
-                alt="Datnie UX Design GIF"
-                fill
-                style={{ objectFit: 'contain' }}
-                onError={(e) => {
-                  // Fallback to placeholder if gif doesn't exist
-                  const target = e.target as HTMLImageElement;
-                  target.src = 'https://via.placeholder.com/800x450/2a2a2a/888888?text=UX+Design+GIF';
+              <video
+                src={getImageSrc('/webm/Datnie/uxboard.webm')}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain'
                 }}
+                autoPlay
+                loop
+                muted
+                playsInline
               />
             </div>
           </div>
@@ -309,12 +332,12 @@ export default function Post1() {
             {[
               { path: '/gifs/groommaking1.webm', description: 'Character Groom Blueprint making process, groom binding in blender', isVideo: true },
               { path: '/gifs/run.webm', description: 'Character running shot', isVideo: true },
-              { path: '/gifs/trainshot.gif', description: 'Sequence of talking, here I "fake" the background by a depth image, and here I use Dollars MoCap to do motion capture in blender' },
-              { path: '/gifs/train.gif', description: 'Movie cut of talking' },
-              { path: '/gifs/trainout.gif', description: 'Sequence of walking' },
-              { path: '/gifs/walk.gif', description: 'Movie cut of waking' },
-              { path: '/gifs/logogroom.gif', description: 'Give our logo groom to look cute' },
-              { path: '/gifs/logoshot.gif', description: 'using Green Screen to layer it as transparent layer later' }
+              { path: '/webm/Datnie/trainshot.webm', description: 'Sequence of talking, here I "fake" the background by a depth image, and here I use Dollars MoCap to do motion capture in blender', isVideo: true },
+              { path: '/webm/Datnie/train.webm', description: 'Movie cut of talking', isVideo: true },
+              { path: '/webm/Datnie/trainout.webm', description: 'Sequence of walking', isVideo: true },
+              { path: '/webm/Datnie/walk.webm', description: 'Movie cut of waking', isVideo: true },
+              { path: '/webm/Datnie/logogroom.webm', description: 'Give our logo groom to look cute', isVideo: true },
+              { path: '/webm/Datnie/logoshot.webm', description: 'using Green Screen to layer it as transparent layer later', isVideo: true }
             ].map((item, index) => (
               <div
                 key={index}
@@ -334,7 +357,7 @@ export default function Post1() {
                     backgroundColor: 'transparent',
                     cursor: 'pointer'
                   }}
-                  onClick={() => handleImageClick(item.path, item.description)}
+                  onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                 >
                   {item.isVideo ? (
                     <video
@@ -404,11 +427,11 @@ export default function Post1() {
             {/* Stage 2 Items */}
             {[
               { path: '/DatnieStage2/uiunity.png', description: 'Unity Meta SDK' },
-              { path: '/DatnieStage2/pivot.gif', description: 'prototype a Pivot to switch profile card' },
-              { path: '/DatnieStage2/uinavigator.gif', description: 'UI navigator debug by keyboard first, then replaced by hand microgesture' },
-              { path: '/gifs/grabcloud.gif', description: 'I prototype a cloth simulation cloud first to pop up more infomation from profile card although not been used finally' },
-              { path: '/DatnieStage2/grabcard.gif', description: 'Make every info card interactable, and easy to grab' },
-              { path: '/DatnieStage2/addtop.gif', description: 'Frequent answer propmted to be added to profile of the user' },
+              { path: '/webm/Datnie/pivot.webm', description: 'prototype a Pivot to switch profile card', isVideo: true },
+              { path: '/webm/Datnie/uinavigator.webm', description: 'UI navigator debug by keyboard first, then replaced by hand microgesture', isVideo: true },
+              { path: '/webm/Datnie/grabcloud.webm', description: 'I prototype a cloth simulation cloud first to pop up more infomation from profile card although not been used finally', isVideo: true },
+              { path: '/webm/Datnie/grabcard.webm', description: 'Make every info card interactable, and easy to grab', isVideo: true },
+              { path: '/webm/Datnie/addtop.webm', description: 'Frequent answer propmted to be added to profile of the user', isVideo: true },
               { path: '/gifs/unity-placeholder-7.gif', description: 'Unity Development Placeholder 7' },
               { path: '/gifs/unity-placeholder-8.gif', description: 'Unity Development Placeholder 8' }
             ].map((item, index) => (
@@ -430,19 +453,37 @@ export default function Post1() {
                     backgroundColor: 'transparent',
                     cursor: 'pointer'
                   }}
-                  onClick={() => handleImageClick(item.path, item.description)}
+                  onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                 >
-                  <Image
-                    src={getImageSrc(item.path)}
-                    alt={item.description}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    onError={(e) => {
-                      // Fallback to placeholder if image/gif doesn't exist
-                      const target = e.target as HTMLImageElement;
-                      target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                    }}
-                  />
+                  {item.isVideo ? (
+                    <video
+                      src={getImageSrc(item.path)}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain'
+                      }}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <Image
+                      src={getImageSrc(item.path)}
+                      alt={item.description}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      onError={(e) => {
+                        // Fallback to placeholder if image/gif doesn't exist
+                        const target = e.target as HTMLImageElement;
+                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                      }}
+                    />
+                  )}
                 </div>
                 <p style={{
                   fontSize: '0.95rem',

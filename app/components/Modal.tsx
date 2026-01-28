@@ -69,7 +69,7 @@ export default function Modal({ post, isOpen, onClose }: ModalProps) {
           onClick={onClose}
           aria-label="Close modal"
         >
-          &times;
+          Back
         </button>
         <div className="modal-body">
           <PostDetailView post={post} />

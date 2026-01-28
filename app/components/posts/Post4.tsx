@@ -15,7 +15,7 @@ function getImageSrc(src: string): string {
 
 export default function Post4() {
   const [isMobile, setIsMobile] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -36,8 +36,8 @@ export default function Post4() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
-  const handleImageClick = (src: string, alt: string) => {
-    setEnlargedImage({ src, alt });
+  const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
+    setEnlargedImage({ src, alt, isVideo });
   };
 
   const handleCloseEnlarged = () => {
@@ -76,20 +76,39 @@ export default function Post4() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={getImageSrc(enlargedImage.src)}
-              alt={enlargedImage.alt}
-              style={{
-                maxWidth: '90vw',
-                maxHeight: '90vh',
-                width: 'auto',
-                height: 'auto',
-                objectFit: 'contain',
-                borderRadius: '8px',
-                transform: `scale(${getImageScale(enlargedImage.src)})`,
-                transformOrigin: 'center center'
-              }}
-            />
+            {enlargedImage.isVideo ? (
+              <video
+                src={getImageSrc(enlargedImage.src)}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px'
+                }}
+              />
+            ) : (
+              <img
+                src={getImageSrc(enlargedImage.src)}
+                alt={enlargedImage.alt}
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  transform: `scale(${getImageScale(enlargedImage.src)})`,
+                  transformOrigin: 'center center'
+                }}
+              />
+            )}
             <button
               onClick={handleCloseEnlarged}
               style={{
@@ -184,12 +203,12 @@ export default function Post4() {
             }}>
               {[
                 
-                { path: '/mocapgifs/mocapclean.png', description: 'Overview' },
-                { path: '/mocapgifs/motioncapture.gif', description: 'Motion Capture' },
-                { path: '/mocapgifs/mb1.gif', description: 'Retargetting' },
-                { path: '/mocapgifs/mb2.gif', description: '  Data cleaning' },
-                { path: '/mocapgifs/mb3.gif', description: 'It works' },
-                { path: '/mocapgifs/realtimevcam.gif', description: 'Real-time VCam Testing' }
+                { path: '/mocapgifs/mocapclean.png', description: 'Overview', isVideo: false },
+                { path: '/webm/MotionCapture/motioncapture.webm', description: 'Motion Capture', isVideo: true },
+                { path: '/webm/MotionCapture/mb1.webm', description: 'Retargetting', isVideo: true },
+                { path: '/webm/MotionCapture/mb2.webm', description: '  Data cleaning', isVideo: true },
+                { path: '/webm/MotionCapture/mb3.webm', description: 'It works', isVideo: true },
+                { path: '/webm/MotionCapture/realtimevcam.webm', description: 'Real-time VCam Testing', isVideo: true }
               ].map((item, index) => (
                 <div
                   key={index}
@@ -209,18 +228,36 @@ export default function Post4() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '0.95rem',
@@ -258,9 +295,9 @@ export default function Post4() {
               padding: isMobile ? '0 16px' : '0'
             }}>
               {[
-                { path: '/mocapgifs/facialmotion.gif', description: 'Facial Motion' },
-                { path: '/mocapgifs/facemesh.png', description: 'Face Mesh' },
-                { path: '/mocapgifs/sequence.gif', description: 'Sequence' }
+                { path: '/webm/MotionCapture/facialmotion.webm', description: 'Facial Motion', isVideo: true },
+                { path: '/mocapgifs/facemesh.png', description: 'Face Mesh', isVideo: false },
+                { path: '/webm/MotionCapture/sequence.webm', description: 'Sequence', isVideo: true }
               ].map((item, index) => (
                 <div
                   key={index}
@@ -280,18 +317,36 @@ export default function Post4() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '0.95rem',

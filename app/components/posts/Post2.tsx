@@ -44,7 +44,7 @@ function convertToEmbedUrl(url: string): string {
 
 export default function Post2() {
   const [isMobile, setIsMobile] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
   
   // Get post data for Stage 3 video URL
   const post = getPostById('post-2');
@@ -69,8 +69,8 @@ export default function Post2() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
-  const handleImageClick = (src: string, alt: string) => {
-    setEnlargedImage({ src, alt });
+  const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
+    setEnlargedImage({ src, alt, isVideo });
   };
 
   const handleCloseEnlarged = () => {
@@ -109,20 +109,39 @@ export default function Post2() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={getImageSrc(enlargedImage.src)}
-              alt={enlargedImage.alt}
-              style={{
-                maxWidth: '90vw',
-                maxHeight: '90vh',
-                width: 'auto',
-                height: 'auto',
-                objectFit: 'contain',
-                borderRadius: '8px',
-                transform: `scale(${getImageScale(enlargedImage.src)})`,
-                transformOrigin: 'center center'
-              }}
-            />
+            {enlargedImage.isVideo ? (
+              <video
+                src={getImageSrc(enlargedImage.src)}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px'
+                }}
+              />
+            ) : (
+              <img
+                src={getImageSrc(enlargedImage.src)}
+                alt={enlargedImage.alt}
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  transform: `scale(${getImageScale(enlargedImage.src)})`,
+                  transformOrigin: 'center center'
+                }}
+              />
+            )}
             <button
               onClick={handleCloseEnlarged}
               style={{
@@ -274,9 +293,9 @@ export default function Post2() {
             }}>
               {/* 6 pictures and a gif - placeholder paths */}
               {[
-                { path: '/Signiepics/hand1.gif', description: 'Hand guiding animation' },
-                { path: '/Signiepics/hand2.gif', description: 'Hand guiding animation with customized hand model' },
-                { path: '/Signiepics/fb2.gif', description: 'Full body animation recored by meta quest headset' },
+                { path: '/webm/Signie/hand1.webm', description: 'Hand guiding animation', isVideo: true },
+                { path: '/webm/Signie/hand2.webm', description: 'Hand guiding animation with customized hand model', isVideo: true },
+                { path: '/webm/Signie/fb2.webm', description: 'Full body animation recored by meta quest headset', isVideo: true },
                 { path: '/Signiepics/handrecord.png', description: 'I record use unity recorder, and use fbx converter all in unity' }
                 
               ].map((item, index) => (
@@ -298,18 +317,36 @@ export default function Post2() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '1rem',
@@ -346,8 +383,8 @@ export default function Post2() {
             }}>
               {/* 2 pictures and a gif */}
               {[
-                { path: '/Signiepics/bubble1.gif', description: 'Bubble guide 1' },
-                { path: '/Signiepics/bubble2.gif', description: 'Bubble guide 2' }
+                { path: '/webm/Signie/bubble1.webm', description: 'Bubble guide 1', isVideo: true },
+                { path: '/webm/Signie/bubble2.webm', description: 'Bubble guide 2', isVideo: true }
               ].map((item, index) => (
                 <div
                   key={index}
@@ -367,18 +404,36 @@ export default function Post2() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '1rem',
@@ -429,10 +484,10 @@ export default function Post2() {
               {[
                 { path: '/Signiepics/mixwords.png', description: 'Pattern of learning and testing with mixed mechanism' },
                 { path: '/Signiepics/manager.jpg', description: 'Manager prefab for a learning a new word' },
-                { path: '/Signiepics/learn.gif', description: 'Follow the tutor animation to learn' },
-                { path: '/Signiepics/test1.gif', description: 'Test1: Hand Gesture Test' },
-                { path: '/Signiepics/test2.gif', description: 'Test2: A rhythm game-like testing to test ASL alphabet' },
-                { path: '/Signiepics/test3.gif', description: 'Test3: Pick correct lines based on animation played by tutor' }
+                { path: '/webm/Signie/learn.webm', description: 'Follow the tutor animation to learn', isVideo: true },
+                { path: '/webm/Signie/test1.webm', description: 'Test1: Hand Gesture Test', isVideo: true },
+                { path: '/webm/Signie/test2.webm', description: 'Test2: A rhythm game-like testing to test ASL alphabet', isVideo: true },
+                { path: '/webm/Signie/test3.webm', description: 'Test3: Pick correct lines based on animation played by tutor', isVideo: true }
                 
               ].map((item, index) => (
                 <div
@@ -453,18 +508,36 @@ export default function Post2() {
                       backgroundColor: 'transparent',
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleImageClick(item.path, item.description)}
+                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
                   >
-                    <Image
-                      src={getImageSrc(item.path)}
-                      alt={item.description}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                      }}
-                    />
+                    {item.isVideo ? (
+                      <video
+                        src={getImageSrc(item.path)}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover'
+                        }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <Image
+                        src={getImageSrc(item.path)}
+                        alt={item.description}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
+                        }}
+                      />
+                    )}
                   </div>
                   <p style={{
                     fontSize: '1rem',

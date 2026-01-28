@@ -1394,16 +1394,16 @@ header h1 {
 }
 
 .modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
     background-color: rgba(42, 45, 53, 0.9);
     /* 深色背景 */
     border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 24px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
     z-index: 1002;
     display: flex;
