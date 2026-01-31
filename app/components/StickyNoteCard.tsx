@@ -177,6 +177,7 @@ export default function StickyNoteCard({
       ref={cardRef}
       className={`card card-image ${isFiltered ? 'hidden' : ''} ${isDragging ? 'dragging' : ''}`}
       data-category={category}
+      data-post-id={post.id}
       onMouseDown={handleDragStart}
       onTouchStart={handleDragStart}
       onClick={handleClick}

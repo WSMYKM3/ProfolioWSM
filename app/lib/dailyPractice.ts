@@ -4,7 +4,8 @@ export interface DailyPracticePost {
   thumbnail: string;
   date: string;
   tags: string[];
-  quality: 'high' | 'medium' | 'low';
+  description?: string; // Optional, for modal description
+  videoUrl?: string; // Optional, for YouTube or other video URLs
   file?: string; // Optional, for modal content
 }
 
@@ -15,25 +16,26 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     thumbnail: "https://via.placeholder.com/400x600/cccccc/666666?text=Morning+Sketch",
     date: "2024-03-01",
     tags: ["sketch", "daily"],
-    quality: "high",
     file: "post-1"
   },
   {
     id: "daily-2",
-    title: "Quick Design Study",
-    thumbnail: "https://via.placeholder.com/400x300/cccccc/666666?text=Design+Study",
-    date: "2024-03-02",
-    tags: ["design", "study"],
-    quality: "medium",
+    title: "Real-Scale kinetic installation Prototype",
+    thumbnail: "/dailypracticeThumbnail/mediaue.jpg",
+    date: "2025.9",
+    tags: ["Mediapipe", "Osc"],
+    description: "Using MediaPipe, cameras detect visitor positions. When someone enters a zone, the corresponding unit freezes, then resumes after they leave—creating a clear reading-and-discovery rhythm",
+    videoUrl: "https://youtu.be/bUfKjx5Om8s",
     file: "post-2"
   },
   {
     id: "daily-3",
-    title: "Color Exploration",
-    thumbnail: "https://via.placeholder.com/400x500/cccccc/666666?text=Color+Exp",
-    date: "2024-03-03",
-    tags: ["color", "experiment"],
-    quality: "low",
+    title: "Point laser level in Unreal Engine",
+    thumbnail: "/dailypracticeThumbnail/pointue.png",
+    date: "2024.8",
+    tags: ["XR path-finding", "experiment"],
+    description: "Built in Unreal Engine, a path-finding game level which let players to use XR controllers to fire point laser in a dark room",
+    videoUrl: "https://www.youtube.com/watch?v=LK2qBjUf-Gs",
     file: "post-3"
   },
   {
@@ -42,7 +44,6 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     thumbnail: "https://via.placeholder.com/400x700/cccccc/666666?text=Typography",
     date: "2024-03-04",
     tags: ["typography", "practice"],
-    quality: "high",
     file: "post-4"
   },
   {
@@ -51,7 +52,6 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     thumbnail: "https://via.placeholder.com/400x400/cccccc/666666?text=Layout",
     date: "2024-03-05",
     tags: ["layout", "experiment"],
-    quality: "medium",
     file: "post-1"
   },
   {
@@ -60,7 +60,6 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     thumbnail: "https://via.placeholder.com/400x250/cccccc/666666?text=Doodle",
     date: "2024-03-06",
     tags: ["doodle", "quick"],
-    quality: "low",
     file: "post-2"
   },
   {
@@ -69,7 +68,6 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     thumbnail: "https://via.placeholder.com/400x800/cccccc/666666?text=3D+Render",
     date: "2024-03-07",
     tags: ["3d", "render"],
-    quality: "high",
     file: "post-3"
   },
   {
@@ -78,7 +76,6 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     thumbnail: "https://via.placeholder.com/400x350/cccccc/666666?text=Animation",
     date: "2024-03-08",
     tags: ["animation", "frame"],
-    quality: "medium",
     file: "post-4"
   },
   {
@@ -87,7 +84,6 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     thumbnail: "https://via.placeholder.com/400x550/cccccc/666666?text=Concept",
     date: "2024-03-09",
     tags: ["concept", "art"],
-    quality: "low",
     file: "post-1"
   }
 ];
