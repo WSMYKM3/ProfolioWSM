@@ -9,6 +9,7 @@ import Post1 from '@/app/components/posts/Post1'
 import Post2 from '@/app/components/posts/Post2'
 import Post3 from '@/app/components/posts/Post3'
 import Post4 from '@/app/components/posts/Post4'
+import Post5 from '@/app/components/posts/Post5'
 import Post6 from '@/app/components/posts/Post6'
 import SoftwareIcon from '@/app/components/SoftwareIcon'
 
@@ -25,6 +26,7 @@ const postComponents: Record<string, React.ComponentType> = {
   'post-2': Post2,
   'post-3': Post3,
   'post-4': Post4,
+  'post-5': Post5,
   'post-6': Post6,
 }
 

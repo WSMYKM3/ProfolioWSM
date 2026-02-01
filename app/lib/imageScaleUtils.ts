@@ -13,6 +13,10 @@ export function getImageScale(imageSrc: string): number {
   if (imageSrc.includes('/DatnieStage2/uinavigator.gif') || imageSrc.includes('/DatnieStage2/uiunity.png')) {
     return 1.0; // No scale for these large Stage2 images
   }
+  // Stage2 rotater and CodeRotate images - scale down to prevent over-enlargement
+  if (imageSrc.includes('/DatnieStage2/rotater.png') || imageSrc.includes('/DatnieStage2/CodeRotate.png')) {
+    return 1.0; // Smaller scale for these images
+  }
   // Post4 mocapgifs - large files, use smaller scale
   if (imageSrc.includes('/mocapgifs/')) {
     // PNG files are usually larger, use no scale
@@ -42,6 +46,10 @@ export function getImageScale(imageSrc: string): number {
     }
     // GIF files - use moderate scale
     return 1.2;
+  }
+  // TheToolbox images - scale down to prevent over-enlargement
+  if (imageSrc.includes('/TheToolbox/aiStructure.png')) {
+    return 0.9; // Smaller scale for this image
   }
   // Default scale for other images/gifs
   return 2;

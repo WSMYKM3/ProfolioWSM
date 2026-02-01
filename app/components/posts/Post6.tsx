@@ -45,6 +45,7 @@ function convertToEmbedUrl(url: string): string {
 export default function Post6() {
   const [isMobile, setIsMobile] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string } | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   
   // Get post data for video URL
   const post = getPostById('post-6');
@@ -364,9 +365,13 @@ export default function Post6() {
                     overflow: 'hidden',
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     cursor: 'pointer',
-                    border: '2px dashed rgba(255,255,255,0.2)'
+                    border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px dashed rgba(255,255,255,0.2)',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                   }}
                   onClick={() => handleImageClick(item.path, item.alt)}
+                  onMouseEnter={() => setHoveredItem(item.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   <Image
                     src={getImageSrc(item.path)}
@@ -433,9 +438,13 @@ export default function Post6() {
                     overflow: 'hidden',
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     cursor: 'pointer',
-                    border: '2px dashed rgba(255,255,255,0.2)'
+                    border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px dashed rgba(255,255,255,0.2)',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                   }}
                   onClick={() => handleImageClick(item.path, item.alt)}
+                  onMouseEnter={() => setHoveredItem(item.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   <Image
                     src={getImageSrc(item.path)}
@@ -515,9 +524,13 @@ export default function Post6() {
                     overflow: 'hidden',
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     cursor: 'pointer',
-                    border: '2px dashed rgba(255,255,255,0.2)'
+                    border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px dashed rgba(255,255,255,0.2)',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                   }}
                   onClick={() => handleImageClick(item.path, item.alt)}
+                  onMouseEnter={() => setHoveredItem(item.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   <Image
                     src={getImageSrc(item.path)}
@@ -651,9 +664,13 @@ export default function Post6() {
                     overflow: 'hidden',
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     cursor: 'pointer',
-                    border: '2px dashed rgba(255,255,255,0.2)'
+                    border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px dashed rgba(255,255,255,0.2)',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                   }}
                   onClick={() => handleImageClick(item.path, item.alt)}
+                  onMouseEnter={() => setHoveredItem(item.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   <Image
                     src={getImageSrc(item.path)}
@@ -720,9 +737,13 @@ export default function Post6() {
                     overflow: 'hidden',
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     cursor: 'pointer',
-                    border: '2px dashed rgba(255,255,255,0.2)'
+                    border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px dashed rgba(255,255,255,0.2)',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                   }}
                   onClick={() => handleImageClick(item.path, item.alt)}
+                  onMouseEnter={() => setHoveredItem(item.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   <Image
                     src={getImageSrc(item.path)}

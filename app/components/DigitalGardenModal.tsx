@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { DailyPracticePost } from '@/app/lib/dailyPractice';
 
@@ -62,6 +62,16 @@ function convertToEmbedUrl(url: string): string {
 
 export default function DigitalGardenModal({ post, isOpen, onClose }: DigitalGardenModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -129,7 +139,53 @@ export default function DigitalGardenModal({ post, isOpen, onClose }: DigitalGar
           </div>
         )}
         <div className="digital-garden-modal-info">
-          <h3 className="digital-garden-modal-title">{post.title}</h3>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: isMobile ? 'wrap' : 'nowrap'
+          }}>
+            <h3 className="digital-garden-modal-title" style={{ margin: 0, flex: 1 }}>{post.title}</h3>
+            {post.githubUrl && (
+              <a
+                href={post.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: isMobile ? '6px' : '10px',
+                  padding: isMobile ? '8px 12px' : '10px 14px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontSize: isMobile ? '0.875rem' : '0.95rem',
+                  transition: 'all 0.3s ease',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  flexShrink: 0
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                <Image
+                  src={getImageSrc('/icons/github.svg')}
+                  alt="GitHub"
+                  width={isMobile ? 28 : 32}
+                  height={isMobile ? 28 : 32}
+                  style={{ filter: 'invert(1)' }}
+                />
+                {!isMobile && <span>check in Github</span>}
+              </a>
+            )}
+          </div>
           <p className="digital-garden-modal-date">planted on {formattedDate}</p>
           {post.description && (
             <p className="digital-garden-modal-description">{post.description}</p>

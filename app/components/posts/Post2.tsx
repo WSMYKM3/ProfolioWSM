@@ -45,6 +45,7 @@ function convertToEmbedUrl(url: string): string {
 export default function Post2() {
   const [isMobile, setIsMobile] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   
   // Get post data for Stage 3 video URL
   const post = getPostById('post-2');
@@ -315,9 +316,14 @@ export default function Post2() {
                       borderRadius: '12px',
                       overflow: 'hidden',
                       backgroundColor: 'transparent',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                      transition: 'transform 0.3s ease, border-color 0.3s ease',
+                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                     }}
                     onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
+                    onMouseEnter={() => setHoveredItem(item.path)}
+                    onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
                       <video
@@ -402,9 +408,14 @@ export default function Post2() {
                       borderRadius: '12px',
                       overflow: 'hidden',
                       backgroundColor: 'transparent',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                      transition: 'transform 0.3s ease, border-color 0.3s ease',
+                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                     }}
                     onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
+                    onMouseEnter={() => setHoveredItem(item.path)}
+                    onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
                       <video
@@ -506,9 +517,14 @@ export default function Post2() {
                       borderRadius: '12px',
                       overflow: 'hidden',
                       backgroundColor: 'transparent',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                      transition: 'transform 0.3s ease, border-color 0.3s ease',
+                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                     }}
                     onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
+                    onMouseEnter={() => setHoveredItem(item.path)}
+                    onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
                       <video

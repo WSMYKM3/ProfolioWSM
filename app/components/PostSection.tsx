@@ -186,7 +186,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.5) 100%)',
+            background: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.4) 100%)',
             zIndex: 1
           }} />
         </div>
@@ -205,7 +205,8 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
         alignItems: isMobile ? 'flex-end' : 'center',
         justifyContent: 'space-between',
         height: '100%',
-        pointerEvents: 'auto' // Changed to auto to ensure clicks work
+        pointerEvents: 'auto', // Changed to auto to ensure clicks work
+        backgroundColor: 'rgba(0, 0, 0, 0.3)' // Background with alpha transparency
       }}>
 
         {/* Text Content */}

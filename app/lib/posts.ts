@@ -18,6 +18,7 @@ export interface Post {
   role?: string; // Project contribution/role (e.g., "UX/XR Lead")
   achievement?: string; // Project achievement or recognition (e.g., "AWE 2025 USA presentation")
   stage3VideoUrl?: string; // Stage 3 video URL for Signie project
+  linkedInUrl?: string; // LinkedIn post URL for embedding
 }
 
 export const posts: Post[] = [
@@ -103,18 +104,16 @@ export const posts: Post[] = [
   {
     id: "post-5",
     title: "The Tool Box",
-    thumbnail: "https://via.placeholder.com/400x400/cccccc/666666?text=Text+Project",
-    file: "post-4",
-    date: "2024-02-10",
+    thumbnail: "/toolboxthumb.png",
+    file: "post-5",
+    date: "3 days for XR Creator Con 2025 hackthon in Berlin - Strauss Track",
     tags: ["xr", "ai"],
-    quality: "low", // 低质量内容，显示为小尺寸
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoTitle: "Text Project Video Title",
-    gifUrl: "/gifs/text-project.gif", // GIF for cinematic-extra section
-    description: "A content-focused project exploring narrative and textual expression.",
-    softwareTools: ["Notion", "Markdown"],
-    features: [],
-    role: "Content Creator"
+    quality: "medium",
+    description: "AI assistant for customer purchasing",
+    softwareTools: ["Unity6"],
+    features: ["AI Assistant", "XR Shopping Guide"],
+    role: "Team leader of 5, XR developer",
+    linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/"
   },
   {
     id: "post-6",

@@ -8,6 +8,7 @@ import Post1 from './posts/Post1';
 import Post2 from './posts/Post2';
 import Post3 from './posts/Post3';
 import Post4 from './posts/Post4';
+import Post5 from './posts/Post5';
 import Post6 from './posts/Post6';
 import PostSidebar from './PostSidebar';
 
@@ -16,6 +17,7 @@ const postComponents: Record<string, React.ComponentType> = {
   'post-2': Post2,
   'post-3': Post3,
   'post-4': Post4,
+  'post-5': Post5,
   'post-6': Post6,
 };
 
@@ -150,6 +152,16 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
             ];
         }
         
+        if (post.id === 'post-5') {
+            return [
+                ...baseSections,
+                { id: 'video', label: 'Video' },
+                { id: 'ideation', label: 'Ideation' },
+                { id: 'stage1', label: 'Stage1: XR Development' },
+                { id: 'stage2', label: 'Stage2: AI Assistant' }
+            ];
+        }
+        
         if (post.id === 'post-6') {
             return [
                 ...baseSections,
@@ -181,8 +193,8 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
 
     return (
         <div className="post-detail-view" style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
-            {/* 1. Hero Video/Image - Hide for post-4 and post-6 as videos are in Post components */}
-            {post.id !== 'post-4' && post.id !== 'post-6' && (
+            {/* 1. Hero Video/Image - Hide for post-4, post-5, and post-6 as videos/content are in Post components */}
+            {post.id !== 'post-4' && post.id !== 'post-5' && post.id !== 'post-6' && (
             <div className="detail-video-container" style={{
                 width: '80%',
                 maxWidth: '1000px',

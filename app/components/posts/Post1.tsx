@@ -17,6 +17,7 @@ function getImageSrc(src: string): string {
 export default function Post1() {
   const [isMobile, setIsMobile] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -197,8 +198,14 @@ export default function Post1() {
                 overflow: 'hidden',
                 backgroundColor: 'rgba(255,255,255,0.05)',
                 padding: '20px',
-                backdropFilter: 'blur(10px)'
-              }}>
+                backdropFilter: 'blur(10px)',
+                border: hoveredItem === '/Datnieideation.png' ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                transition: 'transform 0.3s ease, border-color 0.3s ease',
+                transform: hoveredItem === '/Datnieideation.png' ? 'scale(1.05)' : 'scale(1)'
+              }}
+              onMouseEnter={() => setHoveredItem('/Datnieideation.png')}
+              onMouseLeave={() => setHoveredItem(null)}
+              >
                 <Image
                   src={getImageSrc('/Datnieideation.png')}
                   alt="Datnie Ideation"
@@ -248,9 +255,14 @@ export default function Post1() {
                 borderRadius: '12px',
                 overflow: 'hidden',
                 backgroundColor: 'transparent',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                border: hoveredItem === '/brainstorm.png' ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                transition: 'transform 0.3s ease, border-color 0.3s ease',
+                transform: hoveredItem === '/brainstorm.png' ? 'scale(1.05)' : 'scale(1)'
               }}
               onClick={() => handleImageClick('/brainstorm.png', 'Datnie UX Design')}
+              onMouseEnter={() => setHoveredItem('/brainstorm.png')}
+              onMouseLeave={() => setHoveredItem(null)}
             >
               <Image
                 src={getImageSrc('/brainstorm.png')}
@@ -273,9 +285,14 @@ export default function Post1() {
                 borderRadius: '12px',
                 overflow: 'hidden',
                 backgroundColor: 'transparent',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                border: hoveredItem === '/webm/Datnie/uxboard.webm' ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                transition: 'transform 0.3s ease, border-color 0.3s ease',
+                transform: hoveredItem === '/webm/Datnie/uxboard.webm' ? 'scale(1.05)' : 'scale(1)'
               }}
               onClick={() => handleImageClick('/webm/Datnie/uxboard.webm', 'Datnie UX Design GIF', true)}
+              onMouseEnter={() => setHoveredItem('/webm/Datnie/uxboard.webm')}
+              onMouseLeave={() => setHoveredItem(null)}
             >
               <video
                 src={getImageSrc('/webm/Datnie/uxboard.webm')}
@@ -355,9 +372,14 @@ export default function Post1() {
                     borderRadius: '12px',
                     overflow: 'hidden',
                     backgroundColor: 'transparent',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                   }}
                   onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
+                  onMouseEnter={() => setHoveredItem(item.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   {item.isVideo ? (
                     <video
@@ -432,8 +454,8 @@ export default function Post1() {
               { path: '/webm/Datnie/grabcloud.webm', description: 'I prototype a cloth simulation cloud first to pop up more infomation from profile card although not been used finally', isVideo: true },
               { path: '/webm/Datnie/grabcard.webm', description: 'Make every info card interactable, and easy to grab', isVideo: true },
               { path: '/webm/Datnie/addtop.webm', description: 'Frequent answer propmted to be added to profile of the user', isVideo: true },
-              { path: '/gifs/unity-placeholder-7.gif', description: 'Unity Development Placeholder 7' },
-              { path: '/gifs/unity-placeholder-8.gif', description: 'Unity Development Placeholder 8' }
+              { path: '/DatnieStage2/rotater.png', description: 'The Main GameObject which auto-lays out icons on a ring and smoothly rotates to the next focused item' },
+              { path: '/DatnieStage2/CodeRotate.png', description: 'The Script which rotates a circular UI carousel with smooth animated steps, index tracking, auto layout, and center-change events.' }
             ].map((item, index) => (
               <div
                 key={`stage2-${index}`}
@@ -451,9 +473,14 @@ export default function Post1() {
                     borderRadius: '12px',
                     overflow: 'hidden',
                     backgroundColor: 'transparent',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
                   }}
                   onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
+                  onMouseEnter={() => setHoveredItem(item.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
                   {item.isVideo ? (
                     <video

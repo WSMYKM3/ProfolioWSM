@@ -6,6 +6,7 @@ export interface DailyPracticePost {
   tags: string[];
   description?: string; // Optional, for modal description
   videoUrl?: string; // Optional, for YouTube or other video URLs
+  githubUrl?: string; // Optional, for GitHub repository URLs
   file?: string; // Optional, for modal content
 }
 
@@ -48,10 +49,13 @@ export const dailyPracticePosts: DailyPracticePost[] = [
   },
   {
     id: "daily-5",
-    title: "Layout Experiment",
-    thumbnail: "https://via.placeholder.com/400x400/cccccc/666666?text=Layout",
-    date: "2024-03-05",
-    tags: ["layout", "experiment"],
+    title: "Unity Editor Tools - Asset Opener",
+    thumbnail: "/dailypracticeThumbnail/assetopener.png",
+    date: "2025",
+    tags: ["Group Collaboration", "Efficiency"],
+    description: "A Unity editor tool to manage and open Unity assets quickly and pin on a certain game object. This is for group collabration which let every group member choose a certain list of game objects they will use of their own role.",
+    videoUrl: "https://youtu.be/2Nu1RrGWfAw",
+    githubUrl: "https://github.com/WSMYKM3/UnityToolScripts-WSM",
     file: "post-1"
   },
   {
