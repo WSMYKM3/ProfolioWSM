@@ -7,15 +7,6 @@ import ProjectGrid from '@/app/components/ProjectGrid';
 import Modal from '@/app/components/Modal';
 import { posts, Post } from '@/app/lib/posts';
 
-// Helper function for video path
-function getVideoSrc(src: string): string {
-  if (src.startsWith('http://') || src.startsWith('https://')) {
-    return src;
-  }
-  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
-  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
-}
-
 export default function About() {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -56,17 +47,31 @@ export default function About() {
                 Passionate about creating immersive digital solutions that bridge the gap between imagination and reality.
               </p>
             </div>
-            <video
+            <div 
               className="about-video"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              src={getVideoSrc('/video-placeholder.mp4')}
+              style={{
+                position: 'relative',
+                width: '100%',
+                paddingBottom: '30%', // Wider aspect ratio
+                height: 0,
+                overflow: 'hidden'
+              }}
             >
-              Your browser does not support the video tag.
-            </video>
+              <iframe
+                src="https://www.youtube.com/embed/SdtlgYBgla8?autoplay=1&mute=1&loop=1&playsinline=1&playlist=SdtlgYBgla8"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 'none'
+                }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="YouTube video player"
+              />
+            </div>
           </div>
         </section>
 

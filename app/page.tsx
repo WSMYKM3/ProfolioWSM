@@ -7,15 +7,6 @@ import ProjectGrid from './components/ProjectGrid';
 import Modal from './components/Modal';
 import { posts, Post } from './lib/posts';
 
-// Helper function for video path
-function getVideoSrc(src: string): string {
-  if (src.startsWith('http://') || src.startsWith('https://')) {
-    return src;
-  }
-  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
-  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
-}
-
 export default function Home() {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -59,17 +50,31 @@ export default function Home() {
                 I make <strong className="highlight">games</strong>, <strong className="highlight">XR products</strong>, <strong className="highlight">animation trailers</strong>.
               </p>
             </div>
-            <video
+            <div 
               className="about-video"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              src={getVideoSrc('/video-placeholder.mp4')}
+              style={{
+                position: 'relative',
+                width: '100%',
+                paddingBottom: '30%', // Wider aspect ratio
+                height: 0,
+                overflow: 'hidden'
+              }}
             >
-              Your browser does not support the video tag.
-            </video>
+              <iframe
+                src="https://www.youtube.com/embed/SdtlgYBgla8?autoplay=1&mute=1&loop=1&playsinline=1&playlist=SdtlgYBgla8"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  border: 'none'
+                }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="YouTube video player"
+              />
+            </div>
           </div>
         </section>
 
