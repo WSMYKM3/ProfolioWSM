@@ -4,6 +4,25 @@ import TopNav from '@/app/components/TopNav';
 import ResumeSidebar from '@/app/components/ResumeSidebar';
 import Image from 'next/image';
 
+// Helper function to add basePath for GitHub Pages
+// Uses runtime detection to work correctly in both dev and production
+function getImageSrc(src: string): string {
+  // If it's already a full URL (http/https), return as is
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  // Detect basePath from current location (runtime detection)
+  // This works correctly in both development and GitHub Pages
+  if (typeof window !== 'undefined') {
+    const pathname = window.location.pathname;
+    const basePath = pathname.startsWith('/ProfolioWSM') ? '/ProfolioWSM' : '';
+    return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+  }
+  // Fallback for SSR (shouldn't happen in static export, but safe fallback)
+  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+}
+
 const resumeSections = [
   { id: 'awards', label: 'Awards & Exhibitions' },
   { id: 'projects', label: 'Selected Projects' },
@@ -146,16 +165,16 @@ export default function Resume() {
                   <h3 className="resume-tools-group-title">Development & Design</h3>
                   <div className="resume-tools-grid">
                     <span className="resume-tool-item">
-                      <Image src="/icons/github.svg" alt="GitHub" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/github.svg")} alt="GitHub" width={20} height={20} className="resume-tool-icon" />
                       GitHub
                     </span>
                     <span className="resume-tool-item">
-                      <Image src="/icons/figma.svg" alt="Figma" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/figma.svg")} alt="Figma" width={20} height={20} className="resume-tool-icon" />
                       Figma
                     </span>
                     <span className="resume-tool-item">
-                      <Image src="/icons/claude.svg" alt="Claude" width={20} height={20} className="resume-tool-icon" />
-                      <Image src="/icons/obsidian.svg" alt="Obsidian" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/claude.svg")} alt="Claude" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/obsidian.svg")} alt="Obsidian" width={20} height={20} className="resume-tool-icon" />
                       Claude + Obsidian
                     </span>
                   </div>
@@ -164,11 +183,11 @@ export default function Resume() {
                   <h3 className="resume-tools-group-title">Game Engines</h3>
                   <div className="resume-tools-grid">
                     <span className="resume-tool-item">
-                      <Image src="/icons/unity.svg" alt="Unity" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/unity.svg")} alt="Unity" width={20} height={20} className="resume-tool-icon" />
                       Unity (URP, Animation, VFX, XR Interaction Toolkit)
                     </span>
                     <span className="resume-tool-item">
-                      <Image src="/icons/unrealengine.svg" alt="Unreal Engine" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/unrealengine.svg")} alt="Unreal Engine" width={20} height={20} className="resume-tool-icon" />
                       Unreal Engine (Blueprints, C++)
                     </span>
                   </div>
@@ -177,17 +196,17 @@ export default function Resume() {
                   <h3 className="resume-tools-group-title">Creative Tools</h3>
                   <div className="resume-tools-grid">
                     <span className="resume-tool-item">
-                      <Image src="/icons/touchdesigner.svg" alt="TouchDesigner" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/touchdesigner.svg")} alt="TouchDesigner" width={20} height={20} className="resume-tool-icon" />
                       TouchDesigner
                     </span>
                     <span className="resume-tool-item">Houdini & Houdini Engine (UE / Unity)</span>
                     <span className="resume-tool-item">
-                      <Image src="/icons/blender.svg" alt="Blender" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/blender.svg")} alt="Blender" width={20} height={20} className="resume-tool-icon" />
                       Blender
                     </span>
                     <span className="resume-tool-item">Maya</span>
                     <span className="resume-tool-item">
-                      <Image src="/icons/motion builder.svg" alt="MotionBuilder" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/motion builder.svg")} alt="MotionBuilder" width={20} height={20} className="resume-tool-icon" />
                       MotionBuilder
                     </span>
                   </div>
@@ -197,7 +216,7 @@ export default function Resume() {
                   <div className="resume-tools-grid">
                     <span className="resume-tool-item">C#</span>
                     <span className="resume-tool-item">
-                      <Image src="/icons/python.svg" alt="Python" width={20} height={20} className="resume-tool-icon" />
+                      <Image src={getImageSrc("/icons/python.svg")} alt="Python" width={20} height={20} className="resume-tool-icon" />
                       Python
                     </span>
                   </div>

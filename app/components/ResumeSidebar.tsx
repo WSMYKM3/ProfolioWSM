@@ -11,6 +11,25 @@ interface ResumeSidebarProps {
   sections: Section[];
 }
 
+// Helper function to add basePath for GitHub Pages
+// Uses runtime detection to work correctly in both dev and production
+function getFileSrc(src: string): string {
+  // If it's already a full URL (http/https), return as is
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src;
+  }
+  // Detect basePath from current location (runtime detection)
+  // This works correctly in both development and GitHub Pages
+  if (typeof window !== 'undefined') {
+    const pathname = window.location.pathname;
+    const basePath = pathname.startsWith('/ProfolioWSM') ? '/ProfolioWSM' : '';
+    return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+  }
+  // Fallback for SSR (shouldn't happen in static export, but safe fallback)
+  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+}
+
 export default function ResumeSidebar({ sections }: ResumeSidebarProps) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -139,7 +158,7 @@ export default function ResumeSidebar({ sections }: ResumeSidebarProps) {
       </nav>
       <div className="resume-sidebar-download">
         <a 
-          href="/Siming_Wang_Creative_Technologist_XR_Resume.pdf" 
+          href={getFileSrc("/Siming_Wang_Creative_Technologist_XR_Resume.pdf")} 
           download
           className="resume-sidebar-download-button"
         >
