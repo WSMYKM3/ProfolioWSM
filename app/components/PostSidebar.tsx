@@ -34,24 +34,57 @@ export default function PostSidebar({ sections, projectTitle }: PostSidebarProps
     // Create Intersection Observer
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -60% 0px', // Trigger when section is in upper portion of viewport
-      threshold: 0
+      rootMargin: '-120px 0px -60% 0px', // Trigger when section is near the top (accounting for sticky header)
+      threshold: [0, 0.25, 0.5, 0.75, 1]
     };
 
     observerRef.current = new IntersectionObserver((entries) => {
-      // Find the section that's most visible in the upper portion
-      const visibleSections = entries
+      // Find all intersecting sections
+      const intersectingSections = entries
         .filter(entry => entry.isIntersecting)
         .map(entry => ({
           id: entry.target.id,
-          top: entry.boundingClientRect.top
-        }))
-        .sort((a, b) => a.top - b.top);
+          top: entry.boundingClientRect.top,
+          ratio: entry.intersectionRatio,
+          bottom: entry.boundingClientRect.bottom,
+          height: entry.boundingClientRect.height
+        }));
 
-      if (visibleSections.length > 0) {
-        // Get the section closest to the top
-        const topSection = visibleSections[0];
-        setActiveSection(topSection.id);
+      if (intersectingSections.length > 0) {
+        // Find the section that's closest to the top of the viewport (within the trigger zone)
+        const triggerZoneTop = 120; // Top offset for sticky header
+        const triggerZoneBottom = window.innerHeight * 0.4; // 40% from top
+        
+        // Sort by proximity to trigger zone top
+        intersectingSections.sort((a, b) => {
+          const aInZone = a.top >= triggerZoneTop && a.top <= triggerZoneBottom;
+          const bInZone = b.top >= triggerZoneTop && b.top <= triggerZoneBottom;
+          
+          if (aInZone && !bInZone) return -1;
+          if (!aInZone && bInZone) return 1;
+          
+          // Both in zone or both out - prefer the one closer to trigger zone top
+          const aDistance = Math.abs(a.top - triggerZoneTop);
+          const bDistance = Math.abs(b.top - triggerZoneTop);
+          
+          return aDistance - bDistance;
+        });
+        
+        setActiveSection(intersectingSections[0].id);
+      } else {
+        // No sections intersecting - find the one that just passed above the viewport
+        const allEntries = Array.from(entries);
+        const aboveViewport = allEntries
+          .filter(entry => entry.boundingClientRect.bottom < 150)
+          .map(entry => ({
+            id: entry.target.id,
+            bottom: entry.boundingClientRect.bottom
+          }))
+          .sort((a, b) => b.bottom - a.bottom); // Closest to top
+        
+        if (aboveViewport.length > 0) {
+          setActiveSection(aboveViewport[0].id);
+        }
       }
     }, observerOptions);
 
@@ -105,9 +138,6 @@ export default function PostSidebar({ sections, projectTitle }: PostSidebarProps
   return (
     <aside
       style={{
-        position: 'sticky',
-        top: '120px',
-        alignSelf: 'flex-start',
         width: '220px',
         paddingRight: '32px',
         paddingTop: '20px',
