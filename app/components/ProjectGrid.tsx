@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
+import SoftwareIcon from './SoftwareIcon';
 
 interface ProjectGridProps {
   posts: Post[];
@@ -66,6 +67,19 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
               <h3 className="strip-expanded-title">{post.title}</h3>
               {post.description && (
                 <p className="strip-expanded-desc">{post.description}</p>
+              )}
+              {post.role && (
+                <div className="strip-expanded-role">
+                  <span className="strip-role-label">Role:</span>
+                  <span className="strip-role-value">{post.role}</span>
+                </div>
+              )}
+              {post.softwareTools && post.softwareTools.length > 0 && (
+                <div className="strip-expanded-tools">
+                  {post.softwareTools.map((tool) => (
+                    <SoftwareIcon key={tool} name={tool} size={24} />
+                  ))}
+                </div>
               )}
               {post.tags && post.tags.length > 0 && (
                 <div className="strip-expanded-tags">

@@ -58,7 +58,7 @@ export default function About() {
               }}
             >
               <iframe
-                src="https://www.youtube.com/embed/SdtlgYBgla8?autoplay=1&mute=1&loop=1&playsinline=1&playlist=SdtlgYBgla8"
+                src="https://www.youtube.com/embed/ThW5sgK06q0?autoplay=1&mute=1&loop=1&playsinline=1&playlist=ThW5sgK06q0"
                 style={{
                   position: 'absolute',
                   top: 0,

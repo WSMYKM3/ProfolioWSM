@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Bodoni_Moda } from 'next/font/google'
 import './globals.css'
+import FontLoader from './components/FontLoader'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${bodoni.variable}`}>
       <body>
+        <FontLoader />
         <div className="grain-overlay" />
         {children}
       </body>

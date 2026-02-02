@@ -1,10 +1,11 @@
-@font-face {
+/* Rotio font is now loaded dynamically via FontLoader component to support basePath */
+/* @font-face {
     font-family: 'Rotio';
     src: url('/font/RotioDemo.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-}
+} */
 
 * {
     margin: 0;
@@ -3439,6 +3440,75 @@ header h1 {
     transform: translateY(0);
 }
 
+/* Role in expanded view */
+.strip-expanded-role {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.22s, transform 0.3s ease 0.22s;
+}
+
+.strip-card:hover .strip-expanded-role {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.strip-role-label {
+    font-size: 0.75rem;
+    color: #D4C8BE;
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+}
+
+.strip-role-value {
+    font-size: 0.875rem;
+    color: #F5F0EB;
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 400;
+}
+
+/* Tools icons in expanded view */
+.strip-expanded-tools {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.24s, transform 0.3s ease 0.24s;
+}
+
+.strip-card:hover .strip-expanded-tools {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.strip-expanded-tools .software-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.strip-expanded-tools .software-icon-label {
+    font-size: 0.65rem;
+    color: #D4C8BE;
+    opacity: 0.8;
+    text-align: center;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* Tags in expanded view */
 .strip-expanded-tags {
     display: flex;
@@ -3550,6 +3620,14 @@ header h1 {
     .strip-expanded-desc {
         -webkit-line-clamp: 3;
         line-clamp: 3;
+    }
+
+    .strip-expanded-role {
+        margin-top: 20px;
+    }
+
+    .strip-expanded-tools {
+        justify-content: center;
     }
 }
 
@@ -3689,6 +3767,25 @@ header h1 {
         font-size: 0.875rem;
         -webkit-line-clamp: 3;
         line-clamp: 3;
+    }
+
+    .strip-expanded-role {
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .strip-expanded-tools {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .strip-expanded-tools .software-icon {
+        flex: 0 0 auto;
+    }
+
+    .strip-expanded-tools .software-icon-label {
+        font-size: 0.6rem;
+        max-width: 50px;
     }
 }
 
