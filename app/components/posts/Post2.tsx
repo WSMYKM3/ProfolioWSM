@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import HoverVideo from '../HoverVideo';
 import { getImageScale } from '@/app/lib/imageScaleUtils';
 import { getPostById } from '@/app/lib/posts';
 
@@ -326,20 +327,10 @@ export default function Post2() {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
-                      <video
-                        src={getImageSrc(item.path)}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover'
-                        }}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
+                      <HoverVideo
+                        videoSrc={item.path}
+                        alt={item.description}
+                        objectFit="cover"
                       />
                     ) : (
                       <Image
@@ -418,20 +409,10 @@ export default function Post2() {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
-                      <video
-                        src={getImageSrc(item.path)}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover'
-                        }}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
+                      <HoverVideo
+                        videoSrc={item.path}
+                        alt={item.description}
+                        objectFit="cover"
                       />
                     ) : (
                       <Image
@@ -527,20 +508,10 @@ export default function Post2() {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
-                      <video
-                        src={getImageSrc(item.path)}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover'
-                        }}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
+                      <HoverVideo
+                        videoSrc={item.path}
+                        alt={item.description}
+                        objectFit="cover"
                       />
                     ) : (
                       <Image

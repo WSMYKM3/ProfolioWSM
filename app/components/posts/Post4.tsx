@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import HoverVideo from '../HoverVideo';
 import { getImageScale } from '@/app/lib/imageScaleUtils';
 
 // Helper function to add basePath for GitHub Pages
@@ -237,20 +238,10 @@ export default function Post4() {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
-                      <video
-                        src={getImageSrc(item.path)}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain'
-                        }}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
+                      <HoverVideo
+                        videoSrc={item.path}
+                        alt={item.description}
+                        objectFit="contain"
                       />
                     ) : (
                       <Image
@@ -331,20 +322,10 @@ export default function Post4() {
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.isVideo ? (
-                      <video
-                        src={getImageSrc(item.path)}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain'
-                        }}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
+                      <HoverVideo
+                        videoSrc={item.path}
+                        alt={item.description}
+                        objectFit="contain"
                       />
                     ) : (
                       <Image
