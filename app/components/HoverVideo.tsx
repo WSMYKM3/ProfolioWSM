@@ -32,14 +32,10 @@ function getThumbnailPath(videoSrc: string): string {
   return videoSrc;
 }
 
-// Get compressed video path if available, otherwise use original
+// Note: All webm files have been compressed and renamed to original names
+// This function is kept for compatibility but just returns the original path
 function getCompressedVideoPath(videoSrc: string): string {
-  // If video path ends with .webm, try to use compressed version
-  if (videoSrc.endsWith('.webm')) {
-    // Check if compressed version exists by replacing .webm with -compressed.webm
-    return videoSrc.replace('.webm', '-compressed.webm');
-  }
-  // Fallback: return original path
+  // All webm files are already compressed, so just return the original path
   return videoSrc;
 }
 
@@ -54,35 +50,46 @@ export default function HoverVideo({
 }: HoverVideoProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [thumbnailError, setThumbnailError] = useState(false);
-  const [useOriginalVideo, setUseOriginalVideo] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fallbackVideoRef = useRef<HTMLVideoElement>(null);
 
   // Auto-generate thumbnail path if not provided
   const finalThumbnailSrc = thumbnailSrc || getThumbnailPath(videoSrc);
   const displayThumbnailSrc = getImageSrc(finalThumbnailSrc);
-  // Use compressed video if available, otherwise use original
-  const compressedVideoSrc = getCompressedVideoPath(videoSrc);
-  const finalVideoSrc = useOriginalVideo ? videoSrc : compressedVideoSrc;
-  const displayVideoSrc = getImageSrc(finalVideoSrc);
+  // All webm files are already compressed (original files deleted)
+  const displayVideoSrc = getImageSrc(videoSrc);
 
-  // Handle video play/pause on hover
+  // Handle video loading when hovered
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     if (isHovered) {
-      // Load and play video on hover
+      // Start loading video when hovered
+      setIsLoadingVideo(true);
+      setIsVideoReady(false);
       video.load();
-      video.play().catch(err => {
-        console.warn('Video play failed:', err);
-      });
     } else {
-      // Pause and reset video on leave
+      // Reset states when not hovered
+      setIsVideoReady(false);
+      setIsLoadingVideo(false);
       video.pause();
       video.currentTime = 0;
     }
   }, [isHovered]);
+
+  // Handle video play when ready
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isVideoReady || !isHovered) return;
+
+    // Play video when it's ready and hovered
+    video.play().catch(err => {
+      console.warn('Video play failed:', err);
+    });
+  }, [isVideoReady, isHovered]);
 
   // Handle fallback video (when thumbnail doesn't exist)
   useEffect(() => {
@@ -100,18 +107,27 @@ export default function HoverVideo({
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    setIsVideoReady(false);
+    setIsLoadingVideo(false);
   };
 
   const handleThumbnailError = () => {
     setThumbnailError(true);
   };
 
+  const handleVideoLoadStart = () => {
+    setIsLoadingVideo(true);
+  };
+
+  const handleVideoCanPlay = () => {
+    setIsVideoReady(true);
+    setIsLoadingVideo(false);
+  };
+
   const handleVideoError = () => {
-    // If compressed video fails to load, fallback to original
-    if (!useOriginalVideo) {
-      console.warn(`Compressed video failed to load, using original: ${videoSrc}`);
-      setUseOriginalVideo(true);
-    }
+    setIsVideoReady(false);
+    setIsLoadingVideo(false);
+    // Keep showing thumbnail on error
   };
 
   return (
@@ -127,22 +143,23 @@ export default function HoverVideo({
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
     >
-      {/* Thumbnail - shown by default */}
-      {!isHovered && !thumbnailError && (
+      {/* Thumbnail - shown when not hovered or video not ready */}
+      {(!isHovered || !isVideoReady) && !thumbnailError && (
         <Image
           src={displayThumbnailSrc}
           alt={alt}
           fill
           style={{ 
             objectFit,
-            transition: 'opacity 0.3s ease'
+            transition: 'opacity 0.3s ease',
+            opacity: isVideoReady && isHovered ? 0 : 1
           }}
           onError={handleThumbnailError}
         />
       )}
       
       {/* Fallback: show video as thumbnail if thumbnail doesn't exist */}
-      {!isHovered && thumbnailError && (
+      {(!isHovered || !isVideoReady) && thumbnailError && (
         <video
           ref={fallbackVideoRef}
           src={displayVideoSrc}
@@ -153,36 +170,37 @@ export default function HoverVideo({
             width: '100%',
             height: '100%',
             objectFit,
-            opacity: 0.5 // Dimmed as thumbnail
+            opacity: isVideoReady && isHovered ? 0 : 0.5 // Dimmed as thumbnail
           }}
           muted
           playsInline
           preload="none"
-          onError={handleVideoError}
         />
       )}
 
-      {/* Video - shown on hover */}
-      {isHovered && (
-        <video
-          ref={videoRef}
-          src={displayVideoSrc}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit,
-            transition: 'opacity 0.3s ease'
-          }}
-          loop
-          muted
-          playsInline
-          preload="none"
-          onError={handleVideoError}
-        />
-      )}
+      {/* Video - always rendered but hidden until ready */}
+      <video
+        ref={videoRef}
+        src={displayVideoSrc}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit,
+          opacity: isVideoReady && isHovered ? 1 : 0,
+          transition: 'opacity 0.3s ease',
+          pointerEvents: isVideoReady && isHovered ? 'auto' : 'none'
+        }}
+        loop
+        muted
+        playsInline
+        preload="none"
+        onLoadStart={handleVideoLoadStart}
+        onCanPlay={handleVideoCanPlay}
+        onError={handleVideoError}
+      />
     </div>
   );
 }
