@@ -51,6 +51,7 @@ export default function HoverVideo({
   const [isHovered, setIsHovered] = useState(false);
   const [thumbnailError, setThumbnailError] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fallbackVideoRef = useRef<HTMLVideoElement>(null);
@@ -74,6 +75,7 @@ export default function HoverVideo({
     } else {
       // Reset states when not hovered
       setIsVideoReady(false);
+      setIsVideoPlaying(false);
       setIsLoadingVideo(false);
       video.pause();
       video.currentTime = 0;
@@ -85,10 +87,29 @@ export default function HoverVideo({
     const video = videoRef.current;
     if (!video || !isVideoReady || !isHovered) return;
 
-    // Play video when it's ready and hovered
-    video.play().catch(err => {
-      console.warn('Video play failed:', err);
-    });
+    // Double-check video is ready before playing
+    // Ensure we have enough data for smooth playback
+    if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+      // Play video when it's ready and hovered
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Video started playing successfully
+            setIsVideoPlaying(true);
+          })
+          .catch(err => {
+            console.warn('Video play failed:', err);
+            // If play fails, reset ready state to show thumbnail
+            setIsVideoReady(false);
+            setIsVideoPlaying(false);
+          });
+      }
+    } else {
+      // If not enough data, wait for canplaythrough event
+      setIsVideoReady(false);
+      setIsVideoPlaying(false);
+    }
   }, [isVideoReady, isHovered]);
 
   // Handle fallback video (when thumbnail doesn't exist)
@@ -108,7 +129,18 @@ export default function HoverVideo({
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsVideoReady(false);
+    setIsVideoPlaying(false);
     setIsLoadingVideo(false);
+  };
+
+  const handleVideoPlaying = () => {
+    // Video has started playing
+    setIsVideoPlaying(true);
+  };
+
+  const handleVideoPause = () => {
+    // Video paused
+    setIsVideoPlaying(false);
   };
 
   const handleThumbnailError = () => {
@@ -117,11 +149,32 @@ export default function HoverVideo({
 
   const handleVideoLoadStart = () => {
     setIsLoadingVideo(true);
+    setIsVideoReady(false);
   };
 
   const handleVideoCanPlay = () => {
+    // onCanPlay fires when enough data is loaded to start playing
+    // but we need to wait for canplaythrough to ensure smooth playback
+    const video = videoRef.current;
+    if (video && video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+      // Check if we have enough data for smooth playback
+      if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+        setIsVideoReady(true);
+        setIsLoadingVideo(false);
+      }
+    }
+  };
+
+  const handleVideoCanPlayThrough = () => {
+    // onCanPlayThrough fires when enough data is loaded for smooth playback
+    // This is the event we should rely on to ensure video is fully ready
     setIsVideoReady(true);
     setIsLoadingVideo(false);
+  };
+
+  const handleVideoWaiting = () => {
+    // If video starts buffering during playback, mark as not ready
+    setIsVideoReady(false);
   };
 
   const handleVideoError = () => {
@@ -143,8 +196,8 @@ export default function HoverVideo({
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
     >
-      {/* Thumbnail - shown when not hovered or video not ready */}
-      {(!isHovered || !isVideoReady) && !thumbnailError && (
+      {/* Thumbnail - shown when not hovered or video not playing */}
+      {(!isHovered || !isVideoPlaying) && !thumbnailError && (
         <Image
           src={displayThumbnailSrc}
           alt={alt}
@@ -152,14 +205,15 @@ export default function HoverVideo({
           style={{ 
             objectFit,
             transition: 'opacity 0.3s ease',
-            opacity: isVideoReady && isHovered ? 0 : 1
+            opacity: isVideoPlaying && isHovered ? 0 : 1,
+            zIndex: isVideoPlaying && isHovered ? 0 : 1
           }}
           onError={handleThumbnailError}
         />
       )}
       
       {/* Fallback: show video as thumbnail if thumbnail doesn't exist */}
-      {(!isHovered || !isVideoReady) && thumbnailError && (
+      {(!isHovered || !isVideoPlaying) && thumbnailError && (
         <video
           ref={fallbackVideoRef}
           src={displayVideoSrc}
@@ -170,7 +224,8 @@ export default function HoverVideo({
             width: '100%',
             height: '100%',
             objectFit,
-            opacity: isVideoReady && isHovered ? 0 : 0.5 // Dimmed as thumbnail
+            opacity: isVideoPlaying && isHovered ? 0 : 0.5, // Dimmed as thumbnail
+            zIndex: isVideoPlaying && isHovered ? 0 : 1
           }}
           muted
           playsInline
@@ -178,7 +233,7 @@ export default function HoverVideo({
         />
       )}
 
-      {/* Video - always rendered but hidden until ready */}
+      {/* Video - always rendered but hidden until ready and playing */}
       <video
         ref={videoRef}
         src={displayVideoSrc}
@@ -189,9 +244,11 @@ export default function HoverVideo({
           width: '100%',
           height: '100%',
           objectFit,
-          opacity: isVideoReady && isHovered ? 1 : 0,
+          opacity: isVideoPlaying && isHovered ? 1 : 0,
           transition: 'opacity 0.3s ease',
-          pointerEvents: isVideoReady && isHovered ? 'auto' : 'none'
+          pointerEvents: isVideoPlaying && isHovered ? 'auto' : 'none',
+          visibility: isVideoReady && isHovered ? 'visible' : 'hidden',
+          zIndex: isVideoPlaying && isHovered ? 2 : 0
         }}
         loop
         muted
@@ -199,6 +256,10 @@ export default function HoverVideo({
         preload="none"
         onLoadStart={handleVideoLoadStart}
         onCanPlay={handleVideoCanPlay}
+        onCanPlayThrough={handleVideoCanPlayThrough}
+        onPlaying={handleVideoPlaying}
+        onPause={handleVideoPause}
+        onWaiting={handleVideoWaiting}
         onError={handleVideoError}
       />
     </div>
