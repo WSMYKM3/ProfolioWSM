@@ -22,7 +22,7 @@ function generateThumbnails() {
     path.join(publicDir, 'webm', 'Signie'),
     path.join(publicDir, 'webm', 'Mirrormirror'),
     path.join(publicDir, 'webm', 'MotionCapture'),
-    path.join(publicDir, 'webm', 'TheToolbox'),
+    path.join(publicDir, 'TheToolbox', 'webm'), // TheToolbox webm 文件在 public/TheToolbox/webm/ 目录
     path.join(publicDir, 'gifs') // Post1 中也有 gifs 目录下的 webm
   ];
 
