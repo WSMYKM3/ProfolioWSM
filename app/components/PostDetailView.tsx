@@ -23,6 +23,7 @@ const postComponents: Record<string, React.ComponentType> = {
 
 interface PostDetailViewProps {
     post: Post;
+    isPageView?: boolean; // Indicates if this is used in a page route vs modal
 }
 
 // Helper function to add basePath for GitHub Pages
@@ -63,9 +64,9 @@ function convertToEmbedUrl(url: string): string {
     return url;
 }
 
-export default function PostDetailView({ post }: PostDetailViewProps) {
-    // Use the first video if available, otherwise the main videoUrl
-    const rawVideoUrl = (post.videoUrls && post.videoUrls.length > 0) ? post.videoUrls[0] : post.videoUrl;
+export default function PostDetailView({ post, isPageView = false }: PostDetailViewProps) {
+    // Use videoUrl for hero video if available, otherwise use first videoUrls, otherwise null
+    const rawVideoUrl = post.videoUrl || (post.videoUrls && post.videoUrls.length > 0 ? post.videoUrls[0] : null);
     const videoUrl = rawVideoUrl ? convertToEmbedUrl(rawVideoUrl) : null;
     
     // Get the Post component for detailed content
@@ -98,6 +99,7 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                     id: 'prototype',
                     label: 'Prototype',
                     subsections: [
+                        { id: 'animation-trailer', label: 'Animation Trailer - (Video)' },
                         { id: 'prototype-stage1', label: 'Stage1: Animation Trailer(UE) production' },
                         { id: 'prototype-stage2', label: 'Stage2: Unity Development' }
                     ]
@@ -191,13 +193,19 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
         return baseSections;
     };
 
+    // Adjust sizing based on page vs modal context
+    const videoMaxWidth = isPageView ? '800px' : '1000px';
+    const videoWidth = isPageView ? '65%' : '80%';
+    const contentMaxWidth = isPageView ? '1600px' : '1400px';
+    const contentPadding = isPageView ? (isMobile ? '0 20px' : '0 60px') : (isMobile ? '0 16px' : '0 40px');
+
     return (
-        <div className="post-detail-view" style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
+        <div className={`post-detail-view ${isPageView ? 'post-detail-view-page' : ''}`} style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
             {/* 1. Hero Video/Image - Hide for post-4, post-5, and post-6 as videos/content are in Post components */}
             {post.id !== 'post-4' && post.id !== 'post-5' && post.id !== 'post-6' && (
             <div className="detail-video-container" style={{
-                width: '80%',
-                maxWidth: '1000px',
+                width: videoWidth,
+                maxWidth: videoMaxWidth,
                 aspectRatio: '16/9',
                 backgroundColor: '#000',
                 borderRadius: '16px',
@@ -305,16 +313,17 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                 <div id="videos" style={{ 
                     marginBottom: '60px', 
                     scrollMarginTop: '100px',
-                    maxWidth: '1400px',
+                    maxWidth: contentMaxWidth,
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    padding: isMobile ? '0 16px' : '0 40px'
+                    padding: contentPadding
                 }}>
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                        gridTemplateColumns: isMobile ? '1fr' : '1.5fr 1fr',
                         gap: isMobile ? '24px' : '40px',
-                        marginBottom: '24px'
+                        marginBottom: '24px',
+                        alignItems: 'center'
                     }}>
                         {/* Left Video: Behind the scenes */}
                         <div>
@@ -372,19 +381,20 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
             <div style={{
                 display: 'flex',
                 gap: '40px',
-                maxWidth: '1400px',
+                maxWidth: contentMaxWidth,
                 margin: '0 auto',
-                padding: post.id === 'post-6' ? '0' : (isMobile ? '0 16px' : '0 40px')
+                padding: post.id === 'post-6' ? '0' : contentPadding
             }}>
                 {/* Sidebar Navigation */}
                 {!isMobile && (
                     <PostSidebar
                         sections={getSections()}
+                        isPageView={isPageView}
                     />
                 )}
                 
                 {/* Main Content */}
-                <div style={{ flex: 1, minWidth: 0, padding: post.id === 'post-6' ? (isMobile ? '0 16px' : '0 40px') : '0' }}>
+                <div style={{ flex: 1, minWidth: 0, padding: post.id === 'post-6' ? contentPadding : '0' }}>
                     {/* Two YouTube Videos above Intro for post-2 */}
                     {post.id === 'post-2' && post.videoUrls && post.videoUrls.length >= 2 && (
                         <div style={{
@@ -492,7 +502,26 @@ export default function PostDetailView({ post }: PostDetailViewProps) {
                                 marginLeft: 'auto', 
                                 marginRight: 'auto' 
                             }}>
-                                {post.description || "Project description placeholder."}
+                                {post.id === 'post-1' && post.description ? (
+                                    post.description.split('no more repeated conversation').map((part, index, array) => 
+                                        index === array.length - 1 ? part : (
+                                            <span key={index}>
+                                                {part}
+                                                <span style={{
+                                                    background: 'linear-gradient(120deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%)',
+                                                    padding: '2px 6px',
+                                                    borderRadius: '4px',
+                                                    fontWeight: 600,
+                                                    color: '#fff'
+                                                }}>
+                                                    no more repeated conversation
+                                                </span>
+                                            </span>
+                                        )
+                                    )
+                                ) : (
+                                    post.description || "Project description placeholder."
+                                )}
                             </p>
                         </div>
                     )}

@@ -617,7 +617,9 @@ export default function Post2() {
                       width: '100%',
                       height: '100%',
                       border: 'none',
-                      borderRadius: '12px'
+                      borderRadius: '12px',
+                      marginTop: '0px',
+                      marginBottom: '0px'
                     }}
                   />
                 ) : (

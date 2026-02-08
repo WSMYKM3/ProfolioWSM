@@ -11,9 +11,10 @@ interface Section {
 interface PostSidebarProps {
   sections: Section[];
   projectTitle?: string;
+  isPageView?: boolean;
 }
 
-export default function PostSidebar({ sections, projectTitle }: PostSidebarProps) {
+export default function PostSidebar({ sections, projectTitle, isPageView = false }: PostSidebarProps) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -120,13 +121,10 @@ export default function PostSidebar({ sections, projectTitle }: PostSidebarProps
   const handleClick = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      const offset = 100; // Offset from top
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
+      // Use scrollIntoView which respects scroll-margin-top CSS property
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   };
@@ -141,7 +139,16 @@ export default function PostSidebar({ sections, projectTitle }: PostSidebarProps
         width: '220px',
         paddingRight: '32px',
         paddingTop: '20px',
-        flexShrink: 0
+        flexShrink: 0,
+        ...(isPageView ? {
+          position: 'fixed',
+          top: '50%',
+          left: '40px',
+          transform: 'translateY(-50%)',
+          maxHeight: 'calc(100vh - 40px)',
+          overflowY: 'auto',
+          zIndex: 50
+        } : {})
       }}
     >
       <nav

@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import TopNav from './components/TopNav';
 import ProjectFilter from './components/ProjectFilter';
 import ProjectGrid from './components/ProjectGrid';
 import Modal from './components/Modal';
 import { posts, Post } from './lib/posts';
+import { shouldNavigateToPage, getPostPageRoute } from './lib/navigation';
 
 export default function Home() {
+  const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,8 +27,12 @@ export default function Home() {
   }, [selectedFilter]);
 
   const handlePostClick = (post: Post) => {
-    setSelectedPost(post);
-    setIsModalOpen(true);
+    if (shouldNavigateToPage(post.id)) {
+      router.push(getPostPageRoute(post.id));
+    } else {
+      setSelectedPost(post);
+      setIsModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {

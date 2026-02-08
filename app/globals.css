@@ -2735,6 +2735,11 @@ header h1 {
     display: block;
 }
 
+.post-content #ux-design img {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .post-content iframe {
     width: 100%;
     border-radius: 12px;
@@ -5422,5 +5427,107 @@ header h1 {
     .resume-social-links {
         flex-direction: column;
         gap: 12px;
+    }
+}
+
+/* Project Detail Page Styles */
+.project-detail-page {
+    min-height: 100vh;
+}
+
+.project-detail-main {
+    position: relative;
+    padding-top: 100px;
+    padding-bottom: 40px;
+}
+
+.project-detail-back-button {
+    position: fixed;
+    top: 100px;
+    left: 40px;
+    z-index: 100;
+    padding: 12px 24px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-family: var(--font-inter), sans-serif;
+}
+
+.project-detail-back-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(-4px);
+}
+
+.project-detail-content-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Post Detail View - Page Context Styles */
+.post-detail-view-page {
+    padding-top: 20px;
+}
+
+.post-detail-view-page .detail-video-container {
+    margin-top: 20px;
+}
+
+.post-detail-view-page .detail-header {
+    margin-top: 40px;
+}
+
+/* Responsive adjustments for project detail page */
+@media (max-width: 1200px) {
+    .project-detail-back-button {
+        left: 20px;
+        top: 90px;
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-detail-main {
+        padding-top: 80px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .project-detail-back-button {
+        position: fixed;
+        top: 80px;
+        left: 16px;
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        z-index: 100;
+    }
+
+    .project-detail-content-wrapper {
+        padding: 0;
+    }
+
+    .post-detail-view-page {
+        padding-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-detail-back-button {
+        top: 70px;
+        left: 12px;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+
+    .project-detail-main {
+        padding-top: 70px;
     }
 }

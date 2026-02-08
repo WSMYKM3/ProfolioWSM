@@ -53,12 +53,13 @@ export const posts: Post[] = [
     date: "March–Jun 2025",
     tags: ["xr", "featured"],
     quality: "high",
+    videoUrl: "https://www.youtube.com/watch?v=BpG5c0Rr4E8",
     videoUrls: [
-      "https://www.youtube.com/watch?v=BpG5c0Rr4E8",
+      "https://www.youtube.com/watch?v=IRlvLdZX8TU&t=95s",
       "https://www.youtube.com/watch?v=GxtJhHQGz3o"
     ],
     videoTitles: [
-      "Trailer",
+      "AWE USA present video",
       "Fullplay video"
     ],
     description: "Signie is an immersive ASL learning and real-time translation system powered by hand tracking, micro-gestures, and AI feedback. It evolved from concept validation to interactive learning experiences, and ultimately to AI-glasses-based live translation.",
@@ -87,7 +88,7 @@ export const posts: Post[] = [
   // 第二行（从左到右）
   {
     id: "post-4",
-    title: "The Shadow of Horizon",
+    title: "The Shadow of Horizon(Motion Capture)",
     thumbnail: "/mocapthumbnail.png",
     file: "post-4",
     date: "3 months in 2024",

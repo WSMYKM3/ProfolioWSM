@@ -1,13 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import TopNav from '@/app/components/TopNav';
 import PostScrollContainer from '@/app/components/PostScrollContainer';
 import HorizontalPostGrid from '@/app/components/HorizontalPostGrid';
 import Modal from '@/app/components/Modal';
 import { posts, Post } from '@/app/lib/posts';
+import { shouldNavigateToPage, getPostPageRoute } from '@/app/lib/navigation';
 
 export default function Work() {
+  const router = useRouter();
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewedPosts, setViewedPosts] = useState<Set<string>>(new Set());
@@ -16,9 +19,14 @@ export default function Work() {
   const handlePostClick = (post: Post) => {
     console.log('🔴 Work page handlePostClick:', post.id, post.title);
     setViewedPosts(prev => new Set(prev).add(post.id));
-    setSelectedPost(post);
-    setIsModalOpen(true);
-    console.log('🔴 Modal should open now');
+    
+    if (shouldNavigateToPage(post.id)) {
+      router.push(getPostPageRoute(post.id));
+    } else {
+      setSelectedPost(post);
+      setIsModalOpen(true);
+      console.log('🔴 Modal should open now');
+    }
   };
 
   const handleCloseModal = () => {

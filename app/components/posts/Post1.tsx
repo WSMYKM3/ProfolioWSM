@@ -181,7 +181,13 @@ export default function Post1() {
                 marginBottom: '16px',
                 textAlign: isMobile ? 'center' : 'left'
               }}>
-                So we're building a dating app that recognizes your frequently mentioned answers and turns them into your profile automatically, letting you chat freely without repeating yourself.
+                So we're building a dating app that <span style={{
+                  background: 'linear-gradient(120deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%)',
+                  padding: '2px 6px',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  color: '#fff'
+                }}>recognizes your frequently mentioned answers and turns them into your profile automatically</span>, letting you chat freely without repeating yourself.
               </p>
             </div>
             {/* Right: Image */}
@@ -315,6 +321,58 @@ export default function Post1() {
           }}>
             Prototype
           </h2>
+          
+          {/* Animation Trailer Video */}
+          <div id="animation-trailer" style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '12px',
+            marginBottom: '48px',
+            width: isMobile ? '100%' : '65%',
+            maxWidth: '800px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            padding: isMobile ? '0 16px' : '0',
+            scrollMarginTop: '100px'
+          }}>
+            <div style={{
+              width: '100%',
+              aspectRatio: '16/9',
+              backgroundColor: '#000',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+              position: 'relative'
+            }}>
+              <iframe
+                src="https://www.youtube.com/embed/SdtlgYBgla8"
+                title="Animation Trailer"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  position: 'absolute',
+                  top: '-4px',
+                  left: 0,
+                  width: '100%',
+                  height: 'calc(100% + 8px)',
+                  display: 'block',
+                  marginLeft: '0px',
+                  marginTop: '0px'
+                }}
+              />
+            </div>
+            <p style={{
+              fontSize: '0.95rem',
+              color: '#d0d0d0',
+              textAlign: 'center',
+              margin: 0
+            }}>
+              Animation Trailer
+            </p>
+          </div>
+
           <h3 id="prototype-stage1" style={{ 
             fontSize: '1.25rem', 
             fontWeight: 600, 
