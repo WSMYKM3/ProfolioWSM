@@ -74,7 +74,7 @@ export default function TopNav() {
           href="/daily-practice" 
           className={`top-nav-link ${isActive('/daily-practice') ? 'active' : ''}`}
         >
-          Daily practice
+          Explorations
         </Link>
         <Link 
           href="/resume" 

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Post } from '@/app/lib/posts';
+import Link from 'next/link';
+import { Post, posts } from '@/app/lib/posts';
 import SoftwareIcon from './SoftwareIcon';
 import Image from 'next/image';
 import Post1 from './posts/Post1';
@@ -580,6 +581,132 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                     </div>
                 </div>
             )}
+
+            {/* Explore more projects section */}
+            {isPageView && (() => {
+                // Get 3 other projects (excluding current one)
+                // Use current post index to rotate through all projects
+                const currentIndex = posts.findIndex(p => p.id === post.id);
+                const otherPosts = posts
+                    .filter(p => p.id !== post.id)
+                    .slice(currentIndex) // Start from current index
+                    .concat(posts.filter(p => p.id !== post.id).slice(0, currentIndex)) // Wrap around
+                    .slice(0, 3);
+                
+                if (otherPosts.length === 0) return null;
+                
+                return (
+                    <section style={{
+                        marginTop: '80px',
+                        paddingTop: '60px',
+                        borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+                    }}>
+                        <h2 style={{
+                            fontSize: '1.75rem',
+                            fontWeight: 700,
+                            color: '#fff',
+                            marginBottom: '40px',
+                            textAlign: 'center'
+                        }}>
+                            Explore more projects
+                        </h2>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+                            gap: isMobile ? '24px' : '32px',
+                            maxWidth: '1200px',
+                            margin: '0 auto'
+                        }}>
+                            {otherPosts.map((otherPost) => (
+                                <Link
+                                    key={otherPost.id}
+                                    href={`/projects/${otherPost.id}`}
+                                    style={{
+                                        textDecoration: 'none',
+                                        color: 'inherit',
+                                        display: 'block',
+                                        transition: 'transform 0.3s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-4px)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                    }}
+                                >
+                                    <div style={{
+                                        borderRadius: '12px',
+                                        overflow: 'hidden',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                                    }}
+                                    >
+                                        <div style={{
+                                            position: 'relative',
+                                            width: '100%',
+                                            aspectRatio: '16/9',
+                                            overflow: 'hidden',
+                                            backgroundColor: '#1a1a1a'
+                                        }}>
+                                            <Image
+                                                src={getImageSrc(otherPost.thumbnail)}
+                                                alt={otherPost.title}
+                                                fill
+                                                style={{
+                                                    objectFit: 'cover',
+                                                    transition: 'transform 0.3s ease'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1.05)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                }}
+                                            />
+                                        </div>
+                                        <div style={{
+                                            padding: '20px'
+                                        }}>
+                                            <h3 style={{
+                                                fontSize: '1.1rem',
+                                                fontWeight: 600,
+                                                color: '#fff',
+                                                marginBottom: '8px',
+                                                marginTop: 0
+                                            }}>
+                                                {otherPost.title}
+                                            </h3>
+                                            {otherPost.description && (
+                                                <p style={{
+                                                    fontSize: '0.875rem',
+                                                    color: '#d0d0d0',
+                                                    lineHeight: '1.5',
+                                                    margin: 0,
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden'
+                                                }}>
+                                                    {otherPost.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                );
+            })()}
 
             <style jsx global>{`
                 .gallery-image:hover {

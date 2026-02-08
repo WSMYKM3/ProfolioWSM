@@ -13,7 +13,7 @@ export interface DailyPracticePost {
 export const dailyPracticePosts: DailyPracticePost[] = [
   {
     id: "daily-1",
-    title: "Morning Sketch",
+    title: "upcoming",
     thumbnail: "https://via.placeholder.com/400x600/cccccc/666666?text=Morning+Sketch",
     date: "2024-03-01",
     tags: ["sketch", "daily"],
@@ -41,7 +41,7 @@ export const dailyPracticePosts: DailyPracticePost[] = [
   },
   {
     id: "daily-4",
-    title: "Typography Practice",
+    title: "upcoming",
     thumbnail: "https://via.placeholder.com/400x700/cccccc/666666?text=Typography",
     date: "2024-03-04",
     tags: ["typography", "practice"],
@@ -60,7 +60,7 @@ export const dailyPracticePosts: DailyPracticePost[] = [
   },
   {
     id: "daily-6",
-    title: "Quick Doodle",
+    title: "upcoming",
     thumbnail: "https://via.placeholder.com/400x250/cccccc/666666?text=Doodle",
     date: "2024-03-06",
     tags: ["doodle", "quick"],
@@ -68,7 +68,7 @@ export const dailyPracticePosts: DailyPracticePost[] = [
   },
   {
     id: "daily-7",
-    title: "3D Render Test",
+    title: "upcoming",
     thumbnail: "https://via.placeholder.com/400x800/cccccc/666666?text=3D+Render",
     date: "2024-03-07",
     tags: ["3d", "render"],
@@ -76,7 +76,7 @@ export const dailyPracticePosts: DailyPracticePost[] = [
   },
   {
     id: "daily-8",
-    title: "Animation Frame",
+    title: "upcoming",
     thumbnail: "https://via.placeholder.com/400x350/cccccc/666666?text=Animation",
     date: "2024-03-08",
     tags: ["animation", "frame"],
@@ -84,7 +84,7 @@ export const dailyPracticePosts: DailyPracticePost[] = [
   },
   {
     id: "daily-9",
-    title: "Concept Art",
+    title: "upcoming",
     thumbnail: "https://via.placeholder.com/400x550/cccccc/666666?text=Concept",
     date: "2024-03-09",
     tags: ["concept", "art"],

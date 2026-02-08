@@ -33,7 +33,7 @@ export default function DailyPractice() {
       <TopNav />
       <main className="main-content">
         <header>
-          <h1>Daily Practice</h1>
+          <h1>Explorations</h1>
         </header>
         <DigitalGarden 
           posts={dailyPracticePosts} 

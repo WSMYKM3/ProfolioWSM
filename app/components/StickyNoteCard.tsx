@@ -197,8 +197,35 @@ export default function StickyNoteCard({
           loading="lazy"
         />
         <div className="card-info">
-          <span className="card-tag">{category.charAt(0).toUpperCase() + category.slice(1)}</span>
+          <span className="card-tag">Check →</span>
           <h3 className="card-title">{post.title}</h3>
+          {post.tags && post.tags.length > 0 && (
+            <div className="card-tags" style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '6px',
+              marginTop: '8px',
+              marginBottom: '4px'
+            }}>
+              {post.tags.map((tag, index) => (
+                <span 
+                  key={index} 
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    color: '#d0d0d0',
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
           <p className="card-date">planted on {formattedDate}</p>
         </div>
       </div>
