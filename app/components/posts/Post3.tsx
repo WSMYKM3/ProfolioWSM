@@ -16,6 +16,7 @@ function getImageSrc(src: string): string {
 
 export default function Post3() {
   const [isMobile, setIsMobile] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
@@ -23,6 +24,7 @@ export default function Post3() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -139,6 +141,31 @@ export default function Post3() {
             >
               &times;
             </button>
+            {/* Back button for touch devices (iPad, mobile) */}
+            {isTouchDevice && (
+              <button
+                onClick={handleCloseEnlarged}
+                style={{
+                  position: 'absolute',
+                  right: '20px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  border: '2px solid rgba(255, 255, 255, 0.5)',
+                  borderRadius: '12px',
+                  padding: '14px 24px',
+                  color: '#000',
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  zIndex: 10001,
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                  minWidth: '80px'
+                }}
+              >
+                Back
+              </button>
+            )}
           </div>
         </div>
       )}

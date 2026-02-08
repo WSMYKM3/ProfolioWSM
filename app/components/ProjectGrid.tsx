@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import React from 'react';
 import { Post } from '@/app/lib/posts';
 import SoftwareIcon from './SoftwareIcon';
 
@@ -23,6 +24,35 @@ function truncateText(text: string, maxLength: number): string {
   if (!text || text.length <= maxLength) return text || '';
   return text.slice(0, maxLength).trim() + '...';
 }
+
+// Highlight keywords in a text string
+function highlightText(text: string, keywords: string[]): React.ReactNode {
+  if (!keywords || keywords.length === 0) return text;
+  // Build a regex that matches any of the keywords (case-insensitive)
+  const escaped = keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const regex = new RegExp(`(${escaped.join('|')})`, 'gi');
+  const parts = text.split(regex);
+  return parts.map((part, i) => {
+    if (keywords.some(k => k.toLowerCase() === part.toLowerCase())) {
+      return <strong key={i} className="strip-highlight">{part}</strong>;
+    }
+    return part;
+  });
+}
+
+// Per-post highlight config: which keywords to highlight in description / shortDescription
+const descHighlights: Record<string, string[]> = {
+  'post-1': ["catch your next crush's frequency answers"],
+  'post-2': ['hand tracking', 'micro-gestures', 'AI feedback'],
+  'post-3': ['listens, responds, and reflects', 'digital embodiment'],
+  'post-5': ['customer purchasing'],
+  'post-6': ['elemental counter system'],
+};
+
+// Per-post highlight config for role field
+const roleHighlights: Record<string, string[]> = {
+  'post-4': ['Motion Capture'],
+};
 
 export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
   return (
@@ -65,13 +95,20 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
             </div>
             <div className="strip-expanded-content">
               <h3 className="strip-expanded-title">{post.title}</h3>
-              {post.description && (
-                <p className="strip-expanded-desc">{post.description}</p>
+              {(post.shortDescription || post.description) && (
+                <p className="strip-expanded-desc">
+                  {highlightText(
+                    post.shortDescription || post.description || '',
+                    descHighlights[post.id] || []
+                  )}
+                </p>
               )}
               {post.role && (
                 <div className="strip-expanded-role">
                   <span className="strip-role-label">Role:</span>
-                  <span className="strip-role-value">{post.role}</span>
+                  <span className="strip-role-value">
+                    {highlightText(post.role, roleHighlights[post.id] || [])}
+                  </span>
                 </div>
               )}
               {post.softwareTools && post.softwareTools.length > 0 && (

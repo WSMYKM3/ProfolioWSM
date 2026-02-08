@@ -1112,12 +1112,17 @@ header h1 {
 
 @media (max-width: 768px) {
     .top-nav-wrapper {
-        top: 12px;
-        right: 12px;
-        left: 12px;
+        position: sticky;
+        top: 0;
+        right: 0;
+        left: 0;
         flex-direction: column;
-        gap: 12px;
-        align-items: flex-end;
+        gap: 8px;
+        align-items: center;
+        padding: 12px;
+        background-color: rgba(5, 5, 5, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
 
     .top-nav-social-icons {
@@ -1147,7 +1152,7 @@ header h1 {
     .main-content {
         padding-left: 12px;
         padding-right: 12px;
-        padding-top: 60px; /* Add top padding to prevent header overlap */
+        padding-top: 0;
         height: 100vh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
@@ -3382,15 +3387,22 @@ header h1 {
 .strip-expanded-image-wrapper {
     flex: 1;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     min-width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(100, 50, 30, 0.75);
 }
 
 .strip-expanded-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scale(1.05);
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center center;
+    transform: scale(1);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -3405,7 +3417,8 @@ header h1 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #4f2010;
+    background-color: rgba(79, 32, 16, 0.85);
+    backdrop-filter: blur(4px);
     min-width: 50%;
 }
 
@@ -3447,6 +3460,14 @@ header h1 {
 .strip-card:hover .strip-expanded-desc {
     opacity: 1;
     transform: translateY(0);
+}
+
+.strip-highlight {
+    color: #ffffff;
+    font-weight: 600;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    padding: 1px 5px;
+    border-radius: 3px;
 }
 
 /* Role in expanded view */
@@ -3642,7 +3663,7 @@ header h1 {
 
 @media (max-width: 768px) {
     .about-page {
-        padding-top: 80px;
+        padding-top: 20px;
     }
 
     .about-video-section {
@@ -4703,7 +4724,7 @@ header h1 {
 .resume-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 60px;
+    padding: 0 60px 0 300px;
     position: relative;
     overflow: visible;
 }
@@ -5325,14 +5346,14 @@ header h1 {
 /* Responsive Design */
 @media (max-width: 1024px) {
     .resume-container {
-        padding: 0 40px;
+        padding: 0 40px 0 280px;
         gap: 40px;
     }
 }
 
 @media (max-width: 768px) {
     .resume-page {
-        padding-top: 80px;
+        padding-top: 20px;
         padding-bottom: 60px;
     }
 
@@ -5402,7 +5423,7 @@ header h1 {
 
 @media (max-width: 480px) {
     .resume-page {
-        padding-top: 60px;
+        padding-top: 12px;
         padding-bottom: 40px;
     }
 
@@ -5496,7 +5517,7 @@ header h1 {
 
 @media (max-width: 768px) {
     .project-detail-main {
-        padding-top: 80px;
+        padding-top: 20px;
         padding-left: 0;
         padding-right: 0;
     }

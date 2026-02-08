@@ -19,6 +19,7 @@ export interface Post {
   achievement?: string; // Project achievement or recognition (e.g., "AWE 2025 USA presentation")
   stage3VideoUrl?: string; // Stage 3 video URL for Signie project
   linkedInUrl?: string; // LinkedIn post URL for embedding
+  shortDescription?: string; // Short description used on about page project cards (overrides description)
 }
 
 export const posts: Post[] = [
@@ -83,7 +84,8 @@ export const posts: Post[] = [
     description: "AI can be a collaborator or a mirror—mentor, listener, lover. Before AI becomes anything, we assign it an \"AI\"dentity. What if identity itself is co-authored between \"I\" and \"AI\"? I & AI: Mirror is an immersive experience exploring human–AI intimacy. Audiences engage with a generative mirror-self that listens, learns, and reflects their presence, transforming interactions into real-time, shared expressions of identity.",
     softwareTools: ["Unreal Engine", "Touchdesigner", "Blender", "Python"],
     features: ["Real-time Metahuman lipsync", "Touchdesigner-UE communication"],
-    role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)"
+    role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)",
+    shortDescription: "A real-time AI mirror that listens, responds, and reflects the user through voice-driven interaction and digital embodiment."
   },
   // 第二行（从左到右）
   {
@@ -100,7 +102,7 @@ export const posts: Post[] = [
     description: "A comprehensive video production showcasing motion capture and Metahuman animation.",
     softwareTools: ["Unreal Engine", "Motion Builder", "Optitrack Motion Capture"],
     features: ["Motion Capture", "Metahuman Animation"],
-    role: "Metahuman Prototyper, Animator"
+    role: "Motion Capture, Metahuman Prototyper, Animator"
   },
   {
     id: "post-5",
@@ -126,7 +128,7 @@ export const posts: Post[] = [
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/watch?v=-4Z7SdWcgyU", // Will be updated with actual YouTube URL
     videoTitle: "Aether Tag",
-    description: "We aim to create a non-violent laser tag game that can facilitate competitive dynamics without the need for overt violence. In our shooting game, we introduce a mechanism \"elemental counter system\", specifically, Water > Fire > Wind > Water. Therefore, when a superior bullet hits the type of enemy it restrains, the damage is doubled.",
+    description: "A non-violent competitive laser tag game using an elemental counter system (Water > Fire > Wind) where type advantages reward strategy by doubling damage.",
     softwareTools: ["Unity2022"],
     features: ["Elemental Counter System"],
     role: "XR developer"
