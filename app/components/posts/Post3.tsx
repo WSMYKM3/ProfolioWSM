@@ -278,6 +278,116 @@ export default function Post3() {
                 </div>
               ))}
             </div>
+            <h3 id="live-scene" style={{
+              fontSize: '1.25rem',
+              fontWeight: 600,
+              color: '#fff',
+              marginTop: '40px',
+              marginBottom: '24px',
+              textAlign: 'center',
+              scrollMarginTop: '100px'
+            }}>
+              Live Scene
+            </h3>
+            <div style={{
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              gap: '16px',
+              maxWidth: '900px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              {[
+                { path: '/IandAI/installation1.jpg', alt: 'I & AI: MIRROR Installation 1' },
+                { path: '/IandAI/installation2.jpg', alt: 'I & AI: MIRROR Installation 2' },
+                { path: '/IandAI/installation3.jpg', alt: 'I & AI: MIRROR Installation 3' }
+              ].map((img) => (
+                <div
+                  key={img.path}
+                  style={{
+                    flex: 1,
+                    position: 'relative',
+                    aspectRatio: '4/3',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    border: hoveredItem === img.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
+                    transition: 'transform 0.3s ease, border-color 0.3s ease',
+                    transform: hoveredItem === img.path ? 'scale(1.02)' : 'scale(1)'
+                  }}
+                  onClick={() => handleImageClick(img.path, img.alt)}
+                  onMouseEnter={() => setHoveredItem(img.path)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                >
+                  <Image
+                    src={getImageSrc(img.path)}
+                    alt={img.alt}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://via.placeholder.com/300x225/2a2a2a/888888?text=Installation';
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div style={{
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              gap: '20px',
+              marginTop: '32px',
+              maxWidth: '900px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              {[
+                { title: 'Participation in 3 days', value: '422', unit: 'plays' },
+                { title: 'Fullplay Counts', value: '287', unit: 'plays' }
+              ].map((stat) => (
+                <div
+                  key={stat.title}
+                  style={{
+                    flex: 1,
+                    padding: '24px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    borderRadius: '20px',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+                    minWidth: 0
+                  }}
+                >
+                  <div style={{
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    color: '#e85d04',
+                    marginBottom: '12px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <span>↓</span>
+                    <span>{stat.title}</span>
+                  </div>
+                  <div style={{
+                    fontSize: '2.5rem',
+                    fontWeight: 700,
+                    color: '#1a1a1a',
+                    lineHeight: 1.2
+                  }}>
+                    {stat.value}
+                  </div>
+                  <div style={{
+                    fontSize: '0.95rem',
+                    color: '#4a4a4a',
+                    marginTop: '4px'
+                  }}>
+                    {stat.unit}
+                  </div>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Installation Draft Section */}

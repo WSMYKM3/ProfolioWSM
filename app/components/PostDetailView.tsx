@@ -130,7 +130,13 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                 ...baseSections,
                 { id: 'achievement', label: 'Achievement' },
                 { id: 'tools', label: 'Tools' },
-                { id: 'contributions', label: 'My Contributions' },
+                {
+                    id: 'contributions',
+                    label: 'My Contributions',
+                    subsections: [
+                        { id: 'live-scene', label: 'Live Scene' }
+                    ]
+                },
                 {
                     id: 'process',
                     label: 'Process',
