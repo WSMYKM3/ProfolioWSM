@@ -177,6 +177,14 @@ export default function Resume() {
                       <Image src={getImageSrc("/icons/obsidian.svg")} alt="Obsidian" width={20} height={20} className="resume-tool-icon" />
                       Claude + Obsidian
                     </span>
+                    <span className="resume-tool-item">
+                      <Image src={getImageSrc("/icons/photoshop.svg")} alt="Photoshop" width={20} height={20} className="resume-tool-icon" />
+                      Photoshop
+                    </span>
+                    <span className="resume-tool-item">
+                      <Image src={getImageSrc("/icons/adobe-premiere.svg")} alt="Premiere Pro" width={20} height={20} className="resume-tool-icon" />
+                      Premiere Pro
+                    </span>
                   </div>
                 </div>
                 <div className="resume-tools-group">
