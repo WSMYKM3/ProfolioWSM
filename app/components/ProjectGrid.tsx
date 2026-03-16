@@ -19,10 +19,19 @@ function getImageSrc(src: string): string {
   return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
-// Helper function to truncate description for collapsed view
-function truncateText(text: string, maxLength: number): string {
-  if (!text || text.length <= maxLength) return text || '';
-  return text.slice(0, maxLength).trim() + '...';
+// Build a one-line role + tools summary for collapsed card view
+function buildRoleSummary(post: Post): string {
+  const parts: string[] = [];
+  if (post.role) {
+    // Take just the first role if comma-separated
+    const firstRole = post.role.split(',')[0].trim();
+    parts.push(firstRole);
+  }
+  if (post.softwareTools && post.softwareTools.length > 0) {
+    // Show up to 2 tools
+    parts.push(...post.softwareTools.slice(0, 2));
+  }
+  return parts.join(' · ');
 }
 
 // Highlight keywords in a text string
@@ -74,11 +83,9 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
               loading="lazy"
             />
             <h4 className="strip-collapsed-title">{post.title}</h4>
-            {post.description && (
-              <p className="strip-collapsed-desc">
-                {truncateText(post.description, 50)}
-              </p>
-            )}
+            <p className="strip-collapsed-role">
+              {buildRoleSummary(post)}
+            </p>
           </div>
 
           {/* Expanded layer - visible on hover */}

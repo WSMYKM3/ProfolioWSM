@@ -83,6 +83,14 @@ export default function Home() {
               />
             </div>
           </div>
+
+          {/* Scroll Down Indicator */}
+          <div className="scroll-indicator-wrapper" aria-hidden="true">
+            <div className="scroll-indicator">
+              <span className="scroll-indicator-text">scroll</span>
+              <div className="scroll-indicator-chevron" />
+            </div>
+          </div>
         </section>
 
         {/* Filter Section */}

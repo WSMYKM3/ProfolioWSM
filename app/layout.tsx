@@ -18,8 +18,9 @@ const bodoni = Bodoni_Moda({
 })
 
 export const metadata: Metadata = {
-  title: 'WSM_Portfolio',
-  description: 'Portfolio website with masonry layout',
+  title: 'Siming Wang — Creative Technologist & XR Developer',
+  description: 'Portfolio of Siming Wang, Creative Technologist and XR Developer building games, XR products, and interactive installations.',
+  icons: { icon: '/favicon.ico' },
 }
 
 export default function RootLayout({
