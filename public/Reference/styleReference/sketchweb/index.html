@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch Underline Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #fafaf9;
+      color: #1c1917;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 680px;
+      padding: 3rem 2rem;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+      color: #44403c;
+    }
+
+    .sketch-underline {
+      position: relative;
+      display: inline;
+    }
+
+    .sketch-underline svg {
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .sketch-underline svg path {
+      fill: none;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 0 1;
+      opacity: 0;
+      transition: stroke-dasharray 1.8s cubic-bezier(0.43, 0.13, 0.23, 0.96),
+                  opacity 0.3s ease;
+    }
+
+    .sketch-underline svg path.drawn {
+      stroke-dasharray: 1 1;
+      opacity: 1;
+    }
+
+    /* Color variants */
+    .sketch-underline.orange svg path { stroke: #f97316; }
+    .sketch-underline.blue svg path { stroke: #3b82f6; }
+    .sketch-underline.green svg path { stroke: #22c55e; }
+    .sketch-underline.pink svg path { stroke: #ec4899; }
+    .sketch-underline.purple svg path { stroke: #a855f7; }
+
+    .section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #a8a29e;
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: #44403c;
+      padding: 0.15rem 0;
+    }
+
+    ul li::before {
+      content: ">";
+      margin-right: 0.5rem;
+      color: #a8a29e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>
+      i
+      <span class="sketch-underline orange">build
+        <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+          <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
+        </svg>
+      </span>
+      and
+      <span class="sketch-underline orange">create
+        <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+          <path d="M 2 6 Q 40 3, 90 7 Q 140 4, 198 5" pathLength="1" />
+        </svg>
+      </span>
+      cool stuff.
+    </h1>
+
+    <div class="section">
+      <div class="section-title">What I do</div>
+      <p>
+        I
+        <span class="sketch-underline blue">design
+          <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+            <path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" />
+          </svg>
+        </span>
+        interfaces,
+        <span class="sketch-underline green">write
+          <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+            <path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" />
+          </svg>
+        </span>
+        code, and
+        <span class="sketch-underline pink">ship
+          <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+            <path d="M 3 5 Q 55 9, 105 3 Q 155 8, 197 5" pathLength="1" />
+          </svg>
+        </span>
+        products that people love to use.
+      </p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Currently</div>
+      <ul>
+        <li>building things at
+          <span class="sketch-underline purple">Acme Corp
+            <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+              <path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" />
+            </svg>
+          </span>
+        </li>
+        <li>exploring
+          <span class="sketch-underline blue">generative AI
+            <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+              <path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" />
+            </svg>
+          </span>
+          tooling
+        </li>
+        <li>making
+          <span class="sketch-underline green">short films
+            <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+              <path d="M 2 5 Q 60 9, 110 3 T 198 6" pathLength="1" />
+            </svg>
+          </span>
+          on weekends
+        </li>
+        <li>seeking
+          <span class="sketch-underline orange">fall 2026
+            <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+              <path d="M 3 4 Q 40 8, 100 3 Q 160 8, 197 5" pathLength="1" />
+            </svg>
+          </span>
+          internship opportunities
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Animate underlines when they scroll into view (same technique as justinzwu.com)
+    // Uses IntersectionObserver + pathLength trick:
+    //   pathLength="1" normalizes the path to length 1
+    //   stroke-dasharray goes from "0 1" (hidden) to "1 1" (fully drawn)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const path = entry.target.querySelector('path');
+          if (path) {
+            const delay = parseFloat(entry.target.dataset.delay || 0);
+            setTimeout(() => {
+              path.classList.add('drawn');
+            }, delay * 1000);
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe all sketch-underline elements with staggered delays
+    document.querySelectorAll('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

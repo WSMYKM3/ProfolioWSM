@@ -40,6 +40,27 @@ export default function Post4() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
     setEnlargedImage({ src, alt, isVideo });
   };
@@ -172,6 +193,34 @@ export default function Post4() {
 
     <div className="post-content">
       <div className="text-content">
+          {/* Introduction Section */}
+          <section id="introduction" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
+            <p style={{
+              fontSize: '1rem',
+              lineHeight: '1.8',
+              color: '#d0d0d0',
+              marginBottom: '16px',
+              textAlign: 'center',
+              maxWidth: '800px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              A cinematic short film driven by{' '}
+              <span className="sketch-underline orange">motion capture performance
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
+              </span>
+              , combining Optitrack data with{' '}
+              <span className="sketch-underline blue">Metahuman animation
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" /></svg>
+              </span>
+              {' '}in Unreal Engine to produce a{' '}
+              <span className="sketch-underline green">photorealistic real-time render
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
+              </span>
+              .
+            </p>
+          </section>
+
           {/* Tools Section */}
           <section id="tools" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
             <h2 style={{ 

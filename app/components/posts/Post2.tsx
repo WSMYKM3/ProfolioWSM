@@ -73,6 +73,27 @@ export default function Post2() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
     setEnlargedImage({ src, alt, isVideo });
   };
@@ -226,8 +247,20 @@ export default function Post2() {
               marginLeft: 'auto',
               marginRight: 'auto'
             }}>
-              Signie is an immersive ASL learning and real-time translation system powered by hand tracking, micro-gestures, and AI feedback.
-              It evolved from concept validation to interactive learning experiences, and ultimately to AI-glasses-based live translation.
+              Signie is an immersive{' '}
+              <span className="sketch-underline orange">ASL learning and real-time translation
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
+              </span>
+              {' '}system powered by{' '}
+              <span className="sketch-underline blue">hand tracking, micro-gestures, and AI feedback
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" /></svg>
+              </span>
+              .
+              It evolved from concept validation to interactive learning experiences, and ultimately to{' '}
+              <span className="sketch-underline green">AI-glasses-based live translation
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
+              </span>
+              .
             </p>
           </section>
 

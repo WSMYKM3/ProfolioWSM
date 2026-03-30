@@ -109,6 +109,27 @@ export default function Post6() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const handleImageClick = (src: string, alt: string) => {
     setEnlargedImage({ src, alt });
   };
@@ -289,9 +310,21 @@ export default function Post6() {
             marginLeft: 'auto',
             marginRight: 'auto'
           }}>
-            We aim to create a non-violent laser tag game that can facilitate competitive dynamics without the need for overt violence.
-            In our shooting game, we introduce a mechanism "elemental counter system", specifically, Water {'>'} Fire {'>'} Wind {'>'} Water. 
-            Therefore, when a superior bullet hits the type of enemy it restrains, the damage is doubled.
+            We aim to create a{' '}
+            <span className="sketch-underline green">non-violent laser tag game
+              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
+            </span>
+            {' '}that can facilitate competitive dynamics without the need for overt violence.
+            In our shooting game, we introduce a mechanism{' '}
+            <span className="sketch-underline orange">&quot;elemental counter system&quot;
+              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" /></svg>
+            </span>
+            , specifically, Water {'>'} Fire {'>'} Wind {'>'} Water.
+            Therefore, when a superior bullet hits the type of enemy it restrains, the{' '}
+            <span className="sketch-underline blue">damage is doubled
+              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" /></svg>
+            </span>
+            .
           </p>
           {/* 1 GIF/Pic placeholder */}
           {introductionImages.map((item, index) => (

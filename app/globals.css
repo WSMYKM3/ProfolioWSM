@@ -480,8 +480,8 @@ header h1 {
     height: 40px;
     padding: 0 16px;
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     color: white;
     font-size: 14px;
     font-weight: 600;
@@ -492,7 +492,12 @@ header h1 {
     justify-content: center;
     gap: 8px;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
     user-select: none;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -523,9 +528,13 @@ header h1 {
 
 
 .carousel-3d-wrapper-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .carousel-3d-wrapper-btn:active {
@@ -1842,26 +1851,29 @@ header h1 {
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #2a2a2a;
+    background: rgba(255, 255, 255, 0.07);
     width: 100%;
     min-height: 200px;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: inset 1px 1px 2.6px rgba(255, 255, 255, 0.1),
-      inset -1px -1px 2.6px rgba(0, 0, 0, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.3),
-      4px 4px 8px rgba(0, 0, 0, 0.25), 6px 6px 12px rgba(0, 0, 0, 0.2),
-      8px 8px 16px rgba(0, 0, 0, 0.15), 10px 10px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(120, 120, 120, 0.2);
-    transition: box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.3s ease, transform 0.2s ease, background 0.2s ease;
     user-select: none;
     overflow: hidden;
 }
 
 .masonry-grid .post-card input[type="checkbox"]:checked + .btn {
-    box-shadow: inset 0.5px 0.5px 1.4px rgba(255, 255, 255, 0.15),
-      inset -0.5px -0.5px 1.4px rgba(0, 0, 0, 0.4), 1px 1px 2px rgba(0, 0, 0, 0.2),
-      2px 2px 4px rgba(0, 0, 0, 0.18), 4px 4px 8px rgba(0, 0, 0, 0.15),
-      6px 6px 12px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .masonry-grid .post-card-image-wrapper {
@@ -2027,27 +2039,34 @@ header h1 {
     font-weight: 700;
     font-family: var(--font-inter), sans-serif;
     color: white;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 3px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     user-select: none;
     letter-spacing: 0.05em;
     min-width: 300px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 }
 
 .check-project-details-button:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: scale(1.08);
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.04) translateY(-2px);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.38),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 }
 
 .check-project-details-button:active {
-    transform: scale(1.02);
+    transform: scale(1.01);
 }
 
 /* Horizontal Post Grid Component */
@@ -2130,26 +2149,29 @@ header h1 {
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #2a2a2a;
+    background: rgba(255, 255, 255, 0.07);
     width: 100%;
     min-height: 200px;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: inset 1px 1px 2.6px rgba(255, 255, 255, 0.1),
-      inset -1px -1px 2.6px rgba(0, 0, 0, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.3),
-      4px 4px 8px rgba(0, 0, 0, 0.25), 6px 6px 12px rgba(0, 0, 0, 0.2),
-      8px 8px 16px rgba(0, 0, 0, 0.15), 10px 10px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(120, 120, 120, 0.2);
-    transition: box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.3s ease, transform 0.2s ease, background 0.2s ease;
     user-select: none;
     overflow: hidden;
 }
 
 .horizontal-post-grid .post-card input[type="checkbox"]:checked + .btn {
-    box-shadow: inset 0.5px 0.5px 1.4px rgba(255, 255, 255, 0.15),
-      inset -0.5px -0.5px 1.4px rgba(0, 0, 0, 0.4), 1px 1px 2px rgba(0, 0, 0, 0.2),
-      2px 2px 4px rgba(0, 0, 0, 0.18), 4px 4px 8px rgba(0, 0, 0, 0.15),
-      6px 6px 12px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .horizontal-post-grid .post-card-image-wrapper {
@@ -3003,7 +3025,8 @@ header h1 {
 .about-video-section {
     width: 100%;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
     background-color: #000000;
     display: flex;
     justify-content: center;
@@ -3024,6 +3047,7 @@ header h1 {
 .about-video-intro {
     flex: 0 0 300px;
     max-width: 300px;
+    overflow: visible;
 }
 
 .about-name {
@@ -3042,6 +3066,8 @@ header h1 {
     font-family: var(--font-inter), sans-serif;
     font-weight: 400;
     margin: 0;
+    padding-bottom: 12px;
+    overflow: visible;
 }
 
 .about-intro-text .highlight {
@@ -3051,6 +3077,43 @@ header h1 {
     padding: 2px 6px;
     border-radius: 3px;
 }
+
+/* Sketch animated underline */
+.sketch-underline {
+    position: relative;
+    display: inline;
+}
+
+.sketch-underline svg {
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.sketch-underline svg path {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 0 1;
+    opacity: 0;
+    transition: stroke-dasharray 1.8s cubic-bezier(0.43, 0.13, 0.23, 0.96),
+                opacity 0.3s ease;
+}
+
+.sketch-underline svg path.drawn {
+    stroke-dasharray: 1 1;
+    opacity: 1;
+}
+
+.sketch-underline.orange svg path { stroke: #f97316; }
+.sketch-underline.blue   svg path { stroke: #3b82f6; }
+.sketch-underline.green  svg path { stroke: #22c55e; }
+.sketch-underline.purple svg path { stroke: #a855f7; }
 
 /* Scroll Down Indicator */
 .scroll-indicator-wrapper {
@@ -4455,13 +4518,17 @@ header h1 {
     display: flex;
     gap: 12px;
     padding: 12px 24px;
-    background: rgba(26, 26, 26, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
     border-radius: 50px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.08);
     z-index: 999;
     animation: fadeInFilter 0.6s ease 0.2s backwards;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 @keyframes fadeInFilter {
@@ -4880,9 +4947,9 @@ header h1 {
     display: block;
     width: 100%;
     padding: 12px 24px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     color: #ffffff;
     text-decoration: none;
     font-size: 0.95rem;
@@ -4892,12 +4959,22 @@ header h1 {
     transition: all 0.3s ease;
     cursor: pointer;
     white-space: nowrap;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .resume-sidebar-download-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.35);
     transform: translateY(-2px);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.32),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .resume-content {
@@ -5516,22 +5593,31 @@ header h1 {
     left: 40px;
     z-index: 100;
     padding: 12px 24px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    border-radius: 20px;
     color: #fff;
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     font-family: var(--font-inter), sans-serif;
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 
 .project-detail-back-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.32);
     transform: translateX(-4px);
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 
 .project-detail-content-wrapper {

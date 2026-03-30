@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import TopNav from './components/TopNav';
 import ProjectFilter from './components/ProjectFilter';
@@ -40,6 +40,28 @@ export default function Home() {
     setSelectedPost(null);
   };
 
+  // Animate sketch underlines when they scroll into view
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="layout">
       <TopNav />
@@ -50,11 +72,46 @@ export default function Home() {
             <div className="about-video-intro">
               <h1 className="about-name">Siming Wang</h1>
               <p className="about-intro-text">
-                Hi, I'm a Creative Technologist who values <strong className="highlight">both design and technology</strong>,
+                Hi, I&apos;m a Creative Technologist who values{' '}
+                <span className="sketch-underline orange">
+                  both design and technology
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
+                  </svg>
+                </span>
+                ,
                 <br />
-                building <strong className="highlight">real-world</strong> digital solutions through tangible, interactive, multi-media systems.
+                building{' '}
+                <span className="sketch-underline green">
+                  real-world
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" />
+                  </svg>
+                </span>
+                {' '}digital solutions through tangible, interactive, multi-media systems.
                 <br />
-                I make <strong className="highlight">games</strong>, <strong className="highlight">XR products</strong>, <strong className="highlight">animation trailers</strong>.
+                I make{' '}
+                <span className="sketch-underline blue">
+                  games
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" />
+                  </svg>
+                </span>
+                ,{' '}
+                <span className="sketch-underline purple">
+                  XR products
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" />
+                  </svg>
+                </span>
+                ,{' '}
+                <span className="sketch-underline orange">
+                  animation trailers
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" />
+                  </svg>
+                </span>
+                .
               </p>
             </div>
             <div 

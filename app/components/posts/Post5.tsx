@@ -40,6 +40,27 @@ export default function Post5() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
     setEnlargedImage({ src, alt, isVideo });
   };
@@ -230,7 +251,15 @@ export default function Post5() {
                 marginBottom: '16px',
                 textAlign: 'center'
               }}>
-                We want to build a platform which <span style={{ fontWeight: 'bold', color: '#fff', fontSize: '1.1rem' }}>encourage potential customers to try Strauss' products</span> with <span style={{ fontWeight: 'bold', color: '#fff', fontSize: '1.1rem' }}>virtual shopping guide</span> and direct them to Strauss website to purchase.
+                We want to build a platform which{' '}
+                <span className="sketch-underline orange">encourage potential customers to try Strauss&apos; products
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
+                </span>
+                {' '}with{' '}
+                <span className="sketch-underline blue">virtual shopping guide
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" /></svg>
+                </span>
+                {' '}and direct them to Strauss website to purchase.
               </p>
               <p style={{ 
                 fontSize: '1rem', 
@@ -239,7 +268,14 @@ export default function Post5() {
                 marginBottom: '16px',
                 textAlign: 'center'
               }}>
-                <span style={{ fontWeight: 'bold', color: '#fff', fontSize: '1.1rem' }}>Guided by on-site Strauss staff</span>, our team defined three core principles — Professionalism, Guided Experience, and Safety — which shaped the entire development process. The project was developed around these values, maintaining a clear conceptual and experiential <span style={{ fontWeight: 'bold', color: '#fff', fontSize: '1.1rem' }}>link to the Strauss website</span>.
+                <span className="sketch-underline green">Guided by on-site Strauss staff
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
+                </span>
+                , our team defined three core principles — Professionalism, Guided Experience, and Safety — which shaped the entire development process. The project was developed around these values, maintaining a clear conceptual and experiential{' '}
+                <span className="sketch-underline purple">link to the Strauss website
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" /></svg>
+                </span>
+                .
               </p>
             </div>
           </section>

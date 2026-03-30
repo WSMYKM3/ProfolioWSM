@@ -40,6 +40,27 @@ export default function Post3() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
     setEnlargedImage({ src, alt, isVideo });
   };
@@ -193,7 +214,19 @@ export default function Post3() {
               marginLeft: 'auto',
               marginRight: 'auto'
             }}>
-              Supported by Immersive Arts UK, Cryptic, the UKRI Innovate UK Immersive Tech Network, Co-STEAM, the Institute for Design Informatics, and Inspace. This is the first prototype presentation of this project, a pop-up exhibition and performance at Inspace, Edinburgh, which is set to expand into a major exhibition in 2026 and 2027.
+              Supported by{' '}
+              <span className="sketch-underline blue">Immersive Arts UK
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
+              </span>
+              , Cryptic, the UKRI Innovate UK Immersive Tech Network, Co-STEAM, the Institute for Design Informatics, and Inspace. This is the first prototype presentation of this project, a{' '}
+              <span className="sketch-underline orange">pop-up exhibition and performance at Inspace, Edinburgh
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" /></svg>
+              </span>
+              , which is set to expand into a{' '}
+              <span className="sketch-underline green">major exhibition in 2026 and 2027
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" /></svg>
+              </span>
+              .
             </p>
           </section>
 

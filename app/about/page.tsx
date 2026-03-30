@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import TopNav from '@/app/components/TopNav';
 import ProjectFilter from '@/app/components/ProjectFilter';
@@ -40,6 +40,27 @@ export default function About() {
     setSelectedPost(null);
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="layout">
       <TopNav />
@@ -50,8 +71,35 @@ export default function About() {
             <div className="about-video-intro">
               <h1 className="about-name">Xinxin Wang</h1>
               <p className="about-intro-text">
-                Creative Technologist exploring the intersection of design, technology, and interactive experiences. 
-                Passionate about creating immersive digital solutions that bridge the gap between imagination and reality.
+                Hi — I&apos;m Simon, a{' '}
+                <span className="sketch-underline orange">
+                  Creative Technologist
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
+                  </svg>
+                </span>
+                {' '}who lives at the intersection of design and code. I build{' '}
+                <span className="sketch-underline green">
+                  games
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" />
+                  </svg>
+                </span>
+                ,{' '}
+                <span className="sketch-underline purple">
+                  XR experiences
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" />
+                  </svg>
+                </span>
+                , and{' '}
+                <span className="sketch-underline blue">
+                  spatial interfaces
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                    <path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" />
+                  </svg>
+                </span>
+                {' '}using Unity, Unreal, and Blender — turning ideas into immersive, multi-media realities.
               </p>
             </div>
             <div 

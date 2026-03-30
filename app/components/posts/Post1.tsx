@@ -41,6 +41,27 @@ export default function Post1() {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [enlargedImage]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const path = el.querySelector('path');
+          if (path) {
+            const delay = parseFloat(el.dataset.delay || '0');
+            setTimeout(() => path.classList.add('drawn'), delay * 1000);
+          }
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
+      el.dataset.delay = (i * 0.15).toFixed(2);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
     setEnlargedImage({ src, alt, isVideo });
   };
@@ -199,22 +220,32 @@ export default function Post1() {
                 marginBottom: '16px',
                 textAlign: isMobile ? 'center' : 'left'
               }}>
-                Inspired by a friend's frustration with dating apps—endless queued messages, repeated conversations, and time spent hanging out only to find no shared interests.
+                Inspired by a friend&apos;s frustration with{' '}
+                <span className="sketch-underline orange">dating apps
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
+                </span>
+                —endless queued messages, repeated conversations, and time spent hanging out only to find{' '}
+                <span className="sketch-underline blue">no shared interests
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" /></svg>
+                </span>
+                .
               </p>
-              <p style={{ 
-                fontSize: '1rem', 
-                lineHeight: '1.8', 
+              <p style={{
+                fontSize: '1rem',
+                lineHeight: '1.8',
                 color: '#d0d0d0',
                 marginBottom: '16px',
                 textAlign: isMobile ? 'center' : 'left'
               }}>
-                So we're building a dating app that <span style={{
-                  background: 'linear-gradient(120deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%)',
-                  padding: '2px 6px',
-                  borderRadius: '4px',
-                  fontWeight: 600,
-                  color: '#fff'
-                }}>recognizes your frequently mentioned answers and turns them into your profile automatically</span>, letting you chat freely without repeating yourself.
+                So we&apos;re building a dating app that{' '}
+                <span className="sketch-underline green">recognizes your frequently mentioned answers and turns them into your profile automatically
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
+                </span>
+                , letting you{' '}
+                <span className="sketch-underline purple">chat freely
+                  <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" /></svg>
+                </span>
+                {' '}without repeating yourself.
               </p>
             </div>
             {/* Right: Image */}
