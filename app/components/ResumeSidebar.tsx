@@ -23,11 +23,13 @@ function getFileSrc(src: string): string {
   if (typeof window !== 'undefined') {
     const pathname = window.location.pathname;
     const basePath = pathname.startsWith('/ProfolioWSM') ? '/ProfolioWSM' : '';
-    return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+    const full = src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+    return encodeURI(full);
   }
   // Fallback for SSR (shouldn't happen in static export, but safe fallback)
   const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
-  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+  const full = src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+  return encodeURI(full);
 }
 
 export default function ResumeSidebar({ sections }: ResumeSidebarProps) {
@@ -158,8 +160,8 @@ export default function ResumeSidebar({ sections }: ResumeSidebarProps) {
       </nav>
       <div className="resume-sidebar-download">
         <a 
-          href={getFileSrc("/Siming_Wang_Creative_Technologist_XR_Resume.pdf")} 
-          download
+          href={getFileSrc("/XR Engineer_Siming Wang.pdf")}
+          download="XR Engineer_Siming Wang.pdf"
           className="resume-sidebar-download-button"
         >
           Download Resume
