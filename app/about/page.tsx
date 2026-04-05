@@ -60,7 +60,7 @@ export default function About() {
                 <SketchUnderline color="orange">robotics</SketchUnderline>, integrating{' '}
                 <SketchUnderline color="green">immersive</SketchUnderline> technologies into{' '}
                 <SketchUnderline color="purple">scalable</SketchUnderline>,{' '}
-                <SketchUnderline color="blue" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
+                <SketchUnderline color="blue" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" nowrap>
                   production-ready
                 </SketchUnderline>{' '}
                 solutions.
@@ -69,7 +69,7 @@ export default function About() {
                 With experience in creating trailers,{' '}
                 <SketchUnderline color="pink">advertising</SketchUnderline> content, and product-driven storytelling with
                 a{' '}
-                <SketchUnderline color="orange" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
+                <SketchUnderline color="orange" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" nowrap>
                   promotion-focused
                 </SketchUnderline>{' '}
                 mindset.

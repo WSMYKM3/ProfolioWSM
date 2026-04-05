@@ -12,11 +12,13 @@ export interface SketchUnderlineProps {
   children: ReactNode;
   /** SVG path d=... with pathLength="1" normalized stroke; omit for default sketch curve */
   path?: string;
+  /** Keep phrase on one line so the SVG underline matches the full word (helps hyphenated terms). */
+  nowrap?: boolean;
 }
 
-export function SketchUnderline({ color, children, path = DEFAULT_PATH }: SketchUnderlineProps) {
+export function SketchUnderline({ color, children, path = DEFAULT_PATH, nowrap }: SketchUnderlineProps) {
   return (
-    <span className={`sketch-underline ${color}`}>
+    <span className={`sketch-underline ${color}${nowrap ? ' sketch-underline-nowrap' : ''}`}>
       {children}
       <svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden>
         <path d={path} pathLength={1} />
@@ -52,7 +54,7 @@ export function useSketchUnderlineAnimation() {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: [0, 0.05, 0.1, 0.25], rootMargin: '0px 0px 48px 0px' }
     );
 
     document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {

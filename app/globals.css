@@ -3081,7 +3081,13 @@ header h1 {
 /* Sketch animated underline */
 .sketch-underline {
     position: relative;
-    display: inline;
+    display: inline-block;
+    vertical-align: baseline;
+    max-width: 100%;
+}
+
+.sketch-underline-nowrap {
+    white-space: nowrap;
 }
 
 .sketch-underline svg {
