@@ -36,7 +36,17 @@ export function useSketchUnderlineAnimation() {
             const path = el.querySelector('path');
             if (path) {
               const delay = parseFloat(el.dataset.delay || '0');
-              setTimeout(() => path.classList.add('drawn'), delay * 1000);
+              const applyDrawn = () => {
+                // Double rAF: commit initial stroke-dasharray to paint before transitioning to .drawn
+                requestAnimationFrame(() => {
+                  requestAnimationFrame(() => path.classList.add('drawn'));
+                });
+              };
+              if (delay > 0) {
+                setTimeout(applyDrawn, delay * 1000);
+              } else {
+                applyDrawn();
+              }
             }
             observer.unobserve(el);
           }
