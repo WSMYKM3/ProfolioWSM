@@ -1,0 +1,136 @@
+:root { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: radial-gradient(circle at 50% 40%, #1a1a22 0%, #08080c 70%);
+  color: #eee;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hint {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: .45;
+  font-size: 12px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: opacity .4s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.stage[data-active] .hint { opacity: 1; }
+
+.project {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* width/height/margins set inline from JS */
+}
+
+.piece {
+  position: absolute;
+  background-repeat: no-repeat;
+  transform-origin: 50% 50%;
+  transform:
+    translate(var(--sx), var(--sy))
+    rotate(var(--sr))
+    scale(var(--scale, 1));
+  transition:
+    transform .85s cubic-bezier(.22, .9, .28, 1.08),
+    opacity .5s ease,
+    filter .5s ease;
+  opacity: .95;
+  cursor: pointer;
+  will-change: transform, opacity, filter;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .55));
+}
+
+/* Hidden-scatter pieces sit at home, invisible, until their project assembles. */
+.piece.hidden-scatter {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(0, 0) rotate(0deg) scale(1);
+  filter: none;
+}
+
+/* Once a project is active, every other piece is locked out and fades away. */
+.stage[data-active] .piece {
+  opacity: 0;
+  pointer-events: none;
+  transform:
+    translate(calc(var(--sx) * 1.8), calc(var(--sy) * 1.8))
+    rotate(var(--sr))
+    scale(var(--scale, 1));
+}
+
+/* The active project's pieces snap home at full scale and stay clickable. */
+.stage[data-active] .project.assembled .piece {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(0, 0) rotate(0deg) scale(1);
+  filter: drop-shadow(0 14px 34px rgba(0, 0, 0, .6));
+}
+
+.stage[data-active] .project.assembled .piece:hover {
+  filter: drop-shadow(0 14px 34px rgba(255, 255, 255, .18)) brightness(1.06);
+}
+
+/* ------- Close button on assembled image ------- */
+.close-btn {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  font-size: 20px;
+  line-height: 36px;
+  text-align: center;
+  font-weight: 300;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(.6);
+  transition:
+    opacity .35s ease .5s,
+    transform .45s cubic-bezier(.22, 1.4, .4, 1) .5s,
+    background-color .2s ease;
+  z-index: 20;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .5);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.project.assembled .close-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.close-btn:hover {
+  background: #ffe04a;
+}
