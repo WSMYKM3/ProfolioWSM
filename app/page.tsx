@@ -8,6 +8,7 @@ import ProjectFilter from './components/ProjectFilter';
 import ProjectGrid from './components/ProjectGrid';
 import Modal from './components/Modal';
 import { posts, Post } from './lib/posts';
+import { getPublicAssetUrl } from './lib/publicAsset';
 import { shouldNavigateToPage, getPostPageRoute } from './lib/navigation';
 
 export default function Home() {
@@ -50,6 +51,16 @@ export default function Home() {
         {/* Video Section */}
         <section className="about-video-section">
           <div className="about-video-container">
+            <div className="about-video-container-bg" aria-hidden="true">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                src={getPublicAssetUrl('/backarm.mov')}
+              />
+            </div>
+            <div className="about-video-container-inner">
             <div className="about-video-intro">
               <h1 className="about-name">Siming Wang</h1>
               <p className="about-intro-text">
@@ -75,30 +86,14 @@ export default function Home() {
                 mindset.
               </p>
             </div>
-            <div 
-              className="about-video"
-              style={{
-                position: 'relative',
-                width: '100%',
-                paddingBottom: '30%', // Wider aspect ratio
-                height: 0,
-                overflow: 'hidden'
-              }}
-            >
+            <div className="about-video">
               <iframe
                 src="https://www.youtube.com/embed/ThW5sgK06q0?autoplay=1&mute=1&loop=1&playsinline=1&playlist=ThW5sgK06q0"
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  border: 'none'
-                }}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="YouTube video player"
               />
+            </div>
             </div>
           </div>
 
@@ -121,9 +116,16 @@ export default function Home() {
 
         {/* Projects Grid Section */}
         <section className="about-projects-section">
-          <ProjectGrid 
-            posts={filteredPosts}
-            onPostClick={handlePostClick}
+          <div className="about-projects-section-content">
+            <ProjectGrid 
+              posts={filteredPosts}
+              onPostClick={handlePostClick}
+            />
+          </div>
+          <div
+            className="about-projects-strip-hover"
+            id="about-projects-strip-hover"
+            aria-live="polite"
           />
         </section>
       </main>
