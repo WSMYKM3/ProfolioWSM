@@ -12,6 +12,8 @@ interface ProjectGridProps {
 }
 
 const HOVER_LEAVE_MS = 400;
+/** Delay opening the center panel so strip-card hover (lift/rotate) plays first */
+const HOVER_OPEN_DELAY_MS = 420;
 const STRIP_HOVER_ROOT_ID = 'about-projects-strip-hover';
 
 // Helper function to add basePath for GitHub Pages
@@ -134,6 +136,7 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
   const [hoveredPost, setHoveredPost] = useState<Post | null>(null);
   const [mounted, setMounted] = useState(false);
   const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openDelayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const prefersHover = useSyncExternalStore(
     subscribeHoverCapability,
@@ -145,6 +148,14 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (openDelayTimerRef.current) {
+        clearTimeout(openDelayTimerRef.current);
+      }
+    };
+  }, []);
+
   const clearLeaveTimer = useCallback(() => {
     if (leaveTimerRef.current) {
       clearTimeout(leaveTimerRef.current);
@@ -152,10 +163,18 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
     }
   }, []);
 
+  const clearOpenDelayTimer = useCallback(() => {
+    if (openDelayTimerRef.current) {
+      clearTimeout(openDelayTimerRef.current);
+      openDelayTimerRef.current = null;
+    }
+  }, []);
+
   const closeHover = useCallback(() => {
+    clearOpenDelayTimer();
     clearLeaveTimer();
     setHoveredPost(null);
-  }, [clearLeaveTimer]);
+  }, [clearOpenDelayTimer, clearLeaveTimer]);
 
   const scheduleLeave = useCallback(() => {
     clearLeaveTimer();
@@ -167,10 +186,11 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
 
   const openHover = useCallback(
     (post: Post) => {
+      clearOpenDelayTimer();
       clearLeaveTimer();
       setHoveredPost(post);
     },
-    [clearLeaveTimer]
+    [clearOpenDelayTimer, clearLeaveTimer]
   );
 
   useEffect(() => {
@@ -201,15 +221,21 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
   const handleCardMouseEnter = useCallback(
     (post: Post) => {
       if (!prefersHover) return;
-      openHover(post);
+      clearLeaveTimer();
+      clearOpenDelayTimer();
+      openDelayTimerRef.current = setTimeout(() => {
+        openDelayTimerRef.current = null;
+        openHover(post);
+      }, HOVER_OPEN_DELAY_MS);
     },
-    [prefersHover, openHover]
+    [prefersHover, clearLeaveTimer, clearOpenDelayTimer, openHover]
   );
 
   const handleCardMouseLeave = useCallback(() => {
     if (!prefersHover) return;
+    clearOpenDelayTimer();
     scheduleLeave();
-  }, [prefersHover, scheduleLeave]);
+  }, [prefersHover, clearOpenDelayTimer, scheduleLeave]);
 
   const portalEl =
     mounted && typeof document !== 'undefined'
@@ -239,6 +265,7 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
               onMouseEnter={prefersHover ? clearLeaveTimer : undefined}
             />
             <div
+              key={hoveredPost.id}
               className="strip-hover-panel"
               role="dialog"
               aria-modal="true"
