@@ -96,7 +96,7 @@ function StripExpandedBody({ post }: { post: Post }) {
           {post.title}
         </h3>
         {(post.shortDescription || post.description) && (
-          <p className="strip-expanded-desc">
+          <p className={`strip-expanded-desc ${post.id === 'post-1' ? '' : 'strip-expanded-desc--dim'}`}>
             {highlightText(
               post.shortDescription || post.description || '',
               descHighlights[post.id] || []

@@ -3823,6 +3823,10 @@ header h1 {
     transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
 }
 
+.strip-expanded-desc--dim {
+    color: rgba(224, 216, 207, 0.68);
+}
+
 .strip-hover-panel .strip-expanded-title,
 .strip-hover-panel .strip-expanded-desc {
     opacity: 1;
@@ -5974,3 +5978,689 @@ header h1 {
         padding-top: 70px;
     }
 }
+
+/* ============================================================
+ * EDITORIAL THEME — Warm Cinematic / Editorial Pop
+ * Scoped to .editorial. See STYLE-GUIDE.md.
+ * ============================================================ */
+.editorial {
+    /* ─── deep warm darks ─── */
+    --ink:           #1a140d;
+    --shadow-warm:   #322618;
+    --shadow-deep:   #1c1409;
+    --teal-shadow:   #2a423d;
+    --teal-mid:      #4a655d;
+
+    /* ─── tungsten highlights ─── */
+    --tungsten:      #e8b85a;
+    --tungsten-dim:  #c89848;
+    --cream-aged:    #f4e2b6;
+    --paper-warm:    #ead7a8;
+    --bone:          #fff5dc;
+
+    /* ─── oily pops ─── */
+    --rust:          #c64a28;
+    --rust-deep:     #8a3018;
+    --orange:        #d97030;
+    --blue-cold:     #4d80a4;
+    --blue-deep:     #2c4e72;
+    --olive:         #6b7a3f;
+
+    --muted:         #6b5135;
+
+    --serif: var(--font-fraunces), 'Fraunces', 'Times New Roman', serif;
+    --sans:  var(--font-space-grotesk), 'Space Grotesk', system-ui, sans-serif;
+
+    --ed-max: 1240px;
+    --ed-pad: clamp(20px, 5vw, 80px);
+
+    background: var(--paper-warm);
+    color: var(--ink);
+    font-family: var(--serif);
+}
+
+/* Page background takes over when in an editorial project page */
+.project-detail-page.editorial,
+.editorial .project-detail-main {
+    background: var(--paper-warm);
+    color: var(--ink);
+}
+
+.editorial * { box-sizing: border-box; }
+
+/* base type */
+.editorial p, .editorial h1, .editorial h2, .editorial h3, .editorial h4, .editorial blockquote, .editorial cite {
+    font-family: var(--serif);
+    color: var(--ink);
+}
+
+/* kicker — Space Grotesk uppercase tracking */
+.editorial .ed-kicker {
+    font-family: var(--sans);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: inline-block;
+}
+.editorial .ed-kicker--rust { color: var(--rust); }
+
+/* ─── hero ─── */
+.editorial .ed-hero {
+    position: relative;
+    min-height: 90vh;
+    padding: clamp(80px, 12vh, 160px) var(--ed-pad) 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+.editorial .ed-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 55%, rgba(232, 184, 90, 0.42), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+.editorial .ed-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: var(--ed-max);
+}
+.editorial .ed-hero__kicker {
+    display: block;
+    margin-bottom: 24px;
+}
+.editorial .ed-hero__mark {
+    display: block;
+}
+.editorial .ed-hero__mark {
+    font-family: var(--serif);
+    font-weight: 800;
+    font-style: italic;
+    font-variation-settings: "opsz" 144;
+    font-size: clamp(72px, 14vw, 200px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin: 0 0 24px;
+    color: var(--ink);
+    display: inline-block;
+    transform-origin: 50% 50%;
+}
+.editorial .ed-hero__tag {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 2.4vw, 32px);
+    line-height: 1.35;
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--shadow-warm);
+}
+
+.editorial .post-detail-view--dim-description .ed-hero__tag,
+.editorial .post-detail-view--dim-description .ed-intro__body,
+.editorial .post-detail-view--dim-description .ed-explore__desc {
+    color: rgba(107, 81, 53, 0.62);
+}
+
+/* ─── polaroid frame ─── */
+.editorial .photo {
+    display: inline-block;
+    background: var(--bone);
+    padding: 14px 14px 42px;
+    border: 1px solid rgba(26, 20, 13, 0.10);
+    box-shadow:
+        0 1px 1px rgba(26, 20, 13, 0.10),
+        16px 22px 0 rgba(26, 20, 13, 0.06),
+        0 8px 28px rgba(26, 20, 13, 0.18);
+    position: relative;
+    max-width: 100%;
+}
+.editorial .photo__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ink);
+}
+.editorial .photo__frame--3by4 { aspect-ratio: 4 / 3; }
+.editorial .photo__frame--square { aspect-ratio: 1 / 1; }
+.editorial .photo__frame iframe,
+.editorial .photo__frame video,
+.editorial .photo__frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: cover;
+}
+.editorial .photo__frame--contain img,
+.editorial .photo__frame--contain video {
+    object-fit: contain;
+    background: var(--cream-aged);
+}
+.editorial .photo__caption {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--muted);
+    margin-top: 12px;
+    text-align: center;
+}
+.editorial .photo--tilt-l { transform: rotate(-1.8deg); }
+.editorial .photo--tilt-r { transform: rotate(1.6deg); }
+.editorial .photo--lift  { transform: translateY(-24px); }
+
+/* asymmetric grid rhythm via :nth-child */
+.editorial .ed-grid-asym > * { transition: transform 0.4s ease, box-shadow 0.4s ease; }
+.editorial .ed-grid-asym > *:nth-child(3n+1) { transform: rotate(-1.4deg) translateY(20px); }
+.editorial .ed-grid-asym > *:nth-child(3n+2) { transform: rotate(0.8deg)  translateY(-10px); }
+.editorial .ed-grid-asym > *:nth-child(3n+3) { transform: rotate(-0.6deg) translateY(40px); }
+.editorial .ed-grid-asym > *:hover {
+    transform: rotate(0deg) translateY(-6px);
+    box-shadow:
+        0 2px 2px rgba(26, 20, 13, 0.12),
+        20px 28px 0 rgba(26, 20, 13, 0.08),
+        0 14px 40px rgba(26, 20, 13, 0.22);
+    z-index: 2;
+}
+
+/* ─── meta strip ─── */
+.editorial .ed-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: clamp(60px, 9vw, 110px) var(--ed-pad);
+    border-top: 1px solid rgba(26, 20, 13, 0.18);
+    border-bottom: 1px solid rgba(26, 20, 13, 0.18);
+    max-width: var(--ed-max);
+    margin: 80px auto 0;
+    gap: 0;
+}
+.editorial .ed-meta__col {
+    padding: 0 28px;
+    border-left: 1px solid rgba(26, 20, 13, 0.12);
+}
+.editorial .ed-meta__col:first-child {
+    border-left: 0;
+    padding-left: 0;
+}
+.editorial .ed-meta__label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: block;
+}
+.editorial .ed-meta__value {
+    font-family: var(--serif);
+    font-size: clamp(18px, 1.4vw, 22px);
+    line-height: 1.3;
+    color: var(--ink);
+}
+.editorial .ed-meta__tools {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.editorial .ed-meta__tools .software-icon-label { color: var(--ink); }
+.editorial .ed-meta__features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+}
+.editorial .ed-meta__feature {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--rust);
+}
+.editorial .ed-meta__feature::before { content: '· '; color: var(--muted); }
+.editorial .ed-meta__feature:first-child::before { content: ''; }
+
+/* ─── intro segmented bouncy ─── */
+.editorial .ed-intro {
+    max-width: var(--ed-max);
+    margin: clamp(80px, 12vh, 140px) auto;
+    padding: 0 var(--ed-pad);
+}
+.editorial .ed-intro__body {
+    font-family: var(--serif);
+    font-size: clamp(24px, 2.6vw, 40px);
+    line-height: 1.4;
+    color: var(--ink);
+    max-width: 720px;
+    margin: 0;
+}
+.editorial .ed-intro__body + .ed-intro__body {
+    margin-top: clamp(60px, 10vh, 140px);
+}
+.editorial .ed-intro__body:nth-of-type(1) { margin-left: 0; }
+.editorial .ed-intro__body:nth-of-type(2) { margin-left: auto; text-align: right; }
+.editorial .ed-intro__body:nth-of-type(3) { margin-left: 8%; }
+.editorial .ed-intro__body:nth-of-type(4) { margin-left: auto; text-align: right; max-width: 600px; }
+.editorial .ed-intro__body em {
+    color: var(--rust);
+    font-style: italic;
+    background: linear-gradient(120deg, transparent 0%, rgba(232, 184, 90, 0.35) 60%, transparent 100%);
+    padding: 0 6px;
+    border-radius: 4px;
+}
+
+/* ─── pull-quote ─── */
+.editorial .ed-quote {
+    position: relative;
+    padding: clamp(80px, 12vh, 140px) var(--ed-pad);
+    margin-top: 60px;
+}
+.editorial .ed-quote--dark { background: var(--shadow-warm); color: var(--bone); }
+.editorial .ed-quote--rust { background: var(--rust-deep); color: var(--bone); }
+.editorial .ed-quote--teal { background: var(--teal-shadow); color: var(--bone); }
+.editorial .ed-quote--dark .ed-quote__body,
+.editorial .ed-quote--rust .ed-quote__body,
+.editorial .ed-quote--teal .ed-quote__body { color: var(--bone); }
+.editorial .ed-quote__body {
+    position: relative;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(28px, 4.2vw, 58px);
+    line-height: 1.25;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.editorial .ed-quote__body em { color: var(--tungsten); font-style: italic; }
+.editorial .ed-quote__body::before {
+    content: '\201C';
+    position: absolute;
+    top: -0.55em;
+    left: -0.18em;
+    font-size: 10em;
+    font-weight: 700;
+    font-style: normal;
+    color: var(--tungsten);
+    opacity: 0.22;
+    pointer-events: none;
+    line-height: 1;
+}
+.editorial .ed-quote--left  .ed-quote__body { margin-right: auto; margin-left: 0; padding-right: 10%; }
+.editorial .ed-quote--right .ed-quote__body { margin-left: auto;  margin-right: 0; padding-left: 10%; }
+
+/* ─── section titles (editorial chapters) ─── */
+.editorial .ed-section {
+    max-width: var(--ed-max);
+    margin: 0 auto;
+    padding: clamp(80px, 12vh, 140px) var(--ed-pad) 60px;
+    scroll-margin-top: 100px;
+}
+.editorial .ed-section__title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(48px, 7vw, 110px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 8px 0 48px;
+    color: var(--ink);
+    text-align: left;
+}
+.editorial .ed-section__subtitle {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(22px, 2.4vw, 34px);
+    color: var(--shadow-warm);
+    margin: 60px 0 28px;
+    text-align: left;
+}
+
+/* ─── sticker decorations ─── */
+.editorial .deco {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ─── back button on cream paper ─── */
+.editorial .project-detail-back-button {
+    background: var(--bone);
+    color: var(--ink);
+    border: 1px solid rgba(26, 20, 13, 0.25);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    font-family: var(--sans);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 12px;
+    box-shadow:
+        4px 5px 0 var(--ink),
+        0 2px 8px rgba(26, 20, 13, 0.15);
+}
+.editorial .project-detail-back-button:hover {
+    background: var(--tungsten);
+    color: var(--ink);
+    border-color: var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow:
+        6px 7px 0 var(--ink),
+        0 4px 12px rgba(26, 20, 13, 0.2);
+}
+
+/* ─── sidebar (PostSidebar) override surface ─── */
+.editorial .ed-sidebar-wrap {
+    position: fixed;
+    top: 50%;
+    left: 24px;
+    transform: translateY(-50%);
+    z-index: 50;
+    background: var(--bone);
+    border: 1px solid rgba(26, 20, 13, 0.18);
+    border-radius: 4px;
+    box-shadow:
+        4px 5px 0 var(--ink),
+        0 4px 16px rgba(26, 20, 13, 0.15);
+    padding: 16px 8px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+.editorial .ed-sidebar-wrap::before {
+    content: 'NAVIGATE';
+    display: block;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--rust);
+    padding: 0 12px 12px;
+    border-bottom: 1px solid rgba(26, 20, 13, 0.12);
+    margin-bottom: 12px;
+}
+/* Recolor the inline-styled buttons inside the sidebar */
+.editorial .ed-sidebar-wrap aside { position: static !important; transform: none !important; top: auto !important; left: auto !important; width: 200px !important; padding: 0 !important; max-height: none !important; }
+.editorial .ed-sidebar-wrap nav button {
+    color: var(--muted) !important;
+    background: transparent !important;
+    font-family: var(--sans) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
+}
+.editorial .ed-sidebar-wrap nav button:hover {
+    color: var(--ink) !important;
+    background: rgba(232, 184, 90, 0.18) !important;
+}
+.editorial .ed-sidebar-wrap nav > div > button[style*="font-weight: 600"],
+.editorial .ed-sidebar-wrap nav > div > div > button[style*="font-weight: 500"] {
+    color: var(--rust) !important;
+    font-family: var(--serif) !important;
+    font-style: italic !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+.editorial .ed-sidebar-wrap nav button span[style*="background-color: rgb(255, 255, 255)"],
+.editorial .ed-sidebar-wrap nav button span[style*="background-color: #fff"] {
+    background-color: var(--rust) !important;
+}
+
+/* ─── shell — top of project page ─── */
+.editorial .project-detail-main {
+    padding: 0 !important;
+    scroll-snap-type: none !important;
+    scroll-behavior: smooth;
+    /* Keep the legacy .main-content scroll container (height: 100vh; overflow-y: auto)
+       so wheel scrolling works as it always did on this site. EditorialMotion proxies
+       ScrollTrigger to this scroller. */
+}
+.editorial .project-detail-content-wrapper {
+    max-width: 100%;
+    padding: 0;
+}
+/* Lock .layout to viewport height so the flex child .main-content can be
+   exactly 100vh tall and own the scroll, as it does on the rest of the site. */
+.editorial.layout {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+/* the centered hero video container that PostDetailView used — neutralize default styles */
+.editorial .detail-video-container {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    width: auto !important;
+    max-width: none !important;
+    aspect-ratio: auto !important;
+    margin: 0 auto !important;
+}
+
+/* ─── explore-more cards as polaroids ─── */
+.editorial .ed-explore {
+    max-width: var(--ed-max);
+    margin: clamp(80px, 10vh, 120px) auto 0;
+    padding: 80px var(--ed-pad);
+    border-top: 1px solid rgba(26, 20, 13, 0.18);
+}
+.editorial .ed-explore__kicker {
+    text-align: center;
+    margin-bottom: 16px;
+}
+.editorial .ed-explore__title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(40px, 5vw, 72px);
+    text-align: center;
+    margin: 0 0 60px;
+    color: var(--ink);
+}
+.editorial .ed-explore__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+}
+.editorial .ed-explore__item {
+    text-decoration: none;
+    display: block;
+    color: var(--ink);
+}
+.editorial .ed-explore__item .photo {
+    width: 100%;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.editorial .ed-explore__item:nth-child(3n+1) .photo { transform: rotate(-1.4deg); }
+.editorial .ed-explore__item:nth-child(3n+2) .photo { transform: rotate(0.7deg) translateY(-12px); }
+.editorial .ed-explore__item:nth-child(3n+3) .photo { transform: rotate(-0.4deg) translateY(20px); }
+.editorial .ed-explore__item:hover .photo {
+    transform: rotate(0deg) translateY(-8px);
+    box-shadow:
+        0 2px 2px rgba(26, 20, 13, 0.12),
+        20px 28px 0 rgba(26, 20, 13, 0.08),
+        0 16px 44px rgba(26, 20, 13, 0.22);
+}
+.editorial .ed-explore__name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22px;
+    margin: 16px 0 8px;
+    color: var(--ink);
+}
+.editorial .ed-explore__desc {
+    font-family: var(--serif);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* On desktop, leave room for the fixed sidebar on the left */
+@media (min-width: 901px) {
+    .editorial .ed-meta,
+    .editorial .ed-intro,
+    .editorial .ed-section,
+    .editorial .ed-quote,
+    .editorial .ed-explore {
+        padding-left: clamp(var(--ed-pad), calc(24px + 220px + 40px), 320px);
+    }
+}
+
+/* ─── responsive ─── */
+@media (max-width: 900px) {
+    .editorial .ed-meta { grid-template-columns: repeat(2, 1fr); gap: 32px 0; }
+    .editorial .ed-meta__col:nth-child(odd) { border-left: 0; padding-left: 0; }
+    .editorial .ed-meta__col:nth-child(3) { border-top: 1px solid rgba(26, 20, 13, 0.12); padding-top: 32px; }
+    .editorial .ed-meta__col:nth-child(4) { border-top: 1px solid rgba(26, 20, 13, 0.12); padding-top: 32px; }
+    .editorial .ed-explore__grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    .editorial .ed-sidebar-wrap { display: none; }
+}
+@media (max-width: 640px) {
+    .editorial .ed-meta { grid-template-columns: 1fr; }
+    .editorial .ed-meta__col {
+        border-left: 0 !important;
+        padding-left: 0 !important;
+        padding-top: 32px;
+        border-top: 1px solid rgba(26, 20, 13, 0.12);
+    }
+    .editorial .ed-meta__col:first-child { border-top: 0; padding-top: 0; }
+    .editorial .ed-explore__grid { grid-template-columns: 1fr; }
+    .editorial .ed-intro__body { margin: 0 !important; text-align: left !important; max-width: 100% !important; }
+}
+
+/* ─── Override hardcoded light text/backgrounds inside Post[N] content
+   so the dark-theme inline styles read on the cream editorial paper.
+   React renders inline styles without spaces between `:` and value,
+   so match `color:#fff` rather than `color: #fff`. ─── */
+
+/* Light text colors (originally meant for dark backgrounds) → ink */
+.editorial .post-content [style*="color:#fff"],
+.editorial .post-content [style*="color:#FFF"],
+.editorial .post-content [style*="color: #fff"],
+.editorial .post-content [style*="color:#ffffff"],
+.editorial .post-content [style*="color: #ffffff"],
+.editorial .post-content [style*="color:rgb(255,255,255)"],
+.editorial .post-content [style*="color: rgb(255, 255, 255)"],
+.editorial .post-content [style*="color:#e8e8e8"],
+.editorial .post-content [style*="color: #e8e8e8"] {
+    color: var(--ink) !important;
+}
+
+/* Dark-theme body grays → readable ink on editorial paper */
+.editorial .post-content [style*="color:#d0d0d0"],
+.editorial .post-content [style*="color: #d0d0d0"],
+.editorial .post-content [style*="color:#ccc"],
+.editorial .post-content [style*="color: #ccc"] {
+    color: var(--ink) !important;
+}
+
+/* Mid grays and translucent white copy → readable ink */
+.editorial .post-content [style*="color:#b0b0b0"],
+.editorial .post-content [style*="color: #b0b0b0"],
+.editorial .post-content [style*="color:#888"],
+.editorial .post-content [style*="color: #888"],
+.editorial .post-content [style*="color:#666"],
+.editorial .post-content [style*="color: #666"],
+.editorial .post-content [style*="color:rgba(255,255,255,0.7)"],
+.editorial .post-content [style*="color: rgba(255, 255, 255, 0.7)"],
+.editorial .post-content [style*="color:rgba(255,255,255,0.8)"],
+.editorial .post-content [style*="color: rgba(255, 255, 255, 0.8)"] {
+    color: var(--ink) !important;
+}
+
+/* Glassy white card backgrounds → cream bone with ink hairline */
+.editorial .post-content [style*="background-color:rgba(255,255,255,0.03)"],
+.editorial .post-content [style*="background-color: rgba(255, 255, 255, 0.03)"],
+.editorial .post-content [style*="background-color:rgba(255,255,255,0.05)"],
+.editorial .post-content [style*="background-color: rgba(255, 255, 255, 0.05)"],
+.editorial .post-content [style*="background-color:rgba(255,255,255,0.07)"],
+.editorial .post-content [style*="background-color: rgba(255, 255, 255, 0.07)"],
+.editorial .post-content [style*="background-color:rgba(255,255,255,0.08)"],
+.editorial .post-content [style*="background-color: rgba(255, 255, 255, 0.08)"],
+.editorial .post-content [style*="background-color:rgba(255,255,255,0.1)"],
+.editorial .post-content [style*="background-color: rgba(255, 255, 255, 0.1)"] {
+    background-color: var(--bone) !important;
+    border: 1px solid rgba(26, 20, 13, 0.12) !important;
+    box-shadow: 4px 5px 0 rgba(26, 20, 13, 0.06) !important;
+}
+
+/* "border-left:4px solid rgba(255,255,255,0.3)" pattern (contribution cards) → rust */
+.editorial .post-content [style*="border-left:4px solid rgba(255,255,255,0.3)"],
+.editorial .post-content [style*="border-left: 4px solid rgba(255, 255, 255, 0.3)"] {
+    border-left-color: var(--rust) !important;
+}
+
+/* Dark backgrounds in post content (e.g. #1a1a1a, #000) → warm shadow */
+.editorial .post-content [style*="background-color:#1a1a1a"],
+.editorial .post-content [style*="background-color: #1a1a1a"] {
+    background-color: var(--shadow-warm) !important;
+}
+
+/* "border-bottom: 2px solid rgba(255,255,255,0.2)" h2 underline pattern → ink hairline */
+.editorial .post-content [style*="border-bottom:2px solid rgba(255,255,255,0.2)"],
+.editorial .post-content [style*="border-bottom: 2px solid rgba(255, 255, 255, 0.2)"],
+.editorial .post-content [style*="border-bottom:1px solid rgba(255,255,255,0.1)"],
+.editorial .post-content [style*="border-bottom: 1px solid rgba(255, 255, 255, 0.1)"] {
+    border-bottom-color: rgba(26, 20, 13, 0.18) !important;
+}
+
+/* Section h2/h3 titles inside .post-content — apply editorial type even when inline-styled */
+.editorial .post-content h2 {
+    font-family: var(--serif) !important;
+    font-style: italic !important;
+    font-size: clamp(40px, 5vw, 72px) !important;
+    font-weight: 700 !important;
+    color: var(--ink) !important;
+    text-align: left !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1 !important;
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 48px !important;
+}
+.editorial .post-content h3 {
+    font-family: var(--serif) !important;
+    font-style: italic !important;
+    font-size: clamp(22px, 2.4vw, 34px) !important;
+    font-weight: 600 !important;
+    color: var(--shadow-warm) !important;
+    text-align: left !important;
+}
+
+/* Text-bearing post content must be readable immediately after client-side navigation.
+   Attribute selectors above catch server-rendered inline styles; these element rules
+   also catch DOM styles normalized by the browser to rgb(...) during route transitions. */
+.editorial .post-content p,
+.editorial .post-content li,
+.editorial .post-content figcaption,
+.editorial .post-content blockquote,
+.editorial .post-content cite,
+.editorial .post-content div > span:not(.sketch-underline) {
+    color: var(--ink) !important;
+}
+
+/* keep sketch-underline colors readable on cream paper */
+.editorial .sketch-underline {
+    position: relative;
+    display: inline-block;
+}
+.editorial .sketch-underline.orange { color: var(--rust); }
+.editorial .sketch-underline.blue { color: var(--blue-cold); }
+.editorial .sketch-underline.green { color: var(--olive); }
+.editorial .sketch-underline.purple { color: var(--rust-deep); }
+.editorial .sketch-underline svg path { stroke: currentColor; }

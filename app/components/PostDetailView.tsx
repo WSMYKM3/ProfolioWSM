@@ -23,706 +23,439 @@ const postComponents: Record<string, React.ComponentType> = {
 };
 
 interface PostDetailViewProps {
-    post: Post;
-    isPageView?: boolean; // Indicates if this is used in a page route vs modal
+  post: Post;
+  isPageView?: boolean;
 }
 
-// Helper function to add basePath for GitHub Pages
 function getImageSrc(src: string): string {
-    if (src.startsWith('http://') || src.startsWith('https://')) {
-        return src;
-    }
-    const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
-    return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+  if (src.startsWith('http://') || src.startsWith('https://')) return src;
+  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
-// Helper function to convert YouTube watch URL to embed URL
 function convertToEmbedUrl(url: string): string {
-    if (!url) return url;
+  if (!url) return url;
+  if (url.includes('/embed/')) return url;
+  if (url.includes('youtube.com/watch')) {
+    const id = url.split('v=')[1]?.split('&')[0];
+    if (id) return `https://www.youtube.com/embed/${id}`;
+  }
+  if (url.includes('youtu.be/')) {
+    const id = url.split('youtu.be/')[1]?.split('?')[0];
+    if (id) return `https://www.youtube.com/embed/${id}`;
+  }
+  return url;
+}
 
-    // If already an embed URL, return as is
-    if (url.includes('/embed/')) {
-        return url;
-    }
+// Split a description into ~roughly equal sentence-bounded segments for the
+// editorial bouncy intro reveal.
+function splitIntoSegments(text: string, count = 3): string[] {
+  const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map((s) => s.trim()).filter(Boolean) || [text];
+  // If we don't have enough sentences, fall back to splitting on commas
+  let parts = sentences;
+  if (parts.length < count) {
+    parts = text
+      .split(/,(?![^"]*"[^"]*$)/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  if (parts.length <= count) return parts;
+  const perBucket = Math.ceil(parts.length / count);
+  const out: string[] = [];
+  for (let i = 0; i < parts.length; i += perBucket) {
+    out.push(parts.slice(i, i + perBucket).join(', '));
+  }
+  return out;
+}
 
-    // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
-    if (url.includes('youtube.com/watch')) {
-        const videoId = url.split('v=')[1]?.split('&')[0];
-        if (videoId) {
-            return `https://www.youtube.com/embed/${videoId}`;
-        }
-    }
-
-    // Convert short URL (https://youtu.be/VIDEO_ID) to embed URL
-    if (url.includes('youtu.be/')) {
-        const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-        if (videoId) {
-            return `https://www.youtube.com/embed/${videoId}`;
-        }
-    }
-
-    // Return original URL if no conversion needed
-    return url;
+function projectKicker(post: Post, idx: number): string {
+  const num = String(idx + 1).padStart(2, '0');
+  const tagPart = post.tags
+    ?.filter((t) => t !== 'featured')
+    .slice(0, 2)
+    .map((t) => t.toUpperCase())
+    .join(' · ');
+  return tagPart ? `PROJECT ${num} — ${tagPart}` : `PROJECT ${num}`;
 }
 
 export default function PostDetailView({ post, isPageView = false }: PostDetailViewProps) {
-    // Use videoUrl for hero video if available, otherwise use first videoUrls, otherwise null
-    const rawVideoUrl = post.videoUrl || (post.videoUrls && post.videoUrls.length > 0 ? post.videoUrls[0] : null);
-    const videoUrl = rawVideoUrl ? convertToEmbedUrl(rawVideoUrl) : null;
-    
-    // Get the Post component for detailed content
-    const PostContent = postComponents[post.id] || null;
+  const rawVideoUrl = post.videoUrl || (post.videoUrls && post.videoUrls.length > 0 ? post.videoUrls[0] : null);
+  const videoUrl = rawVideoUrl ? convertToEmbedUrl(rawVideoUrl) : null;
+  const PostContent = postComponents[post.id] || null;
 
-    const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-    useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+  const projectIdx = posts.findIndex((p) => p.id === post.id);
+  const kicker = projectKicker(post, projectIdx);
 
-    // Define sections for sidebar based on post
-    const getSections = () => {
-        const baseSections = [
-            { id: 'project-title', label: post.title },
-            { id: 'intro', label: 'Intro' }
-        ];
-        
-        if (post.id === 'post-1') {
-            return [
-                ...baseSections,
-                { id: 'ideation', label: 'Ideation' },
-                { id: 'ux-design', label: 'UX Design' },
-                {
-                    id: 'prototype',
-                    label: 'Prototype',
-                    subsections: [
-                        { id: 'animation-trailer', label: 'Animation Trailer - (Video)' },
-                        { id: 'prototype-stage1', label: 'Stage1: Animation Trailer(UE) production' },
-                        { id: 'prototype-stage2', label: 'Stage2: Unity Development' }
-                    ]
-                }
-            ];
-        }
-        
-        if (post.id === 'post-2') {
-            return [
-                ...baseSections,
-                { id: 'ideation', label: 'Ideation' },
-                { id: 'contributions', label: 'My Contributions' },
-                {
-                    id: 'process',
-                    label: 'Process',
-                    subsections: [
-                        { id: 'process-stage1', label: 'Stage1. Prototype - Solve animation of tutors(hand & full body)' },
-                        { id: 'process-stage2', label: 'Stage2. Develop learning and testing function' },
-                        { id: 'process-stage3', label: 'Stage3. AI Glasses: Live ASL Translation' }
-                    ]
-                }
-            ];
-        }
-        
-        if (post.id === 'post-3') {
-            return [
-                ...baseSections,
-                { id: 'achievement', label: 'Achievement' },
-                { id: 'tools', label: 'Tools' },
-                {
-                    id: 'contributions',
-                    label: 'My Contributions',
-                    subsections: [
-                        { id: 'live-scene', label: 'Live Scene' }
-                    ]
-                },
-                {
-                    id: 'process',
-                    label: 'Process',
-                    subsections: [
-                        { id: 'process-stage1', label: 'Stage1: Touchdesigner-Unreal Engine Communication Prototype' },
-                        { id: 'process-stage2', label: 'Stage2: State machine Prototype' },
-                        { id: 'process-stage3', label: 'Stage3: Metahuman realtime Speech/Lipsync' },
-                        { id: 'process-stage4', label: 'Stage4: Wake Words & localhost interactive interface' }
-                    ]
-                }
-            ];
-        }
-        
-        if (post.id === 'post-4') {
-            return [
-                { id: 'project-title', label: post.title },
-                { id: 'videos', label: 'Videos' },
-                { id: 'intro', label: 'Intro' },
-                { id: 'tools', label: 'Tools' },
-                { id: 'motion-capture', label: 'Motion Capture + Motion Data Cleaning' },
-                { id: 'metahuman', label: 'Metahuman' }
-            ];
-        }
-        
-        if (post.id === 'post-5') {
-            return [
-                ...baseSections,
-                { id: 'video', label: 'Video' },
-                { id: 'ideation', label: 'Ideation' },
-                { id: 'stage1', label: 'Stage1: XR Development' },
-                { id: 'stage2', label: 'Stage2: AI Assistant' }
-            ];
-        }
-        
-        if (post.id === 'post-6') {
-            return [
-                ...baseSections,
-                { id: 'video', label: 'Video' },
-                { id: 'introduction', label: 'Introduction' },
-                {
-                    id: 'game-design',
-                    label: 'Game Design',
-                    subsections: [
-                        { id: 'technical-solution', label: '1.1 Technical solution' },
-                        { id: 'enemies-weapons', label: '1.2 Our three types of enemies and weapons' }
-                    ]
-                },
-                {
-                    id: 'my-prototype',
-                    label: 'My Prototype',
-                    subsections: [
-                        { id: 'ragdoll-scripts', label: '1.1 Ragdoll by scripts' },
-                        { id: 'double-damage', label: '1.2 Double damage by detecting the tag and Projectile.cs' },
-                        { id: 'shield-parts', label: '1.3 Four parts of the shield' },
-                        { id: 'gamemanager', label: '1.4 GameManager' }
-                    ]
-                }
-            ];
-        }
-        
-        return baseSections;
-    };
+  const getSections = () => {
+    const baseSections = [
+      { id: 'project-title', label: post.title },
+      { id: 'intro', label: 'Intro' },
+    ];
+    if (post.id === 'post-1') {
+      return [
+        ...baseSections,
+        { id: 'ideation', label: 'Ideation' },
+        { id: 'ux-design', label: 'UX Design' },
+        {
+          id: 'prototype',
+          label: 'Prototype',
+          subsections: [
+            { id: 'animation-trailer', label: 'Animation Trailer' },
+            { id: 'prototype-stage1', label: 'Stage 1 — UE Production' },
+            { id: 'prototype-stage2', label: 'Stage 2 — Unity Development' },
+          ],
+        },
+      ];
+    }
+    if (post.id === 'post-2') {
+      return [
+        ...baseSections,
+        { id: 'ideation', label: 'Ideation' },
+        {
+          id: 'process',
+          label: 'Process',
+          subsections: [
+            { id: 'process-stage1', label: 'Stage 1' },
+            { id: 'process-stage2', label: 'Stage 2' },
+            { id: 'process-stage3', label: 'Stage 3' },
+          ],
+        },
+        { id: 'contributions', label: 'My Contributions' },
+      ];
+    }
+    if (post.id === 'post-3') {
+      return [
+        ...baseSections,
+        { id: 'achievement', label: 'Achievement' },
+        { id: 'tools', label: 'Tools' },
+        { id: 'installation-draft', label: 'Installation Draft' },
+        {
+          id: 'process',
+          label: 'Process',
+          subsections: [
+            { id: 'process-stage1', label: 'Stage 1' },
+            { id: 'process-stage2', label: 'Stage 2' },
+            { id: 'process-stage3', label: 'Stage 3' },
+            { id: 'process-stage4', label: 'Stage 4' },
+          ],
+        },
+        { id: 'contributions', label: 'My Contributions', subsections: [{ id: 'live-scene', label: 'Live Scene' }] },
+      ];
+    }
+    if (post.id === 'post-4') {
+      return [
+        { id: 'project-title', label: post.title },
+        { id: 'videos', label: 'Videos' },
+        { id: 'intro', label: 'Intro' },
+        { id: 'tools', label: 'Tools' },
+        { id: 'motion-capture', label: 'Motion Capture' },
+        { id: 'metahuman', label: 'Metahuman' },
+      ];
+    }
+    if (post.id === 'post-5') {
+      return [
+        ...baseSections,
+        { id: 'video', label: 'Video' },
+        { id: 'ideation', label: 'Ideation' },
+        { id: 'stage1', label: 'Stage 1 — XR' },
+        { id: 'stage2', label: 'Stage 2 — AI Assistant' },
+      ];
+    }
+    if (post.id === 'post-6') {
+      return [
+        ...baseSections,
+        { id: 'video', label: 'Video' },
+        { id: 'introduction', label: 'Introduction' },
+        {
+          id: 'game-design',
+          label: 'Game Design',
+          subsections: [
+            { id: 'technical-solution', label: '1.1 Technical solution' },
+            { id: 'enemies-weapons', label: '1.2 Enemies & weapons' },
+          ],
+        },
+        {
+          id: 'my-prototype',
+          label: 'My Prototype',
+          subsections: [
+            { id: 'ragdoll-scripts', label: '1.1 Ragdoll scripts' },
+            { id: 'double-damage', label: '1.2 Double damage' },
+            { id: 'shield-parts', label: '1.3 Shield parts' },
+            { id: 'gamemanager', label: '1.4 GameManager' },
+          ],
+        },
+      ];
+    }
+    return baseSections;
+  };
 
-    // Adjust sizing based on page vs modal context
-    const videoMaxWidth = isPageView ? '800px' : '1000px';
-    const videoWidth = isPageView ? '65%' : '80%';
-    const contentMaxWidth = isPageView ? '1600px' : '1400px';
-    const contentPadding = isPageView ? (isMobile ? '0 20px' : '0 60px') : (isMobile ? '0 16px' : '0 40px');
+  const introSegments = splitIntoSegments(post.description || '', 3);
+  const showHeroMedia = post.id !== 'post-4' && post.id !== 'post-5' && post.id !== 'post-6';
 
-    return (
-        <div className={`post-detail-view ${isPageView ? 'post-detail-view-page' : ''}`} style={{ color: '#e8e8e8', paddingBottom: '80px' }}>
-            {/* 1. Hero Video/Image - Hide for post-4, post-5, and post-6 as videos/content are in Post components */}
-            {post.id !== 'post-4' && post.id !== 'post-5' && post.id !== 'post-6' && (
-            <div className="detail-video-container" style={{
-                width: videoWidth,
-                maxWidth: videoMaxWidth,
-                aspectRatio: '16/9',
-                backgroundColor: '#000',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                marginBottom: '40px',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
-            }}>
-                {videoUrl ? (
-                    videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
-                        <iframe
-                            src={videoUrl}
-                            title={post.title}
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            style={{ width: '100%', height: '100%' }}
-                        />
-                    ) : (
-                        <video
-                            src={videoUrl}
-                            controls
-                            autoPlay
-                            muted
-                            loop
-                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                        />
-                    )
-                ) : (
-                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                        <Image
-                            src={getImageSrc(post.thumbnail)}
-                            alt={post.title}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                        />
-                    </div>
-                )}
-            </div>
-            )}
+  const isDatnie = post.id === 'post-1';
 
-            {/* 2. Header & Quick Info */}
-            <div className="detail-header" id="project-title" style={{ marginBottom: '40px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '32px', scrollMarginTop: '100px' }}>
-                <h1 style={{
-                    fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                    fontWeight: 800,
-                    marginBottom: '32px',
-                    lineHeight: 1.1,
-                    letterSpacing: '-0.02em',
-                    color: '#fff',
-                    textAlign: 'center'
-                }}>
-                    {post.title}
-                </h1>
+  return (
+    <div className={`post-detail-view post-detail-view-page ${isDatnie ? '' : 'post-detail-view--dim-description'}`}>
+      {/* ─── HERO ─── */}
+      <section className="ed-hero" id="project-title">
+        <svg className="deco" style={{ top: '14%', left: '6%', width: 64, height: 64, color: 'var(--rust)' }}
+             data-anim="sticker" data-rest="-12">
+          <use href="#squiggle" />
+        </svg>
+        <svg className="deco" style={{ top: '22%', right: '8%', width: 52, height: 52, color: 'var(--blue-cold)' }}
+             data-anim="sticker" data-rest="14">
+          <use href="#asterisk" />
+        </svg>
+        <svg className="deco" style={{ bottom: '12%', right: '14%', width: 56, height: 56, color: 'var(--olive)' }}
+             data-anim="sticker" data-rest="-8">
+          <use href="#star-sm" />
+        </svg>
 
-                {/* 3. Metadata Grid */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                    gap: '24px',
-                    background: 'rgba(255,255,255,0.07)',
-                    border: '1px solid rgba(255,255,255,0.16)',
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                    padding: '24px',
-                    borderRadius: '16px',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.1)'
-                }}>
-                    <div>
-                        <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Role</div>
-                        <div style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 500 }}>{post.role || 'Creative Technologist'}</div>
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Timeline</div>
-                        <div style={{ fontSize: '1.1rem', color: '#fff', fontWeight: 500 }}>{post.date}</div>
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tools</div>
-                        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-                            {post.softwareTools?.map(tool => (
-                                <SoftwareIcon key={tool} name={tool} size={24} />
-                            ))}
-                        </div>
-                    </div>
-                    {post.features && post.features.length > 0 && (
-                        <div>
-                            <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Features</div>
-                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                {post.features.map(feature => (
-                                    <span key={feature} style={{
-                                        fontSize: '0.9rem',
-                                        color: '#ccc',
-                                        backgroundColor: 'rgba(255,255,255,0.1)',
-                                        padding: '4px 10px',
-                                        borderRadius: '4px'
-                                    }}>
-                                        {feature}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* 4. Videos Section (for post-4 only) */}
-            {post.id === 'post-4' && (
-                <div id="videos" style={{ 
-                    marginBottom: '60px', 
-                    scrollMarginTop: '100px',
-                    maxWidth: contentMaxWidth,
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    padding: contentPadding
-                }}>
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: isMobile ? '1fr' : '1.5fr 1fr',
-                        gap: isMobile ? '24px' : '40px',
-                        marginBottom: '24px',
-                        alignItems: 'center'
-                    }}>
-                        {/* Left Video: Behind the scenes */}
-                        <div>
-                            <iframe
-                                src={convertToEmbedUrl('https://www.youtube.com/watch?v=J0UV4jHnues')}
-                                title="Behind the scenes"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                style={{
-                                    width: '100%',
-                                    aspectRatio: '16/9',
-                                    borderRadius: '12px',
-                                    marginBottom: '12px'
-                                }}
-                            />
-                            <p style={{
-                                fontSize: '0.95rem',
-                                color: '#d0d0d0',
-                                textAlign: 'center',
-                                margin: 0
-                            }}>
-                                Behind the scenes
-                            </p>
-                        </div>
-                        {/* Right Video: Full length video */}
-                        <div>
-                            <iframe
-                                src={convertToEmbedUrl('https://www.youtube.com/watch?v=f7mk4TVj1jA')}
-                                title="Full length video"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                style={{
-                                    width: '100%',
-                                    aspectRatio: '16/9',
-                                    borderRadius: '12px',
-                                    marginBottom: '12px'
-                                }}
-                            />
-                            <p style={{
-                                fontSize: '0.95rem',
-                                color: '#d0d0d0',
-                                textAlign: 'center',
-                                margin: 0
-                            }}>
-                                Full length video
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* 5. Description with Sidebar Layout */}
-            <div style={{
-                display: 'flex',
-                gap: '40px',
-                maxWidth: contentMaxWidth,
-                margin: '0 auto',
-                padding: post.id === 'post-6' ? '0' : contentPadding
-            }}>
-                {/* Sidebar Navigation */}
-                {!isMobile && (
-                    <PostSidebar
-                        sections={getSections()}
-                        isPageView={isPageView}
-                    />
-                )}
-                
-                {/* Main Content */}
-                <div style={{ flex: 1, minWidth: 0, padding: post.id === 'post-6' ? contentPadding : '0' }}>
-                    {/* Two YouTube Videos above Intro for post-2 */}
-                    {post.id === 'post-2' && post.videoUrls && post.videoUrls.length >= 2 && (
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                            gap: '24px',
-                            marginBottom: '48px',
-                            width: '100%'
-                        }}>
-                            {post.videoUrls.slice(0, 2).map((videoUrl, idx) => {
-                                const embedUrl = convertToEmbedUrl(videoUrl);
-                                const videoTitle = post.videoTitles?.[idx] || `${post.title} Video ${idx + 1}`;
-                                
-                                return (
-                                    <div key={idx} style={{ width: '100%' }}>
-                                        <div style={{
-                                            position: 'relative',
-                                            width: '100%',
-                                            paddingBottom: '56.25%', // 16:9 aspect ratio
-                                            height: 0,
-                                            overflow: 'hidden',
-                                            borderRadius: '12px',
-                                            backgroundColor: '#000',
-                                            marginBottom: '12px'
-                                        }}>
-                                            {embedUrl ? (
-                                                <iframe
-                                                    src={embedUrl}
-                                                    title={videoTitle}
-                                                    frameBorder="0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                    allowFullScreen
-                                                    style={{
-                                                        position: 'absolute',
-                                                        top: 0,
-                                                        left: 0,
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        border: 'none'
-                                                    }}
-                                                />
-                                            ) : (
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    left: 0,
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    backgroundColor: 'rgba(255,255,255,0.05)',
-                                                    border: '1px dashed rgba(255,255,255,0.2)'
-                                                }}>
-                                                    <p style={{
-                                                        fontSize: '0.95rem',
-                                                        color: '#888',
-                                                        textAlign: 'center',
-                                                        margin: 0,
-                                                        padding: '20px'
-                                                    }}>
-                                                        YouTube video placeholder
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <p style={{
-                                            fontSize: '0.875rem',
-                                            color: 'rgba(255,255,255,0.7)',
-                                            textAlign: 'center',
-                                            margin: 0
-                                        }}>
-                                            {videoTitle}
-                                        </p>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
-                    
-                    {/* Hide intro section for post-6 as it has its own Introduction section */}
-                    {post.id !== 'post-6' && (
-                        <div id="intro" className="detail-content" style={{
-                            fontSize: '1.15rem',
-                            lineHeight: 1.8,
-                            color: '#d0d0d0',
-                            maxWidth: '100%',
-                            marginBottom: '60px',
-                            textAlign: 'center',
-                            scrollMarginTop: '100px'
-                        }}>
-                            <h2 style={{
-                                fontSize: '1.75rem',
-                                fontWeight: 700,
-                                color: '#fff',
-                                marginBottom: '40px',
-                                textAlign: 'center'
-                            }}>
-                                Intro
-                            </h2>
-                            <p style={{ 
-                                fontSize: '20px',
-                                marginBottom: '53px', 
-                                maxWidth: '800px', 
-                                marginLeft: 'auto', 
-                                marginRight: 'auto' 
-                            }}>
-                                {post.id === 'post-1' && post.description ? (
-                                    post.description.split('no more repeated conversation').map((part, index, array) => 
-                                        index === array.length - 1 ? part : (
-                                            <span key={index}>
-                                                {part}
-                                                <span style={{
-                                                    background: 'linear-gradient(120deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%)',
-                                                    padding: '2px 6px',
-                                                    borderRadius: '4px',
-                                                    fontWeight: 600,
-                                                    color: '#fff'
-                                                }}>
-                                                    no more repeated conversation
-                                                </span>
-                                            </span>
-                                        )
-                                    )
-                                ) : (
-                                    post.description || "Project description placeholder."
-                                )}
-                            </p>
-                        </div>
-                    )}
-
-                    {/* 6. Detailed Post Content (for projects with Post components) */}
-                    {PostContent && (
-                        <div style={{
-                            marginTop: post.id === 'post-6' ? '0' : '60px',
-                            paddingTop: post.id === 'post-6' ? '0' : '40px',
-                            borderTop: post.id === 'post-6' ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                            marginLeft: post.id === 'post-6' ? (isMobile ? '-16px' : '-40px') : '0',
-                            marginRight: post.id === 'post-6' ? (isMobile ? '-16px' : '-40px') : '0',
-                            paddingLeft: '0',
-                            paddingRight: '0'
-                        }}>
-                            <PostContent />
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* 6. Gallery / Process (fallback if no Post component) */}
-            {!PostContent && post.galleryImages && post.galleryImages.length > 0 && (
-                <div className="detail-gallery">
-                    <h3 style={{
-                        fontSize: '1.5rem',
-                        color: '#fff',
-                        marginBottom: '24px',
-                        borderLeft: '4px solid #fff',
-                        paddingLeft: '16px'
-                    }}>
-                        Process & Gallery
-                    </h3>
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                        gap: '24px'
-                    }}>
-                        {post.galleryImages.map((imgSrc, idx) => (
-                            <div key={idx} style={{
-                                position: 'relative',
-                                borderRadius: '8px',
-                                overflow: 'hidden',
-                                aspectRatio: idx % 3 === 0 ? '16/9' : '4/5', // Varied aspect ratios for masonry feel
-                                backgroundColor: '#1a1a1a'
-                            }}>
-                                <Image
-                                    src={getImageSrc(imgSrc)}
-                                    alt={`Gallery image ${idx + 1}`}
-                                    fill
-                                    style={{ objectFit: 'cover', transition: 'transform 0.5s ease' }}
-                                    className="gallery-image"
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Explore more projects section */}
-            {isPageView && (() => {
-                // Get 3 other projects (excluding current one)
-                // Use current post index to rotate through all projects
-                const currentIndex = posts.findIndex(p => p.id === post.id);
-                const otherPosts = posts
-                    .filter(p => p.id !== post.id)
-                    .slice(currentIndex) // Start from current index
-                    .concat(posts.filter(p => p.id !== post.id).slice(0, currentIndex)) // Wrap around
-                    .slice(0, 3);
-                
-                if (otherPosts.length === 0) return null;
-                
-                return (
-                    <section style={{
-                        marginTop: '80px',
-                        paddingTop: '60px',
-                        borderTop: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}>
-                        <h2 style={{
-                            fontSize: '1.75rem',
-                            fontWeight: 700,
-                            color: '#fff',
-                            marginBottom: '40px',
-                            textAlign: 'center'
-                        }}>
-                            Explore more projects
-                        </h2>
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-                            gap: isMobile ? '24px' : '32px',
-                            maxWidth: '1200px',
-                            margin: '0 auto'
-                        }}>
-                            {otherPosts.map((otherPost) => (
-                                <Link
-                                    key={otherPost.id}
-                                    href={`/projects/${otherPost.id}`}
-                                    style={{
-                                        textDecoration: 'none',
-                                        color: 'inherit',
-                                        display: 'block',
-                                        transition: 'transform 0.3s ease'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.transform = 'translateY(-4px)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.transform = 'translateY(0)';
-                                    }}
-                                >
-                                    <div style={{
-                                        borderRadius: '12px',
-                                        overflow: 'hidden',
-                                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
-                                    }}
-                                    >
-                                        <div style={{
-                                            position: 'relative',
-                                            width: '100%',
-                                            aspectRatio: '16/9',
-                                            overflow: 'hidden',
-                                            backgroundColor: '#1a1a1a'
-                                        }}>
-                                            <Image
-                                                src={getImageSrc(otherPost.thumbnail)}
-                                                alt={otherPost.title}
-                                                fill
-                                                style={{
-                                                    objectFit: 'cover',
-                                                    transition: 'transform 0.3s ease'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.currentTarget.style.transform = 'scale(1.05)';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.currentTarget.style.transform = 'scale(1)';
-                                                }}
-                                            />
-                                        </div>
-                                        <div style={{
-                                            padding: '20px'
-                                        }}>
-                                            <h3 style={{
-                                                fontSize: '1.1rem',
-                                                fontWeight: 600,
-                                                color: '#fff',
-                                                marginBottom: '8px',
-                                                marginTop: 0
-                                            }}>
-                                                {otherPost.title}
-                                            </h3>
-                                            {otherPost.description && (
-                                                <p style={{
-                                                    fontSize: '0.875rem',
-                                                    color: '#d0d0d0',
-                                                    lineHeight: '1.5',
-                                                    margin: 0,
-                                                    display: '-webkit-box',
-                                                    WebkitLineClamp: 2,
-                                                    WebkitBoxOrient: 'vertical',
-                                                    overflow: 'hidden'
-                                                }}>
-                                                    {otherPost.description}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </section>
-                );
-            })()}
-
-            <style jsx global>{`
-                .gallery-image:hover {
-                    transform: scale(1.05);
-                }
-            `}</style>
+        <div className="ed-hero__inner">
+          <span className="ed-kicker ed-hero__kicker" data-anim="slide-up">{kicker}</span>
+          <h1 className="ed-hero__mark" data-scrub-mark>{post.title}</h1>
+          {post.description && (
+            <p className="ed-hero__tag" data-split>{post.description.split('.')[0]}.</p>
+          )}
         </div>
-    );
+      </section>
+
+      {/* ─── HERO MEDIA (polaroid frame for video/thumb) ─── */}
+      {showHeroMedia && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '0 var(--ed-pad)',
+            marginBottom: 40,
+            position: 'relative',
+          }}
+        >
+          <figure
+            className="photo photo--tilt-l"
+            data-anim="rotate-in"
+            style={{ width: 'min(820px, 92%)' }}
+          >
+            <div className="photo__frame">
+              {videoUrl ? (
+                videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
+                  <iframe
+                    src={videoUrl}
+                    title={post.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video src={videoUrl} controls autoPlay muted loop />
+                )
+              ) : (
+                <Image src={getImageSrc(post.thumbnail)} alt={post.title} fill style={{ objectFit: 'cover' }} />
+              )}
+            </div>
+            <figcaption className="photo__caption">{post.videoTitle || post.title}</figcaption>
+          </figure>
+        </div>
+      )}
+
+      {/* ─── META STRIP — four hairline columns ─── */}
+      <div className="ed-meta">
+        <div className="ed-meta__col" data-anim="slide-up">
+          <span className="ed-meta__label">Role</span>
+          <p className="ed-meta__value">{post.role || 'Creative Technologist'}</p>
+        </div>
+        <div className="ed-meta__col" data-anim="slide-up">
+          <span className="ed-meta__label">Timeline</span>
+          <p className="ed-meta__value">{post.date}</p>
+        </div>
+        <div className="ed-meta__col" data-anim="slide-up">
+          <span className="ed-meta__label">Tools</span>
+          <div className="ed-meta__value ed-meta__tools">
+            {post.softwareTools?.map((tool) => (
+              <SoftwareIcon key={tool} name={tool} size={26} />
+            ))}
+          </div>
+        </div>
+        {post.features && post.features.length > 0 && (
+          <div className="ed-meta__col" data-anim="slide-up">
+            <span className="ed-meta__label">Features</span>
+            <div className="ed-meta__value ed-meta__features">
+              {post.features.map((f) => (
+                <span key={f} className="ed-meta__feature">{f}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ─── post-4's special two-video block ─── */}
+      {post.id === 'post-4' && (
+        <section id="videos" className="ed-section">
+          <span className="ed-kicker">SCREENINGS</span>
+          <h2 className="ed-section__title">Videos</h2>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr' : '1.5fr 1fr',
+              gap: isMobile ? 24 : 40,
+              alignItems: 'center',
+            }}
+          >
+            <figure className="photo photo--tilt-l">
+              <div className="photo__frame">
+                <iframe
+                  src={convertToEmbedUrl('https://www.youtube.com/watch?v=J0UV4jHnues')}
+                  title="Behind the scenes"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <figcaption className="photo__caption">Behind the scenes</figcaption>
+            </figure>
+            <figure className="photo photo--tilt-r">
+              <div className="photo__frame">
+                <iframe
+                  src={convertToEmbedUrl('https://www.youtube.com/watch?v=f7mk4TVj1jA')}
+                  title="Full length video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <figcaption className="photo__caption">Full length video</figcaption>
+            </figure>
+          </div>
+        </section>
+      )}
+
+      {/* ─── BODY: sidebar + main ─── */}
+      <div
+        style={{
+          display: 'flex',
+          maxWidth: 'var(--ed-max)',
+          margin: '0 auto',
+          padding: '0 var(--ed-pad)',
+          position: 'relative',
+        }}
+      >
+        {!isMobile && (
+          <div className="ed-sidebar-wrap">
+            <PostSidebar sections={getSections()} isPageView={isPageView} />
+          </div>
+        )}
+
+        <div style={{ flex: 1, minWidth: 0 }}>
+          {/* Post-2 special: two side-by-side videos before intro */}
+          {post.id === 'post-2' && post.videoUrls && post.videoUrls.length >= 2 && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                gap: 32,
+                margin: '60px 0',
+              }}
+            >
+              {post.videoUrls.slice(0, 2).map((u, idx) => {
+                const embed = convertToEmbedUrl(u);
+                const t = post.videoTitles?.[idx] || `${post.title} Video ${idx + 1}`;
+                const tilt = idx % 2 === 0 ? 'photo--tilt-l' : 'photo--tilt-r';
+                return (
+                  <figure key={idx} className={`photo ${tilt}`} data-anim="slide-up">
+                    <div className="photo__frame">
+                      {embed && (
+                        <iframe
+                          src={embed}
+                          title={t}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      )}
+                    </div>
+                    <figcaption className="photo__caption">{t}</figcaption>
+                  </figure>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Intro — segmented bouncy reveal */}
+          {post.id !== 'post-6' && post.description && (
+            <section id="intro" className="ed-intro">
+              <span className="ed-kicker ed-kicker--rust" style={{ marginBottom: 20, display: 'block' }}>
+                INTRO
+              </span>
+              {introSegments.map((segment, idx) => (
+                <p key={idx} className="ed-intro__body" data-split-lines>
+                  {post.id === 'post-1' && segment.includes('no more repeated conversation') ? (
+                    segment.split('no more repeated conversation').map((part, i, arr) =>
+                      i === arr.length - 1 ? (
+                        part
+                      ) : (
+                        <span key={i}>
+                          {part}
+                          <em>no more repeated conversation</em>
+                        </span>
+                      )
+                    )
+                  ) : (
+                    segment
+                  )}
+                </p>
+              ))}
+            </section>
+          )}
+
+          {PostContent && (
+            <div>
+              <PostContent />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ─── EXPLORE MORE ─── */}
+      {isPageView &&
+        (() => {
+          const currentIndex = posts.findIndex((p) => p.id === post.id);
+          const otherPosts = posts
+            .filter((p) => p.id !== post.id)
+            .slice(currentIndex)
+            .concat(posts.filter((p) => p.id !== post.id).slice(0, currentIndex))
+            .slice(0, 3);
+          if (otherPosts.length === 0) return null;
+          return (
+            <section className="ed-explore">
+              <div className="ed-explore__kicker">
+                <span className="ed-kicker">MORE WORK ↓</span>
+              </div>
+              <h2 className="ed-explore__title">Explore more</h2>
+              <div className="ed-explore__grid">
+                {otherPosts.map((p) => (
+                  <Link key={p.id} href={`/projects/${p.id}`} className="ed-explore__item">
+                    <figure className="photo">
+                      <div className="photo__frame">
+                        <Image src={getImageSrc(p.thumbnail)} alt={p.title} fill style={{ objectFit: 'cover' }} />
+                      </div>
+                      <figcaption className="photo__caption">{p.title}</figcaption>
+                    </figure>
+                    <h3 className="ed-explore__name">{p.title}</h3>
+                    {p.description && <p className="ed-explore__desc">{p.description}</p>}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          );
+        })()}
+    </div>
+  );
 }

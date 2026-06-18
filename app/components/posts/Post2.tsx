@@ -264,51 +264,6 @@ export default function Post2() {
             </p>
           </section>
 
-          {/* My Contributions Section */}
-          <section id="contributions" style={{ marginBottom: '72px', scrollMarginTop: '100px' }}>
-            <h2 style={{ 
-              fontSize: '1.75rem', 
-              fontWeight: 700, 
-              color: '#fff', 
-              marginBottom: '40px',
-              textAlign: 'center'
-            }}>
-              My Contributions
-            </h2>
-            <div style={{
-              maxWidth: '900px',
-              margin: '0 auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '24px'
-            }}>
-              {[
-                'make hand interaction of learning process',
-                'GameManager which manage the application experience, from learning to playful game testing',
-                'add microgesture to intergrate Speech to Text to drive live translation of Tutor\'s animation'
-              ].map((contribution, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: '20px',
-                    backgroundColor: 'rgba(255,255,255,0.03)',
-                    borderRadius: '12px',
-                    borderLeft: '4px solid rgba(255,255,255,0.3)'
-                  }}
-                >
-                  <p style={{
-                    fontSize: '1rem',
-                    lineHeight: '1.8',
-                    color: '#d0d0d0',
-                    margin: 0
-                  }}>
-                    {index + 1}. {contribution}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
           {/* Process Section */}
           <section id="process" style={{ marginBottom: '72px', scrollMarginTop: '100px' }}>
             <h2 style={{ 
@@ -715,6 +670,48 @@ export default function Post2() {
               }}>
                 Live ASL Translation Demonstration
               </p>
+            </div>
+          </section>
+
+          {/* My Contributions Section (moved to bottom) */}
+          <section id="contributions" className="ed-section" style={{ scrollMarginTop: '100px' }}>
+            <span className="ed-kicker ed-kicker--rust">CREDITS</span>
+            <h2 className="ed-section__title">My Contributions</h2>
+            <div style={{
+              maxWidth: '900px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px'
+            }}>
+              {[
+                'make hand interaction of learning process',
+                'GameManager which manages the application experience, from learning to playful game testing',
+                'add microgesture to integrate Speech-to-Text driving live translation of the tutor\'s animation'
+              ].map((contribution, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: '20px 24px',
+                    background: 'var(--bone)',
+                    border: '1px solid rgba(26, 20, 13, 0.12)',
+                    borderLeft: '4px solid var(--rust)',
+                    boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
+                  }}
+                >
+                  <p style={{
+                    fontFamily: 'var(--serif)',
+                    fontSize: '1.05rem',
+                    lineHeight: 1.6,
+                    color: 'var(--ink)',
+                    margin: 0,
+                  }}>
+                    <span style={{ fontFamily: 'var(--sans)', fontWeight: 500, letterSpacing: '0.18em', color: 'var(--rust)', marginRight: 10 }}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    {contribution}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
         </div>
