@@ -444,10 +444,21 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                   <Link key={p.id} href={`/projects/${p.id}`} className="ed-explore__item">
                     <figure className="photo">
                       <div className="photo__frame">
-                        <Image src={getImageSrc(p.thumbnail)} alt={p.title} fill style={{ objectFit: 'cover' }} />
+                        <Image
+                          src={getImageSrc(p.thumbnail)}
+                          alt={p.title}
+                          fill
+                          loading="lazy"
+                          sizes="(max-width: 900px) 100vw, 33vw"
+                          style={{ objectFit: 'cover' }}
+                        />
                       </div>
                       <figcaption className="photo__caption">{p.title}</figcaption>
                     </figure>
+                    {(() => {
+                      const cat = p.tags?.find((t) => t.toLowerCase() !== 'featured');
+                      return cat ? <span className="ed-explore__kicker-line">{cat.toUpperCase()}</span> : null;
+                    })()}
                     <h3 className="ed-explore__name">{p.title}</h3>
                     {p.description && <p className="ed-explore__desc">{p.description}</p>}
                   </Link>

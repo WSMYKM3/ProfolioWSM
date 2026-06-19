@@ -142,17 +142,26 @@ small,
 .top-nav-wrapper {
     position: fixed;
     top: 24px;
-    right: 40px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1000;
     display: flex;
     align-items: center;
     gap: 24px;
 }
 
+/* Social icons floated to the top-right, separate from the centered nav pill.
+   Use !important so the legacy mobile rule that columns .top-nav-wrapper
+   doesn't stack the icons. */
 .top-nav-social-icons {
-    display: flex;
-    gap: 16px;
+    position: fixed !important;
+    top: 18px;
+    right: 24px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 14px;
     align-items: center;
+    z-index: 1001;
 }
 
 .top-nav-social-icon {
@@ -174,58 +183,120 @@ small,
     height: 24px;
 }
 
-/* Frosted-glass pill bar (glassmorphism) */
+/* ─── Coparadiso-inspired pill: dark brown, gold serif, yellow CTA ─── */
 .top-nav {
+    --nav-brown: #2f1d10;
+    --nav-gold: #f3c01e;
+    --nav-gold-soft: #ffd54a;
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 10px 14px 10px 18px;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(22px) saturate(160%);
-    -webkit-backdrop-filter: blur(22px) saturate(160%);
-    border: 1px solid rgba(255, 255, 255, 0.38);
+    gap: 8px;
+    padding: 4px 4px 4px 10px;
+    background: var(--nav-brown);
+    border: 0;
     border-radius: 9999px;
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.35),
-        0 8px 32px rgba(0, 0, 0, 0.2);
-    font-family: 'Geist', var(--font-inter), system-ui, sans-serif;
+        inset 0 1px 0 rgba(255, 215, 130, 0.10),
+        0 6px 18px rgba(26, 12, 6, 0.28);
+    font-family: 'Fraunces', 'Times New Roman', serif;
+    min-width: min(720px, 82vw);
+}
+
+.top-nav-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+}
+.top-nav-logo:hover { transform: rotate(-6deg) scale(1.05); }
+.top-nav-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.top-nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 4px;
+    flex: 1;
+    padding: 0 8px;
 }
 
 .top-nav-link {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--nav-gold);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-    font-family: inherit;
-    padding: 8px 14px;
-    border-radius: 9999px;
-}
-
-.top-nav-link:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.top-nav-link::after {
-    display: none;
-}
-
-/* Active item: inner frosted pill (reference-style lift) */
-.top-nav-link.active {
-    color: rgba(38, 32, 28, 0.95);
+    font-family: 'Fraunces', 'Times New Roman', serif;
+    font-style: italic;
     font-weight: 600;
-    background: rgba(255, 255, 255, 0.48);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.85),
-        0 1px 2px rgba(0, 0, 0, 0.08);
+    font-size: 0.95rem;
+    letter-spacing: 0.005em;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    transition: color 0.2s ease, background 0.2s ease;
+    white-space: nowrap;
+}
+.top-nav-link:hover {
+    color: var(--nav-gold-soft);
+    background: rgba(243, 192, 30, 0.08);
+}
+.top-nav-link::after { display: none; }
+.top-nav-link.active {
+    color: var(--nav-gold-soft);
+    background: rgba(243, 192, 30, 0.14);
 }
 
-.top-nav-link.active:hover {
-    color: rgba(28, 24, 20, 0.98);
-    background: rgba(255, 255, 255, 0.55);
+/* Yellow CTA pill on the right */
+.top-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    background: var(--nav-gold);
+    color: var(--nav-brown);
+    font-family: 'Fraunces', 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 7px 18px;
+    border-radius: 9999px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+}
+.top-nav-cta:hover {
+    background: var(--nav-gold-soft);
+    transform: translateY(-1px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        0 4px 14px rgba(26, 12, 6, 0.25);
+}
+.top-nav-cta.active {
+    background: var(--nav-gold-soft);
+}
+
+@media (max-width: 768px) {
+    .top-nav {
+        min-width: 0;
+        width: calc(100vw - 24px);
+        padding: 3px 3px 3px 8px;
+        gap: 4px;
+    }
+    .top-nav-logo { width: 30px; height: 30px; }
+    .top-nav-link {
+        font-size: 0.78rem;
+        padding: 5px 8px;
+    }
+    .top-nav-cta {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    .top-nav-links { padding: 0 2px; gap: 0; }
 }
 
 /* Main Content */
@@ -1118,26 +1189,30 @@ header h1 {
 
 @media (max-width: 768px) {
     .top-nav-wrapper {
-        position: sticky;
-        top: 0;
-        right: 0;
-        left: 0;
-        flex-direction: column;
+        /* Stay floating + centered on mobile too — don't revert to legacy stacked sticky bar */
+        position: fixed;
+        top: 12px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        flex-direction: row;
         gap: 8px;
         align-items: center;
-        padding: 12px;
-        background-color: rgba(5, 5, 5, 0.85);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        padding: 0;
+        background-color: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 
     .top-nav-social-icons {
         gap: 12px;
+        top: 12px;
+        right: 12px;
     }
 
     .top-nav-social-icon svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
     }
 
     .top-nav {
@@ -3236,11 +3311,11 @@ header h1 {
 .about-video {
     position: relative;
     flex: 0 0 auto;
-    width: min(100%, 520px);
-    max-width: 520px;
+    width: min(100%, 624px);
+    max-width: 624px;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 14px;
     margin-left: auto;
     align-self: center;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
@@ -3252,6 +3327,7 @@ header h1 {
     width: 100%;
     height: 100%;
     border: none;
+    border-radius: inherit;
 }
 
 /* Filter Section */
@@ -6110,16 +6186,15 @@ header h1 {
     color: rgba(107, 81, 53, 0.62);
 }
 
-/* ─── polaroid frame ─── */
+/* ─── soft filleted-corner media frame
+   (replaces the older polaroid look — no cream paper backing, no padding,
+   just rounded corners + a faint soft drop shadow on the media itself) ─── */
 .editorial .photo {
-    display: inline-block;
-    background: var(--bone);
-    padding: 14px 14px 42px;
-    border: 1px solid rgba(26, 20, 13, 0.10);
-    box-shadow:
-        0 1px 1px rgba(26, 20, 13, 0.10),
-        16px 22px 0 rgba(26, 20, 13, 0.06),
-        0 8px 28px rgba(26, 20, 13, 0.18);
+    display: block;
+    background: transparent;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
     position: relative;
     max-width: 100%;
 }
@@ -6128,6 +6203,10 @@ header h1 {
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--ink);
+    border-radius: 24px;
+    box-shadow:
+        0 1px 2px rgba(26, 20, 13, 0.08),
+        0 12px 30px rgba(26, 20, 13, 0.14);
 }
 .editorial .photo__frame--3by4 { aspect-ratio: 4 / 3; }
 .editorial .photo__frame--square { aspect-ratio: 1 / 1; }
@@ -6140,11 +6219,16 @@ header h1 {
     height: 100%;
     border: 0;
     object-fit: cover;
+    border-radius: inherit;
+}
+.editorial .photo__frame--contain {
+    background: transparent;
+    box-shadow: none;
 }
 .editorial .photo__frame--contain img,
 .editorial .photo__frame--contain video {
     object-fit: contain;
-    background: var(--cream-aged);
+    background: transparent;
 }
 .editorial .photo__caption {
     font-family: var(--serif);
@@ -6152,24 +6236,22 @@ header h1 {
     font-size: 15px;
     line-height: 1.4;
     color: var(--muted);
-    margin-top: 12px;
+    margin-top: 14px;
     text-align: center;
 }
-.editorial .photo--tilt-l { transform: rotate(-1.8deg); }
-.editorial .photo--tilt-r { transform: rotate(1.6deg); }
-.editorial .photo--lift  { transform: translateY(-24px); }
+/* Tilt modifiers are now no-ops — kept so existing markup still resolves
+   but no rotation is applied. */
+.editorial .photo--tilt-l,
+.editorial .photo--tilt-r { transform: none; }
+.editorial .photo--lift   { transform: translateY(-12px); }
 
-/* asymmetric grid rhythm via :nth-child */
+/* Subtle asymmetric drift only — no rotations on the filleted frames. */
 .editorial .ed-grid-asym > * { transition: transform 0.4s ease, box-shadow 0.4s ease; }
-.editorial .ed-grid-asym > *:nth-child(3n+1) { transform: rotate(-1.4deg) translateY(20px); }
-.editorial .ed-grid-asym > *:nth-child(3n+2) { transform: rotate(0.8deg)  translateY(-10px); }
-.editorial .ed-grid-asym > *:nth-child(3n+3) { transform: rotate(-0.6deg) translateY(40px); }
+.editorial .ed-grid-asym > *:nth-child(3n+1) { transform: translateY(12px); }
+.editorial .ed-grid-asym > *:nth-child(3n+2) { transform: translateY(-6px); }
+.editorial .ed-grid-asym > *:nth-child(3n+3) { transform: translateY(24px); }
 .editorial .ed-grid-asym > *:hover {
-    transform: rotate(0deg) translateY(-6px);
-    box-shadow:
-        0 2px 2px rgba(26, 20, 13, 0.12),
-        20px 28px 0 rgba(26, 20, 13, 0.08),
-        0 14px 40px rgba(26, 20, 13, 0.22);
+    transform: translateY(-6px);
     z-index: 2;
 }
 
@@ -6414,7 +6496,8 @@ header h1 {
 }
 
 /* ─── shell — top of project page ─── */
-.editorial .project-detail-main {
+.editorial .project-detail-main,
+.editorial .main-content {
     padding: 0 !important;
     scroll-snap-type: none !important;
     scroll-behavior: smooth;
@@ -6422,6 +6505,9 @@ header h1 {
        so wheel scrolling works as it always did on this site. EditorialMotion proxies
        ScrollTrigger to this scroller. */
 }
+/* Also disable mandatory snap on any descendant scrollable child so long-form
+   editorial sections never jank under fast wheel/touch on mobile. */
+.editorial * { scroll-snap-type: none !important; scroll-snap-align: none !important; }
 .editorial .project-detail-content-wrapper {
     max-width: 100%;
     padding: 0;
@@ -6480,22 +6566,33 @@ header h1 {
     width: 100%;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
-.editorial .ed-explore__item:nth-child(3n+1) .photo { transform: rotate(-1.4deg); }
-.editorial .ed-explore__item:nth-child(3n+2) .photo { transform: rotate(0.7deg) translateY(-12px); }
-.editorial .ed-explore__item:nth-child(3n+3) .photo { transform: rotate(-0.4deg) translateY(20px); }
+.editorial .ed-explore__item:nth-child(3n+1) .photo { transform: translateY(0); }
+.editorial .ed-explore__item:nth-child(3n+2) .photo { transform: translateY(-10px); }
+.editorial .ed-explore__item:nth-child(3n+3) .photo { transform: translateY(14px); }
 .editorial .ed-explore__item:hover .photo {
-    transform: rotate(0deg) translateY(-8px);
+    transform: translateY(-8px);
+}
+.editorial .ed-explore__item:hover .photo__frame {
     box-shadow:
-        0 2px 2px rgba(26, 20, 13, 0.12),
-        20px 28px 0 rgba(26, 20, 13, 0.08),
-        0 16px 44px rgba(26, 20, 13, 0.22);
+        0 2px 3px rgba(26, 20, 13, 0.10),
+        0 18px 42px rgba(26, 20, 13, 0.20);
+}
+.editorial .ed-explore__kicker-line {
+    display: block;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin: 16px 0 6px;
 }
 .editorial .ed-explore__name {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 600;
     font-size: 22px;
-    margin: 16px 0 8px;
+    margin: 0 0 8px;
     color: var(--ink);
 }
 .editorial .ed-explore__desc {
@@ -6664,3 +6761,380 @@ header h1 {
 .editorial .sketch-underline.green { color: var(--olive); }
 .editorial .sketch-underline.purple { color: var(--rust-deep); }
 .editorial .sketch-underline svg path { stroke: currentColor; }
+
+/* ============================================================
+ * HOME WHEEL — scroll-driven 3D project carousel (couralweb-derived).
+ * Editorial palette: paper-warm bg, ink type, rust kicker accent.
+ * ============================================================ */
+
+/* The home page is a long scroll container so the wheel section can pin.
+   The global `html, body { height: 100%; overflow-y: auto }` traps overflow
+   inside body — html stays viewport-tall and the page can't scroll.
+   When HomeWheel mounts it adds `.home-wheel-active` to html + body; we
+   release the height/overflow constraints so the document scrolls and
+   `position: sticky` works inside the wheel section. */
+html.home-wheel-active,
+body.home-wheel-active {
+    height: auto !important;
+    /* `clip` prevents horizontal scrollbars without creating a scroll
+       container — `hidden` would break `position: sticky` on descendants. */
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+}
+.home-wheel-layout.editorial.layout {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    min-height: 100vh;
+}
+.home-wheel-page {
+    flex: 1;
+    width: 100%;
+    overflow: visible;
+    height: auto;
+    padding: 0;
+    /* Pale sage-cream from the couralweb reference, replacing the warm yellow
+       paper used on project pages. */
+    background: #f4f6f2;
+    --home-paper: #f4f6f2;
+}
+
+.wheel-section {
+    position: relative;
+    height: calc(var(--project-count, 72) * 105vh);
+    min-height: 520vh;
+}
+
+.editorial .showcase {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    min-height: 620px;
+    overflow: hidden;
+    isolation: isolate;
+    background: #f4f6f2;
+}
+
+/* ─── Intro chip in the top-right corner. Fades out as the wheel takes over. ─── */
+.home-wheel-intro {
+    position: absolute;
+    z-index: 11;
+    top: clamp(80px, 12vh, 120px);
+    right: clamp(20px, 4vw, 56px);
+    width: min(320px, 42vw);
+    text-align: right;
+    pointer-events: auto;
+    transition: opacity 0.2s linear;
+}
+.home-wheel-intro__kicker {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin: 0 0 10px;
+}
+.home-wheel-intro__tag {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(14px, 1.05vw, 18px);
+    line-height: 1.45;
+    color: var(--shadow-warm);
+    margin: 0;
+}
+
+/* ─── Stage copy: kicker + active project title, top-center.
+   Typography matches the couralweb reference: Georgia for the title and
+   counter, a small sage-green uppercase kicker above. The block sits
+   well below the floating nav pill so the kicker is always visible. ─── */
+.editorial .stage-copy {
+    position: absolute;
+    z-index: 10;
+    top: clamp(96px, 13vh, 150px);
+    left: 50%;
+    width: min(56vw, 600px);
+    max-width: calc(100vw - 36px);
+    text-align: center;
+    transform: translateX(-50%);
+    pointer-events: none;
+    transition: opacity 0.2s linear;
+    opacity: 1;
+}
+.editorial .project-kicker {
+    margin: 0 0 0.7rem;
+    color: var(--olive);
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.editorial .stage-copy h2 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(1.9rem, 3.8vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: none;
+}
+
+/* ─── Wheel shell + orbital line ─── */
+.editorial .wheel-shell {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    perspective: 1200px;
+}
+.editorial .orbit-line {
+    width: min(82vw, 1320px);
+    aspect-ratio: 2.15 / 1;
+    border: 1px solid rgba(26, 20, 13, 0.18);
+    border-radius: 50%;
+    opacity: 0.34;
+    transform: translateY(16vh) rotate(-7deg);
+}
+.editorial .project-wheel {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+}
+
+/* ─── Individual project card — square corners, hairline border,
+   and the card sizes itself to the image's natural resolution.
+   1.5x bigger than the previous baseline. ─── */
+.editorial .project-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(210px, 24vw, 390px);
+    height: auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.52);
+    border-radius: 0;
+    background: var(--ink);
+    box-shadow: 0 22px 50px rgba(33, 27, 20, 0.28);
+    transform-origin: 50% 70%;
+    will-change: transform, opacity, filter;
+    cursor: pointer;
+    transition: filter 0.25s ease;
+    outline: none;
+}
+.editorial .project-card:hover,
+.editorial .project-card:focus-visible {
+    filter: saturate(1.12) brightness(1.06);
+}
+.editorial .project-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Show the image at its natural aspect ratio instead of cropping. */
+    object-fit: contain;
+    transform: none;
+}
+.editorial .project-card img.is-hidden {
+    opacity: 0;
+}
+/* Stronger bottom gradient so the index + category label stay legible */
+.editorial .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, transparent 48%, rgba(0, 0, 0, 0.62) 100%),
+        linear-gradient(90deg, rgba(255, 245, 220, 0.08), transparent 34%);
+    pointer-events: none;
+}
+.editorial .project-card__label {
+    position: absolute;
+    z-index: 2;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    color: #fff5dc;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+.editorial .project-card__label span:last-child {
+    color: var(--tungsten);
+}
+
+/* ─── Showreel video (no TV frame); two short stand legs underneath.
+   Sits just above the footer's progress line. ─── */
+.home-wheel-tv {
+    position: absolute;
+    z-index: 12;
+    left: 50%;
+    bottom: clamp(50px, 6vh, 80px);
+    transform: translateX(-50%);
+    width: clamp(240px, 26.5vw, 360px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+}
+.home-wheel-tv__video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 12px;
+    background: #000;
+    display: block;
+    box-shadow: 0 18px 42px rgba(33, 27, 20, 0.24);
+}
+.home-wheel-tv__stand {
+    width: 38%;
+    height: auto;
+    color: var(--ink);
+    margin-top: -1px;
+    overflow: visible;
+}
+
+@media (max-width: 780px) {
+    .home-wheel-tv {
+        bottom: clamp(95px, 12vh, 140px);
+        width: clamp(204px, 50vw, 288px);
+    }
+}
+
+/* ─── Footer (counter, progress, caption) ─── */
+.editorial .project-footer {
+    position: absolute;
+    z-index: 9;
+    left: clamp(18px, 5vw, 76px);
+    right: clamp(18px, 5vw, 76px);
+    bottom: clamp(16px, 3vh, 34px);
+    display: grid;
+    grid-template-columns: max-content minmax(120px, 1fr) minmax(18ch, 36ch);
+    align-items: end;
+    gap: clamp(16px, 2.8vw, 40px);
+}
+.editorial .counter {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 4rem);
+    line-height: 0.85;
+    color: var(--ink);
+}
+.editorial .slash {
+    color: var(--muted);
+    padding-inline: 0.08em;
+}
+.editorial .progress-track {
+    height: 2px;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+    background: rgba(26, 20, 13, 0.18);
+}
+.editorial .progress-track span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+.editorial .project-footer p {
+    margin: 0;
+    color: var(--shadow-warm);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(0.95rem, 1.05vw, 1.1rem);
+    line-height: 1.45;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 780px) {
+    .editorial .showcase { min-height: 560px; }
+    .editorial .stage-copy {
+        top: 86px;
+        width: calc(100vw - 32px);
+    }
+    .editorial .stage-copy h2 {
+        font-size: clamp(2rem, 9vw, 3rem);
+    }
+    .home-wheel-intro {
+        top: 72px;
+        right: 16px;
+        width: min(220px, 60vw);
+    }
+    .editorial .orbit-line {
+        width: 120vw;
+        transform: translateY(8vh) rotate(-10deg);
+    }
+    /* Cards: 1.5x bigger than the previous mobile baseline, but capped
+       so they never spill past the viewport on phones. */
+    .editorial .project-card {
+        width: clamp(220px, 72vw, 360px);
+    }
+    .editorial .project-card__label {
+        font-size: 11px;
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+    }
+    .editorial .project-footer {
+        grid-template-columns: max-content 1fr;
+        align-items: center;
+    }
+    .editorial .project-footer p {
+        grid-column: 1 / -1;
+        max-width: 30ch;
+    }
+}
+
+/* Phones: a slightly tighter cap so a single card doesn't exceed the
+   visible viewport edge during orbit. */
+@media (max-width: 480px) {
+    .editorial .project-card {
+        width: clamp(200px, 78vw, 320px);
+    }
+}
+
+/* ─── Reduced-motion fallback: flat vertical list ─── */
+@media (prefers-reduced-motion: reduce) {
+    .wheel-section { height: auto !important; min-height: 0 !important; }
+    .editorial .showcase {
+        position: relative;
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        padding: 60px 24px 80px;
+    }
+    .editorial .home-wheel-intro {
+        position: relative;
+        inset: auto;
+        height: auto;
+        padding: 80px 24px 40px;
+        opacity: 1 !important;
+    }
+    .editorial .stage-copy { display: none; }
+    .editorial .wheel-shell { position: relative; inset: auto; display: block; }
+    .editorial .orbit-line { display: none; }
+    .editorial .project-wheel { position: relative; inset: auto; }
+    .editorial .project-wheel.reduce-motion .project-card,
+    .editorial .project-card {
+        position: relative;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+        margin: 0 auto 32px;
+        width: min(420px, 90vw);
+    }
+    .editorial .project-footer { position: relative; inset: auto; margin-top: 40px; }
+}

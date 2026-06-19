@@ -1,30 +1,28 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+function getImgSrc(src: string): string {
+  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
+}
+
 export default function TopNav() {
   const pathname = usePathname();
-  
-  // Helper function to check if a link is active
+
   const isActive = (href: string) => {
-    if (href === '/') {
-      // About Me page is the home page
-      return pathname === '/';
-    }
-    if (href === '/work') {
-      // Work page can be "/work" or "/work/[slug]"
-      return pathname === '/work' || pathname.startsWith('/work/');
-    }
-    // For other links, check exact match or if pathname starts with the href
+    if (href === '/') return pathname === '/';
+    if (href === '/work') return pathname === '/work' || pathname.startsWith('/work/');
     return pathname === href || pathname.startsWith(href + '/');
   };
 
   return (
-    <div className="top-nav-wrapper">
+    <>
       <div className="top-nav-social-icons">
-        <a 
-          href="https://github.com/WSMYKM3" 
+        <a
+          href="https://github.com/WSMYKM3"
           target="_blank" 
           rel="noopener noreferrer"
           className="top-nav-social-icon"
@@ -57,39 +55,37 @@ export default function TopNav() {
           </svg>
         </a>
       </div>
-      <nav className="top-nav">
-        <Link 
-          href="/" 
-          className={`top-nav-link ${isActive('/') ? 'active' : ''}`}
-        >
-          About Me
+      <div className="top-nav-wrapper">
+      <nav className="top-nav" aria-label="Primary">
+        <Link href="/" className="top-nav-logo" aria-label="Home">
+          <Image
+            src={getImgSrc('/cherry_logo_clean_transparent.png')}
+            alt="Cherry"
+            width={56}
+            height={56}
+            priority
+          />
         </Link>
-        <Link 
-          href="/work" 
-          className={`top-nav-link ${isActive('/work') ? 'active' : ''}`}
-        >
-          Work
-        </Link>
-        <Link 
-          href="/daily-practice" 
-          className={`top-nav-link ${isActive('/daily-practice') ? 'active' : ''}`}
-        >
-          Explorations
-        </Link>
-        <Link 
-          href="/resume" 
-          className={`top-nav-link ${isActive('/resume') ? 'active' : ''}`}
-        >
-          Resume
-        </Link>
-        <Link 
-          href="/contact" 
-          className={`top-nav-link ${isActive('/contact') ? 'active' : ''}`}
-        >
+        <div className="top-nav-links">
+          <Link href="/" className={`top-nav-link ${isActive('/') ? 'active' : ''}`}>
+            About Me
+          </Link>
+          <Link href="/work" className={`top-nav-link ${isActive('/work') ? 'active' : ''}`}>
+            Work
+          </Link>
+          <Link href="/daily-practice" className={`top-nav-link ${isActive('/daily-practice') ? 'active' : ''}`}>
+            Explorations
+          </Link>
+          <Link href="/resume" className={`top-nav-link ${isActive('/resume') ? 'active' : ''}`}>
+            Resume
+          </Link>
+        </div>
+        <Link href="/contact" className={`top-nav-cta ${isActive('/contact') ? 'active' : ''}`}>
           Contact
         </Link>
       </nav>
-    </div>
+      </div>
+    </>
   );
 }
 
