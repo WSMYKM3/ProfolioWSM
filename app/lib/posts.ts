@@ -130,20 +130,20 @@ export const posts: Post[] = [
     role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)",
     shortDescription: "A real-time AI mirror that listens, responds, and reflects the user through voice-driven interaction and digital embodiment.",
     sections: [
+      { id: "live-scene", label: "Live Scene" },
       { id: "achievement", label: "Achievement" },
-      { id: "tools", label: "Tools" },
-      { id: "installation-draft", label: "Installation Draft" },
       {
         id: "process",
         label: "Process",
         subsections: [
+          { id: "installation-draft", label: "Installation Draft" },
           { id: "process-stage1", label: "Stage 1" },
           { id: "process-stage2", label: "Stage 2" },
           { id: "process-stage3", label: "Stage 3" },
           { id: "process-stage4", label: "Stage 4" }
         ]
       },
-      { id: "contributions", label: "My Contributions", subsections: [{ id: "live-scene", label: "Live Scene" }] }
+      { id: "contributions", label: "My Contributions" }
     ]
   },
   // 第二行（从左到右）

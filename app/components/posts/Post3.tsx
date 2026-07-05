@@ -5,6 +5,7 @@ import {
   EditorialSubtitle,
   MediaFrame,
   MediaGrid,
+  MediaStrip,
   MediaGridItem,
   useImageEnlarger,
   useSketchUnderlineReveal,
@@ -67,9 +68,16 @@ const STAGE4_ITEMS: MediaGridItem[] = [
 ];
 
 const LIVE_SCENE_ITEMS: MediaGridItem[] = [
-  { path: '/IandAI/installation1.jpg', description: 'I & AI: MIRROR — Installation 1' },
-  { path: '/IandAI/installation2.jpg', description: 'I & AI: MIRROR — Installation 2' },
-  { path: '/IandAI/installation3.jpg', description: 'I & AI: MIRROR — Installation 3' },
+  { path: '/IandAI/installation1.jpg' },
+  { path: '/IandAI/installation2.jpg' },
+  { path: '/IandAI/installation3.jpg' },
+  { path: '/IandAI/speak.jpg' },
+  { path: '/IandAI/twogirls.jpeg' },
+  { path: '/IandAI/audience.jpg' },
+  { path: '/IandAI/watch.jpg' },
+  { path: '/IandAI/hands.jpeg' },
+  { path: '/IandAI/sofa.jpg' },
+  { path: '/IandAI/p.jpg' },
 ];
 
 const CONTRIBUTIONS = [
@@ -104,6 +112,79 @@ export default function Post3() {
       {overlay}
 
       <div className="post-content">
+        {/* ─── Live Scene ─── */}
+        <EditorialSection id="live-scene" title="Live Scene" kickerVariant="rust">
+          <MediaStrip
+            items={LIVE_SCENE_ITEMS}
+            idPrefix="live-scene"
+            onItemClick={handleImageClick}
+          />
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              gap: 20,
+              marginTop: 40,
+              maxWidth: 900,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
+            {STATS.map((stat, index) => (
+              <div
+                key={stat.title}
+                data-anim="slide-up"
+                style={{
+                  flex: 1,
+                  padding: 24,
+                  background: 'var(--bone)',
+                  border: '1px solid rgba(26, 20, 13, 0.16)',
+                  boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
+                  minWidth: 0,
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: 'var(--sans)',
+                    fontSize: '0.85rem',
+                    fontWeight: 600,
+                    color: 'var(--rust)',
+                    marginBottom: 12,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.18em',
+                  }}
+                >
+                  ↓ {stat.title}
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'var(--serif)',
+                    fontStyle: 'italic',
+                    fontSize: '2.6rem',
+                    fontWeight: 700,
+                    color: 'var(--ink)',
+                    lineHeight: 1.15,
+                  }}
+                >
+                  <span className={`sketch-underline ${index === 0 ? 'orange' : 'blue'}`}>
+                    {stat.value}
+                    <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                      <path
+                        d={index === 0 ? 'M 2 5 Q 50 8, 100 4 T 198 6' : 'M 3 4 Q 60 9, 120 3 Q 160 7, 197 5'}
+                        pathLength="1"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1rem', color: 'var(--muted)', marginTop: 4 }}>
+                  {stat.unit}
+                </div>
+              </div>
+            ))}
+          </div>
+        </EditorialSection>
+
         {/* ─── Achievement ─── */}
         <EditorialSection id="achievement" kicker="CHAPTER 01" title="Achievement" kickerVariant="rust">
           <p style={bodyStyle}>
@@ -126,41 +207,9 @@ export default function Post3() {
           </p>
         </EditorialSection>
 
-        {/* ─── Tools ─── */}
-        <EditorialSection id="tools" kicker="CHAPTER 02" title="Tools">
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 16,
-              justifyContent: 'center',
-              maxWidth: 800,
-              margin: '0 auto',
-            }}
-          >
-            {['Unreal Engine (C++)', 'TouchDesigner', 'Blender', 'Python'].map((tool, index) => (
-              <span
-                key={tool}
-                data-anim="pop"
-                style={{
-                  padding: '12px 24px',
-                  background: 'var(--bone)',
-                  border: '1px solid rgba(26, 20, 13, 0.16)',
-                  boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
-                  color: 'var(--ink)',
-                  fontFamily: 'var(--serif)',
-                  fontSize: '1.05rem',
-                  fontStyle: 'italic',
-                }}
-              >
-                {tool}
-              </span>
-            ))}
-          </div>
-        </EditorialSection>
-
-        {/* ─── Installation Draft ─── */}
-        <EditorialSection id="installation-draft" kicker="CHAPTER 03" title="Installation Draft" kickerVariant="rust">
+        {/* ─── Process ─── */}
+        <EditorialSection id="process" kicker="CHAPTER 02" title="Process">
+          <EditorialSubtitle id="installation-draft">Installation Draft</EditorialSubtitle>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <MediaFrame
               src="/IandAI/Draft.png"
@@ -173,11 +222,8 @@ export default function Post3() {
               onClick={() => handleImageClick('/IandAI/Draft.png', 'Installation Draft Design')}
             />
           </div>
-        </EditorialSection>
 
-        {/* ─── Process ─── */}
-        <EditorialSection id="process" kicker="CHAPTER 04" title="Process">
-          <EditorialSubtitle id="process-stage1">
+          <EditorialSubtitle id="process-stage1" style={{ marginTop: 80 }}>
             Stage 1 — Touchdesigner–Unreal Engine Communication Prototype
           </EditorialSubtitle>
           <MediaGrid items={STAGE1_ITEMS} isMobile={isMobile} idPrefix="stage1" onItemClick={handleImageClick} />
@@ -219,74 +265,6 @@ export default function Post3() {
                   </span>
                   {line}
                 </p>
-              </div>
-            ))}
-          </div>
-
-          <EditorialSubtitle id="live-scene" style={{ marginTop: 80 }}>
-            Live Scene
-          </EditorialSubtitle>
-          <MediaGrid
-            items={LIVE_SCENE_ITEMS}
-            columns={3}
-            isMobile={isMobile}
-            idPrefix="live-scene"
-            onItemClick={handleImageClick}
-          />
-
-          {/* Stats cards */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
-              gap: 20,
-              marginTop: 40,
-              maxWidth: 900,
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
-            {STATS.map((stat) => (
-              <div
-                key={stat.title}
-                data-anim="slide-up"
-                style={{
-                  flex: 1,
-                  padding: 24,
-                  background: 'var(--bone)',
-                  border: '1px solid rgba(26, 20, 13, 0.16)',
-                  boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
-                  minWidth: 0,
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: 'var(--sans)',
-                    fontSize: '0.85rem',
-                    fontWeight: 600,
-                    color: 'var(--rust)',
-                    marginBottom: 12,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.18em',
-                  }}
-                >
-                  ↓ {stat.title}
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'var(--serif)',
-                    fontStyle: 'italic',
-                    fontSize: '2.6rem',
-                    fontWeight: 700,
-                    color: 'var(--ink)',
-                    lineHeight: 1.15,
-                  }}
-                >
-                  {stat.value}
-                </div>
-                <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: '1rem', color: 'var(--muted)', marginTop: 4 }}>
-                  {stat.unit}
-                </div>
               </div>
             ))}
           </div>

@@ -2,6 +2,7 @@ export { default as EditorialSection } from './EditorialSection';
 export { default as EditorialSubtitle } from './EditorialSubtitle';
 export { default as MediaFrame } from './MediaFrame';
 export { default as MediaGrid } from './MediaGrid';
+export { default as MediaStrip } from './MediaStrip';
 export type { MediaGridItem } from './MediaGrid';
 export type { MediaFrameProps, MediaFrameVariant } from './MediaFrame';
 export { useImageEnlarger } from './hooks/useImageEnlarger';

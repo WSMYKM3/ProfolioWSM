@@ -4,7 +4,8 @@ import MediaFrame, { MediaFrameVariant } from './MediaFrame';
 
 export interface MediaGridItem {
   path: string;
-  description: string;
+  description?: string;
+  alt?: string;
   isVideo?: boolean;
   isYouTube?: boolean;
   variant?: MediaFrameVariant;
@@ -21,6 +22,8 @@ interface MediaGridProps {
   idPrefix?: string;
   gap?: number;
   className?: string;
+  /** Hide captions under each frame (alt text is still set for accessibility). */
+  hideCaptions?: boolean;
 }
 
 /**
@@ -36,6 +39,7 @@ export default function MediaGrid({
   idPrefix = 'media',
   gap,
   className,
+  hideCaptions = false,
 }: MediaGridProps) {
   const gridGap = gap ?? (isMobile ? 40 : 60);
   return (
@@ -50,19 +54,25 @@ export default function MediaGrid({
     >
       {items.map((item, index) => {
         const dataAnim = index % 2 === 0 ? 'slide-left' : 'slide-right';
+        const alt =
+          item.alt ??
+          item.description ??
+          item.path.split('/').pop()?.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') ??
+          'Media';
+        const caption = hideCaptions ? undefined : item.description;
         return (
           <MediaFrame
             key={`${idPrefix}-${index}`}
             src={item.path}
-            alt={item.description}
-            caption={item.description}
+            alt={alt}
+            caption={caption}
             isVideo={item.isVideo}
             isYouTube={item.isYouTube}
             variant={item.variant ?? 'contain'}
             dataAnim={dataAnim}
             onClick={
               onItemClick
-                ? () => onItemClick(item.path, item.description, item.isVideo)
+                ? () => onItemClick(item.path, item.description ?? alt, item.isVideo)
                 : undefined
             }
           />

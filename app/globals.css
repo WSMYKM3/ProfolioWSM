@@ -6248,6 +6248,72 @@ header h1 {
 .editorial .photo--tilt-r { transform: none; }
 .editorial .photo--lift   { transform: translateY(-12px); }
 
+/* ─── horizontal media strip (live scene gallery) ─── */
+.editorial .ed-media-strip {
+    position: relative;
+    margin-top: 32px;
+}
+.editorial .ed-media-strip__track {
+    display: flex;
+    gap: clamp(16px, 2vw, 24px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(26, 20, 13, 0.22) transparent;
+    padding: 4px 2px 14px;
+}
+.editorial .ed-media-strip__track::-webkit-scrollbar {
+    height: 6px;
+}
+.editorial .ed-media-strip__track::-webkit-scrollbar-thumb {
+    background: rgba(26, 20, 13, 0.2);
+    border-radius: 999px;
+}
+.editorial .ed-media-strip__item {
+    flex: 0 0 clamp(220px, 30vw, 360px);
+    scroll-snap-align: start;
+}
+.editorial .ed-media-strip__item .photo {
+    width: 100%;
+}
+.editorial .ed-media-strip__btn {
+    position: absolute;
+    top: 42%;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(26, 20, 13, 0.14);
+    border-radius: 999px;
+    background: var(--bone);
+    color: var(--ink);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 3px 4px 0 rgba(26, 20, 13, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.editorial .ed-media-strip__btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 4px 5px 0 rgba(26, 20, 13, 0.12);
+}
+.editorial .ed-media-strip__btn--left { left: -6px; }
+.editorial .ed-media-strip__btn--right { right: -6px; }
+@media (max-width: 900px) {
+    .editorial .ed-media-strip__item {
+        flex-basis: min(78vw, 320px);
+    }
+    .editorial .ed-media-strip__btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.35rem;
+    }
+    .editorial .ed-media-strip__btn--left { left: 0; }
+    .editorial .ed-media-strip__btn--right { right: 0; }
+}
+
 /* No resting transform / transition on `transform` here — GSAP drives the
    scroll-in animation on these same elements via inline `transform`. A CSS
    `transition: transform` on the same property fights the JS tween every
@@ -6418,6 +6484,12 @@ header h1 {
 .editorial .post-detail-view--datnie .ed-section {
     padding-top: clamp(46px, 7vh, 76px);
     padding-bottom: 36px;
+}
+.editorial .post-detail-view--mirror .ed-intro {
+    margin: clamp(32px, 5vh, 56px) auto clamp(8px, 1.5vh, 16px);
+}
+.editorial .post-detail-view--mirror #live-scene.ed-section {
+    padding-top: clamp(20px, 3vh, 36px);
 }
 .editorial .ed-section__title {
     font-family: var(--serif);

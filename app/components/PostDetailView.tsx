@@ -141,6 +141,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const projectIdx = posts.findIndex((p) => p.id === post.id);
   const kicker = projectKicker(post, projectIdx);
   const isDatnie = post.id === 'post-1';
+  const isMirror = post.id === 'post-3';
   const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-6';
   const showIntro = !hideGeneratedIntro && Boolean(post.description);
 
@@ -164,7 +165,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   return (
     <div
       className={`post-detail-view post-detail-view-page ${
-        isDatnie ? 'post-detail-view--datnie' : 'post-detail-view--dim-description'
+        isDatnie ? 'post-detail-view--datnie' : isMirror ? 'post-detail-view--mirror' : 'post-detail-view--dim-description'
       }`}
     >
       {/* ─── HEADER — compact title + meta strip in one block ─── */}
