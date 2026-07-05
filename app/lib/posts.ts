@@ -1,3 +1,14 @@
+export interface SidebarSubsection {
+  id: string;
+  label: string;
+}
+
+export interface SidebarSection {
+  id: string;
+  label: string;
+  subsections?: SidebarSubsection[];
+}
+
 export interface Post {
   id: string;
   title: string;
@@ -20,6 +31,12 @@ export interface Post {
   stage3VideoUrl?: string; // Stage 3 video URL for Signie project
   linkedInUrl?: string; // LinkedIn post URL for embedding
   shortDescription?: string; // Short description used on about page project cards (overrides description)
+  /**
+   * Sidebar nav sections for this project's detail page.
+   * The shell auto-prepends `{id:'project-title', label: title}` and
+   * `{id:'intro', label:'Intro'}` — list only the content sections here.
+   */
+  sections?: SidebarSection[];
 }
 
 export const posts: Post[] = [
@@ -44,7 +61,20 @@ export const posts: Post[] = [
       "https://via.placeholder.com/600x400/2a2a2a/888888?text=Process+2",
       "https://via.placeholder.com/600x800/2a2a2a/888888?text=Vertical+Process"
     ],
-    role: "XR developer, Director, Animator"
+    role: "XR developer, Director, Animator",
+    sections: [
+      { id: "ideation", label: "Ideation" },
+      { id: "ux-design", label: "UX Design" },
+      {
+        id: "prototype",
+        label: "Prototype",
+        subsections: [
+          { id: "animation-trailer", label: "Animation Trailer" },
+          { id: "prototype-stage1", label: "Stage 1 — UE Production" },
+          { id: "prototype-stage2", label: "Stage 2 — Unity Development" }
+        ]
+      }
+    ]
   },
   {
     id: "post-2",
@@ -68,7 +98,20 @@ export const posts: Post[] = [
     features: ["Hand Tracking", "Gesture Recognition", "Micro-Gestures", "Voice-to-Text", "Virtual Guide", "Animation State Machine"],
     role: "XR developer",
     achievement: "AWE 2025 USA presentation",
-    stage3VideoUrl: "https://www.youtube.com/watch?v=j6PK1TTSxV0"
+    stage3VideoUrl: "https://www.youtube.com/watch?v=j6PK1TTSxV0",
+    sections: [
+      { id: "ideation", label: "Ideation" },
+      {
+        id: "process",
+        label: "Process",
+        subsections: [
+          { id: "process-stage1", label: "Stage 1" },
+          { id: "process-stage2", label: "Stage 2" },
+          { id: "process-stage3", label: "Stage 3" }
+        ]
+      },
+      { id: "contributions", label: "My Contributions" }
+    ]
   },
   {
     id: "post-3",
@@ -85,7 +128,23 @@ export const posts: Post[] = [
     softwareTools: ["Unreal Engine", "Touchdesigner", "Blender", "Python"],
     features: ["Real-time Metahuman lipsync", "Touchdesigner-UE communication"],
     role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)",
-    shortDescription: "A real-time AI mirror that listens, responds, and reflects the user through voice-driven interaction and digital embodiment."
+    shortDescription: "A real-time AI mirror that listens, responds, and reflects the user through voice-driven interaction and digital embodiment.",
+    sections: [
+      { id: "achievement", label: "Achievement" },
+      { id: "tools", label: "Tools" },
+      { id: "installation-draft", label: "Installation Draft" },
+      {
+        id: "process",
+        label: "Process",
+        subsections: [
+          { id: "process-stage1", label: "Stage 1" },
+          { id: "process-stage2", label: "Stage 2" },
+          { id: "process-stage3", label: "Stage 3" },
+          { id: "process-stage4", label: "Stage 4" }
+        ]
+      },
+      { id: "contributions", label: "My Contributions", subsections: [{ id: "live-scene", label: "Live Scene" }] }
+    ]
   },
   // 第二行（从左到右）
   {
@@ -102,7 +161,14 @@ export const posts: Post[] = [
     description: "A comprehensive video production showcasing motion capture and Metahuman animation.",
     softwareTools: ["Unreal Engine", "Motion Builder", "Optitrack Motion Capture"],
     features: ["Motion Capture", "Metahuman Animation"],
-    role: "Motion Capture, Metahuman Prototyper, Animator"
+    role: "Motion Capture, Metahuman Prototyper, Animator",
+    sections: [
+      { id: "videos", label: "Videos" },
+      { id: "intro", label: "Intro" },
+      { id: "tools", label: "Tools" },
+      { id: "motion-capture", label: "Motion Capture" },
+      { id: "metahuman", label: "Metahuman" }
+    ]
   },
   {
     id: "post-5",
@@ -116,7 +182,13 @@ export const posts: Post[] = [
     softwareTools: ["Unity6"],
     features: ["AI Assistant", "XR Shopping Guide"],
     role: "Team leader of 5, XR developer",
-    linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/"
+    linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/",
+    sections: [
+      { id: "video", label: "Video" },
+      { id: "ideation", label: "Ideation" },
+      { id: "stage1", label: "Stage 1 — XR" },
+      { id: "stage2", label: "Stage 2 — AI Assistant" }
+    ]
   },
   {
     id: "post-6",
@@ -131,7 +203,29 @@ export const posts: Post[] = [
     description: "A non-violent competitive laser tag game using an elemental counter system (Water > Fire > Wind) where type advantages reward strategy by doubling damage.",
     softwareTools: ["Unity2022"],
     features: ["Elemental Counter System"],
-    role: "XR developer"
+    role: "XR developer",
+    sections: [
+      { id: "video", label: "Video" },
+      { id: "introduction", label: "Introduction" },
+      {
+        id: "game-design",
+        label: "Game Design",
+        subsections: [
+          { id: "technical-solution", label: "1.1 Technical solution" },
+          { id: "enemies-weapons", label: "1.2 Enemies & weapons" }
+        ]
+      },
+      {
+        id: "my-prototype",
+        label: "My Prototype",
+        subsections: [
+          { id: "ragdoll-scripts", label: "1.1 Ragdoll scripts" },
+          { id: "double-damage", label: "1.2 Double damage" },
+          { id: "shield-parts", label: "1.3 Shield parts" },
+          { id: "gamemanager", label: "1.4 GameManager" }
+        ]
+      }
+    ]
   }
 ];
 

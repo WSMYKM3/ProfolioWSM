@@ -1,435 +1,131 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import HoverVideo from '../HoverVideo';
-import { getImageScale } from '@/app/lib/imageScaleUtils';
+import {
+  EditorialSection,
+  MediaGrid,
+  MediaGridItem,
+  useImageEnlarger,
+  useSketchUnderlineReveal,
+  useIsMobile,
+} from '../editorial';
 
-// Helper function to add basePath for GitHub Pages
-function getImageSrc(src: string): string {
-  if (src.startsWith('http://') || src.startsWith('https://')) {
-    return src;
-  }
-  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
-  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
-}
+const MOCAP_ITEMS: MediaGridItem[] = [
+  { path: '/mocapgifs/mocapclean.png', description: 'Overview' },
+  { path: '/webm/MotionCapture/motioncapture.webm', description: 'Motion capture', isVideo: true },
+  { path: '/webm/MotionCapture/mb1.webm', description: 'Retargeting', isVideo: true },
+  { path: '/webm/MotionCapture/mb2.webm', description: 'Data cleaning', isVideo: true },
+  { path: '/webm/MotionCapture/mb3.webm', description: 'It works', isVideo: true },
+  { path: '/webm/MotionCapture/realtimevcam.webm', description: 'Real-time VCam testing', isVideo: true },
+];
+
+const METAHUMAN_ITEMS: MediaGridItem[] = [
+  { path: '/webm/MotionCapture/facialmotion.webm', description: 'Facial motion', isVideo: true },
+  { path: '/mocapgifs/facemesh.png', description: 'Face mesh' },
+  { path: '/webm/MotionCapture/sequence.webm', description: 'Sequence', isVideo: true },
+];
+
+const bodyStyle = {
+  fontFamily: 'var(--serif)',
+  fontSize: 'clamp(18px, 1.7vw, 22px)',
+  lineHeight: 1.7,
+  color: 'var(--ink)',
+  textAlign: 'center' as const,
+  maxWidth: 900,
+  margin: '0 auto',
+};
 
 export default function Post4() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && enlargedImage) {
-        setEnlargedImage(null);
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [enlargedImage]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target as HTMLElement;
-          const path = el.querySelector('path');
-          if (path) {
-            const delay = parseFloat(el.dataset.delay || '0');
-            setTimeout(() => path.classList.add('drawn'), delay * 1000);
-          }
-          observer.unobserve(el);
-        }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
-      el.dataset.delay = (i * 0.15).toFixed(2);
-      observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
-    setEnlargedImage({ src, alt, isVideo });
-  };
-
-  const handleCloseEnlarged = () => {
-    setEnlargedImage(null);
-  };
+  const isMobile = useIsMobile();
+  const { handleImageClick, overlay } = useImageEnlarger();
+  useSketchUnderlineReveal();
 
   return (
     <>
-      {/* Enlarged Image Overlay */}
-      {enlargedImage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.95)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            padding: '20px'
-          }}
-          onClick={handleCloseEnlarged}
-        >
+      {overlay}
+
+      <div className="post-content">
+        {/* ─── Videos handled by PostDetailView's post-4 branch ─── */}
+
+        {/* ─── Intro paragraph (in place of the standard Intro section) ─── */}
+        <EditorialSection id="introduction" kicker="CHAPTER 01" title="A cinematic mocap short" kickerVariant="rust">
+          <p style={bodyStyle}>
+            A cinematic short film driven by{' '}
+            <span className="sketch-underline orange">
+              motion capture performance
+              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
+            </span>
+            , combining Optitrack data with{' '}
+            <span className="sketch-underline blue">
+              Metahuman animation
+              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" /></svg>
+            </span>{' '}
+            in Unreal Engine to produce a{' '}
+            <span className="sketch-underline green">
+              photorealistic real-time render
+              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
+            </span>
+            .
+          </p>
+        </EditorialSection>
+
+        {/* ─── Tools ─── */}
+        <EditorialSection id="tools" kicker="CHAPTER 02" title="Tools">
           <div
             style={{
-              position: 'relative',
-              width: '90vw',
-              height: '90vh',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {enlargedImage.isVideo ? (
-              <video
-                src={getImageSrc(enlargedImage.src)}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                style={{
-                  maxWidth: '90vw',
-                  maxHeight: '90vh',
-                  width: 'auto',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  borderRadius: '8px'
-                }}
-              />
-            ) : (
-              <img
-                src={getImageSrc(enlargedImage.src)}
-                alt={enlargedImage.alt}
-                style={{
-                  maxWidth: '90vw',
-                  maxHeight: '90vh',
-                  width: 'auto',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  borderRadius: '8px',
-                  transform: `scale(${getImageScale(enlargedImage.src)})`,
-                  transformOrigin: 'center center'
-                }}
-              />
-            )}
-            <button
-              onClick={handleCloseEnlarged}
-              style={{
-                position: 'absolute',
-                top: '20px',
-                right: '20px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '40px',
-                height: '40px',
-                color: '#fff',
-                fontSize: '24px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'background 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-              }}
-            >
-              &times;
-            </button>
-            {/* Back button for touch devices (iPad, mobile) */}
-            {isTouchDevice && (
-              <button
-                onClick={handleCloseEnlarged}
-                style={{
-                  position: 'absolute',
-                  right: '20px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'rgba(255, 255, 255, 0.9)',
-                  border: '2px solid rgba(255, 255, 255, 0.5)',
-                  borderRadius: '12px',
-                  padding: '14px 24px',
-                  color: '#000',
-                  fontSize: '18px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  zIndex: 10001,
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                  minWidth: '80px'
-                }}
-              >
-                Back
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-    <div className="post-content">
-      <div className="text-content">
-          {/* Introduction Section */}
-          <section id="introduction" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
-            <p style={{
-              fontSize: '1rem',
-              lineHeight: '1.8',
-              color: '#d0d0d0',
-              marginBottom: '16px',
-              textAlign: 'center',
-              maxWidth: '800px',
-              marginLeft: 'auto',
-              marginRight: 'auto'
-            }}>
-              A cinematic short film driven by{' '}
-              <span className="sketch-underline orange">motion capture performance
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
-              </span>
-              , combining Optitrack data with{' '}
-              <span className="sketch-underline blue">Metahuman animation
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" /></svg>
-              </span>
-              {' '}in Unreal Engine to produce a{' '}
-              <span className="sketch-underline green">photorealistic real-time render
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
-              </span>
-              .
-            </p>
-          </section>
-
-          {/* Tools Section */}
-          <section id="tools" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
-            <h2 style={{ 
-              fontSize: '1.75rem', 
-              fontWeight: 700, 
-              color: '#fff', 
-              marginBottom: '40px',
-              textAlign: 'center'
-            }}>
-              Tools
-            </h2>
-            <div style={{
               display: 'flex',
               flexWrap: 'wrap',
-              gap: '16px',
+              gap: 16,
               justifyContent: 'center',
-              maxWidth: '800px',
-              margin: '0 auto'
-            }}>
-              {['Unreal Engine', 'Motion Builder', 'Optitrack Motion Capture'].map((tool, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: '12px 24px',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    borderRadius: '8px',
-                    color: '#d0d0d0',
-                    fontSize: '1rem',
-                    border: '1px solid rgba(255,255,255,0.1)'
-                  }}
-                >
-                  {tool}
-                </div>
-              ))}
-            </div>
-          </section>
+              maxWidth: 800,
+              margin: '0 auto',
+            }}
+          >
+            {['Unreal Engine', 'Motion Builder', 'Optitrack Motion Capture'].map((tool) => (
+              <span
+                key={tool}
+                data-anim="pop"
+                style={{
+                  padding: '12px 24px',
+                  background: 'var(--bone)',
+                  border: '1px solid rgba(26, 20, 13, 0.16)',
+                  boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
+                  color: 'var(--ink)',
+                  fontFamily: 'var(--serif)',
+                  fontSize: '1.05rem',
+                  fontStyle: 'italic',
+                }}
+              >
+                {tool}
+              </span>
+            ))}
+          </div>
+        </EditorialSection>
 
-          {/* Motion Capture + Motion Data Cleaning Section */}
-          <section id="motion-capture" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
-            <h2 style={{ 
-              fontSize: '1.75rem', 
-              fontWeight: 700, 
-              color: '#fff', 
-              marginBottom: '40px',
-              textAlign: 'center'
-            }}>
-              Motion Capture + Motion Data Cleaning
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-              gap: isMobile ? '40px' : '60px',
-              marginTop: '24px',
-              maxWidth: '1400px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              {[
-                
-                { path: '/mocapgifs/mocapclean.png', description: 'Overview', isVideo: false },
-                { path: '/webm/MotionCapture/motioncapture.webm', description: 'Motion Capture', isVideo: true },
-                { path: '/webm/MotionCapture/mb1.webm', description: 'Retargetting', isVideo: true },
-                { path: '/webm/MotionCapture/mb2.webm', description: '  Data cleaning', isVideo: true },
-                { path: '/webm/MotionCapture/mb3.webm', description: 'It works', isVideo: true },
-                { path: '/webm/MotionCapture/realtimevcam.webm', description: 'Real-time VCam Testing', isVideo: true }
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '20px'
-                  }}
-                >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer',
-                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
-                      transition: 'transform 0.3s ease, border-color 0.3s ease',
-                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
-                    }}
-                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
-                    onMouseEnter={() => setHoveredItem(item.path)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                  >
-                    {item.isVideo ? (
-                      <HoverVideo
-                        videoSrc={item.path}
-                        alt={item.description}
-                        objectFit="contain"
-                      />
-                    ) : (
-                      <Image
-                        src={getImageSrc(item.path)}
-                        alt={item.description}
-                        fill
-                        style={{ objectFit: 'contain' }}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                        }}
-                      />
-                    )}
-                  </div>
-                  <p style={{
-                    fontSize: '0.95rem',
-                    color: '#d0d0d0',
-                    textAlign: 'center',
-                    margin: 0,
-                    lineHeight: 1.5
-                  }}>
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
+        {/* ─── Motion Capture + Motion Data Cleaning ─── */}
+        <EditorialSection
+          id="motion-capture"
+          kicker="CHAPTER 03"
+          title="Motion Capture + Motion Data Cleaning"
+          kickerVariant="rust"
+        >
+          <MediaGrid
+            items={MOCAP_ITEMS}
+            isMobile={isMobile}
+            idPrefix="mocap"
+            onItemClick={handleImageClick}
+          />
+        </EditorialSection>
 
-          {/* Metahuman Section */}
-          <section id="metahuman" style={{ marginBottom: '48px', scrollMarginTop: '100px' }}>
-            <h2 style={{ 
-              fontSize: '1.75rem', 
-              fontWeight: 700, 
-              color: '#fff', 
-              marginBottom: '40px',
-              textAlign: 'center'
-            }}>
-              Metahuman
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-              gap: isMobile ? '40px' : '40px',
-              marginTop: '24px',
-              maxWidth: '1400px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              {[
-                { path: '/webm/MotionCapture/facialmotion.webm', description: 'Facial Motion', isVideo: true },
-                { path: '/mocapgifs/facemesh.png', description: 'Face Mesh', isVideo: false },
-                { path: '/webm/MotionCapture/sequence.webm', description: 'Sequence', isVideo: true }
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '20px'
-                  }}
-                >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer',
-                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
-                      transition: 'transform 0.3s ease, border-color 0.3s ease',
-                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
-                    }}
-                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
-                    onMouseEnter={() => setHoveredItem(item.path)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                  >
-                    {item.isVideo ? (
-                      <HoverVideo
-                        videoSrc={item.path}
-                        alt={item.description}
-                        objectFit="contain"
-                      />
-                    ) : (
-                      <Image
-                        src={getImageSrc(item.path)}
-                        alt={item.description}
-                        fill
-                        style={{ objectFit: 'contain' }}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                        }}
-                      />
-                    )}
-                  </div>
-                  <p style={{
-                    fontSize: '0.95rem',
-                    color: '#d0d0d0',
-                    textAlign: 'center',
-                    margin: 0,
-                    lineHeight: 1.5
-                  }}>
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
+        {/* ─── Metahuman ─── */}
+        <EditorialSection id="metahuman" kicker="CHAPTER 04" title="Metahuman">
+          <MediaGrid
+            items={METAHUMAN_ITEMS}
+            columns={3}
+            isMobile={isMobile}
+            idPrefix="metahuman"
+            onItemClick={handleImageClick}
+          />
+        </EditorialSection>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Post, posts } from '@/app/lib/posts';
 import SoftwareIcon from './SoftwareIcon';
@@ -49,7 +49,7 @@ function convertToEmbedUrl(url: string): string {
 
 // Split a description into ~roughly equal sentence-bounded segments for the
 // editorial bouncy intro reveal.
-function splitIntoSegments(text: string, count = 3): string[] {
+function splitIntoSegments(text: string, count = 2): string[] {
   const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map((s) => s.trim()).filter(Boolean) || [text];
   // If we don't have enough sentences, fall back to splitting on commas
   let parts = sentences;
@@ -63,9 +63,56 @@ function splitIntoSegments(text: string, count = 3): string[] {
   const perBucket = Math.ceil(parts.length / count);
   const out: string[] = [];
   for (let i = 0; i < parts.length; i += perBucket) {
-    out.push(parts.slice(i, i + perBucket).join(', '));
+    const joined = parts
+      .slice(i, i + perBucket)
+      .join(', ')
+      // Clean up "sentence., sentence" seams left when full sentences (which
+      // already end in . ! ?) get joined with a comma separator.
+      .replace(/([.!?])\s*,\s*/g, '$1 ')
+      .replace(/\s{2,}/g, ' ');
+    out.push(joined);
   }
   return out;
+}
+
+// Trim a segment down to a short, single-line-ish summary so the Intro
+// section reads as a quick pull-quote rather than the full project writeup.
+function summarizeSegment(text: string, limit = 130): string {
+  const trimmed = text.trim();
+  if (trimmed.length <= limit) return trimmed;
+  const cut = trimmed.slice(0, limit);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 60 ? cut.slice(0, lastSpace) : cut).trim() + '…';
+}
+
+// One key phrase per project to underline in the Intro section. Matched
+// case-insensitively against the (already summarized) segment text — if the
+// phrase got trimmed off by summarizeSegment, it's simply not highlighted.
+const INTRO_HIGHLIGHTS: Record<string, string> = {
+  'post-1': 'no more repeated conversation',
+  'post-2': 'hand tracking, micro-gestures, and AI feedback',
+  'post-3': 'human–AI intimacy',
+  'post-4': 'motion capture and Metahuman animation',
+  'post-5': 'AI assistant',
+  'post-6': 'elemental counter system',
+};
+
+// Wrap the project's key phrase in <em> (rendered as an underline via CSS)
+// wherever it appears in the given segment text.
+function renderWithHighlight(segment: string, phrase?: string): React.ReactNode {
+  if (!phrase) return segment;
+  const idx = segment.toLowerCase().indexOf(phrase.toLowerCase());
+  if (idx === -1) return segment;
+  const before = segment.slice(0, idx);
+  const match = segment.slice(idx, idx + phrase.length);
+  const after = segment.slice(idx + phrase.length);
+  return (
+    <>
+      {before}
+      <em>{match}</em>
+      {after}
+    </>
+  );
 }
 
 function projectKicker(post: Post, idx: number): string {
@@ -94,129 +141,36 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const projectIdx = posts.findIndex((p) => p.id === post.id);
   const kicker = projectKicker(post, projectIdx);
 
+  // Sidebar nav: prepend the project title anchor, then read per-project
+  // sections from posts.ts (Post.sections). Insert 'intro' as the second
+  // item unless the post already lists 'intro' explicitly at a custom
+  // position (e.g. post-4 lists intro after "Videos").
   const getSections = () => {
-    const baseSections = [
+    const sections = post.sections ?? [];
+    const hasIntro = sections.some((s) => s.id === 'intro');
+    return [
       { id: 'project-title', label: post.title },
-      { id: 'intro', label: 'Intro' },
+      ...(hasIntro ? [] : [{ id: 'intro', label: 'Intro' }]),
+      ...sections,
     ];
-    if (post.id === 'post-1') {
-      return [
-        ...baseSections,
-        { id: 'ideation', label: 'Ideation' },
-        { id: 'ux-design', label: 'UX Design' },
-        {
-          id: 'prototype',
-          label: 'Prototype',
-          subsections: [
-            { id: 'animation-trailer', label: 'Animation Trailer' },
-            { id: 'prototype-stage1', label: 'Stage 1 — UE Production' },
-            { id: 'prototype-stage2', label: 'Stage 2 — Unity Development' },
-          ],
-        },
-      ];
-    }
-    if (post.id === 'post-2') {
-      return [
-        ...baseSections,
-        { id: 'ideation', label: 'Ideation' },
-        {
-          id: 'process',
-          label: 'Process',
-          subsections: [
-            { id: 'process-stage1', label: 'Stage 1' },
-            { id: 'process-stage2', label: 'Stage 2' },
-            { id: 'process-stage3', label: 'Stage 3' },
-          ],
-        },
-        { id: 'contributions', label: 'My Contributions' },
-      ];
-    }
-    if (post.id === 'post-3') {
-      return [
-        ...baseSections,
-        { id: 'achievement', label: 'Achievement' },
-        { id: 'tools', label: 'Tools' },
-        { id: 'installation-draft', label: 'Installation Draft' },
-        {
-          id: 'process',
-          label: 'Process',
-          subsections: [
-            { id: 'process-stage1', label: 'Stage 1' },
-            { id: 'process-stage2', label: 'Stage 2' },
-            { id: 'process-stage3', label: 'Stage 3' },
-            { id: 'process-stage4', label: 'Stage 4' },
-          ],
-        },
-        { id: 'contributions', label: 'My Contributions', subsections: [{ id: 'live-scene', label: 'Live Scene' }] },
-      ];
-    }
-    if (post.id === 'post-4') {
-      return [
-        { id: 'project-title', label: post.title },
-        { id: 'videos', label: 'Videos' },
-        { id: 'intro', label: 'Intro' },
-        { id: 'tools', label: 'Tools' },
-        { id: 'motion-capture', label: 'Motion Capture' },
-        { id: 'metahuman', label: 'Metahuman' },
-      ];
-    }
-    if (post.id === 'post-5') {
-      return [
-        ...baseSections,
-        { id: 'video', label: 'Video' },
-        { id: 'ideation', label: 'Ideation' },
-        { id: 'stage1', label: 'Stage 1 — XR' },
-        { id: 'stage2', label: 'Stage 2 — AI Assistant' },
-      ];
-    }
-    if (post.id === 'post-6') {
-      return [
-        ...baseSections,
-        { id: 'video', label: 'Video' },
-        { id: 'introduction', label: 'Introduction' },
-        {
-          id: 'game-design',
-          label: 'Game Design',
-          subsections: [
-            { id: 'technical-solution', label: '1.1 Technical solution' },
-            { id: 'enemies-weapons', label: '1.2 Enemies & weapons' },
-          ],
-        },
-        {
-          id: 'my-prototype',
-          label: 'My Prototype',
-          subsections: [
-            { id: 'ragdoll-scripts', label: '1.1 Ragdoll scripts' },
-            { id: 'double-damage', label: '1.2 Double damage' },
-            { id: 'shield-parts', label: '1.3 Shield parts' },
-            { id: 'gamemanager', label: '1.4 GameManager' },
-          ],
-        },
-      ];
-    }
-    return baseSections;
   };
 
-  const introSegments = splitIntoSegments(post.description || '', 3);
+  const introSegments = splitIntoSegments(post.description || '', 2).map((s) => summarizeSegment(s));
   const showHeroMedia = post.id !== 'post-4' && post.id !== 'post-5' && post.id !== 'post-6';
 
   const isDatnie = post.id === 'post-1';
 
   return (
     <div className={`post-detail-view post-detail-view-page ${isDatnie ? '' : 'post-detail-view--dim-description'}`}>
-      {/* ─── HERO ─── */}
+      {/* ─── HEADER — compact title + meta strip in one block ─── */}
       <section className="ed-hero" id="project-title">
-        <svg className="deco" style={{ top: '14%', left: '6%', width: 64, height: 64, color: 'var(--rust)' }}
+        <svg className="deco" style={{ top: '10%', left: '5%', width: 48, height: 48, color: 'var(--rust)' }}
              data-anim="sticker" data-rest="-12">
           <use href="#squiggle" />
         </svg>
-        <svg className="deco" style={{ top: '22%', right: '8%', width: 52, height: 52, color: 'var(--blue-cold)' }}
+        <svg className="deco" style={{ top: '14%', right: '6%', width: 40, height: 40, color: 'var(--blue-cold)' }}
              data-anim="sticker" data-rest="14">
           <use href="#asterisk" />
-        </svg>
-        <svg className="deco" style={{ bottom: '12%', right: '14%', width: 56, height: 56, color: 'var(--olive)' }}
-             data-anim="sticker" data-rest="-8">
-          <use href="#star-sm" />
         </svg>
 
         <div className="ed-hero__inner">
@@ -224,6 +178,36 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
           <h1 className="ed-hero__mark" data-scrub-mark>{post.title}</h1>
           {post.description && (
             <p className="ed-hero__tag" data-split>{post.description.split('.')[0]}.</p>
+          )}
+        </div>
+
+        {/* ─── META STRIP — four hairline columns, merged into the same header ─── */}
+        <div className="ed-meta">
+          <div className="ed-meta__col" data-anim="slide-up">
+            <span className="ed-meta__label">Role</span>
+            <p className="ed-meta__value">{post.role || 'Creative Technologist'}</p>
+          </div>
+          <div className="ed-meta__col" data-anim="slide-up">
+            <span className="ed-meta__label">Timeline</span>
+            <p className="ed-meta__value">{post.date}</p>
+          </div>
+          <div className="ed-meta__col" data-anim="slide-up">
+            <span className="ed-meta__label">Tools</span>
+            <div className="ed-meta__value ed-meta__tools">
+              {post.softwareTools?.map((tool) => (
+                <SoftwareIcon key={tool} name={tool} size={26} />
+              ))}
+            </div>
+          </div>
+          {post.features && post.features.length > 0 && (
+            <div className="ed-meta__col" data-anim="slide-up">
+              <span className="ed-meta__label">Features</span>
+              <div className="ed-meta__value ed-meta__features">
+                {post.features.map((f) => (
+                  <span key={f} className="ed-meta__feature">{f}</span>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </section>
@@ -236,6 +220,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
             justifyContent: 'center',
             padding: '0 var(--ed-pad)',
             marginBottom: 40,
+            marginTop: 40,
             position: 'relative',
           }}
         >
@@ -265,36 +250,6 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
           </figure>
         </div>
       )}
-
-      {/* ─── META STRIP — four hairline columns ─── */}
-      <div className="ed-meta">
-        <div className="ed-meta__col" data-anim="slide-up">
-          <span className="ed-meta__label">Role</span>
-          <p className="ed-meta__value">{post.role || 'Creative Technologist'}</p>
-        </div>
-        <div className="ed-meta__col" data-anim="slide-up">
-          <span className="ed-meta__label">Timeline</span>
-          <p className="ed-meta__value">{post.date}</p>
-        </div>
-        <div className="ed-meta__col" data-anim="slide-up">
-          <span className="ed-meta__label">Tools</span>
-          <div className="ed-meta__value ed-meta__tools">
-            {post.softwareTools?.map((tool) => (
-              <SoftwareIcon key={tool} name={tool} size={26} />
-            ))}
-          </div>
-        </div>
-        {post.features && post.features.length > 0 && (
-          <div className="ed-meta__col" data-anim="slide-up">
-            <span className="ed-meta__label">Features</span>
-            <div className="ed-meta__value ed-meta__features">
-              {post.features.map((f) => (
-                <span key={f} className="ed-meta__feature">{f}</span>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* ─── post-4's special two-video block ─── */}
       {post.id === 'post-4' && (
@@ -388,7 +343,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
             </div>
           )}
 
-          {/* Intro — segmented bouncy reveal */}
+          {/* Intro — short summarized reveal with one underlined key phrase */}
           {post.id !== 'post-6' && post.description && (
             <section id="intro" className="ed-intro">
               <span className="ed-kicker ed-kicker--rust" style={{ marginBottom: 20, display: 'block' }}>
@@ -396,20 +351,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
               </span>
               {introSegments.map((segment, idx) => (
                 <p key={idx} className="ed-intro__body" data-split-lines>
-                  {post.id === 'post-1' && segment.includes('no more repeated conversation') ? (
-                    segment.split('no more repeated conversation').map((part, i, arr) =>
-                      i === arr.length - 1 ? (
-                        part
-                      ) : (
-                        <span key={i}>
-                          {part}
-                          <em>no more repeated conversation</em>
-                        </span>
-                      )
-                    )
-                  ) : (
-                    segment
-                  )}
+                  {renderWithHighlight(segment, INTRO_HIGHLIGHTS[post.id])}
                 </p>
               ))}
             </section>

@@ -372,3 +372,83 @@ After applying rules:
 - **Post Data**: `app/lib/posts.ts`
 - **Full Guide**: `PROJECT_DETAIL_PAGE_GUIDE.md`
 
+---
+
+## Update — Editorial primitives (Nov 2025)
+
+Post1 (Datnie) and Post2–Post6 now share a small primitives library at
+`app/components/editorial/`. Adding a new project is now a three-step exercise:
+
+### 1. Duplicate the template
+
+```
+cp app/components/posts/_Template.tsx app/components/posts/Post7.tsx
+```
+
+The template shows how to compose an editorial project page with the
+primitives: `EditorialSection`, `EditorialSubtitle`, `MediaFrame`, `MediaGrid`,
+plus the `useImageEnlarger`, `useSketchUnderlineReveal`, and `useIsMobile`
+hooks. All state (enlarger modal, mobile flag, sketch underlines) is handled
+by the hooks — you never write that boilerplate again.
+
+### 2. Add metadata + sidebar sections to `posts.ts`
+
+```ts
+{
+  id: "post-7",
+  title: "…",
+  // …
+  sections: [
+    { id: "ideation", label: "Ideation" },
+    {
+      id: "prototype",
+      label: "Prototype",
+      subsections: [
+        { id: "stage-1", label: "Stage 1" }
+      ]
+    }
+  ]
+}
+```
+
+The `sections` list drives the sidebar navigation. `project-title` and
+`intro` are auto-prepended by the shell (see `PostDetailView.getSections()`).
+Post-4 style ordering (where `intro` is not the second item) is supported
+by including `intro` explicitly at a custom position.
+
+### 3. Register the component
+
+Edit `app/components/PostDetailView.tsx`:
+
+```ts
+const postComponents: Record<string, React.ComponentType> = {
+  // …
+  'post-7': Post7,
+};
+```
+
+### Editorial primitives — cheat sheet
+
+- `<EditorialSection id kicker title kickerVariant="rust">` — chapter with
+  Fraunces italic title + small uppercase kicker above.
+- `<EditorialSubtitle id>` — stage subheading inside a section.
+- `<MediaFrame src alt caption isVideo|isYouTube variant tilt onClick />` — a
+  single polaroid frame for a video / image / YouTube iframe.
+- `<MediaGrid items columns isMobile onItemClick />` — grid of polaroid
+  frames with per-index staggered `data-anim` values.
+- `useImageEnlarger()` — returns `{ handleImageClick, overlay }`. Render
+  `{overlay}` at the top; pass `handleImageClick` to `MediaFrame`/`MediaGrid`
+  `onClick`/`onItemClick`.
+- `useSketchUnderlineReveal()` — observes `.sketch-underline` elements and
+  draws them in on scroll. Call once at the top of the component.
+
+### Scroll-driven attributes
+
+`EditorialMotion.tsx` scans the page for these `data-*` attributes and wires
+up scroll-triggered GSAP tweens. The primitives set sensible defaults; only
+add these by hand for one-off effects:
+
+- `data-anim="slide-left|slide-right|slide-up|slide-down|pop|rotate-in|sticker|bounce-in|flip|punch"`
+- `data-split-lines` — bouncy word-by-word reveal (long paragraphs)
+- `data-rest="<deg>"` — resting rotation for `sticker` entries
+

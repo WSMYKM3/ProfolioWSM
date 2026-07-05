@@ -6123,14 +6123,15 @@ header h1 {
 .editorial .ed-kicker--rust { color: var(--rust); }
 
 /* ─── hero ─── */
+/* Compact header — title + tag + meta strip all live in this one section,
+   instead of a full-viewport hero followed by a separately-padded meta
+   block. No more min-height: 90vh / vertical centering. */
 .editorial .ed-hero {
     position: relative;
-    min-height: 90vh;
-    padding: clamp(80px, 12vh, 160px) var(--ed-pad) 80px;
+    padding: clamp(40px, 6vh, 64px) var(--ed-pad) 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
     overflow: hidden;
 }
@@ -6139,7 +6140,7 @@ header h1 {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse at 50% 55%, rgba(232, 184, 90, 0.42), transparent 60%);
+        radial-gradient(ellipse at 50% 30%, rgba(232, 184, 90, 0.34), transparent 60%);
     pointer-events: none;
     z-index: 0;
 }
@@ -6151,7 +6152,7 @@ header h1 {
 }
 .editorial .ed-hero__kicker {
     display: block;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 }
 .editorial .ed-hero__mark {
     display: block;
@@ -6161,10 +6162,12 @@ header h1 {
     font-weight: 800;
     font-style: italic;
     font-variation-settings: "opsz" 144;
-    font-size: clamp(72px, 14vw, 200px);
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-    margin: 0 0 24px;
+    /* Was clamp(72px, 14vw, 200px) — a headline that ate the whole screen.
+       Now reads as a page title, not a section unto itself. */
+    font-size: clamp(32px, 4.2vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
     color: var(--ink);
     display: inline-block;
     transform-origin: 50% 50%;
@@ -6173,9 +6176,9 @@ header h1 {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(20px, 2.4vw, 32px);
-    line-height: 1.35;
-    max-width: 720px;
+    font-size: clamp(15px, 1.3vw, 18px);
+    line-height: 1.4;
+    max-width: 640px;
     margin: 0 auto;
     color: var(--shadow-warm);
 }
@@ -6245,25 +6248,32 @@ header h1 {
 .editorial .photo--tilt-r { transform: none; }
 .editorial .photo--lift   { transform: translateY(-12px); }
 
-/* Subtle asymmetric drift only — no rotations on the filleted frames. */
-.editorial .ed-grid-asym > * { transition: transform 0.4s ease, box-shadow 0.4s ease; }
-.editorial .ed-grid-asym > *:nth-child(3n+1) { transform: translateY(12px); }
-.editorial .ed-grid-asym > *:nth-child(3n+2) { transform: translateY(-6px); }
-.editorial .ed-grid-asym > *:nth-child(3n+3) { transform: translateY(24px); }
+/* No resting transform / transition on `transform` here — GSAP drives the
+   scroll-in animation on these same elements via inline `transform`. A CSS
+   `transition: transform` on the same property fights the JS tween every
+   frame (the browser keeps chasing GSAP's moving target with its own 0.4s
+   ease), which is what made the entrance feel laggy/"stuck". Only transition
+   box-shadow here; hover feedback comes from a translate on a wrapper. */
+.editorial .ed-grid-asym > * { transition: box-shadow 0.4s ease; }
 .editorial .ed-grid-asym > *:hover {
-    transform: translateY(-6px);
     z-index: 2;
 }
 
-/* ─── meta strip ─── */
+/* ─── meta strip — merged into .ed-hero, reads as one compact header ─── */
 .editorial .ed-meta {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    padding: clamp(60px, 9vw, 110px) var(--ed-pad);
+    width: 100%;
+    /* Was clamp(60px, 9vw, 110px) top/bottom — that alone was a full screen
+       of whitespace. Now just enough breathing room around the columns. */
+    padding: 28px var(--ed-pad) 40px;
     border-top: 1px solid rgba(26, 20, 13, 0.18);
-    border-bottom: 1px solid rgba(26, 20, 13, 0.18);
     max-width: var(--ed-max);
-    margin: 80px auto 0;
+    /* Was 80px — the gap that visually split title and meta into two
+       separate sections. */
+    margin: 28px auto 0;
     gap: 0;
 }
 .editorial .ed-meta__col {
@@ -6310,33 +6320,38 @@ header h1 {
 .editorial .ed-meta__feature::before { content: '· '; color: var(--muted); }
 .editorial .ed-meta__feature:first-child::before { content: ''; }
 
-/* ─── intro segmented bouncy ─── */
+/* ─── intro — short summarized pull-quote ─── */
 .editorial .ed-intro {
     max-width: var(--ed-max);
-    margin: clamp(80px, 12vh, 140px) auto;
+    margin: clamp(48px, 7vh, 90px) auto;
     padding: 0 var(--ed-pad);
 }
 .editorial .ed-intro__body {
     font-family: var(--serif);
-    font-size: clamp(24px, 2.6vw, 40px);
-    line-height: 1.4;
+    /* Reads as body copy, not a headline — was clamp(24px, 2.6vw, 40px). */
+    font-size: clamp(17px, 1.4vw, 21px);
+    line-height: 1.55;
     color: var(--ink);
-    max-width: 720px;
+    max-width: 640px;
     margin: 0;
 }
 .editorial .ed-intro__body + .ed-intro__body {
-    margin-top: clamp(60px, 10vh, 140px);
+    /* Was clamp(60px, 10vh, 140px) — the huge gap ate most of the viewport. */
+    margin-top: clamp(20px, 3vh, 32px);
 }
 .editorial .ed-intro__body:nth-of-type(1) { margin-left: 0; }
 .editorial .ed-intro__body:nth-of-type(2) { margin-left: auto; text-align: right; }
-.editorial .ed-intro__body:nth-of-type(3) { margin-left: 8%; }
-.editorial .ed-intro__body:nth-of-type(4) { margin-left: auto; text-align: right; max-width: 600px; }
+/* Key phrase gets an underline instead of a background highlight box. */
 .editorial .ed-intro__body em {
     color: var(--rust);
     font-style: italic;
-    background: linear-gradient(120deg, transparent 0%, rgba(232, 184, 90, 0.35) 60%, transparent 100%);
-    padding: 0 6px;
-    border-radius: 4px;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    text-decoration: underline;
+    text-decoration-color: var(--rust);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
 }
 
 /* ─── pull-quote ─── */

@@ -1,720 +1,235 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import HoverVideo from '../HoverVideo';
-import { getImageScale } from '@/app/lib/imageScaleUtils';
+import {
+  EditorialSection,
+  EditorialSubtitle,
+  MediaFrame,
+  MediaGrid,
+  MediaGridItem,
+  useImageEnlarger,
+  useSketchUnderlineReveal,
+  useIsMobile,
+} from '../editorial';
 import { getPostById } from '@/app/lib/posts';
 
-// Helper function to add basePath for GitHub Pages
-function getImageSrc(src: string): string {
-  if (src.startsWith('http://') || src.startsWith('https://')) {
-    return src;
-  }
-  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
-  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
-}
-
-// Helper function to convert YouTube watch URL to embed URL
+// YouTube watch URL → embed URL
 function convertToEmbedUrl(url: string): string {
   if (!url) return url;
-  
-  // If already an embed URL, return as is
-  if (url.includes('/embed/')) {
-    return url;
-  }
-  
-  // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
+  if (url.includes('/embed/')) return url;
   if (url.includes('youtube.com/watch')) {
     const videoId = url.split('v=')[1]?.split('&')[0];
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
+    if (videoId) return `https://www.youtube.com/embed/${videoId}`;
   }
-  
-  // Convert short URL (https://youtu.be/VIDEO_ID) to embed URL
   if (url.includes('youtu.be/')) {
     const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
+    if (videoId) return `https://www.youtube.com/embed/${videoId}`;
   }
-  
   return url;
 }
 
+const STAGE1_RECORDING_ITEMS: MediaGridItem[] = [
+  { path: '/webm/Signie/hand1.webm', description: 'Hand guiding animation', isVideo: true },
+  { path: '/webm/Signie/hand2.webm', description: 'Hand guiding animation with customized hand model', isVideo: true },
+  { path: '/webm/Signie/fb2.webm', description: 'Full body animation recorded by Meta Quest headset', isVideo: true },
+  { path: '/Signiepics/handrecord.png', description: 'I record via Unity recorder + FBX converter, all in Unity' },
+];
+
+const STAGE1_BUBBLE_ITEMS: MediaGridItem[] = [
+  { path: '/webm/Signie/bubble1.webm', description: 'Bubble guide 1', isVideo: true },
+  { path: '/webm/Signie/bubble2.webm', description: 'Bubble guide 2', isVideo: true },
+];
+
+const STAGE2_ITEMS: MediaGridItem[] = [
+  { path: '/Signiepics/mixwords.png', description: 'Pattern of learning and testing with mixed mechanism' },
+  { path: '/Signiepics/manager.jpg', description: 'Manager prefab for learning a new word' },
+  { path: '/webm/Signie/learn.webm', description: 'Follow the tutor animation to learn', isVideo: true },
+  { path: '/webm/Signie/test1.webm', description: 'Test 1 — Hand gesture test', isVideo: true },
+  { path: '/webm/Signie/test2.webm', description: 'Test 2 — Rhythm-game testing of ASL alphabet', isVideo: true },
+  { path: '/webm/Signie/test3.webm', description: 'Test 3 — Pick correct lines based on animation played by tutor', isVideo: true },
+];
+
+const CONTRIBUTIONS = [
+  'make hand interaction of learning process',
+  'GameManager which manages the application experience, from learning to playful game testing',
+  "add microgesture to integrate Speech-to-Text driving live translation of the tutor's animation",
+];
+
+const bodyStyle = {
+  fontFamily: 'var(--serif)',
+  fontSize: 'clamp(18px, 1.7vw, 22px)',
+  lineHeight: 1.7,
+  color: 'var(--ink)',
+} as const;
+
+const stageNoteStyle = {
+  fontFamily: 'var(--serif)',
+  fontStyle: 'italic',
+  fontSize: 'clamp(15px, 1.3vw, 18px)',
+  color: 'var(--shadow-warm)',
+  textAlign: 'center' as const,
+  marginTop: 24,
+  marginBottom: 8,
+};
+
 export default function Post2() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState<{ src: string; alt: string; isVideo?: boolean } | null>(null);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  
-  // Get post data for Stage 3 video URL
+  const isMobile = useIsMobile();
+  const { handleImageClick, overlay } = useImageEnlarger();
+  useSketchUnderlineReveal();
+
   const post = getPostById('post-2');
   const stage3VideoUrl = post?.stage3VideoUrl;
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && enlargedImage) {
-        setEnlargedImage(null);
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [enlargedImage]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target as HTMLElement;
-          const path = el.querySelector('path');
-          if (path) {
-            const delay = parseFloat(el.dataset.delay || '0');
-            setTimeout(() => path.classList.add('drawn'), delay * 1000);
-          }
-          observer.unobserve(el);
-        }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll<HTMLElement>('.sketch-underline').forEach((el, i) => {
-      el.dataset.delay = (i * 0.15).toFixed(2);
-      observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  const handleImageClick = (src: string, alt: string, isVideo?: boolean) => {
-    setEnlargedImage({ src, alt, isVideo });
-  };
-
-  const handleCloseEnlarged = () => {
-    setEnlargedImage(null);
-  };
+  const stage3Embed = stage3VideoUrl ? convertToEmbedUrl(stage3VideoUrl) : '';
 
   return (
     <>
-      {/* Enlarged Image Overlay */}
-      {enlargedImage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.95)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            padding: '20px'
-          }}
-          onClick={handleCloseEnlarged}
-        >
-          <div
-            style={{
-              position: 'relative',
-              width: '90vw',
-              height: '90vh',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {enlargedImage.isVideo ? (
-              <video
-                src={getImageSrc(enlargedImage.src)}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                style={{
-                  maxWidth: '90vw',
-                  maxHeight: '90vh',
-                  width: 'auto',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  borderRadius: '8px'
-                }}
-              />
-            ) : (
-              <img
-                src={getImageSrc(enlargedImage.src)}
-                alt={enlargedImage.alt}
-                style={{
-                  maxWidth: '90vw',
-                  maxHeight: '90vh',
-                  width: 'auto',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  borderRadius: '8px',
-                  transform: `scale(${getImageScale(enlargedImage.src)})`,
-                  transformOrigin: 'center center'
-                }}
-              />
-            )}
-            <button
-              onClick={handleCloseEnlarged}
-              style={{
-                position: 'absolute',
-                top: '20px',
-                right: '20px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '40px',
-                height: '40px',
-                color: '#fff',
-                fontSize: '24px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'background 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-              }}
-            >
-              &times;
-            </button>
-            {/* Back button for touch devices (iPad, mobile) */}
-            {isTouchDevice && (
-              <button
-                onClick={handleCloseEnlarged}
-                style={{
-                  position: 'absolute',
-                  right: '20px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'rgba(255, 255, 255, 0.9)',
-                  border: '2px solid rgba(255, 255, 255, 0.5)',
-                  borderRadius: '12px',
-                  padding: '14px 24px',
-                  color: '#000',
-                  fontSize: '18px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  zIndex: 10001,
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                  minWidth: '80px'
-                }}
-              >
-                Back
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      {overlay}
 
       <div className="post-content">
-        <div className="text-content">
-          {/* Ideation Section */}
-          <section id="ideation" style={{ marginBottom: '72px', scrollMarginTop: '100px' }}>
-            <h2 style={{ 
-              fontSize: '1.75rem', 
-              fontWeight: 700, 
-              color: '#fff', 
-              marginBottom: '24px',
-              textAlign: 'center'
-            }}>
-              Ideation
-            </h2>
-            <p style={{ 
-              fontSize: '1rem', 
-              lineHeight: '1.8', 
-              color: '#d0d0d0',
-              marginBottom: '16px',
-              textAlign: 'center',
-              maxWidth: '900px',
-              marginLeft: 'auto',
-              marginRight: 'auto'
-            }}>
+        {/* ─── Ideation ─── */}
+        <EditorialSection id="ideation" kicker="CHAPTER 01" title="Ideation" kickerVariant="rust">
+          <div style={{ maxWidth: 900, margin: '0 auto' }}>
+            <p style={bodyStyle}>
               Signie is an immersive{' '}
-              <span className="sketch-underline orange">ASL learning and real-time translation
+              <span className="sketch-underline orange">
+                ASL learning and real-time translation
                 <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
-              </span>
-              {' '}system powered by{' '}
-              <span className="sketch-underline blue">hand tracking, micro-gestures, and AI feedback
+              </span>{' '}
+              system powered by{' '}
+              <span className="sketch-underline blue">
+                hand tracking, micro-gestures, and AI feedback
                 <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" /></svg>
               </span>
-              .
-              It evolved from concept validation to interactive learning experiences, and ultimately to{' '}
-              <span className="sketch-underline green">AI-glasses-based live translation
+              . It evolved from concept validation to interactive learning experiences, and ultimately to{' '}
+              <span className="sketch-underline green">
+                AI-glasses-based live translation
                 <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
               </span>
               .
             </p>
-          </section>
+          </div>
+        </EditorialSection>
 
-          {/* Process Section */}
-          <section id="process" style={{ marginBottom: '72px', scrollMarginTop: '100px' }}>
-            <h2 style={{ 
-              fontSize: '1.75rem', 
-              fontWeight: 700, 
-              color: '#fff', 
-              marginBottom: '40px',
-              textAlign: 'center'
-            }}>
-              Process
-            </h2>
+        {/* ─── Process ─── */}
+        <EditorialSection id="process" kicker="CHAPTER 02" title="Process">
+          {/* Stage 1 */}
+          <EditorialSubtitle id="process-stage1">
+            Stage 1 — Prototype: Solve animation of tutors (hand & full body)
+          </EditorialSubtitle>
+          <p style={stageNoteStyle}>1. record hand-guiding / full-body animation, all in Unity</p>
+          <MediaGrid
+            items={STAGE1_RECORDING_ITEMS}
+            isMobile={isMobile}
+            idPrefix="stage1-record"
+            onItemClick={handleImageClick}
+          />
+          <p style={{ ...stageNoteStyle, marginTop: 60 }}>2. add bubbles to guide hand movement</p>
+          <MediaGrid
+            items={STAGE1_BUBBLE_ITEMS}
+            isMobile={isMobile}
+            idPrefix="stage1-bubbles"
+            onItemClick={handleImageClick}
+          />
 
-            {/* Stage1: Prototype - Solve animation of tutors */}
-            <h3 id="process-stage1" style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: 600, 
-              color: '#d0d0d0', 
-              marginBottom: '24px',
-              marginTop: '16px',
-              scrollMarginTop: '100px',
-              textAlign: 'center'
-            }}>
-              Stage1. Prototype - Solve animation of tutors(hand & full body)
-            </h3>
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#d0d0d0',
-              textAlign: 'center',
-              marginBottom: '24px',
-              fontStyle: 'italic'
-            }}>
-              1. record hand guiding/full body animation all in unity
+          {/* Stage 2 */}
+          <EditorialSubtitle id="process-stage2" style={{ marginTop: 100 }}>
+            Stage 2 — Develop learning and testing function
+          </EditorialSubtitle>
+          <p style={stageNoteStyle}>1. mix words of different levels of familiarity</p>
+          <MediaGrid
+            items={STAGE2_ITEMS}
+            isMobile={isMobile}
+            idPrefix="stage2"
+            onItemClick={handleImageClick}
+          />
+
+          {/* Stage 3 */}
+          <EditorialSubtitle id="process-stage3" style={{ marginTop: 100 }}>
+            Stage 3 — AI Glasses: Live ASL Translation
+          </EditorialSubtitle>
+          <div style={{ maxWidth: 900, margin: '32px auto 40px' }}>
+            <p style={{ ...bodyStyle, marginBottom: 16 }}>
+              <strong>1. Micro-gesture input for hands-free system control</strong>
             </p>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-              gap: isMobile ? '24px' : '30px',
-              marginTop: '24px',
-              marginBottom: '40px',
-              maxWidth: '1400px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              {/* 6 pictures and a gif - placeholder paths */}
-              {[
-                { path: '/webm/Signie/hand1.webm', description: 'Hand guiding animation', isVideo: true },
-                { path: '/webm/Signie/hand2.webm', description: 'Hand guiding animation with customized hand model', isVideo: true },
-                { path: '/webm/Signie/fb2.webm', description: 'Full body animation recored by meta quest headset', isVideo: true },
-                { path: '/Signiepics/handrecord.png', description: 'I record use unity recorder, and use fbx converter all in unity' }
-                
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px'
-                  }}
-                >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer',
-                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
-                      transition: 'transform 0.3s ease, border-color 0.3s ease',
-                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
-                    }}
-                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
-                    onMouseEnter={() => setHoveredItem(item.path)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                  >
-                    {item.isVideo ? (
-                      <HoverVideo
-                        videoSrc={item.path}
-                        alt={item.description}
-                        objectFit="cover"
-                      />
-                    ) : (
-                      <Image
-                        src={getImageSrc(item.path)}
-                        alt={item.description}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                        }}
-                      />
-                    )}
-                  </div>
-                  <p style={{
-                    fontSize: '1rem',
-                    color: '#d0d0d0',
-                    textAlign: 'center',
-                    margin: 0,
-                    lineHeight: 1.5
-                  }}>
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-            
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#d0d0d0',
-              textAlign: 'center',
-              marginBottom: '24px',
-              fontStyle: 'italic'
-            }}>
-              2. add bubbles to guide hand movement
+            <p style={{ ...bodyStyle, marginBottom: 12 }}>
+              <strong>Live Translation Pipeline</strong>
             </p>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-              gap: isMobile ? '24px' : '30px',
-              marginTop: '24px',
-              marginBottom: '40px',
-              maxWidth: '1400px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              {/* 2 pictures and a gif */}
-              {[
-                { path: '/webm/Signie/bubble1.webm', description: 'Bubble guide 1', isVideo: true },
-                { path: '/webm/Signie/bubble2.webm', description: 'Bubble guide 2', isVideo: true }
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px'
-                  }}
-                >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer',
-                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
-                      transition: 'transform 0.3s ease, border-color 0.3s ease',
-                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
-                    }}
-                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
-                    onMouseEnter={() => setHoveredItem(item.path)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                  >
-                    {item.isVideo ? (
-                      <HoverVideo
-                        videoSrc={item.path}
-                        alt={item.description}
-                        objectFit="cover"
-                      />
-                    ) : (
-                      <Image
-                        src={getImageSrc(item.path)}
-                        alt={item.description}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                        }}
-                      />
-                    )}
-                  </div>
-                  <p style={{
-                    fontSize: '1rem',
-                    color: '#d0d0d0',
-                    textAlign: 'center',
-                    margin: 0,
-                    lineHeight: 1.5
-                  }}>
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <ul
+              style={{
+                fontFamily: 'var(--serif)',
+                fontSize: 'clamp(17px, 1.5vw, 20px)',
+                lineHeight: 1.7,
+                color: 'var(--ink)',
+                marginLeft: 24,
+                paddingLeft: 0,
+              }}
+            >
+              <li style={{ marginBottom: 8 }}>Voice → Text using Wit.ai</li>
+              <li>Text → Sign animation via animation state machine</li>
+            </ul>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <MediaFrame
+              src={
+                stage3Embed
+                  ? `${stage3Embed}?autoplay=1&mute=1&loop=1&playlist=${
+                      stage3VideoUrl!.includes('watch?v=')
+                        ? stage3VideoUrl!.split('v=')[1]?.split('&')[0]
+                        : stage3VideoUrl!.split('/embed/')[1]?.split('?')[0]
+                    }`
+                  : ''
+              }
+              alt="Live ASL Translation Demonstration"
+              caption="Live ASL Translation Demonstration"
+              isYouTube={!!stage3Embed}
+              variant="default"
+              tilt="right"
+              dataAnim="rotate-in"
+              width="min(900px, 96%)"
+            />
+          </div>
+        </EditorialSection>
 
-            {/* Stage2: Develop learning and testing function */}
-            <h3 id="process-stage2" style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: 600, 
-              color: '#d0d0d0', 
-              marginBottom: '24px',
-              marginTop: '48px',
-              textAlign: 'center',
-              scrollMarginTop: '100px'
-            }}>
-              Stage2. Develop learning and testing function
-            </h3>
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#d0d0d0',
-              textAlign: 'center',
-              marginBottom: '24px',
-              fontStyle: 'italic'
-            }}>
-              1. mix words of different levels of the familarity
-            </p>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-              gap: isMobile ? '24px' : '30px',
-              marginTop: '24px',
-              marginBottom: '40px',
-              maxWidth: '1400px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              padding: isMobile ? '0 16px' : '0'
-            }}>
-              {/* 6 pictures and a gif */}
-              {[
-                { path: '/Signiepics/mixwords.png', description: 'Pattern of learning and testing with mixed mechanism' },
-                { path: '/Signiepics/manager.jpg', description: 'Manager prefab for a learning a new word' },
-                { path: '/webm/Signie/learn.webm', description: 'Follow the tutor animation to learn', isVideo: true },
-                { path: '/webm/Signie/test1.webm', description: 'Test1: Hand Gesture Test', isVideo: true },
-                { path: '/webm/Signie/test2.webm', description: 'Test2: A rhythm game-like testing to test ASL alphabet', isVideo: true },
-                { path: '/webm/Signie/test3.webm', description: 'Test3: Pick correct lines based on animation played by tutor', isVideo: true }
-                
-              ].map((item, index) => (
-                <div
-                  key={`stage2-${index}`}
+        {/* ─── My Contributions ─── */}
+        <EditorialSection id="contributions" kicker="CREDITS" title="My Contributions" kickerVariant="rust">
+          <div style={{ maxWidth: 900, display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {CONTRIBUTIONS.map((line, index) => (
+              <div
+                key={index}
+                data-anim="slide-up"
+                style={{
+                  padding: '20px 24px',
+                  background: 'var(--bone)',
+                  border: '1px solid rgba(26, 20, 13, 0.12)',
+                  borderLeft: '4px solid var(--rust)',
+                  boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
+                }}
+              >
+                <p
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px'
-                  }}
-                >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '16/9',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      backgroundColor: 'transparent',
-                      cursor: 'pointer',
-                      border: hoveredItem === item.path ? '2px solid rgba(255, 255, 255, 0.6)' : '2px solid transparent',
-                      transition: 'transform 0.3s ease, border-color 0.3s ease',
-                      transform: hoveredItem === item.path ? 'scale(1.05)' : 'scale(1)'
-                    }}
-                    onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
-                    onMouseEnter={() => setHoveredItem(item.path)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                  >
-                    {item.isVideo ? (
-                      <HoverVideo
-                        videoSrc={item.path}
-                        alt={item.description}
-                        objectFit="cover"
-                      />
-                    ) : (
-                      <Image
-                        src={getImageSrc(item.path)}
-                        alt={item.description}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://via.placeholder.com/400x225/2a2a2a/888888?text=${encodeURIComponent(item.description)}`;
-                        }}
-                      />
-                    )}
-                  </div>
-                  <p style={{
-                    fontSize: '1rem',
-                    color: '#d0d0d0',
-                    textAlign: 'center',
-                    margin: 0,
-                    lineHeight: 1.5
-                  }}>
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Stage3: AI Glasses: Live ASL Translation */}
-            <h3 id="process-stage3" style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: 600, 
-              color: '#d0d0d0', 
-              marginBottom: '24px',
-              marginTop: '48px',
-              textAlign: 'center',
-              scrollMarginTop: '100px'
-            }}>
-              Stage3. AI Glasses: Live ASL Translation
-            </h3>
-            <div style={{
-              maxWidth: '900px',
-              margin: '0 auto',
-              marginBottom: '24px'
-            }}>
-              <p style={{
-                fontSize: '1rem',
-                lineHeight: '1.8',
-                color: '#d0d0d0',
-                marginBottom: '16px',
-                textAlign: 'left'
-              }}>
-                <strong style={{ color: '#fff' }}>1. Micro-gesture input for hands-free system control</strong>
-              </p>
-              <p style={{
-                fontSize: '1rem',
-                lineHeight: '1.8',
-                color: '#d0d0d0',
-                marginBottom: '24px',
-                textAlign: 'left'
-              }}>
-                <strong style={{ color: '#fff' }}>Live Translation Pipeline</strong>
-              </p>
-              <ul style={{
-                fontSize: '1rem',
-                lineHeight: '1.8',
-                color: '#d0d0d0',
-                marginLeft: '24px',
-                marginBottom: '24px',
-                paddingLeft: '0'
-              }}>
-                <li style={{ marginBottom: '8px' }}>Voice → Text using Wit.ai</li>
-                <li style={{ marginBottom: '8px' }}>Text → Sign animation via animation state machine</li>
-              </ul>
-            </div>
-            
-            {/* YouTube Video for Stage 3 */}
-            <div style={{
-              maxWidth: '900px',
-              margin: '0 auto',
-              marginTop: '24px'
-            }}>
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                paddingBottom: '56.25%', // 16:9 aspect ratio
-                height: 0,
-                overflow: 'hidden',
-                borderRadius: '12px',
-                backgroundColor: 'transparent',
-                marginBottom: '12px'
-              }}>
-                {stage3VideoUrl ? (
-                  <iframe
-                    src={`${convertToEmbedUrl(stage3VideoUrl)}?autoplay=1&mute=1&loop=1&playlist=${stage3VideoUrl.includes('watch?v=') ? stage3VideoUrl.split('v=')[1]?.split('&')[0] : stage3VideoUrl.split('/embed/')[1]?.split('?')[0]}`}
-                    title="Live ASL Translation Demonstration"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      border: 'none',
-                      borderRadius: '12px',
-                      marginTop: '0px',
-                      marginBottom: '0px'
-                    }}
-                  />
-                ) : (
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    border: '1px dashed rgba(255,255,255,0.2)'
-                  }}>
-                    <p style={{
-                      fontSize: '0.95rem',
-                      color: '#888',
-                      textAlign: 'center',
-                      margin: 0,
-                      padding: '20px'
-                    }}>
-                      YouTube video placeholder - Add stage3VideoUrl in posts.ts
-                    </p>
-                  </div>
-                )}
-              </div>
-              <p style={{
-                fontSize: '0.875rem',
-                color: 'rgba(255,255,255,0.7)',
-                textAlign: 'center',
-                margin: 0
-              }}>
-                Live ASL Translation Demonstration
-              </p>
-            </div>
-          </section>
-
-          {/* My Contributions Section (moved to bottom) */}
-          <section id="contributions" className="ed-section" style={{ scrollMarginTop: '100px' }}>
-            <span className="ed-kicker ed-kicker--rust">CREDITS</span>
-            <h2 className="ed-section__title">My Contributions</h2>
-            <div style={{
-              maxWidth: '900px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px'
-            }}>
-              {[
-                'make hand interaction of learning process',
-                'GameManager which manages the application experience, from learning to playful game testing',
-                'add microgesture to integrate Speech-to-Text driving live translation of the tutor\'s animation'
-              ].map((contribution, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: '20px 24px',
-                    background: 'var(--bone)',
-                    border: '1px solid rgba(26, 20, 13, 0.12)',
-                    borderLeft: '4px solid var(--rust)',
-                    boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
-                  }}
-                >
-                  <p style={{
                     fontFamily: 'var(--serif)',
                     fontSize: '1.05rem',
                     lineHeight: 1.6,
                     color: 'var(--ink)',
                     margin: 0,
-                  }}>
-                    <span style={{ fontFamily: 'var(--sans)', fontWeight: 500, letterSpacing: '0.18em', color: 'var(--rust)', marginRight: 10 }}>
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    {contribution}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--sans)',
+                      fontWeight: 500,
+                      letterSpacing: '0.18em',
+                      color: 'var(--rust)',
+                      marginRight: 10,
+                    }}
+                  >
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {line}
+                </p>
+              </div>
+            ))}
+          </div>
+        </EditorialSection>
       </div>
     </>
   );
