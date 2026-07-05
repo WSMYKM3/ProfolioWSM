@@ -6128,7 +6128,7 @@ header h1 {
    block. No more min-height: 90vh / vertical centering. */
 .editorial .ed-hero {
     position: relative;
-    padding: clamp(40px, 6vh, 64px) var(--ed-pad) 0;
+    padding: clamp(118px, 13vh, 150px) var(--ed-pad) 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6268,16 +6268,16 @@ header h1 {
     width: 100%;
     /* Was clamp(60px, 9vw, 110px) top/bottom — that alone was a full screen
        of whitespace. Now just enough breathing room around the columns. */
-    padding: 28px var(--ed-pad) 40px;
+    padding: 20px var(--ed-pad) 28px;
     border-top: 1px solid rgba(26, 20, 13, 0.18);
     max-width: var(--ed-max);
     /* Was 80px — the gap that visually split title and meta into two
        separate sections. */
-    margin: 28px auto 0;
+    margin: 22px auto 0;
     gap: 0;
 }
 .editorial .ed-meta__col {
-    padding: 0 28px;
+    padding: 0 22px;
     border-left: 1px solid rgba(26, 20, 13, 0.12);
 }
 .editorial .ed-meta__col:first-child {
@@ -6286,35 +6286,44 @@ header h1 {
 }
 .editorial .ed-meta__label {
     font-family: var(--sans);
-    font-size: 11px;
-    letter-spacing: 0.24em;
+    font-size: 10px;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     display: block;
 }
 .editorial .ed-meta__value {
     font-family: var(--serif);
-    font-size: clamp(18px, 1.4vw, 22px);
-    line-height: 1.3;
+    font-size: clamp(15px, 1.05vw, 18px);
+    line-height: 1.25;
     color: var(--ink);
 }
 .editorial .ed-meta__tools {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: wrap;
     align-items: center;
+}
+.editorial .ed-meta__tools .software-icon img {
+    width: 22px !important;
+    height: 22px !important;
+    max-width: 22px !important;
+    max-height: 22px !important;
+}
+.editorial .ed-meta__tools .software-icon-label {
+    font-size: 13px;
 }
 .editorial .ed-meta__tools .software-icon-label { color: var(--ink); }
 .editorial .ed-meta__features {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px 12px;
+    gap: 4px 10px;
 }
 .editorial .ed-meta__feature {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 15px;
+    font-size: 14px;
     color: var(--rust);
 }
 .editorial .ed-meta__feature::before { content: '· '; color: var(--muted); }
@@ -6394,10 +6403,21 @@ header h1 {
 
 /* ─── section titles (editorial chapters) ─── */
 .editorial .ed-section {
+    width: 100%;
+    box-sizing: border-box;
     max-width: var(--ed-max);
     margin: 0 auto;
     padding: clamp(80px, 12vh, 140px) var(--ed-pad) 60px;
     scroll-margin-top: 100px;
+}
+@media (min-width: 901px) {
+    .editorial .post-content .ed-section {
+        max-width: min(100vw, 1612px);
+    }
+}
+.editorial .post-detail-view--datnie .ed-section {
+    padding-top: clamp(46px, 7vh, 76px);
+    padding-bottom: 36px;
 }
 .editorial .ed-section__title {
     font-family: var(--serif);
@@ -6409,6 +6429,22 @@ header h1 {
     margin: 8px 0 48px;
     color: var(--ink);
     text-align: left;
+}
+.editorial .post-detail-view--datnie .ed-section__title {
+    margin-bottom: 30px;
+}
+.editorial .post-content .signie-ideation-section {
+    padding-top: clamp(44px, 6vh, 68px);
+    padding-bottom: 0;
+}
+.editorial .post-content .signie-ideation-section .ed-section__title {
+    margin-bottom: 30px;
+}
+.editorial .post-content .signie-ideation-section p {
+    margin: 0;
+}
+.editorial .post-content .signie-process-section {
+    padding-top: 12px;
 }
 .editorial .ed-section__subtitle {
     font-family: var(--serif);
@@ -6635,10 +6671,10 @@ header h1 {
 
 /* ─── responsive ─── */
 @media (max-width: 900px) {
-    .editorial .ed-meta { grid-template-columns: repeat(2, 1fr); gap: 32px 0; }
+    .editorial .ed-meta { grid-template-columns: repeat(2, 1fr); gap: 24px 0; padding-bottom: 28px; }
     .editorial .ed-meta__col:nth-child(odd) { border-left: 0; padding-left: 0; }
-    .editorial .ed-meta__col:nth-child(3) { border-top: 1px solid rgba(26, 20, 13, 0.12); padding-top: 32px; }
-    .editorial .ed-meta__col:nth-child(4) { border-top: 1px solid rgba(26, 20, 13, 0.12); padding-top: 32px; }
+    .editorial .ed-meta__col:nth-child(3) { border-top: 1px solid rgba(26, 20, 13, 0.12); padding-top: 24px; }
+    .editorial .ed-meta__col:nth-child(4) { border-top: 1px solid rgba(26, 20, 13, 0.12); padding-top: 24px; }
     .editorial .ed-explore__grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
     .editorial .ed-sidebar-wrap { display: none; }
 }
@@ -6647,12 +6683,38 @@ header h1 {
     .editorial .ed-meta__col {
         border-left: 0 !important;
         padding-left: 0 !important;
-        padding-top: 32px;
+        padding-top: 22px;
         border-top: 1px solid rgba(26, 20, 13, 0.12);
     }
     .editorial .ed-meta__col:first-child { border-top: 0; padding-top: 0; }
     .editorial .ed-explore__grid { grid-template-columns: 1fr; }
     .editorial .ed-intro__body { margin: 0 !important; text-align: left !important; max-width: 100% !important; }
+    .editorial .post-content,
+    .editorial .post-content .ed-section,
+    .editorial .post-content .ed-grid-asym {
+        max-width: 100%;
+        overflow-x: clip;
+    }
+    .editorial .post-content .ed-grid-asym {
+        grid-template-columns: 1fr !important;
+    }
+    .editorial .post-content .ed-grid-asym > * {
+        max-width: 100%;
+    }
+    .editorial .post-content .sketch-underline,
+    .editorial .ed-hero__tag .sketch-underline {
+        display: inline !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        text-decoration-line: underline;
+        text-decoration-color: currentColor;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+    }
+    .editorial .post-content .sketch-underline svg,
+    .editorial .ed-hero__tag .sketch-underline svg {
+        display: none;
+    }
 }
 
 /* ─── Override hardcoded light text/backgrounds inside Post[N] content

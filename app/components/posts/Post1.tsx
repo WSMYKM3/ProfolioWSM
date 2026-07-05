@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import {
   EditorialSection,
   EditorialSubtitle,
@@ -11,7 +10,6 @@ import {
   useSketchUnderlineReveal,
   useIsMobile,
 } from '../editorial';
-import { getPublicAssetUrl } from '@/app/lib/publicAsset';
 
 const STAGE1_ITEMS: MediaGridItem[] = [
   { path: '/gifs/groommaking1.webm', description: 'Character Groom Blueprint making process, groom binding in blender', isVideo: true },
@@ -46,6 +44,11 @@ export default function Post1() {
     lineHeight: 1.7,
     color: 'var(--ink)',
   } as const;
+  const ideationBodyStyle = {
+    ...bodyStyle,
+    fontSize: 'clamp(15px, 1.2vw, 18px)',
+    lineHeight: 1.62,
+  } as const;
 
   return (
     <>
@@ -56,14 +59,13 @@ export default function Post1() {
         <EditorialSection id="ideation" kicker="CHAPTER 01" title="Ideation" kickerVariant="rust">
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : '1.1fr 1fr',
-              gap: isMobile ? 32 : 60,
-              alignItems: 'center',
+              maxWidth: 760,
+              margin: 0,
+              textAlign: 'left',
             }}
           >
             <div>
-              <p style={{ ...bodyStyle, marginBottom: 20 }}>
+              <p style={{ ...ideationBodyStyle, marginBottom: 16 }}>
                 Inspired by a friend&apos;s frustration with{' '}
                 <span className="sketch-underline orange">
                   dating apps
@@ -71,7 +73,7 @@ export default function Post1() {
                     <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
                   </svg>
                 </span>
-                —endless queued messages, repeated conversations, and time spent hanging out only to find{' '}
+                {' '}— endless queued messages, repeated conversations, and time spent hanging out only to find{' '}
                 <span className="sketch-underline blue">
                   no shared interests
                   <svg viewBox="0 0 200 10" preserveAspectRatio="none">
@@ -80,7 +82,7 @@ export default function Post1() {
                 </span>
                 .
               </p>
-              <p style={bodyStyle}>
+              <p style={ideationBodyStyle}>
                 So we&apos;re building a dating app that{' '}
                 <span className="sketch-underline green">
                   recognizes your frequently mentioned answers and turns them into your profile automatically
@@ -98,27 +100,6 @@ export default function Post1() {
                 without repeating yourself.
               </p>
             </div>
-            <figure
-              className="photo photo--tilt-r"
-              data-anim="rotate-in"
-              style={{ width: 'min(420px, 100%)', justifySelf: isMobile ? 'center' : 'end', cursor: 'pointer' }}
-              onClick={() => handleImageClick('/Datnieideation.png', 'Datnie Ideation')}
-            >
-              <div className="photo__frame photo__frame--3by4 photo__frame--contain">
-                <Image
-                  src={getPublicAssetUrl('/Datnieideation.png')}
-                  alt="Datnie Ideation"
-                  width={800}
-                  height={600}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'https://via.placeholder.com/800x600/2a2a2a/888888?text=Ideation+Diagram';
-                  }}
-                />
-              </div>
-              <figcaption className="photo__caption">marker on butcher paper</figcaption>
-            </figure>
           </div>
         </EditorialSection>
 

@@ -140,6 +140,9 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
 
   const projectIdx = posts.findIndex((p) => p.id === post.id);
   const kicker = projectKicker(post, projectIdx);
+  const isDatnie = post.id === 'post-1';
+  const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-6';
+  const showIntro = !hideGeneratedIntro && Boolean(post.description);
 
   // Sidebar nav: prepend the project title anchor, then read per-project
   // sections from posts.ts (Post.sections). Insert 'intro' as the second
@@ -150,7 +153,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
     const hasIntro = sections.some((s) => s.id === 'intro');
     return [
       { id: 'project-title', label: post.title },
-      ...(hasIntro ? [] : [{ id: 'intro', label: 'Intro' }]),
+      ...(!hasIntro && showIntro ? [{ id: 'intro', label: 'Intro' }] : []),
       ...sections,
     ];
   };
@@ -158,10 +161,12 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const introSegments = splitIntoSegments(post.description || '', 2).map((s) => summarizeSegment(s));
   const showHeroMedia = post.id !== 'post-4' && post.id !== 'post-5' && post.id !== 'post-6';
 
-  const isDatnie = post.id === 'post-1';
-
   return (
-    <div className={`post-detail-view post-detail-view-page ${isDatnie ? '' : 'post-detail-view--dim-description'}`}>
+    <div
+      className={`post-detail-view post-detail-view-page ${
+        isDatnie ? 'post-detail-view--datnie' : 'post-detail-view--dim-description'
+      }`}
+    >
       {/* ─── HEADER — compact title + meta strip in one block ─── */}
       <section className="ed-hero" id="project-title">
         <svg className="deco" style={{ top: '10%', left: '5%', width: 48, height: 48, color: 'var(--rust)' }}
@@ -176,9 +181,26 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
         <div className="ed-hero__inner">
           <span className="ed-kicker ed-hero__kicker" data-anim="slide-up">{kicker}</span>
           <h1 className="ed-hero__mark" data-scrub-mark>{post.title}</h1>
-          {post.description && (
+          {post.description && (isDatnie ? (
+            <p className="ed-hero__tag">
+              Datnie matches you by learning both your and{' '}
+              <span className="sketch-underline blue">
+                your crush’s vibe from past conversations
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                  <path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" />
+                </svg>
+              </span>
+              , so there’s{' '}
+              <span className="sketch-underline orange">
+                no need to repeat yourself.
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                  <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
+                </svg>
+              </span>
+            </p>
+          ) : (
             <p className="ed-hero__tag" data-split>{post.description.split('.')[0]}.</p>
-          )}
+          ))}
         </div>
 
         {/* ─── META STRIP — four hairline columns, merged into the same header ─── */}
@@ -296,9 +318,11 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
       <div
         style={{
           display: 'flex',
-          maxWidth: 'var(--ed-max)',
+          width: '100%',
+          maxWidth: 'min(100vw, 1612px)',
           margin: '0 auto',
-          padding: '0 var(--ed-pad)',
+          padding: isMobile ? 0 : '0 var(--ed-pad)',
+          boxSizing: 'border-box',
           position: 'relative',
         }}
       >
@@ -344,7 +368,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
           )}
 
           {/* Intro — short summarized reveal with one underlined key phrase */}
-          {post.id !== 'post-6' && post.description && (
+          {showIntro && (
             <section id="intro" className="ed-intro">
               <span className="ed-kicker ed-kicker--rust" style={{ marginBottom: 20, display: 'block' }}>
                 INTRO

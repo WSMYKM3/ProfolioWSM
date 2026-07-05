@@ -52,7 +52,7 @@ export const posts: Post[] = [
     videoUrl: "https://www.youtube.com/embed/TrJPls4p5ak",
     videoTitle: "Datnie- XR Dating app",
     gifUrl: "/gifs/datnie.gif", // GIF for cinematic-extra section
-    description: "With Datnie, we don't want to pair you with an 'another' crush, no more repeated conversation as we catch your next crush's frequency answers from past coversations, and so do yours to pair better.",
+    description: "Datnie matches you by learning both your and your crush’s vibe from past conversations, so there’s no need to repeat yourself.",
     softwareTools: ["Unity6", "Unreal Engine", "Blender"],
     features: ["Mixed Reality", "Spatial Design", "XR Hands"],
     galleryImages: [
@@ -232,4 +232,3 @@ export const posts: Post[] = [
 export function getPostById(id: string): Post | undefined {
   return posts.find(post => post.id === id);
 }
-

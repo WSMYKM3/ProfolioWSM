@@ -86,7 +86,13 @@ export default function Post2() {
 
       <div className="post-content">
         {/* ─── Ideation ─── */}
-        <EditorialSection id="ideation" kicker="CHAPTER 01" title="Ideation" kickerVariant="rust">
+        <EditorialSection
+          id="ideation"
+          kicker="CHAPTER 01"
+          title="Ideation"
+          kickerVariant="rust"
+          className="signie-ideation-section"
+        >
           <div style={{ maxWidth: 900, margin: '0 auto' }}>
             <p style={bodyStyle}>
               Signie is an immersive{' '}
@@ -110,7 +116,7 @@ export default function Post2() {
         </EditorialSection>
 
         {/* ─── Process ─── */}
-        <EditorialSection id="process" kicker="CHAPTER 02" title="Process">
+        <EditorialSection id="process" kicker="CHAPTER 02" title="Process" className="signie-process-section">
           {/* Stage 1 */}
           <EditorialSubtitle id="process-stage1">
             Stage 1 — Prototype: Solve animation of tutors (hand & full body)
