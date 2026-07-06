@@ -31,7 +31,7 @@ export default function DailyPractice() {
   return (
     <div className="layout">
       <TopNav />
-      <main className="main-content">
+      <main className="main-content portfolio-light-surface explorations-light-page">
         <header>
           <h1>Explorations</h1>
         </header>
@@ -48,4 +48,3 @@ export default function DailyPractice() {
     </div>
   );
 }
-

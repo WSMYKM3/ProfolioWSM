@@ -447,6 +447,35 @@ header h1 {
     margin-bottom: 16px !important;
 }
 
+.carousel-title-action-overlay {
+    position: absolute;
+    z-index: 60;
+    left: calc(max(10vw, (100vw - 1200px) / 2) + 30px);
+    top: 50%;
+    width: min(600px, calc(80vw - 60px));
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    transform: translateY(-86px);
+    pointer-events: none;
+}
+
+.carousel-title-action-overlay .check-project-details-button {
+    pointer-events: auto;
+}
+
+.carousel-title-action-measure {
+    visibility: hidden;
+    color: transparent;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-shadow: none;
+    max-width: 100%;
+}
+
 .carousel-3d-wrapper-item .cinematic-text p {
     font-size: clamp(0.875rem, 1.5vw, 1rem) !important;
     margin-bottom: 20px !important;
@@ -733,6 +762,16 @@ header h1 {
         min-width: 250px;
     }
 
+    .check-project-details-button-title {
+        min-width: 0;
+        padding: 11px 18px;
+        font-size: 12px;
+    }
+
+    .work-light-page .horizontal-post-grid-container {
+        margin-top: -14px !important;
+    }
+
     .carousel-3d-wrapper-item .cinematic-content-container {
         padding: 20px !important;
         overflow: visible !important;
@@ -741,6 +780,18 @@ header h1 {
 
     .carousel-3d-wrapper-item .cinematic-text h2 {
         font-size: clamp(1.25rem, 4vw, 1.75rem) !important;
+    }
+
+    .carousel-title-action-overlay {
+        left: calc(5vw + 20px);
+        top: 50%;
+        width: calc(90vw - 40px);
+        gap: 12px;
+        transform: translateY(-52px);
+    }
+
+    .carousel-title-action-measure {
+        font-size: clamp(1.25rem, 4vw, 1.75rem);
     }
 
     .carousel-3d-wrapper-item .cinematic-extra {
@@ -820,6 +871,22 @@ header h1 {
         padding: 14px 24px;
         font-size: 12px;
         min-width: 200px;
+    }
+
+    .check-project-details-button-title {
+        min-width: 0;
+        padding: 10px 14px;
+        font-size: 11px;
+    }
+
+    .carousel-title-action-overlay {
+        left: calc(2.5vw + 16px);
+        width: calc(95vw - 32px);
+        transform: translateY(-44px);
+    }
+
+    .carousel-title-action-measure {
+        font-size: 1.25rem;
     }
 
     .carousel-3d-wrapper-item .cinematic-extra-mobile {
@@ -2127,7 +2194,27 @@ header h1 {
         inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 }
 
+.check-project-details-button-title {
+    min-width: 0;
+    padding: 12px 24px;
+    font-size: clamp(0.72rem, 1.2vw, 0.9rem);
+    line-height: 1;
+    white-space: nowrap;
+    animation: detailsButtonPulse 2s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes detailsButtonPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
 .check-project-details-button:hover {
+    animation: none;
     background: rgba(255, 255, 255, 0.18);
     border-color: rgba(255, 255, 255, 0.4);
     transform: scale(1.04) translateY(-2px);
@@ -2151,6 +2238,10 @@ header h1 {
 .main-content .horizontal-post-grid-container {
     margin-top: 0;
     padding-top: 0;
+}
+
+.work-light-page .horizontal-post-grid-container {
+    margin-top: -22px;
 }
 
 .horizontal-post-grid {
@@ -6513,6 +6604,25 @@ header h1 {
 .editorial .post-detail-view--mirror #live-scene.ed-section {
     padding-top: clamp(20px, 3vh, 36px);
 }
+.editorial .post-detail-view--mirror .mirror-achievement-section {
+    padding-top: clamp(40px, 6vh, 72px);
+    padding-bottom: 28px;
+}
+.editorial .post-detail-view--mirror .mirror-achievement-section .ed-section__title {
+    font-size: clamp(36px, 4.8vw, 72px);
+    margin-bottom: 24px;
+}
+.editorial .post-detail-view--mirror .mirror-achievement-section p {
+    font-size: clamp(16px, 1.35vw, 19px) !important;
+    line-height: 1.55 !important;
+}
+.editorial .post-detail-view--mirror .mirror-installation-draft-frame .photo__frame {
+    background: var(--paper-warm);
+}
+.editorial .post-detail-view--mirror .mirror-installation-draft-frame .photo__frame img {
+    height: calc(100% + 34px);
+    transform: translateY(-28px) scale(1.015);
+}
 .editorial .ed-section__title {
     font-family: var(--serif);
     font-style: italic;
@@ -7308,4 +7418,271 @@ body.home-wheel-active {
         width: min(420px, 90vw);
     }
     .editorial .project-footer { position: relative; inset: auto; margin-top: 40px; }
+}
+
+/* ============================================================
+ * LIGHT PORTFOLIO PAGES — Work / Explorations / Resume
+ * Reuses the pale About-style background while keeping
+ * existing page layouts intact.
+ * ============================================================ */
+.portfolio-light-surface {
+    --light-ink: #1a140d;
+    --light-muted: #6b5135;
+    --light-rust: #c64a28;
+    --light-paper: #f3f4f0;
+    --light-bone: #fbfbf7;
+    background: var(--light-paper) !important;
+    color: var(--light-ink) !important;
+}
+
+.layout:has(.resume-page.portfolio-light-surface) {
+    --light-ink: #1a140d;
+    --light-muted: #6b5135;
+    --light-rust: #c64a28;
+    --light-paper: #f3f4f0;
+    --light-bone: #fbfbf7;
+    background: var(--light-paper);
+}
+
+.portfolio-light-surface header h1 {
+    color: var(--light-ink);
+    border-color: rgba(26, 20, 13, 0.18);
+}
+
+.portfolio-light-surface .check-project-details-button,
+.portfolio-light-surface .carousel-3d-wrapper-btn,
+.portfolio-light-surface .horizontal-post-grid-arrow {
+    color: var(--light-ink);
+    background: rgba(251, 251, 247, 0.86);
+    border-color: rgba(26, 20, 13, 0.18);
+    box-shadow:
+        3px 4px 0 rgba(26, 20, 13, 0.12),
+        0 6px 18px rgba(26, 20, 13, 0.12);
+}
+
+.portfolio-light-surface .check-project-details-button:hover,
+.portfolio-light-surface .carousel-3d-wrapper-btn:hover,
+.portfolio-light-surface .horizontal-post-grid-arrow:hover {
+    background: var(--light-bone);
+    border-color: rgba(26, 20, 13, 0.28);
+    box-shadow:
+        4px 5px 0 rgba(26, 20, 13, 0.14),
+        0 10px 24px rgba(26, 20, 13, 0.16);
+}
+
+.portfolio-light-surface .horizontal-post-grid {
+    scrollbar-color: rgba(26, 20, 13, 0.28) transparent;
+}
+
+.portfolio-light-surface .horizontal-post-grid::-webkit-scrollbar-thumb {
+    background-color: rgba(26, 20, 13, 0.26);
+}
+
+.portfolio-light-surface .horizontal-post-grid::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(26, 20, 13, 0.36);
+}
+
+.portfolio-light-surface .horizontal-post-grid .post-card .btn,
+.portfolio-light-surface .masonry-grid .post-card .btn {
+    background: rgba(251, 251, 247, 0.72);
+    border-color: rgba(26, 20, 13, 0.13);
+    box-shadow:
+        0 6px 20px rgba(26, 20, 13, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.portfolio-light-surface .horizontal-post-grid .post-card input[type="checkbox"]:checked + .btn,
+.portfolio-light-surface .masonry-grid .post-card input[type="checkbox"]:checked + .btn {
+    background: rgba(251, 251, 247, 0.94);
+    box-shadow:
+        0 4px 14px rgba(26, 20, 13, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.62);
+}
+
+.portfolio-light-surface .horizontal-post-grid .post-card .top,
+.portfolio-light-surface .masonry-grid .post-card .top {
+    color: var(--light-ink);
+}
+
+.portfolio-light-surface .horizontal-post-grid .post-card .bottom .dot,
+.portfolio-light-surface .masonry-grid .post-card .bottom .dot {
+    background-color: rgba(26, 20, 13, 0.18);
+}
+
+.portfolio-light-surface .filter-container {
+    background: rgba(251, 251, 247, 0.88);
+    border-color: rgba(26, 20, 13, 0.16);
+    box-shadow:
+        0 8px 28px rgba(26, 20, 13, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.56);
+}
+
+.portfolio-light-surface .filter-tag {
+    color: var(--light-muted);
+}
+
+.portfolio-light-surface .filter-tag:hover {
+    background: rgba(198, 74, 40, 0.08);
+    color: var(--light-ink);
+}
+
+.portfolio-light-surface .filter-tag.active {
+    background: var(--light-ink);
+    color: var(--light-bone);
+}
+
+.portfolio-light-surface .garden {
+    background: transparent;
+}
+
+.portfolio-light-surface .card {
+    background: rgba(251, 251, 247, 0.96);
+    border-color: rgba(26, 20, 13, 0.14);
+    box-shadow:
+        0 6px 18px rgba(26, 20, 13, 0.16),
+        0 12px 30px rgba(26, 20, 13, 0.1);
+}
+
+.portfolio-light-surface .card:hover {
+    box-shadow:
+        0 12px 24px rgba(26, 20, 13, 0.18),
+        0 20px 44px rgba(26, 20, 13, 0.12);
+}
+
+.portfolio-light-surface .card:before,
+.portfolio-light-surface .card:after {
+    background: rgba(198, 74, 40, 0.08);
+}
+
+.portfolio-light-surface .card:hover:before,
+.portfolio-light-surface .card:hover:after {
+    background: rgba(198, 74, 40, 0.13);
+}
+
+.portfolio-light-surface .card-tag,
+.portfolio-light-surface .card-tags span {
+    background: rgba(26, 20, 13, 0.08) !important;
+    color: var(--light-muted) !important;
+}
+
+.portfolio-light-surface .card-title {
+    color: var(--light-ink);
+}
+
+.portfolio-light-surface .card-date {
+    color: var(--light-muted);
+}
+
+.resume-page.portfolio-light-surface {
+    background: var(--light-paper) !important;
+}
+
+.portfolio-light-surface .resume-section-title,
+.portfolio-light-surface .resume-award-name,
+.portfolio-light-surface .resume-experience-title,
+.portfolio-light-surface .resume-project-title,
+.portfolio-light-surface .resume-skills-subtitle,
+.portfolio-light-surface .resume-tools-group-title,
+.portfolio-light-surface .resume-education-degree,
+.portfolio-light-surface .resume-name {
+    color: var(--light-ink);
+}
+
+.portfolio-light-surface .resume-profile-text,
+.portfolio-light-surface .resume-skills-list li,
+.portfolio-light-surface .resume-contact-details p,
+.portfolio-light-surface .resume-experience-company,
+.portfolio-light-surface .resume-experience-description li,
+.portfolio-light-surface .resume-project-features li,
+.portfolio-light-surface .resume-project-description,
+.portfolio-light-surface .resume-feature-item,
+.portfolio-light-surface .resume-education-school,
+.portfolio-light-surface .resume-education-details,
+.portfolio-light-surface .resume-award-project,
+.portfolio-light-surface .resume-contact-final p,
+.portfolio-light-surface .resume-title {
+    color: var(--light-muted);
+}
+
+.portfolio-light-surface .resume-experience-period,
+.portfolio-light-surface .resume-project-tech,
+.portfolio-light-surface .resume-award-year,
+.portfolio-light-surface .resume-award-project::before {
+    color: rgba(107, 81, 53, 0.72);
+}
+
+.portfolio-light-surface .resume-skills-list li::before,
+.portfolio-light-surface .resume-experience-description li::before,
+.portfolio-light-surface .resume-project-features li::before {
+    color: var(--light-rust);
+}
+
+.portfolio-light-surface .resume-tool-item,
+.portfolio-light-surface .resume-project-tool {
+    color: var(--light-ink);
+    background-color: rgba(251, 251, 247, 0.78);
+    border-color: rgba(26, 20, 13, 0.14);
+}
+
+.portfolio-light-surface .resume-tool-item:hover {
+    background-color: rgba(251, 251, 247, 0.98);
+    border-color: rgba(26, 20, 13, 0.24);
+}
+
+.portfolio-light-surface .resume-sidebar,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar {
+    background: rgba(251, 251, 247, 0.82);
+    border: 1px solid rgba(26, 20, 13, 0.12);
+    border-radius: 12px;
+    padding: 16px 14px;
+    box-shadow:
+        4px 5px 0 rgba(26, 20, 13, 0.1),
+        0 8px 24px rgba(26, 20, 13, 0.12);
+}
+
+.portfolio-light-surface .resume-sidebar-item,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar-item {
+    color: var(--light-muted);
+}
+
+.portfolio-light-surface .resume-sidebar-item:hover,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar-item:hover {
+    color: var(--light-ink);
+    background-color: rgba(198, 74, 40, 0.08);
+}
+
+.portfolio-light-surface .resume-sidebar-item.active,
+.portfolio-light-surface .resume-sidebar-item.active:hover,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar-item.active,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar-item.active:hover {
+    color: var(--light-rust);
+}
+
+.portfolio-light-surface .resume-sidebar-indicator,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar-indicator {
+    background-color: var(--light-rust);
+}
+
+.portfolio-light-surface .resume-download-button,
+.portfolio-light-surface .resume-sidebar-download-button,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar-download-button {
+    color: var(--light-ink);
+    background: rgba(251, 251, 247, 0.88);
+    border-color: rgba(26, 20, 13, 0.18);
+    box-shadow:
+        3px 4px 0 rgba(26, 20, 13, 0.1),
+        0 6px 18px rgba(26, 20, 13, 0.12);
+}
+
+.portfolio-light-surface .resume-download-button:hover,
+.portfolio-light-surface .resume-sidebar-download-button:hover,
+.layout:has(.resume-page.portfolio-light-surface) .resume-sidebar-download-button:hover {
+    background: var(--light-bone);
+    border-color: rgba(26, 20, 13, 0.28);
+}
+
+@media (max-width: 768px) {
+    .portfolio-light-surface .filter-container {
+        top: 84px;
+    }
 }

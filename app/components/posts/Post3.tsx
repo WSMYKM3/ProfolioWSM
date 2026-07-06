@@ -187,7 +187,13 @@ export default function Post3() {
         </EditorialSection>
 
         {/* ─── Achievement ─── */}
-        <EditorialSection id="achievement" kicker="CHAPTER 01" title="Achievement" kickerVariant="rust">
+        <EditorialSection
+          id="achievement"
+          kicker="CHAPTER 01"
+          title="Achievement"
+          kickerVariant="rust"
+          className="mirror-achievement-section"
+        >
           <p style={bodyStyle}>
             Supported by{' '}
             <span className="sketch-underline blue">
@@ -219,6 +225,7 @@ export default function Post3() {
               variant="default"
               tilt="left"
               dataAnim="rotate-in"
+              className="mirror-installation-draft-frame"
               width="min(900px, 96%)"
               onClick={() => handleImageClick('/IandAI/Draft.png', 'Installation Draft Design')}
             />

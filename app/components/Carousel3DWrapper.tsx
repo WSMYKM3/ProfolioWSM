@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import type { ReactNode } from 'react';
 import { Post } from '@/app/lib/posts';
 import PostSection from './PostSection';
 
@@ -8,9 +9,10 @@ interface Carousel3DWrapperProps {
   posts: Post[];
   onPostClick?: (post: Post) => void;
   onIndexChange?: (index: number) => void;
+  titleAction?: (post: Post) => ReactNode;
 }
 
-export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange }: Carousel3DWrapperProps) {
+export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, titleAction }: Carousel3DWrapperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -179,6 +181,14 @@ export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange }:
           );
         })}
       </div>
+      {titleAction && posts[currentIndex] && (
+        <div className="carousel-title-action-overlay">
+          <span className="carousel-title-action-measure" aria-hidden="true">
+            {posts[currentIndex].title}
+          </span>
+          {titleAction(posts[currentIndex])}
+        </div>
+      )}
       <div className="carousel-3d-wrapper-controls">
         <button
           className="carousel-3d-wrapper-btn carousel-3d-wrapper-btn-left"
@@ -200,4 +210,3 @@ export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange }:
     </div>
   );
 }
-

@@ -239,38 +239,73 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
       {showHeroMedia && (
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
+            display: isMirror ? 'grid' : 'flex',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1.12fr',
+            gap: isMobile ? 24 : 32,
+            alignItems: 'center',
+            justifyContent: isMirror ? undefined : 'center',
+            maxWidth: isMirror ? 'min(100vw, 1280px)' : undefined,
+            marginLeft: isMirror ? 'auto' : undefined,
+            marginRight: isMirror ? 'auto' : undefined,
             padding: '0 var(--ed-pad)',
             marginBottom: 40,
             marginTop: 40,
             position: 'relative',
           }}
         >
-          <figure
-            className="photo photo--tilt-l"
-            data-anim="rotate-in"
-            style={{ width: 'min(820px, 92%)' }}
-          >
-            <div className="photo__frame">
-              {videoUrl ? (
-                videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
+          {isMirror ? (
+            <>
+              <figure className="photo photo--tilt-l" data-anim="rotate-in">
+                <div className="photo__frame">
                   <iframe
-                    src={videoUrl}
-                    title={post.title}
+                    src={convertToEmbedUrl('https://www.youtube.com/watch?v=D7zAp-WNIjM')}
+                    title="I AND AI: MIRROR technical walkthrough"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
+                </div>
+                <figcaption className="photo__caption">technical walkthrough</figcaption>
+              </figure>
+              <figure className="photo photo--tilt-r" data-anim="rotate-in">
+                <div className="photo__frame">
+                  <iframe
+                    src={convertToEmbedUrl('https://www.youtube.com/watch?v=Q4DBkTWYAFs')}
+                    title="I AND AI: MIRROR exhibition and interaction"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+                <figcaption className="photo__caption">Exhibition and interaction</figcaption>
+              </figure>
+            </>
+          ) : (
+            <figure
+              className="photo photo--tilt-l"
+              data-anim="rotate-in"
+              style={{ width: 'min(820px, 92%)' }}
+            >
+              <div className="photo__frame">
+                {videoUrl ? (
+                  videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
+                    <iframe
+                      src={videoUrl}
+                      title={post.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <video src={videoUrl} controls autoPlay muted loop />
+                  )
                 ) : (
-                  <video src={videoUrl} controls autoPlay muted loop />
-                )
-              ) : (
-                <Image src={getImageSrc(post.thumbnail)} alt={post.title} fill style={{ objectFit: 'cover' }} />
-              )}
-            </div>
-            <figcaption className="photo__caption">{post.videoTitle || post.title}</figcaption>
-          </figure>
+                  <Image src={getImageSrc(post.thumbnail)} alt={post.title} fill style={{ objectFit: 'cover' }} />
+                )}
+              </div>
+              <figcaption className="photo__caption">{post.videoTitle || post.title}</figcaption>
+            </figure>
+          )}
         </div>
       )}
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
@@ -10,6 +11,7 @@ interface PostSectionProps {
   post: Post;
   index: number;
   onPostClick?: (post: Post) => void;
+  titleAction?: ReactNode;
 }
 
 // Helper function to add basePath for GitHub Pages
@@ -40,7 +42,7 @@ function formatDate(dateString: string): string {
   return `${month}/${day}/${year}`;
 }
 
-export default function PostSection({ post, index, onPostClick }: PostSectionProps) {
+export default function PostSection({ post, index, onPostClick, titleAction }: PostSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -279,7 +281,8 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             gap: '16px',
             marginBottom: '24px',
             flexWrap: 'wrap'
-          }}>
+          }}
+          className="cinematic-title-row">
             <h2 style={{
               fontSize: isMobile ? '2.5rem' : '4rem',
               fontWeight: 800,
@@ -291,6 +294,7 @@ export default function PostSection({ post, index, onPostClick }: PostSectionPro
             }}>
               {post.title}
             </h2>
+            {titleAction}
           </div>
 
           {/* Horizontal divider line under project title */}

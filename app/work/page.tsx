@@ -37,7 +37,7 @@ export default function Work() {
   return (
     <div className="layout">
       <TopNav />
-      <main className="main-content">
+      <main className="main-content portfolio-light-surface work-light-page">
         <header>
           <h1>THE WORK</h1>
         </header>
@@ -45,20 +45,20 @@ export default function Work() {
           posts={posts} 
           onPostClick={handlePostClick}
           onIndexChange={setActiveIndex}
+          titleAction={(post) => (
+            <button
+              className="check-project-details-button check-project-details-button-title"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                handlePostClick(post);
+              }}
+              aria-label={`Check ${post.title} project details`}
+            >
+              Check Project Details
+            </button>
+          )}
         />
-        <div className="check-project-details-button-container">
-          <button
-            className="check-project-details-button"
-            onClick={() => {
-              if (posts[activeIndex]) {
-                handlePostClick(posts[activeIndex]);
-              }
-            }}
-            aria-label="Check project details"
-          >
-            Check Project Details
-          </button>
-        </div>
         <HorizontalPostGrid 
           posts={posts} 
           onPostClick={handlePostClick}

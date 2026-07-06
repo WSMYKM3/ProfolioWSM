@@ -40,7 +40,7 @@ export default function Resume() {
     <div className="layout">
       <TopNav />
       <ResumeSidebar sections={resumeSections} />
-      <main className="resume-page">
+      <main className="resume-page portfolio-light-surface">
         <div className="resume-container">
           <div className="resume-content">
             {/* Awards & Exhibitions Section */}
