@@ -68,16 +68,16 @@ const STAGE4_ITEMS: MediaGridItem[] = [
 ];
 
 const LIVE_SCENE_ITEMS: MediaGridItem[] = [
+  { path: '/IandAI/twogirls.jpeg' },
+  { path: '/IandAI/p.jpg' },
   { path: '/IandAI/installation1.jpg' },
   { path: '/IandAI/installation2.jpg' },
   { path: '/IandAI/installation3.jpg' },
   { path: '/IandAI/speak.jpg' },
-  { path: '/IandAI/twogirls.jpeg' },
   { path: '/IandAI/audience.jpg' },
   { path: '/IandAI/watch.jpg' },
   { path: '/IandAI/hands.jpeg' },
   { path: '/IandAI/sofa.jpg' },
-  { path: '/IandAI/p.jpg' },
 ];
 
 const CONTRIBUTIONS = [
@@ -118,6 +118,7 @@ export default function Post3() {
             items={LIVE_SCENE_ITEMS}
             idPrefix="live-scene"
             onItemClick={handleImageClick}
+            scrollSpeed={52}
           />
 
           <div

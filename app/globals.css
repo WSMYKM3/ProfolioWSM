@@ -6252,32 +6252,48 @@ header h1 {
 .editorial .ed-media-strip {
     position: relative;
     margin-top: 32px;
+    overflow: hidden;
+    --strip-gap: clamp(16px, 2vw, 24px);
+}
+.editorial .ed-media-strip__viewport {
+    overflow: hidden;
+    padding: 4px 2px 14px;
 }
 .editorial .ed-media-strip__track {
     display: flex;
-    gap: clamp(16px, 2vw, 24px);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(26, 20, 13, 0.22) transparent;
-    padding: 4px 2px 14px;
+    width: max-content;
+    will-change: transform;
+    animation: ed-media-strip-marquee var(--strip-duration, 72s) linear infinite;
 }
-.editorial .ed-media-strip__track::-webkit-scrollbar {
-    height: 6px;
+.editorial .ed-media-strip__track--static {
+    animation: none;
 }
-.editorial .ed-media-strip__track::-webkit-scrollbar-thumb {
-    background: rgba(26, 20, 13, 0.2);
-    border-radius: 999px;
+.editorial .ed-media-strip__group {
+    display: flex;
+    flex: 0 0 auto;
+    gap: var(--strip-gap);
+    padding-right: var(--strip-gap);
+}
+@keyframes ed-media-strip-marquee {
+    from {
+        transform: translateX(var(--strip-shift, 0px));
+    }
+    to {
+        transform: translateX(calc(-50% + var(--strip-shift, 0px)));
+    }
 }
 .editorial .ed-media-strip__item {
-    flex: 0 0 clamp(220px, 30vw, 360px);
-    scroll-snap-align: start;
+    flex: 0 0 clamp(264px, 36vw, 432px);
 }
 .editorial .ed-media-strip__item .photo {
     width: 100%;
+}
+.editorial .ed-media-strip__item .photo__frame {
+    background: var(--paper-warm);
+}
+.editorial .ed-media-strip__item .photo__frame img {
+    object-fit: cover !important;
+    transform: scale(1.025);
 }
 .editorial .ed-media-strip__btn {
     position: absolute;
@@ -6303,7 +6319,7 @@ header h1 {
 .editorial .ed-media-strip__btn--right { right: -6px; }
 @media (max-width: 900px) {
     .editorial .ed-media-strip__item {
-        flex-basis: min(78vw, 320px);
+        flex-basis: min(86vw, 384px);
     }
     .editorial .ed-media-strip__btn {
         width: 36px;
@@ -6312,6 +6328,12 @@ header h1 {
     }
     .editorial .ed-media-strip__btn--left { left: 0; }
     .editorial .ed-media-strip__btn--right { right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .editorial .ed-media-strip__track {
+        animation: none;
+        transform: translateX(var(--strip-shift, 0px));
+    }
 }
 
 /* No resting transform / transition on `transform` here — GSAP drives the

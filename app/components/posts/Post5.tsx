@@ -115,17 +115,24 @@ export default function Post5() {
               margin: '0 auto',
             }}
           >
-            {STAGE2_ITEMS.map((item, i) => (
-              <MediaFrame
-                key={item.path}
-                src={item.path}
-                alt={item.description}
-                caption={item.description}
-                isVideo={item.isVideo}
-                dataAnim={i % 2 === 0 ? 'slide-left' : 'slide-right'}
-                onClick={() => handleImageClick(item.path, item.description, item.isVideo)}
-              />
-            ))}
+            {STAGE2_ITEMS.map((item, i) => {
+              const alt =
+                item.alt ??
+                item.description ??
+                item.path.split('/').pop()?.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') ??
+                'Media';
+              return (
+                <MediaFrame
+                  key={item.path}
+                  src={item.path}
+                  alt={alt}
+                  caption={item.description}
+                  isVideo={item.isVideo}
+                  dataAnim={i % 2 === 0 ? 'slide-left' : 'slide-right'}
+                  onClick={() => handleImageClick(item.path, item.description ?? alt, item.isVideo)}
+                />
+              );
+            })}
           </div>
         </EditorialSection>
       </div>

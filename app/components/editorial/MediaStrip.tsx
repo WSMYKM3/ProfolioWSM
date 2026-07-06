@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 import MediaFrame from './MediaFrame';
 import type { MediaGridItem } from './MediaGrid';
 
@@ -9,7 +10,8 @@ interface MediaStripProps {
   idPrefix?: string;
   onItemClick?: (path: string, description: string, isVideo?: boolean) => void;
   autoPlay?: boolean;
-  autoPlayInterval?: number;
+  /** Continuous scroll speed in pixels per second. */
+  scrollSpeed?: number;
 }
 
 function itemAlt(item: MediaGridItem) {
@@ -22,110 +24,82 @@ function itemAlt(item: MediaGridItem) {
 }
 
 /**
- * Single-row horizontal gallery — scroll-snap, arrow controls, optional auto-advance.
+ * Single-row horizontal gallery with continuous looping motion and arrow controls.
  */
 export default function MediaStrip({
   items,
   idPrefix = 'strip',
   onItemClick,
   autoPlay = true,
-  autoPlayInterval = 4500,
+  scrollSpeed = 34,
 }: MediaStripProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [manualShift, setManualShift] = useState(0);
+  const duration = useMemo(() => {
+    if (!autoPlay || scrollSpeed <= 0) return undefined;
+    return `${Math.max(42, (items.length * 360) / scrollSpeed)}s`;
+  }, [autoPlay, items.length, scrollSpeed]);
 
-  const updateButtons = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 8);
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
-  }, []);
-
-  useEffect(() => {
-    updateButtons();
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener('scroll', updateButtons, { passive: true });
-    window.addEventListener('resize', updateButtons);
-    return () => {
-      el.removeEventListener('scroll', updateButtons);
-      window.removeEventListener('resize', updateButtons);
-    };
-  }, [items, updateButtons]);
-
-  const scrollBy = useCallback((direction: 'left' | 'right') => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const step = el.clientWidth * 0.72;
-    el.scrollBy({ left: direction === 'left' ? -step : step, behavior: 'smooth' });
-  }, []);
-
-  useEffect(() => {
-    if (!autoPlay || isPaused || items.length <= 1) return;
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const timer = window.setInterval(() => {
-      const atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 8;
-      if (atEnd) {
-        el.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        const step = el.clientWidth * 0.72;
-        el.scrollBy({ left: step, behavior: 'smooth' });
-      }
-    }, autoPlayInterval);
-
-    return () => window.clearInterval(timer);
-  }, [autoPlay, autoPlayInterval, isPaused, items.length]);
+  const nudge = (direction: 'left' | 'right') => {
+    setManualShift((value) => value + (direction === 'left' ? 360 : -360));
+  };
 
   return (
-    <div
-      className="ed-media-strip"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => window.setTimeout(() => setIsPaused(false), 3000)}
-    >
-      {canScrollLeft && (
+    <div className="ed-media-strip">
+      {items.length > 1 && (
         <button
           type="button"
           className="ed-media-strip__btn ed-media-strip__btn--left"
-          onClick={() => scrollBy('left')}
+          onClick={() => nudge('left')}
           aria-label="Scroll left"
         >
           ‹
         </button>
       )}
 
-      <div className="ed-media-strip__track" ref={scrollRef}>
-        {items.map((item, index) => {
-          const alt = itemAlt(item);
-          return (
-            <div key={`${idPrefix}-${index}`} className="ed-media-strip__item">
-              <MediaFrame
-                src={item.path}
-                alt={alt}
-                isVideo={item.isVideo}
-                variant={item.variant ?? 'default'}
-                dataAnim={index % 2 === 0 ? 'slide-left' : 'slide-right'}
-                onClick={
-                  onItemClick
-                    ? () => onItemClick(item.path, item.description ?? alt, item.isVideo)
-                    : undefined
-                }
-              />
+      <div className="ed-media-strip__viewport">
+        <div
+          className={`ed-media-strip__track${autoPlay ? '' : ' ed-media-strip__track--static'}`}
+          style={{
+            '--strip-shift': `${manualShift}px`,
+            '--strip-duration': duration,
+          } as CSSProperties}
+        >
+          {[0, 1].map((groupIndex) => (
+            <div
+              key={`${idPrefix}-group-${groupIndex}`}
+              className="ed-media-strip__group"
+              aria-hidden={groupIndex === 1}
+            >
+              {items.map((item, index) => {
+                const alt = itemAlt(item);
+                return (
+                  <div key={`${idPrefix}-${groupIndex}-${index}`} className="ed-media-strip__item">
+                    <MediaFrame
+                      src={item.path}
+                      alt={alt}
+                      isVideo={item.isVideo}
+                      variant={item.variant ?? 'default'}
+                      dataAnim={groupIndex === 0 ? (index % 2 === 0 ? 'slide-left' : 'slide-right') : undefined}
+                      dataRest={groupIndex === 0 ? '0' : undefined}
+                      onClick={
+                        onItemClick
+                          ? () => onItemClick(item.path, item.description ?? alt, item.isVideo)
+                          : undefined
+                      }
+                    />
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
 
-      {canScrollRight && (
+      {items.length > 1 && (
         <button
           type="button"
           className="ed-media-strip__btn ed-media-strip__btn--right"
-          onClick={() => scrollBy('right')}
+          onClick={() => nudge('right')}
           aria-label="Scroll right"
         >
           ›
