@@ -164,8 +164,6 @@ export const posts: Post[] = [
     role: "Motion Capture, Metahuman Prototyper, Animator",
     sections: [
       { id: "videos", label: "Videos" },
-      { id: "intro", label: "Intro" },
-      { id: "tools", label: "Tools" },
       { id: "motion-capture", label: "Motion Capture" },
       { id: "metahuman", label: "Metahuman" }
     ]
@@ -179,13 +177,12 @@ export const posts: Post[] = [
     tags: ["xr", "ai"],
     quality: "medium",
     description: "AI assistant for customer purchasing",
-    softwareTools: ["Unity6"],
+    softwareTools: ["Unity6", "Blender"],
     features: ["AI Assistant", "XR Shopping Guide"],
     role: "Team leader of 5, XR developer",
     linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/",
     sections: [
       { id: "video", label: "Video" },
-      { id: "ideation", label: "Ideation" },
       { id: "stage1", label: "Stage 1 — XR" },
       { id: "stage2", label: "Stage 2 — AI Assistant" }
     ]

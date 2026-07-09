@@ -6161,9 +6161,19 @@ header h1 {
     /* ─── tungsten highlights ─── */
     --tungsten:      #e8b85a;
     --tungsten-dim:  #c89848;
-    --cream-aged:    #f4e2b6;
-    --paper-warm:    #ead7a8;
-    --bone:          #fff5dc;
+    --cream-aged:    #f1eee6;
+    --paper-warm:    #f4f6f2;
+    --bone:          #fbfbf7;
+    --project-page-gradient:
+        linear-gradient(
+            180deg,
+            #f4f6f2 0%,
+            #f7f4ee 18%,
+            #f2f3f8 37%,
+            #eef6f4 58%,
+            #f5f1f8 78%,
+            #f4f6f2 100%
+        );
 
     /* ─── oily pops ─── */
     --rust:          #c64a28;
@@ -6181,15 +6191,22 @@ header h1 {
     --ed-max: 1240px;
     --ed-pad: clamp(20px, 5vw, 80px);
 
-    background: var(--paper-warm);
+    background: var(--project-page-gradient);
+    background-size: 100% 360vh;
+    background-attachment: local;
     color: var(--ink);
     font-family: var(--serif);
 }
 
 /* Page background takes over when in an editorial project page */
-.project-detail-page.editorial,
+.project-detail-page.editorial {
+    background: var(--project-page-gradient);
+    background-size: 100% 360vh;
+    background-attachment: local;
+    color: var(--ink);
+}
 .editorial .project-detail-main {
-    background: var(--paper-warm);
+    background: transparent;
     color: var(--ink);
 }
 
@@ -6231,7 +6248,9 @@ header h1 {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse at 50% 30%, rgba(232, 184, 90, 0.34), transparent 60%);
+        radial-gradient(ellipse at 28% 18%, rgba(174, 221, 220, 0.26), transparent 48%),
+        radial-gradient(ellipse at 72% 24%, rgba(213, 202, 238, 0.22), transparent 52%),
+        radial-gradient(ellipse at 50% 64%, rgba(244, 228, 198, 0.2), transparent 58%);
     pointer-events: none;
     z-index: 0;
 }
@@ -6608,6 +6627,10 @@ header h1 {
     padding-top: clamp(40px, 6vh, 72px);
     padding-bottom: 28px;
 }
+.editorial .toolbox-showreel-section {
+    padding-top: clamp(16px, 2.5vh, 32px);
+    padding-bottom: 18px;
+}
 .editorial .post-detail-view--mirror .mirror-achievement-section .ed-section__title {
     font-size: clamp(36px, 4.8vw, 72px);
     margin-bottom: 24px;
@@ -6753,6 +6776,7 @@ header h1 {
 /* ─── shell — top of project page ─── */
 .editorial .project-detail-main,
 .editorial .main-content {
+    background: transparent !important;
     padding: 0 !important;
     scroll-snap-type: none !important;
     scroll-behavior: smooth;
@@ -7119,8 +7143,8 @@ body.home-wheel-active {
 .home-wheel-intro__tag {
     font-family: var(--serif);
     font-style: italic;
-    font-size: clamp(14px, 1.05vw, 18px);
-    line-height: 1.45;
+    font-size: clamp(18px, 1.45vw, 24px);
+    line-height: 1.35;
     color: var(--shadow-warm);
     margin: 0;
 }
@@ -7146,7 +7170,7 @@ body.home-wheel-active {
     margin: 0 0 0.7rem;
     color: var(--olive);
     font-family: var(--sans);
-    font-size: 0.82rem;
+    font-size: clamp(1rem, 1.2vw, 1.35rem);
     font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -7156,7 +7180,7 @@ body.home-wheel-active {
     font-family: Georgia, 'Times New Roman', serif;
     font-style: normal;
     font-weight: 400;
-    font-size: clamp(1.9rem, 3.8vw, 4rem);
+    font-size: clamp(2.6rem, 5.2vw, 5.6rem);
     line-height: 0.95;
     letter-spacing: -0.01em;
     color: var(--ink);

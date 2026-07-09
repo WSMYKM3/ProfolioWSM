@@ -6,7 +6,6 @@ import {
   MediaGrid,
   MediaGridItem,
   useImageEnlarger,
-  useSketchUnderlineReveal,
   useIsMobile,
 } from '../editorial';
 import { getPublicAssetUrl } from '@/app/lib/publicAsset';
@@ -23,18 +22,9 @@ const STAGE2_ITEMS: MediaGridItem[] = [
   { path: '/TheToolbox/ais.png', description: 'AI Assistant structure including speech to text, OpenAI API, and text to speech' },
 ];
 
-const bodyStyle = {
-  fontFamily: 'var(--serif)',
-  fontSize: 'clamp(18px, 1.7vw, 22px)',
-  lineHeight: 1.7,
-  color: 'var(--ink)',
-  marginBottom: 20,
-} as const;
-
 export default function Post5() {
   const isMobile = useIsMobile();
   const { handleImageClick, overlay } = useImageEnlarger();
-  useSketchUnderlineReveal();
 
   return (
     <>
@@ -42,7 +32,7 @@ export default function Post5() {
 
       <div className="post-content">
         {/* ─── Video ─── */}
-        <EditorialSection id="video" kicker="SHOWREEL" title="The Tool Box">
+        <EditorialSection id="video" kicker="SHOWREEL" title="The Tool Box" className="toolbox-showreel-section">
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <figure
               className="photo photo--tilt-l"
@@ -62,39 +52,8 @@ export default function Post5() {
           </div>
         </EditorialSection>
 
-        {/* ─── Ideation ─── */}
-        <EditorialSection id="ideation" kicker="CHAPTER 01" title="Ideation" kickerVariant="rust">
-          <div style={{ maxWidth: 900, margin: '0 auto' }}>
-            <p style={bodyStyle}>
-              We want to build a platform which{' '}
-              <span className="sketch-underline orange">
-                encourage potential customers to try Strauss&apos; products
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
-              </span>{' '}
-              with{' '}
-              <span className="sketch-underline blue">
-                virtual shopping guide
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" /></svg>
-              </span>{' '}
-              and direct them to the Strauss website to purchase.
-            </p>
-            <p style={bodyStyle}>
-              <span className="sketch-underline green">
-                Guided by on-site Strauss staff
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
-              </span>
-              , our team defined three core principles — Professionalism, Guided Experience, and Safety — which shaped the entire development process. The project was developed around these values, maintaining a clear conceptual and experiential{' '}
-              <span className="sketch-underline purple">
-                link to the Strauss website
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5" pathLength="1" /></svg>
-              </span>
-              .
-            </p>
-          </div>
-        </EditorialSection>
-
         {/* ─── Stage 1: XR Development ─── */}
-        <EditorialSection id="stage1" kicker="CHAPTER 02" title="Stage 1 — XR Development">
+        <EditorialSection id="stage1" kicker="CHAPTER 01" title="Stage 1 — XR Development">
           <MediaGrid
             items={STAGE1_ITEMS}
             columns={1}
@@ -105,7 +64,7 @@ export default function Post5() {
         </EditorialSection>
 
         {/* ─── Stage 2: AI Assistant ─── */}
-        <EditorialSection id="stage2" kicker="CHAPTER 03" title="Stage 2 — AI Assistant" kickerVariant="rust">
+        <EditorialSection id="stage2" kicker="CHAPTER 02" title="Stage 2 — AI Assistant" kickerVariant="rust">
           <div
             style={{
               display: 'flex',

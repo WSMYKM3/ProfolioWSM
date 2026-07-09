@@ -5,7 +5,6 @@ import {
   MediaGrid,
   MediaGridItem,
   useImageEnlarger,
-  useSketchUnderlineReveal,
   useIsMobile,
 } from '../editorial';
 
@@ -24,20 +23,9 @@ const METAHUMAN_ITEMS: MediaGridItem[] = [
   { path: '/webm/MotionCapture/sequence.webm', description: 'Sequence', isVideo: true },
 ];
 
-const bodyStyle = {
-  fontFamily: 'var(--serif)',
-  fontSize: 'clamp(18px, 1.7vw, 22px)',
-  lineHeight: 1.7,
-  color: 'var(--ink)',
-  textAlign: 'center' as const,
-  maxWidth: 900,
-  margin: '0 auto',
-};
-
 export default function Post4() {
   const isMobile = useIsMobile();
   const { handleImageClick, overlay } = useImageEnlarger();
-  useSketchUnderlineReveal();
 
   return (
     <>
@@ -46,65 +34,10 @@ export default function Post4() {
       <div className="post-content">
         {/* ─── Videos handled by PostDetailView's post-4 branch ─── */}
 
-        {/* ─── Intro paragraph (in place of the standard Intro section) ─── */}
-        <EditorialSection id="introduction" kicker="CHAPTER 01" title="A cinematic mocap short" kickerVariant="rust">
-          <p style={bodyStyle}>
-            A cinematic short film driven by{' '}
-            <span className="sketch-underline orange">
-              motion capture performance
-              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" /></svg>
-            </span>
-            , combining Optitrack data with{' '}
-            <span className="sketch-underline blue">
-              Metahuman animation
-              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6" pathLength="1" /></svg>
-            </span>{' '}
-            in Unreal Engine to produce a{' '}
-            <span className="sketch-underline green">
-              photorealistic real-time render
-              <svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M 2 6 Q 45 2, 100 7 T 198 4" pathLength="1" /></svg>
-            </span>
-            .
-          </p>
-        </EditorialSection>
-
-        {/* ─── Tools ─── */}
-        <EditorialSection id="tools" kicker="CHAPTER 02" title="Tools">
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 16,
-              justifyContent: 'center',
-              maxWidth: 800,
-              margin: '0 auto',
-            }}
-          >
-            {['Unreal Engine', 'Motion Builder', 'Optitrack Motion Capture'].map((tool) => (
-              <span
-                key={tool}
-                data-anim="pop"
-                style={{
-                  padding: '12px 24px',
-                  background: 'var(--bone)',
-                  border: '1px solid rgba(26, 20, 13, 0.16)',
-                  boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.08)',
-                  color: 'var(--ink)',
-                  fontFamily: 'var(--serif)',
-                  fontSize: '1.05rem',
-                  fontStyle: 'italic',
-                }}
-              >
-                {tool}
-              </span>
-            ))}
-          </div>
-        </EditorialSection>
-
         {/* ─── Motion Capture + Motion Data Cleaning ─── */}
         <EditorialSection
           id="motion-capture"
-          kicker="CHAPTER 03"
+          kicker="CHAPTER 01"
           title="Motion Capture + Motion Data Cleaning"
           kickerVariant="rust"
         >
@@ -117,7 +50,7 @@ export default function Post4() {
         </EditorialSection>
 
         {/* ─── Metahuman ─── */}
-        <EditorialSection id="metahuman" kicker="CHAPTER 04" title="Metahuman">
+        <EditorialSection id="metahuman" kicker="CHAPTER 02" title="Metahuman">
           <MediaGrid
             items={METAHUMAN_ITEMS}
             columns={3}

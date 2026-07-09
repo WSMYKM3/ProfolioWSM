@@ -142,7 +142,8 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const kicker = projectKicker(post, projectIdx);
   const isDatnie = post.id === 'post-1';
   const isMirror = post.id === 'post-3';
-  const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-6';
+  const isToolbox = post.id === 'post-5';
+  const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-4' || isToolbox || post.id === 'post-6';
   const showIntro = !hideGeneratedIntro && Boolean(post.description);
 
   // Sidebar nav: prepend the project title anchor, then read per-project
@@ -198,6 +199,16 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                   <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
                 </svg>
               </span>
+            </p>
+          ) : isToolbox ? (
+            <p className="ed-hero__tag">
+              <span className="sketch-underline orange">
+                AI assistant
+                <svg viewBox="0 0 200 10" preserveAspectRatio="none">
+                  <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
+                </svg>
+              </span>{' '}
+              for customer purchasing
             </p>
           ) : (
             <p className="ed-hero__tag" data-split>{post.description.split('.')[0]}.</p>
