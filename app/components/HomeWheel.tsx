@@ -77,17 +77,27 @@ export default function HomeWheel({ tag }: HomeWheelProps) {
       card.setAttribute('aria-label', post.title);
       card.dataset.postId = post.id;
       card.tabIndex = 0;
-      card.innerHTML = `
-        <img src="${getPublicAssetUrl(post.thumbnail)}" alt="" loading="${index < 2 ? 'eager' : 'lazy'}" />
-        <div class="project-card__label">
-          <span>${pad(index + 1)}</span>
-          <span>${getCategory(post.tags)}</span>
-        </div>
-      `;
-      const img = card.querySelector('img');
-      img?.addEventListener('error', (e) => {
+
+      const img = document.createElement('img');
+      img.src = getPublicAssetUrl(post.thumbnail);
+      img.alt = '';
+      img.loading = index < 2 ? 'eager' : 'lazy';
+      img.addEventListener('error', (e) => {
         (e.currentTarget as HTMLElement).classList.add('is-hidden');
       });
+
+      const label = document.createElement('div');
+      label.className = 'project-card__label';
+
+      const indexLabel = document.createElement('span');
+      indexLabel.textContent = pad(index + 1);
+
+      const categoryLabel = document.createElement('span');
+      categoryLabel.textContent = getCategory(post.tags);
+
+      label.append(indexLabel, categoryLabel);
+      card.append(img, label);
+
       const navigate = () => {
         router.push(getPostPageRoute(post.id));
       };

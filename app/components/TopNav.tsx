@@ -44,7 +44,7 @@ export default function TopNav() {
           </svg>
         </a>
         <a 
-          href="https://www.youtube.com/@WSM-z4j" 
+          href="https://www.youtube.com/@WSMYKM3" 
           target="_blank" 
           rel="noopener noreferrer"
           className="top-nav-social-icon"
@@ -88,4 +88,3 @@ export default function TopNav() {
     </>
   );
 }
-

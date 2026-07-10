@@ -42,7 +42,7 @@ export default function Contact() {
             </svg>
           </motion.a>
           <motion.a
-            href="https://www.youtube.com/@WSM-z4j"
+            href="https://www.youtube.com/@WSMYKM3"
             target="_blank"
             rel="noopener noreferrer"
             className="contact-icon contact-icon-youtube"
@@ -60,4 +60,3 @@ export default function Contact() {
     </div>
   );
 }
-

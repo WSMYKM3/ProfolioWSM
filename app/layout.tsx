@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import Script from 'next/script'
 import './globals.css'
 import FontLoader from './components/FontLoader'
 
@@ -71,14 +72,47 @@ export const metadata: Metadata = {
   icons: { icon: '/favicon.ico' },
 }
 
+const googleTranslateDomGuard = `
+(function () {
+  if (window.__googleTranslateDomGuardInstalled) return;
+  window.__googleTranslateDomGuardInstalled = true;
+
+  var originalRemoveChild = Node.prototype.removeChild;
+  var originalInsertBefore = Node.prototype.insertBefore;
+
+  Node.prototype.removeChild = function removeChild(child) {
+    if (child && child.parentNode !== this) {
+      return child;
+    }
+    return originalRemoveChild.call(this, child);
+  };
+
+  Node.prototype.insertBefore = function insertBefore(newNode, referenceNode) {
+    if (referenceNode && referenceNode.parentNode !== this) {
+      return this.appendChild(newNode);
+    }
+    return originalInsertBefore.call(this, newNode, referenceNode);
+  };
+})();
+`
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${bodoni.variable} ${fraunces.variable} ${spaceGrotesk.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${bodoni.variable} ${fraunces.variable} ${spaceGrotesk.variable}`}
+      suppressHydrationWarning
+    >
       <body>
+        <Script
+          id="google-translate-dom-guard"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: googleTranslateDomGuard }}
+        />
         <FontLoader />
         <div className="grain-overlay" />
         {children}
