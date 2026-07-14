@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import Script from 'next/script'
 import './globals.css'
 import FontLoader from './components/FontLoader'
+import { LanguageProvider } from './lib/i18n/LanguageProvider'
 
 const inter = localFont({
   variable: '--font-inter',
@@ -115,7 +116,7 @@ export default function RootLayout({
         />
         <FontLoader />
         <div className="grain-overlay" />
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   )

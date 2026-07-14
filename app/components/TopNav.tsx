@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLanguage } from '@/app/lib/i18n/LanguageProvider';
 
 function getImgSrc(src: string): string {
   const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
@@ -11,6 +12,7 @@ function getImgSrc(src: string): string {
 
 export default function TopNav() {
   const pathname = usePathname();
+  const { language, toggleLanguage } = useLanguage();
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -83,6 +85,16 @@ export default function TopNav() {
         <Link href="/contact" className={`top-nav-cta ${isActive('/contact') ? 'active' : ''}`}>
           Contact
         </Link>
+        <button
+          type="button"
+          className={`top-nav-language ${language === 'zh' ? 'active' : ''}`}
+          onClick={toggleLanguage}
+          aria-label="Toggle language"
+          title="Toggle language"
+          data-i18n-skip
+        >
+          en/中
+        </button>
       </nav>
       </div>
     </>
