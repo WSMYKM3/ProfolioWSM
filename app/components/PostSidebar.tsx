@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Section {
   id: string;
@@ -10,127 +10,160 @@ interface Section {
 
 interface PostSidebarProps {
   sections: Section[];
-  projectTitle?: string;
   isPageView?: boolean;
+  variant?: 'panel' | 'rail';
 }
 
-export default function PostSidebar({ sections, projectTitle, isPageView = false }: PostSidebarProps) {
+export default function PostSidebar({
+  sections,
+  isPageView = false,
+  variant = 'panel',
+}: PostSidebarProps) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
+  const sectionKey = sections
+    .flatMap((section) => [section.id, ...(section.subsections?.map((subsection) => subsection.id) ?? [])])
+    .join('|');
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= (variant === 'rail' ? 900 : 768));
     };
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [variant]);
 
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || sections.length === 0) return;
 
-    // Create Intersection Observer
-    const observerOptions = {
-      root: null,
-      rootMargin: '-120px 0px -60% 0px', // Trigger when section is near the top (accounting for sticky header)
-      threshold: [0, 0.25, 0.5, 0.75, 1]
-    };
+    setActiveSection(sections[0].id);
 
-    observerRef.current = new IntersectionObserver((entries) => {
-      // Find all intersecting sections
-      const intersectingSections = entries
-        .filter(entry => entry.isIntersecting)
-        .map(entry => ({
-          id: entry.target.id,
-          top: entry.boundingClientRect.top,
-          ratio: entry.intersectionRatio,
-          bottom: entry.boundingClientRect.bottom,
-          height: entry.boundingClientRect.height
-        }));
+    if (variant === 'rail') {
+      const scroller = document.querySelector<HTMLElement>('.project-detail-main');
+      const targets = sections
+        .map((section) => ({ section, element: document.getElementById(section.id) }))
+        .filter((item): item is { section: Section; element: HTMLElement } => Boolean(item.element));
 
-      if (intersectingSections.length > 0) {
-        // Find the section that's closest to the top of the viewport (within the trigger zone)
-        const triggerZoneTop = 120; // Top offset for sticky header
-        const triggerZoneBottom = window.innerHeight * 0.4; // 40% from top
-        
-        // Sort by proximity to trigger zone top
-        intersectingSections.sort((a, b) => {
-          const aInZone = a.top >= triggerZoneTop && a.top <= triggerZoneBottom;
-          const bInZone = b.top >= triggerZoneTop && b.top <= triggerZoneBottom;
-          
-          if (aInZone && !bInZone) return -1;
-          if (!aInZone && bInZone) return 1;
-          
-          // Both in zone or both out - prefer the one closer to trigger zone top
-          const aDistance = Math.abs(a.top - triggerZoneTop);
-          const bDistance = Math.abs(b.top - triggerZoneTop);
-          
-          return aDistance - bDistance;
-        });
-        
-        setActiveSection(intersectingSections[0].id);
-      } else {
-        // No sections intersecting - find the one that just passed above the viewport
-        const allEntries = Array.from(entries);
-        const aboveViewport = allEntries
-          .filter(entry => entry.boundingClientRect.bottom < 150)
-          .map(entry => ({
-            id: entry.target.id,
-            bottom: entry.boundingClientRect.bottom
-          }))
-          .sort((a, b) => b.bottom - a.bottom); // Closest to top
-        
-        if (aboveViewport.length > 0) {
-          setActiveSection(aboveViewport[0].id);
+      if (targets.length === 0) return;
+
+      let animationFrame = 0;
+      const updateActiveSection = () => {
+        animationFrame = 0;
+        const rootRect = scroller?.getBoundingClientRect() ?? {
+          top: 0,
+          height: window.innerHeight,
+        };
+        const activationY = rootRect.top + rootRect.height * 0.28;
+        let nextActive = targets[0].section.id;
+
+        for (const target of targets) {
+          if (target.element.getBoundingClientRect().top <= activationY) {
+            nextActive = target.section.id;
+          } else {
+            break;
+          }
         }
-      }
-    }, observerOptions);
 
-    // Observe all sections and subsections
-    sections.forEach(section => {
+        setActiveSection((current) => (current === nextActive ? current : nextActive));
+      };
+
+      const queueUpdate = () => {
+        if (animationFrame) return;
+        animationFrame = window.requestAnimationFrame(updateActiveSection);
+      };
+
+      const scrollTarget: HTMLElement | Window = scroller ?? window;
+      scrollTarget.addEventListener('scroll', queueUpdate, { passive: true });
+      window.addEventListener('resize', queueUpdate);
+      updateActiveSection();
+
+      return () => {
+        scrollTarget.removeEventListener('scroll', queueUpdate);
+        window.removeEventListener('resize', queueUpdate);
+        if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      };
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const intersectingSections = entries
+          .filter((entry) => entry.isIntersecting)
+          .map((entry) => ({ id: entry.target.id, top: entry.boundingClientRect.top }))
+          .sort((a, b) => Math.abs(a.top - 120) - Math.abs(b.top - 120));
+
+        if (intersectingSections[0]) {
+          setActiveSection(intersectingSections[0].id);
+          return;
+        }
+
+        const aboveViewport = entries
+          .filter((entry) => entry.boundingClientRect.bottom < 150)
+          .map((entry) => ({ id: entry.target.id, bottom: entry.boundingClientRect.bottom }))
+          .sort((a, b) => b.bottom - a.bottom);
+
+        if (aboveViewport[0]) setActiveSection(aboveViewport[0].id);
+      },
+      {
+        root: null,
+        rootMargin: '-120px 0px -60% 0px',
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      }
+    );
+
+    sections.forEach((section) => {
       const element = document.getElementById(section.id);
-      if (element) {
-        sectionRefs.current.set(section.id, element);
-        observerRef.current?.observe(element);
-      }
+      if (element) observer.observe(element);
 
-      // Observe subsections
-      section.subsections?.forEach(subsection => {
+      section.subsections?.forEach((subsection) => {
         const subElement = document.getElementById(subsection.id);
-        if (subElement) {
-          sectionRefs.current.set(subsection.id, subElement);
-          observerRef.current?.observe(subElement);
-        }
+        if (subElement) observer.observe(subElement);
       });
     });
 
-    // Set initial active section
-    const firstSection = sections[0];
-    if (firstSection) {
-      setActiveSection(firstSection.id);
-    }
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [sections, isMobile]);
+    return () => observer.disconnect();
+    // sectionKey tracks meaningful navigation changes without rerunning this
+    // effect for a freshly allocated but otherwise identical sections array.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionKey, isMobile, variant]);
 
   const handleClick = (id: string) => {
     const element = document.getElementById(id);
-    if (element) {
-      // Use scrollIntoView which respects scroll-margin-top CSS property
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
+    if (!element) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    element.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
   };
 
-  if (isMobile) {
-    return null;
+  if (isMobile) return null;
+
+  if (variant === 'rail') {
+    return (
+      <aside className="project-chapter-rail">
+        <nav className="project-chapter-rail__nav" aria-label="Project chapters">
+          {sections.map((section) => {
+            const isActive = activeSection === section.id;
+            return (
+              <button
+                key={section.id}
+                type="button"
+                className="project-chapter-rail__item"
+                aria-label={`Go to ${section.label}`}
+                aria-current={isActive ? 'location' : undefined}
+                onClick={() => handleClick(section.id)}
+              >
+                <span className="project-chapter-rail__tick" aria-hidden="true" />
+                <span className="project-chapter-rail__label">{section.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      </aside>
+    );
   }
 
   return (
@@ -140,24 +173,20 @@ export default function PostSidebar({ sections, projectTitle, isPageView = false
         paddingRight: '32px',
         paddingTop: '20px',
         flexShrink: 0,
-        ...(isPageView ? {
-          position: 'fixed',
-          top: '50%',
-          left: '40px',
-          transform: 'translateY(-50%)',
-          maxHeight: 'calc(100vh - 40px)',
-          overflowY: 'auto',
-          zIndex: 50
-        } : {})
+        ...(isPageView
+          ? {
+              position: 'fixed',
+              top: '50%',
+              left: '40px',
+              transform: 'translateY(-50%)',
+              maxHeight: 'calc(100vh - 40px)',
+              overflowY: 'auto',
+              zIndex: 50,
+            }
+          : {}),
       }}
     >
-      <nav
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px'
-        }}
-      >
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {sections.map((section) => (
           <div key={section.id}>
             <button
@@ -176,18 +205,18 @@ export default function PostSidebar({ sections, projectTitle, isPageView = false
                 borderRadius: '6px',
                 transition: 'all 0.2s ease',
                 position: 'relative',
-                fontFamily: 'var(--font-inter), sans-serif'
+                fontFamily: 'var(--font-inter), sans-serif',
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={(event) => {
                 if (activeSection !== section.id) {
-                  e.currentTarget.style.color = '#d0d0d0';
-                  e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
+                  event.currentTarget.style.color = '#d0d0d0';
+                  event.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
                 }
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={(event) => {
                 if (activeSection !== section.id) {
-                  e.currentTarget.style.color = '#b0b0b0';
-                  e.currentTarget.style.backgroundColor = 'transparent';
+                  event.currentTarget.style.color = '#b0b0b0';
+                  event.currentTarget.style.backgroundColor = 'transparent';
                 }
               }}
             >
@@ -201,12 +230,13 @@ export default function PostSidebar({ sections, projectTitle, isPageView = false
                     width: '3px',
                     height: '60%',
                     backgroundColor: '#fff',
-                    borderRadius: '0 2px 2px 0'
+                    borderRadius: '0 2px 2px 0',
                   }}
                 />
               )}
               {section.label}
             </button>
+
             {section.subsections && section.subsections.length > 0 && (
               <div
                 style={{
@@ -214,7 +244,7 @@ export default function PostSidebar({ sections, projectTitle, isPageView = false
                   marginTop: '4px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '4px'
+                  gap: '4px',
                 }}
               >
                 {section.subsections.map((subsection) => (
@@ -235,18 +265,18 @@ export default function PostSidebar({ sections, projectTitle, isPageView = false
                       borderRadius: '6px',
                       transition: 'all 0.2s ease',
                       position: 'relative',
-                      fontFamily: 'var(--font-inter), sans-serif'
+                      fontFamily: 'var(--font-inter), sans-serif',
                     }}
-                    onMouseEnter={(e) => {
+                    onMouseEnter={(event) => {
                       if (activeSection !== subsection.id) {
-                        e.currentTarget.style.color = '#b0b0b0';
-                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)';
+                        event.currentTarget.style.color = '#b0b0b0';
+                        event.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)';
                       }
                     }}
-                    onMouseLeave={(e) => {
+                    onMouseLeave={(event) => {
                       if (activeSection !== subsection.id) {
-                        e.currentTarget.style.color = '#888';
-                        e.currentTarget.style.backgroundColor = 'transparent';
+                        event.currentTarget.style.color = '#888';
+                        event.currentTarget.style.backgroundColor = 'transparent';
                       }
                     }}
                   >
@@ -260,7 +290,7 @@ export default function PostSidebar({ sections, projectTitle, isPageView = false
                           width: '2px',
                           height: '50%',
                           backgroundColor: '#fff',
-                          borderRadius: '0 1px 1px 0'
+                          borderRadius: '0 1px 1px 0',
                         }}
                       />
                     )}
@@ -275,4 +305,3 @@ export default function PostSidebar({ sections, projectTitle, isPageView = false
     </aside>
   );
 }
-

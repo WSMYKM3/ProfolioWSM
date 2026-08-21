@@ -151,6 +151,10 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
     ];
   };
 
+  // The full project page uses only top-level content chapters for its
+  // compact progress rail. The modal keeps the complete navigation tree.
+  const railSections = (post.sections ?? []).map(({ id, label }) => ({ id, label }));
+
   const introSegments = splitIntoSegments(post.description || '', 2).map((s) => summarizeSegment(s));
   return (
     <div
@@ -293,18 +297,21 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
           width: '100%',
           maxWidth: 'min(100vw, 1612px)',
           margin: '0 auto',
-          padding: isMobile ? 0 : '0 var(--ed-pad)',
           boxSizing: 'border-box',
           position: 'relative',
         }}
       >
         {!isMobile && (
-          <div className="ed-sidebar-wrap">
-            <PostSidebar sections={getSections()} isPageView={isPageView} />
+          <div className={`ed-sidebar-wrap ${isPageView ? 'ed-sidebar-wrap--rail' : 'ed-sidebar-wrap--panel'}`}>
+            <PostSidebar
+              sections={isPageView ? railSections : getSections()}
+              isPageView={isPageView}
+              variant={isPageView ? 'rail' : 'panel'}
+            />
           </div>
         )}
 
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="ed-body-content" style={{ flex: 1, minWidth: 0 }}>
           {/* Post-2 special: two side-by-side videos before intro */}
           {post.id === 'post-2' && post.videoUrls && post.videoUrls.length >= 2 && (
             <div
