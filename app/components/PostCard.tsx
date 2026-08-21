@@ -10,6 +10,7 @@ interface PostCardProps {
   isViewed?: boolean;
   checkboxId?: string;
   isActive?: boolean;
+  indexLabel?: string;
 }
 
 function formatDate(dateString: string): string {
@@ -33,7 +34,7 @@ function getImageSrc(src: string): string {
   return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
-export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false }: PostCardProps) {
+export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false, indexLabel }: PostCardProps) {
   const formattedDate = formatDate(post.date);
   const imageSrc = getImageSrc(post.thumbnail);
   
@@ -56,6 +57,9 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
         onChange={() => {}} // Controlled by parent state
       />
       <div className="btn">
+        {indexLabel && (
+          <span className="post-card-index" aria-hidden="true">{indexLabel}</span>
+        )}
         <div className="post-card-image-wrapper">
           <Image 
             src={imageSrc} 
@@ -75,4 +79,3 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
     </label>
   );
 }
-

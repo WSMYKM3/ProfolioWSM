@@ -37,7 +37,7 @@ export default function Work() {
   return (
     <div className="layout">
       <TopNav />
-      <main className="main-content portfolio-light-surface work-light-page">
+      <main className="main-content work-line-page">
         <header>
           <h1>THE WORK</h1>
         </header>
@@ -59,12 +59,18 @@ export default function Work() {
             </button>
           )}
         />
-        <HorizontalPostGrid 
-          posts={posts} 
-          onPostClick={handlePostClick}
-          viewedPosts={viewedPosts}
-          activeIndex={activeIndex}
-        />
+        <section className="work-project-rail" aria-labelledby="selected-work-title">
+          <div className="work-project-rail-heading">
+            <h2 id="selected-work-title">Selected work</h2>
+            <p>Scroll or drag to explore</p>
+          </div>
+          <HorizontalPostGrid
+            posts={posts}
+            onPostClick={handlePostClick}
+            viewedPosts={viewedPosts}
+            activeIndex={activeIndex}
+          />
+        </section>
       </main>
       <Modal 
         post={selectedPost} 

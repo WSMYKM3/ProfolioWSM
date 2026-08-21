@@ -31,7 +31,7 @@ export default function DailyPractice() {
   return (
     <div className="layout">
       <TopNav />
-      <main className="main-content portfolio-light-surface explorations-light-page">
+      <main className="main-content explorations-line-page">
         <header>
           <h1>Explorations</h1>
         </header>

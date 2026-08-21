@@ -115,16 +115,6 @@ function renderWithHighlight(segment: string, phrase?: string): React.ReactNode 
   );
 }
 
-function projectKicker(post: Post, idx: number): string {
-  const num = String(idx + 1).padStart(2, '0');
-  const tagPart = post.tags
-    ?.filter((t) => t !== 'featured')
-    .slice(0, 2)
-    .map((t) => t.toUpperCase())
-    .join(' · ');
-  return tagPart ? `PROJECT ${num} — ${tagPart}` : `PROJECT ${num}`;
-}
-
 export default function PostDetailView({ post, isPageView = false }: PostDetailViewProps) {
   const rawVideoUrl = post.videoUrl || (post.videoUrls && post.videoUrls.length > 0 ? post.videoUrls[0] : null);
   const videoUrl = rawVideoUrl ? convertToEmbedUrl(rawVideoUrl) : null;
@@ -138,11 +128,12 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const projectIdx = posts.findIndex((p) => p.id === post.id);
-  const kicker = projectKicker(post, projectIdx);
   const isDatnie = post.id === 'post-1';
   const isMirror = post.id === 'post-3';
   const isToolbox = post.id === 'post-5';
+  const heroVideoUrl = isMirror
+    ? convertToEmbedUrl('https://www.youtube.com/watch?v=D7zAp-WNIjM')
+    : videoUrl;
   const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-4' || isToolbox || post.id === 'post-6';
   const showIntro = !hideGeneratedIntro && Boolean(post.description);
 
@@ -161,164 +152,97 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   };
 
   const introSegments = splitIntoSegments(post.description || '', 2).map((s) => summarizeSegment(s));
-  const showHeroMedia = post.id !== 'post-4' && post.id !== 'post-5' && post.id !== 'post-6';
-
   return (
     <div
       className={`post-detail-view post-detail-view-page ${
         isDatnie ? 'post-detail-view--datnie' : isMirror ? 'post-detail-view--mirror' : 'post-detail-view--dim-description'
       }`}
     >
-      {/* ─── HEADER — compact title + meta strip in one block ─── */}
+      {/* ─── HEADER — compact two-column project summary ─── */}
       <section className="ed-hero" id="project-title">
-        <svg className="deco" style={{ top: '10%', left: '5%', width: 48, height: 48, color: 'var(--rust)' }}
-             data-anim="sticker" data-rest="-12">
-          <use href="#squiggle" />
-        </svg>
-        <svg className="deco" style={{ top: '14%', right: '6%', width: 40, height: 40, color: 'var(--blue-cold)' }}
-             data-anim="sticker" data-rest="14">
-          <use href="#asterisk" />
-        </svg>
+        <div className="ed-hero__layout">
+          <div className="ed-hero__summary">
+            <h1 className={`ed-hero__mark${post.title.length > 18 ? ' ed-hero__mark--long' : ''}`} data-anim="slide-up">
+              {post.title}
+            </h1>
 
-        <div className="ed-hero__inner">
-          <span className="ed-kicker ed-hero__kicker" data-anim="slide-up">{kicker}</span>
-          <h1 className="ed-hero__mark" data-scrub-mark>{post.title}</h1>
-          {post.description && (isDatnie ? (
-            <p className="ed-hero__tag">
-              Datnie matches you by learning both your and{' '}
-              <span className="sketch-underline blue">
-                your crush’s vibe from past conversations
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none">
-                  <path d="M 3 4 Q 60 9, 120 3 Q 160 7, 197 5" pathLength="1" />
-                </svg>
-              </span>
-              , so there’s{' '}
-              <span className="sketch-underline orange">
-                no need to repeat yourself.
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none">
-                  <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
-                </svg>
-              </span>
-            </p>
-          ) : isToolbox ? (
-            <p className="ed-hero__tag">
-              <span className="sketch-underline orange">
-                AI assistant
-                <svg viewBox="0 0 200 10" preserveAspectRatio="none">
-                  <path d="M 2 5 Q 50 8, 100 4 T 198 6" pathLength="1" />
-                </svg>
-              </span>{' '}
-              for customer purchasing
-            </p>
-          ) : (
-            <p className="ed-hero__tag" data-split>{post.description.split('.')[0]}.</p>
-          ))}
-        </div>
-
-        {/* ─── META STRIP — four hairline columns, merged into the same header ─── */}
-        <div className="ed-meta">
-          <div className="ed-meta__col" data-anim="slide-up">
-            <span className="ed-meta__label">Role</span>
-            <p className="ed-meta__value">{post.role || 'Creative Technologist'}</p>
-          </div>
-          <div className="ed-meta__col" data-anim="slide-up">
-            <span className="ed-meta__label">Timeline</span>
-            <p className="ed-meta__value">{post.date}</p>
-          </div>
-          <div className="ed-meta__col" data-anim="slide-up">
-            <span className="ed-meta__label">Tools</span>
-            <div className="ed-meta__value ed-meta__tools">
-              {post.softwareTools?.map((tool) => (
-                <SoftwareIcon key={tool} name={tool} size={26} />
-              ))}
-            </div>
-          </div>
-          {post.features && post.features.length > 0 && (
-            <div className="ed-meta__col" data-anim="slide-up">
-              <span className="ed-meta__label">Features</span>
-              <div className="ed-meta__value ed-meta__features">
-                {post.features.map((f) => (
-                  <span key={f} className="ed-meta__feature">{f}</span>
-                ))}
+            <div className="ed-hero__facts">
+              <div className="ed-hero__fact" data-anim="slide-up">
+                <span className="ed-meta__label">Role</span>
+                <p className="ed-meta__value">{post.role || 'Creative Technologist'}</p>
               </div>
+              <div className="ed-hero__fact" data-anim="slide-up">
+                <span className="ed-meta__label">Timeline</span>
+                <p className="ed-meta__value">{post.date}</p>
+              </div>
+              {post.softwareTools && post.softwareTools.length > 0 && (
+                <div className="ed-hero__fact" data-anim="slide-up">
+                  <span className="ed-meta__label">Tools</span>
+                  <div className="ed-meta__value ed-meta__tools">
+                    {post.softwareTools.map((tool) => (
+                      <SoftwareIcon key={tool} name={tool} size={24} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+
+          <div className="ed-hero__showcase" data-anim="slide-up">
+            <div className="ed-hero__media">
+              {heroVideoUrl ? (
+                heroVideoUrl.includes('youtube.com') || heroVideoUrl.includes('youtu.be') ? (
+                  <iframe
+                    src={heroVideoUrl}
+                    title={post.videoTitle || post.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video src={heroVideoUrl} controls autoPlay muted loop />
+                )
+              ) : (
+                <Image
+                  src={getImageSrc(post.thumbnail)}
+                  alt={post.title}
+                  fill
+                  priority
+                  sizes="(max-width: 900px) 100vw, 68vw"
+                  style={{ objectFit: 'cover' }}
+                />
+              )}
+            </div>
+
+            <div className="ed-hero__showcase-footer">
+              {post.description && (isDatnie ? (
+                <p className="ed-hero__tag">
+                  Datnie matches you by learning both your and{' '}
+                  <span className="sketch-underline blue">your crush’s vibe from past conversations</span>, so there’s{' '}
+                  <span className="sketch-underline orange">no need to repeat yourself.</span>
+                </p>
+              ) : isToolbox ? (
+                <p className="ed-hero__tag">
+                  <span className="sketch-underline orange">AI assistant</span> for customer purchasing
+                </p>
+              ) : (
+                <p className="ed-hero__tag">{post.description.split('.')[0]}.</p>
+              ))}
+
+              {post.features && post.features.length > 0 && (
+                <div className="ed-hero__focus">
+                  <span className="ed-meta__label">Focus</span>
+                  <div className="ed-meta__features">
+                    {post.features.map((feature) => (
+                      <span key={feature} className="ed-meta__feature">{feature}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
-
-      {/* ─── HERO MEDIA (polaroid frame for video/thumb) ─── */}
-      {showHeroMedia && (
-        <div
-          style={{
-            display: isMirror ? 'grid' : 'flex',
-            gridTemplateColumns: isMobile ? '1fr' : '1fr 1.12fr',
-            gap: isMobile ? 24 : 32,
-            alignItems: 'center',
-            justifyContent: isMirror ? undefined : 'center',
-            maxWidth: isMirror ? 'min(100vw, 1280px)' : undefined,
-            marginLeft: isMirror ? 'auto' : undefined,
-            marginRight: isMirror ? 'auto' : undefined,
-            padding: '0 var(--ed-pad)',
-            marginBottom: 40,
-            marginTop: 40,
-            position: 'relative',
-          }}
-        >
-          {isMirror ? (
-            <>
-              <figure className="photo photo--tilt-l" data-anim="rotate-in">
-                <div className="photo__frame">
-                  <iframe
-                    src={convertToEmbedUrl('https://www.youtube.com/watch?v=D7zAp-WNIjM')}
-                    title="I AND AI: MIRROR technical walkthrough"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-                <figcaption className="photo__caption">technical walkthrough</figcaption>
-              </figure>
-              <figure className="photo photo--tilt-r" data-anim="rotate-in">
-                <div className="photo__frame">
-                  <iframe
-                    src={convertToEmbedUrl('https://www.youtube.com/watch?v=Q4DBkTWYAFs')}
-                    title="I AND AI: MIRROR exhibition and interaction"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-                <figcaption className="photo__caption">Exhibition and interaction</figcaption>
-              </figure>
-            </>
-          ) : (
-            <figure
-              className="photo photo--tilt-l"
-              data-anim="rotate-in"
-              style={{ width: 'min(820px, 92%)' }}
-            >
-              <div className="photo__frame">
-                {videoUrl ? (
-                  videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
-                    <iframe
-                      src={videoUrl}
-                      title={post.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <video src={videoUrl} controls autoPlay muted loop />
-                  )
-                ) : (
-                  <Image src={getImageSrc(post.thumbnail)} alt={post.title} fill style={{ objectFit: 'cover' }} />
-                )}
-              </div>
-              <figcaption className="photo__caption">{post.videoTitle || post.title}</figcaption>
-            </figure>
-          )}
-        </div>
-      )}
 
       {/* ─── post-4's special two-video block ─── */}
       {post.id === 'post-4' && (
@@ -363,6 +287,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
 
       {/* ─── BODY: sidebar + main ─── */}
       <div
+        className="ed-body-layout"
         style={{
           display: 'flex',
           width: '100%',

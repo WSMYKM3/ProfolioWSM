@@ -121,6 +121,17 @@ export default function Post3() {
             scrollSpeed={52}
           />
 
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
+            <MediaFrame
+              src="https://www.youtube.com/embed/Q4DBkTWYAFs"
+              alt="I AND AI: MIRROR exhibition and interaction"
+              caption="Exhibition and interaction"
+              isYouTube
+              variant="default"
+              width="min(900px, 100%)"
+            />
+          </div>
+
           <div
             style={{
               display: 'flex',

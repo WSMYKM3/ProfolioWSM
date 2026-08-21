@@ -64,6 +64,11 @@ export default function HorizontalPostGrid({
 
   return (
     <div className="horizontal-post-grid-container">
+      <div className="horizontal-post-grid-guide" aria-hidden="true">
+        <span className="horizontal-post-grid-guide-node horizontal-post-grid-guide-node-start" />
+        <span className="horizontal-post-grid-guide-line" />
+        <span className="horizontal-post-grid-guide-node horizontal-post-grid-guide-node-end" />
+      </div>
       {canScrollLeft && (
         <button 
           className="horizontal-post-grid-arrow horizontal-post-grid-arrow-left"
@@ -85,6 +90,7 @@ export default function HorizontalPostGrid({
             isViewed={viewedPosts.has(post.id)}
             checkboxId={`toggle-${post.id}`}
             isActive={index === activeIndex}
+            indexLabel={String(index + 1).padStart(2, '0')}
           />
         ))}
       </div>
@@ -100,4 +106,3 @@ export default function HorizontalPostGrid({
     </div>
   );
 }
-

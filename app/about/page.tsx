@@ -47,7 +47,7 @@ export default function About() {
   return (
     <div className="layout">
       <TopNav />
-      <main className="about-page">
+      <main className="about-page about-line-page">
         {/* Video Section */}
         <section className="about-video-section">
           <div className="about-video-container">
