@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A standalone liquid-glass portfolio layout experiment for WSM Home."
+    />
+    <title>WSM Home — Liquid Glass Demo</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="scene" aria-labelledby="glass-title">
+      <div class="scene__background" aria-hidden="true"></div>
+      <div class="scene__wash" aria-hidden="true"></div>
+
+      <p class="scene__note" aria-hidden="true">
+        <span>Portfolio study</span>
+        <span>01 / 26</span>
+      </p>
+
+      <aside class="project-preview" id="project-preview" aria-live="polite" aria-hidden="true">
+        <span class="project-preview__line" aria-hidden="true"></span>
+        <p class="project-preview__label">Selected project</p>
+        <p class="project-preview__category" id="project-preview-category"></p>
+        <h2 class="project-preview__title" id="project-preview-title"></h2>
+      </aside>
+
+      <section class="glass-stage" aria-label="Selected portfolio projects">
+        <div class="glass-panel" id="glass-panel">
+          <div class="glass-panel__shine" aria-hidden="true"></div>
+
+          <header class="glass-header">
+            <div>
+              <p class="glass-header__eyebrow">Creative Technologist &amp; Engineer</p>
+              <h1 id="glass-title">Siming Wang</h1>
+            </div>
+            <p class="glass-header__index" aria-label="Portfolio edition 2026">©26</p>
+          </header>
+
+          <div class="project-grid" id="project-grid" aria-label="Project gallery"></div>
+
+          <footer class="glass-footer">
+            <span>Selected work</span>
+            <span>Move to explore depth</span>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

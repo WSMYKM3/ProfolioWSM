@@ -157,7 +157,6 @@ ProfolioWSM/
 │
 ├── README.md                    # User-facing documentation
 ├── DEPLOYMENT.md                # Deployment instructions
-├── DEVELOPMENT_NOTES.md         # Technical notes
 └── PROJECT_GUIDE.md            # This file (AI development guide)
 ```
 
@@ -1039,4 +1038,3 @@ When working on this project in Antigravity IDE Gemini 3 Pro:
 - ✅ Scroll-snapping for smooth navigation
 - ✅ Auto-sizing images in masonry layout
 - ✅ Enhanced mobile responsiveness
-

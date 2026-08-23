@@ -370,7 +370,6 @@ After applying rules:
 - **Datnie Example**: `app/components/posts/Post1.tsx`
 - **Main Detail View**: `app/components/PostDetailView.tsx`
 - **Post Data**: `app/lib/posts.ts`
-- **Full Guide**: `PROJECT_DETAIL_PAGE_GUIDE.md`
 
 ---
 
@@ -451,4 +450,3 @@ add these by hand for one-off effects:
 - `data-anim="slide-left|slide-right|slide-up|slide-down|pop|rotate-in|sticker|bounce-in|flip|punch"`
 - `data-split-lines` — bouncy word-by-word reveal (long paragraphs)
 - `data-rest="<deg>"` — resting rotation for `sticker` entries
-
