@@ -8,6 +8,7 @@ export interface DailyPracticePost {
   videoUrl?: string; // Optional, for YouTube or other video URLs
   githubUrl?: string; // Optional, for GitHub repository URLs
   file?: string; // Optional, for modal content
+  metaLabel?: string; // Optional replacement for the default "planted on" date line
 }
 
 export const dailyPracticePosts: DailyPracticePost[] = [
@@ -89,10 +90,20 @@ export const dailyPracticePosts: DailyPracticePost[] = [
     date: "2024-03-09",
     tags: ["concept", "art"],
     file: "post-1"
+  },
+  {
+    id: "daily-aether-tag",
+    title: "Aether Tag",
+    thumbnail: "/aetherTagthumb.png",
+    date: "2 months",
+    metaLabel: "2-month project",
+    tags: ["game", "unity", "xr"],
+    description: "A non-violent competitive laser tag game using an elemental counter system (Water > Fire > Wind) where type advantages reward strategy by doubling damage.",
+    videoUrl: "https://www.youtube.com/watch?v=-4Z7SdWcgyU",
+    file: "post-6"
   }
 ];
 
 export function getDailyPracticePostById(id: string): DailyPracticePost | undefined {
   return dailyPracticePosts.find(post => post.id === id);
 }
-

@@ -20,6 +20,7 @@ const FIXED_POSITIONS = [
   { top: 50, left: 42, rotation: 1 },     // Card 7
   { top: 58, left: 68, rotation: -2 },    // Card 8
   { top: 68, left: 8, rotation: -4 },     // Card 9
+  { top: 72, left: 40, rotation: 2 },     // Card 10
 ];
 
 // Map posts to categories based on tags

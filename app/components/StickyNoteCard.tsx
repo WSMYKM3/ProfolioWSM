@@ -13,7 +13,11 @@ interface StickyNoteCardProps {
 }
 
 function formatDate(dateString: string): string {
+  if (dateString.includes('.') && !dateString.includes('-')) return dateString;
+
   const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return dateString;
+
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
@@ -171,6 +175,7 @@ export default function StickyNoteCard({
 
   const imageSrc = getImageSrc(post.thumbnail);
   const formattedDate = formatDate(post.date);
+  const metaLabel = post.metaLabel || `planted on ${formattedDate}`;
 
   return (
     <div
@@ -226,7 +231,7 @@ export default function StickyNoteCard({
               ))}
             </div>
           )}
-          <p className="card-date">planted on {formattedDate}</p>
+          <p className="card-date">{metaLabel}</p>
         </div>
       </div>
     </div>

@@ -8333,6 +8333,67 @@ body.home-wheel-active {
     transition: opacity 240ms ease, filter 240ms ease;
 }
 
+.cinematic-placeholder-background {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.16);
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.09), transparent 34%),
+        #050505;
+    background-size: 72px 72px, 72px 72px, auto, auto;
+}
+
+.cinematic-placeholder-background span {
+    font-family: var(--font-space-grotesk), var(--font-inter), sans-serif;
+    font-size: clamp(7rem, 18vw, 18rem);
+    font-weight: 300;
+    line-height: 1;
+}
+
+.work-line-page .horizontal-post-grid .post-card-coming-soon {
+    cursor: default;
+    opacity: 0.72;
+}
+
+.work-line-page .horizontal-post-grid .post-card-coming-soon:hover,
+.work-line-page .horizontal-post-grid .post-card-coming-soon.is-active,
+.work-line-page .horizontal-post-grid .post-card-coming-soon.is-active:hover {
+    transform: none;
+}
+
+.post-card-placeholder-art {
+    position: relative;
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.22);
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+        rgba(255, 255, 255, 0.018);
+    background-size: 28px 28px;
+}
+
+.post-card-placeholder-art span {
+    font-family: var(--font-space-grotesk), var(--font-inter), sans-serif;
+    font-size: 2.6rem;
+    font-weight: 300;
+}
+
+.post-card-status {
+    margin-top: 8px;
+    color: var(--work-copy-muted, rgba(255, 255, 255, 0.58));
+    font-family: var(--font-space-grotesk), var(--font-inter), sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
 .work-line-page .horizontal-post-grid .post-card:hover .post-card-image,
 .work-line-page .horizontal-post-grid .post-card.is-active .post-card-image {
     opacity: 1;

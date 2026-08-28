@@ -9,6 +9,9 @@ export interface SidebarSection {
   subsections?: SidebarSubsection[];
 }
 
+export type ProjectIdentity = 'creative-technologist' | 'artist' | 'builder';
+export type ProjectStatus = 'published' | 'coming-soon';
+
 export interface Post {
   id: string;
   title: string;
@@ -31,6 +34,8 @@ export interface Post {
   stage3VideoUrl?: string; // Stage 3 video URL for Signie project
   linkedInUrl?: string; // LinkedIn post URL for embedding
   shortDescription?: string; // Short description used on about page project cards (overrides description)
+  identity: ProjectIdentity;
+  status: ProjectStatus;
   /**
    * Sidebar nav sections for this project's detail page.
    * The shell auto-prepends `{id:'project-title', label: title}` and
@@ -62,6 +67,8 @@ export const posts: Post[] = [
       "https://via.placeholder.com/600x800/2a2a2a/888888?text=Vertical+Process"
     ],
     role: "XR developer, Director, Animator",
+    identity: "creative-technologist",
+    status: "published",
     sections: [
       { id: "ideation", label: "Ideation" },
       { id: "ux-design", label: "UX Design" },
@@ -97,6 +104,8 @@ export const posts: Post[] = [
     softwareTools: ["Unity6", "Blender"],
     features: ["Hand Tracking", "Gesture Recognition", "Micro-Gestures", "Voice-to-Text", "Virtual Guide", "Animation State Machine"],
     role: "XR developer",
+    identity: "creative-technologist",
+    status: "published",
     achievement: "AWE 2025 USA presentation",
     stage3VideoUrl: "https://www.youtube.com/watch?v=j6PK1TTSxV0",
     sections: [
@@ -129,6 +138,8 @@ export const posts: Post[] = [
     features: ["Real-time Metahuman lipsync", "Touchdesigner-UE communication"],
     role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)",
     shortDescription: "A real-time AI mirror that listens, responds, and reflects the user through voice-driven interaction and digital embodiment.",
+    identity: "artist",
+    status: "published",
     sections: [
       { id: "live-scene", label: "Live Scene" },
       { id: "achievement", label: "Achievement" },
@@ -162,6 +173,8 @@ export const posts: Post[] = [
     softwareTools: ["Unreal Engine", "Motion Builder", "Optitrack Motion Capture"],
     features: ["Motion Capture", "Metahuman Animation"],
     role: "Motion Capture, Metahuman Prototyper, Animator",
+    identity: "artist",
+    status: "published",
     sections: [
       { id: "videos", label: "Videos" },
       { id: "motion-capture", label: "Motion Capture" },
@@ -180,6 +193,8 @@ export const posts: Post[] = [
     softwareTools: ["Unity6", "Blender"],
     features: ["AI Assistant", "XR Shopping Guide"],
     role: "Team leader of 5, XR developer",
+    identity: "creative-technologist",
+    status: "published",
     linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/",
     sections: [
       { id: "video", label: "Video" },
@@ -201,6 +216,8 @@ export const posts: Post[] = [
     softwareTools: ["Unity2022"],
     features: ["Elemental Counter System"],
     role: "XR developer",
+    identity: "creative-technologist",
+    status: "published",
     sections: [
       { id: "video", label: "Video" },
       { id: "introduction", label: "Introduction" },
@@ -224,6 +241,36 @@ export const posts: Post[] = [
       }
     ]
   }
+];
+
+export const placeholderPosts: Post[] = [
+  {
+    id: 'upcoming-1',
+    title: 'Upcoming Project 01',
+    thumbnail: '',
+    file: '',
+    date: 'Coming Soon',
+    tags: [],
+    description: 'Project details will be added soon.',
+    identity: 'creative-technologist',
+    status: 'coming-soon',
+  },
+  {
+    id: 'upcoming-2',
+    title: 'Upcoming Project 02',
+    thumbnail: '',
+    file: '',
+    date: 'Coming Soon',
+    tags: [],
+    description: 'Project details will be added soon.',
+    identity: 'builder',
+    status: 'coming-soon',
+  },
+];
+
+export const workPosts: Post[] = [
+  ...posts.filter((post) => post.id !== 'post-6'),
+  ...placeholderPosts,
 ];
 
 export function getPostById(id: string): Post | undefined {

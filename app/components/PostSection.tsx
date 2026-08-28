@@ -45,6 +45,7 @@ function formatDate(dateString: string): string {
 export default function PostSection({ post, index, onPostClick, titleAction }: PostSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const isComingSoon = post.status === 'coming-soon';
 
   // Detect mobile device
   useEffect(() => {
@@ -175,13 +176,19 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
         }}
       >
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-          <Image
-            src={getImageSrc(post.thumbnail)}
-            alt={post.title}
-            fill
-            style={{ objectFit: 'cover' }}
-            priority={index < 2}
-          />
+          {isComingSoon ? (
+            <div className="cinematic-placeholder-background" aria-hidden="true">
+              <span>+</span>
+            </div>
+          ) : (
+            <Image
+              src={getImageSrc(post.thumbnail)}
+              alt={post.title}
+              fill
+              style={{ objectFit: 'cover' }}
+              priority={index < 2}
+            />
+          )}
           <div style={{
             position: 'absolute',
             top: 0,

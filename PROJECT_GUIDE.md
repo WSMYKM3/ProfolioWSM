@@ -490,6 +490,8 @@ background-attachment: fixed, scroll;
 
 ### Development Workflow
 
+> **Keep the development server running for simple edits:** If `npm run dev` is already running, do not stop or restart it for ordinary content, style, or component changes. Next.js hot reload will apply the changes; the user should only need to refresh the existing browser page to view them. Restart npm only when the server is not running, has crashed, dependencies or runtime configuration changed, or hot reload is confirmed to be stuck.
+
 1. **Make Changes**:
    - Edit files in `app/` directory
    - Changes auto-reload in browser

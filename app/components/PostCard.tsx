@@ -37,45 +37,65 @@ function getImageSrc(src: string): string {
 export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false, indexLabel }: PostCardProps) {
   const formattedDate = formatDate(post.date);
   const imageSrc = getImageSrc(post.thumbnail);
+  const isComingSoon = 'status' in post && post.status === 'coming-soon';
   
   // Get quality class for masonry layout (if quality exists)
   const quality = 'quality' in post ? post.quality : undefined;
   const qualityClass = quality ? `post-card-${quality}` : '';
   const activeClass = isActive ? 'is-active' : '';
-  const cardClassName = `post-card ${qualityClass} ${activeClass}`.trim();
+  const cardClassName = `post-card ${qualityClass} ${activeClass} ${isComingSoon ? 'post-card-coming-soon' : ''}`.trim();
   
   // Generate unique checkbox ID if not provided
   const toggleId = checkboxId || `toggle-${post.id}`;
 
-  return (
-    <label htmlFor={toggleId} className={cardClassName} onClick={onClick}>
-      <input 
-        type="checkbox" 
-        id={toggleId} 
-        checked={isViewed}
-        readOnly
-        onChange={() => {}} // Controlled by parent state
-      />
+  const cardBody = (
       <div className="btn">
         {indexLabel && (
           <span className="post-card-index" aria-hidden="true">{indexLabel}</span>
         )}
         <div className="post-card-image-wrapper">
-          <Image 
-            src={imageSrc} 
-            alt={post.title}
-            width={1920}
-            height={1080}
-            className="post-card-image"
-            style={{ width: '100%', height: 'auto' }}
-            loading="lazy"
-          />
+          {isComingSoon ? (
+            <div className="post-card-placeholder-art" aria-hidden="true">
+              <span>+</span>
+            </div>
+          ) : (
+            <Image
+              src={imageSrc}
+              alt={post.title}
+              width={1920}
+              height={1080}
+              className="post-card-image"
+              style={{ width: '100%', height: 'auto' }}
+              loading="lazy"
+            />
+          )}
         </div>
         <div className="top">{post.title}</div>
+        {isComingSoon && <span className="post-card-status">Coming Soon</span>}
         <div className="bottom">
           <i className="dot"></i>
         </div>
       </div>
+  );
+
+  if (isComingSoon) {
+    return (
+      <article className={cardClassName} aria-label={`${post.title}, Coming Soon`}>
+        {cardBody}
+      </article>
+    );
+  }
+
+  return (
+    <label htmlFor={toggleId} className={cardClassName} onClick={onClick}>
+      <input
+        type="checkbox"
+        id={toggleId}
+        checked={isViewed}
+        readOnly
+        onChange={() => {}} // Controlled by parent state
+      />
+      {cardBody}
     </label>
   );
 }

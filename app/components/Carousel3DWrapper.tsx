@@ -149,6 +149,10 @@ export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, t
     return null;
   }
 
+  const currentTitleAction = titleAction && posts[currentIndex]
+    ? titleAction(posts[currentIndex])
+    : null;
+
   return (
     <div className="carousel-3d-wrapper-shell">
       <div className="carousel-3d-wrapper-content" ref={carouselRef}>
@@ -181,12 +185,12 @@ export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, t
           );
         })}
       </div>
-      {titleAction && posts[currentIndex] && (
+      {currentTitleAction && posts[currentIndex] && (
         <div className="carousel-title-action-overlay">
           <span className="carousel-title-action-measure" aria-hidden="true">
             {posts[currentIndex].title}
           </span>
-          {titleAction(posts[currentIndex])}
+          {currentTitleAction}
         </div>
       )}
       <div className="carousel-3d-wrapper-controls">

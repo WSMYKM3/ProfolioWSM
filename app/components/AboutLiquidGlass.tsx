@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import TopNav from '@/app/components/TopNav';
-import { posts, type Post } from '@/app/lib/posts';
+import { workPosts, type Post, type ProjectIdentity } from '@/app/lib/posts';
 import { getPostPageRoute } from '@/app/lib/navigation';
 import { getPublicAssetUrl } from '@/app/lib/publicAsset';
 import styles from '@/app/about/page.module.css';
@@ -20,9 +20,15 @@ const projectPresentation: Record<string, ProjectPresentation> = {
   'post-4': { category: 'Motion Capture', imagePosition: 'center' },
   'post-5': { category: 'AI Shopping Assistant', imagePosition: 'center' },
   'post-6': { category: 'XR Game Design', imagePosition: 'center' },
+  'upcoming-1': { category: 'In Development', imagePosition: 'center' },
+  'upcoming-2': { category: 'In Development', imagePosition: 'center' },
 };
 
-const displayedProjects = posts.slice(0, 6);
+const identityOptions: Array<{ id: ProjectIdentity; label: string; colorClass: string }> = [
+  { id: 'creative-technologist', label: 'Creative Technologist', colorClass: styles.identityButtonRed },
+  { id: 'builder', label: 'AI / Builder', colorClass: styles.identityButtonBlue },
+  { id: 'artist', label: 'Artist', colorClass: styles.identityButtonYellow },
+];
 
 // Replace `src: null` with paths from the future image folder.
 // Example: { id: '01', src: '/portfolio-strip/image-01.webp', alt: 'Project process' }
@@ -39,6 +45,14 @@ export default function AboutLiquidGlass() {
   const sceneRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [activeProject, setActiveProject] = useState<Post | null>(null);
+  const [activeIdentity, setActiveIdentity] = useState<ProjectIdentity>('creative-technologist');
+
+  const displayedProjects = workPosts.filter((post) => post.identity === activeIdentity);
+
+  const handleIdentityChange = (identity: ProjectIdentity) => {
+    setActiveProject(null);
+    setActiveIdentity(identity);
+  };
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -190,6 +204,20 @@ export default function AboutLiquidGlass() {
         </aside>
 
         <section className={styles.glassStage} aria-label="Selected portfolio projects">
+          <div className={styles.identitySwitcher} aria-label="Filter projects by identity">
+            {identityOptions.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`${styles.identityButton} ${option.colorClass} ${activeIdentity === option.id ? styles.identityButtonActive : ''}`}
+                aria-pressed={activeIdentity === option.id}
+                onClick={() => handleIdentityChange(option.id)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
           <div className={styles.glassPanel} ref={panelRef}>
             <div className={styles.glassShine} aria-hidden="true" />
 
@@ -201,9 +229,59 @@ export default function AboutLiquidGlass() {
               <p className={styles.edition} aria-label="Portfolio edition 2026">@26</p>
             </header>
 
-            <div className={styles.projectGrid} aria-label="Project gallery">
+            <div
+              className={`${styles.projectGrid} ${
+                activeIdentity === 'artist'
+                  ? styles.projectGridArtist
+                  : activeIdentity === 'builder'
+                    ? styles.projectGridBuilder
+                    : styles.projectGridTechnologist
+              }`}
+              aria-label={`${identityOptions.find((option) => option.id === activeIdentity)?.label} project gallery`}
+            >
               {displayedProjects.map((post, index) => {
                 const presentation = projectPresentation[post.id];
+                const isComingSoon = post.status === 'coming-soon';
+                const cardContent = (
+                  <>
+                    {isComingSoon ? (
+                      <span className={styles.placeholderArtwork} aria-hidden="true">
+                        <span className={styles.placeholderMark}>+</span>
+                        <span className={styles.placeholderLine} />
+                        <span className={styles.placeholderLineShort} />
+                      </span>
+                    ) : (
+                      <img
+                        className={styles.projectImage}
+                        src={getPublicAssetUrl(post.thumbnail)}
+                        alt=""
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                      />
+                    )}
+                    <span className={styles.projectVeil} aria-hidden="true" />
+                    <span className={styles.projectNumber}>{String(index + 1).padStart(2, '0')}</span>
+                    <span className={styles.projectContent}>
+                      <span className={styles.projectCategory}>{presentation?.category}</span>
+                      <span className={styles.projectTitle}>{post.title}</span>
+                      <span className={styles.projectCta} aria-hidden="true">
+                        {isComingSoon ? 'Coming Soon' : 'View project'}
+                      </span>
+                    </span>
+                  </>
+                );
+
+                if (isComingSoon) {
+                  return (
+                    <article
+                      key={post.id}
+                      className={`${styles.projectCard} ${styles.projectPlaceholder}`}
+                      aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, Coming Soon`}
+                    >
+                      {cardContent}
+                    </article>
+                  );
+                }
+
                 return (
                   <Link
                     key={post.id}
@@ -218,19 +296,7 @@ export default function AboutLiquidGlass() {
                     onFocus={() => setActiveProject(post)}
                     onBlur={() => setActiveProject(null)}
                   >
-                    <img
-                      className={styles.projectImage}
-                      src={getPublicAssetUrl(post.thumbnail)}
-                      alt=""
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                    />
-                    <span className={styles.projectVeil} aria-hidden="true" />
-                    <span className={styles.projectNumber}>{String(index + 1).padStart(2, '0')}</span>
-                    <span className={styles.projectContent}>
-                      <span className={styles.projectCategory}>{presentation?.category}</span>
-                      <span className={styles.projectTitle}>{post.title}</span>
-                      <span className={styles.projectCta} aria-hidden="true">View project</span>
-                    </span>
+                    {cardContent}
                   </Link>
                 );
               })}
