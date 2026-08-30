@@ -14,14 +14,15 @@ interface ProjectPresentation {
 }
 
 const projectPresentation: Record<string, ProjectPresentation> = {
+  'post-8': { category: 'Multi-Arm Robotics Simulation & Data Collection', imagePosition: 'center 44%' },
+  'post-7': { category: 'AR camera to guide AI generation with phone', imagePosition: 'center 44%' },
   'post-1': { category: 'Mixed Reality Dating', imagePosition: 'center' },
-  'post-2': { category: 'ASL Learning System', imagePosition: 'center 38%' },
+  'post-2': { category: 'ASL learning app', imagePosition: 'center 38%' },
   'post-3': { category: 'Immersive AI Installation', imagePosition: 'center' },
   'post-4': { category: 'Motion Capture', imagePosition: 'center' },
   'post-5': { category: 'AI Shopping Assistant', imagePosition: 'center' },
   'post-6': { category: 'XR Game Design', imagePosition: 'center' },
   'upcoming-1': { category: 'In Development', imagePosition: 'center' },
-  'upcoming-2': { category: 'In Development', imagePosition: 'center' },
 };
 
 const identityOptions: Array<{ id: ProjectIdentity; label: string; colorClass: string }> = [
@@ -196,7 +197,6 @@ export default function AboutLiquidGlass() {
           aria-hidden={!activeProject}
         >
           <span className={styles.projectPreviewLine} aria-hidden="true" />
-          <p className={styles.projectPreviewLabel}>Selected project</p>
           <p className={styles.projectPreviewCategory}>
             {activeProject ? projectPresentation[activeProject.id]?.category : ''}
           </p>

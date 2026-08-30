@@ -16,12 +16,14 @@ export interface Post {
   id: string;
   title: string;
   thumbnail: string;
+  compactThumbnail?: string; // Optional 4:3 artwork for small project cards
   file: string;
   date: string;
   tags: string[];
   quality?: 'high' | 'medium' | 'low'; // 内容质量等级，用于控制post card尺寸 (high=大, medium=中, low=小)
   videoUrl?: string; // YouTube/Vimeo embed URL or local MP4 path
   videoTitle?: string; // Title text displayed above video
+  heroPlaceholder?: string; // Text-only hero media placeholder when the main film is not ready
   videoUrls?: string[]; // Array of video URLs for multiple videos (e.g., for Datnie)
   videoTitles?: string[]; // Array of video titles corresponding to videoUrls
   gifUrl?: string; // GIF image URL for cinematic-extra section
@@ -45,6 +47,56 @@ export interface Post {
 }
 
 export const posts: Post[] = [
+  {
+    id: "post-8",
+    title: "Sorting Factory",
+    thumbnail: "/SortingFactory/thumbnail-vertical.webp",
+    file: "post-8",
+    date: "OpenAI Build Week · July 2026",
+    tags: ["ai", "robotics", "featured"],
+    quality: "high",
+    videoUrl: "https://www.youtube.com/watch?v=sRn4y9llr-s",
+    videoTitle: "Sorting Factory — OpenAI Build Week demo",
+    description: "A Unity simulation that runs multiple SO-101 digital twins with Python vision and records pick data for robotics training.",
+    shortDescription: "Parallel SO-101 digital twins for faster robotics data collection.",
+    softwareTools: ["Unity6", "Python"],
+    features: ["FastAPI", "YOLO26n", "ByteTrack", "WebSocket", "Multi-arm Robotics", "Real-time Telemetry"],
+    role: "AI & Robotics Engineer",
+    identity: "builder",
+    status: "published",
+    sections: [
+      { id: "inspiration", label: "Inspiration" },
+      { id: "vision-solution", label: "Vision Solution" },
+      { id: "robotics-picking", label: "Robotics Pick Demo" }
+    ]
+  },
+  {
+    id: "post-7",
+    title: "Reroll",
+    thumbnail: "/Reroll/thumbnailVertical.png",
+    compactThumbnail: "/Reroll/43thumbnail.png",
+    file: "post-7",
+    date: "Apr–Aug 2026",
+    tags: ["ai", "xr", "featured"],
+    quality: "high",
+    videoTitle: "Reroll main film",
+    heroPlaceholder: "Main film coming soon",
+    description: "Reroll turns a reference image into an editable iPhone AR scene, then records object edits, camera movement, and spoken direction for AI generation.",
+    softwareTools: ["Python", "SwiftUI", "ARKit", "RealityKit"],
+    features: ["AI Filmmaking", "Mobile AR", "Previsualization", "Computer Vision"],
+    role: "Creative Technologist / AI & AR Developer",
+    shortDescription: "Use an iPhone as an AR camera to shape scenes and guide AI generation.",
+    identity: "creative-technologist",
+    status: "published",
+    sections: [
+      { id: "why-reroll", label: "Why Reroll" },
+      { id: "image-to-scene", label: "Image to Editable Scene" },
+      { id: "direct-in-ar", label: "Direct in AR" },
+      { id: "speak-direction", label: "Speak Your Direction" },
+      { id: "refined-prompt", label: "Final Refined Prompt" },
+      { id: "tool-stack", label: "Tool Stack" }
+    ]
+  },
   // 第一行（从左到右）
   {
     id: "post-1",
@@ -253,17 +305,6 @@ export const placeholderPosts: Post[] = [
     tags: [],
     description: 'Project details will be added soon.',
     identity: 'creative-technologist',
-    status: 'coming-soon',
-  },
-  {
-    id: 'upcoming-2',
-    title: 'Upcoming Project 02',
-    thumbnail: '',
-    file: '',
-    date: 'Coming Soon',
-    tags: [],
-    description: 'Project details will be added soon.',
-    identity: 'builder',
     status: 'coming-soon',
   },
 ];

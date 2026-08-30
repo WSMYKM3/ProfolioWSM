@@ -36,7 +36,10 @@ function getImageSrc(src: string): string {
 
 export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false, indexLabel }: PostCardProps) {
   const formattedDate = formatDate(post.date);
-  const imageSrc = getImageSrc(post.thumbnail);
+  const thumbnail = 'compactThumbnail' in post && post.compactThumbnail
+    ? post.compactThumbnail
+    : post.thumbnail;
+  const imageSrc = getImageSrc(thumbnail);
   const isComingSoon = 'status' in post && post.status === 'coming-soon';
   
   // Get quality class for masonry layout (if quality exists)

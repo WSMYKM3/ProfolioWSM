@@ -83,7 +83,7 @@ function StripExpandedBody({ post }: { post: Post }) {
     <>
       <div className="strip-expanded-image-wrapper">
         <Image
-          src={getImageSrc(post.thumbnail)}
+          src={getImageSrc(post.compactThumbnail ?? post.thumbnail)}
           alt={post.title}
           width={1200}
           height={900}
@@ -307,7 +307,7 @@ export default function ProjectGrid({ posts, onPostClick }: ProjectGridProps) {
             >
               <div className="strip-collapsed">
                 <Image
-                  src={getImageSrc(post.thumbnail)}
+                  src={getImageSrc(post.compactThumbnail ?? post.thumbnail)}
                   alt={post.title}
                   width={800}
                   height={600}

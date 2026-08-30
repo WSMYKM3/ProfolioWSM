@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { zhTranslations } from './translations';
+import { rerollTranslations } from './rerollTranslations';
+import { sortingFactoryTranslations } from './sortingFactoryTranslations';
 
 type Language = 'en' | 'zh';
 
@@ -15,10 +17,14 @@ interface LanguageContextValue {
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 const originalTextByNode = new WeakMap<Text, string>();
 
-const translations: Record<string, string> = zhTranslations;
+const translations: Record<string, string> = {
+  ...zhTranslations,
+  ...rerollTranslations,
+  ...sortingFactoryTranslations,
+};
 
 const reverseTranslations: ReadonlyMap<string, string> = new Map(
-  Object.entries(zhTranslations).map(([english, chinese]) => [chinese, english]),
+  Object.entries(translations).map(([english, chinese]) => [chinese, english]),
 );
 
 function shouldSkipNode(node: Node) {

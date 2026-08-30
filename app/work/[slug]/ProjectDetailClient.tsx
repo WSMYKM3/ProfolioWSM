@@ -11,6 +11,8 @@ import Post3 from '@/app/components/posts/Post3'
 import Post4 from '@/app/components/posts/Post4'
 import Post5 from '@/app/components/posts/Post5'
 import Post6 from '@/app/components/posts/Post6'
+import Post7 from '@/app/components/posts/Post7'
+import Post8 from '@/app/components/posts/Post8'
 import SoftwareIcon from '@/app/components/SoftwareIcon'
 
 // Map post file identifiers to post IDs
@@ -28,6 +30,8 @@ const postComponents: Record<string, React.ComponentType> = {
   'post-4': Post4,
   'post-5': Post5,
   'post-6': Post6,
+  'post-7': Post7,
+  'post-8': Post8,
 }
 
 // Helper function to add basePath for GitHub Pages
@@ -323,4 +327,3 @@ export default function ProjectDetailClient({ slug }: { slug: string }) {
     </main>
   )
 }
-

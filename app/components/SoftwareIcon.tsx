@@ -72,11 +72,11 @@ export default function SoftwareIcon({ name, size = 32 }: SoftwareIconProps) {
   const normalizedName = normalizeToolName(name);
   
   // Try to find icon by normalized base name first, then by full normalized name
-  const iconPath = iconImages[normalizedBaseName] || iconImages[normalizedName] || iconImages[baseName] || iconImages[name] || '/icons/unity.svg'; // Default fallback
-  const iconSrc = getIconSrc(iconPath);
+  const iconPath = iconImages[normalizedBaseName] || iconImages[normalizedName] || iconImages[baseName] || iconImages[name];
+  const iconSrc = iconPath ? getIconSrc(iconPath) : '';
 
   // Check if this is Optitrack icon (wide SVG that needs special scaling)
-  const isOptitrack = iconPath.includes('optiTrack.svg');
+  const isOptitrack = iconPath?.includes('optiTrack.svg') ?? false;
   
   // For Optitrack, use a larger width to accommodate the wide aspect ratio
   const iconWidth = isOptitrack ? `${size * 1.8}px` : `${size}px`;
@@ -89,23 +89,28 @@ export default function SoftwareIcon({ name, size = 32 }: SoftwareIconProps) {
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
       title={name}
     >
-      <img
-        src={iconSrc}
-        alt={name}
-        width={size}
-        height={size}
-        style={{
-          width: iconWidth,
-          height: iconHeight,
-          maxWidth: iconWidth,
-          maxHeight: iconHeight,
-          objectFit: 'contain',
-          opacity: 0.9,
-          display: 'block'
-        }}
-      />
+      {iconPath ? (
+        <img
+          src={iconSrc}
+          alt={name}
+          width={size}
+          height={size}
+          style={{
+            width: iconWidth,
+            height: iconHeight,
+            maxWidth: iconWidth,
+            maxHeight: iconHeight,
+            objectFit: 'contain',
+            opacity: 0.9,
+            display: 'block'
+          }}
+        />
+      ) : (
+        <span className="software-icon-monogram" aria-hidden="true">
+          {baseName.slice(0, 2).toUpperCase()}
+        </span>
+      )}
       <span className="software-icon-label">{name}</span>
     </motion.div>
   );
 }
-

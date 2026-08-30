@@ -79,7 +79,7 @@ export default function HomeWheel({ tag }: HomeWheelProps) {
       card.tabIndex = 0;
 
       const img = document.createElement('img');
-      img.src = getPublicAssetUrl(post.thumbnail);
+      img.src = getPublicAssetUrl(post.compactThumbnail ?? post.thumbnail);
       img.alt = '';
       img.loading = index < 2 ? 'eager' : 'lazy';
       img.addEventListener('error', (e) => {
