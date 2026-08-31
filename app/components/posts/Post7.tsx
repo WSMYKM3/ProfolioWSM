@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import { getPublicAssetUrl } from '@/app/lib/publicAsset';
 import {
   EditorialSection,
   MediaFrame,
@@ -26,10 +28,64 @@ const IMAGE_TO_SCENE_ITEMS: MediaGridItem[] = [
   },
 ];
 
+const DIRECT_AR_ITEMS: MediaGridItem[] = [
+  {
+    path: '/Reroll/jsonPoints.webp',
+    alt: 'Camera path points recorded as structured JSON',
+    description: 'Camera path recorded as JSON points',
+    variant: 'contain',
+  },
+  {
+    path: '/Reroll/scene.webp',
+    alt: 'Editable Reroll scene in the iPhone AR camera',
+    description: 'Editable AR scene on iPhone',
+    variant: 'contain',
+  },
+];
+
 const PROMPT_INPUTS = [
-  { title: 'Scene Objects', detail: 'Masks, position, scale, and depth' },
-  { title: 'Camera Direction', detail: 'Angle, framing, and movement path' },
-  { title: 'Edit Tips', detail: 'Voice notes for action, mood, and light' },
+  {
+    title: 'Scene Objects',
+    detail: 'Masks, position, scale, and depth',
+    background: '#DFFF57',
+    ink: '#24320C',
+    shadow: '#8DBB21',
+  },
+  {
+    title: 'Camera Direction',
+    detail: 'Angle, framing, and movement path',
+    background: '#78D9FF',
+    ink: '#10324A',
+    shadow: '#3488ED',
+  },
+  {
+    title: 'Edit Tips',
+    detail: 'Voice notes for action, mood, and light',
+    background: '#FF8CC6',
+    ink: '#4B1735',
+    shadow: '#D94C92',
+  },
+];
+
+const PROMPT_OUTPUTS = [
+  {
+    src: '/Reroll/ch.png',
+    alt: 'Chinese refined prompt generated from the Reroll scene',
+    label: 'Chinese Prompt',
+    width: 960,
+    height: 678,
+    background: '#FFB45C',
+    shadow: '#FF6B45',
+  },
+  {
+    src: '/Reroll/en.png',
+    alt: 'English refined prompt generated from the Reroll scene',
+    label: 'English Prompt',
+    width: 1497,
+    height: 1059,
+    background: '#7EE5E1',
+    shadow: '#3B9EEB',
+  },
 ];
 
 const bodyStyle = {
@@ -40,10 +96,34 @@ const bodyStyle = {
 } as const;
 
 const TOOL_STACK = [
-  { group: 'Vision & Segmentation', tools: ['Python', 'YOLOv8-seg', 'SAM 3', 'DPT'] },
-  { group: 'iPhone AR', tools: ['SwiftUI', 'ARKit', 'RealityKit'] },
-  { group: 'Speech & Prompting', tools: ['Apple Speech', 'SFSpeechRecognizer', 'AI Agent'] },
-  { group: 'Early Prototype', tools: ['Unity'] },
+  {
+    group: 'Vision & Segmentation',
+    tools: ['Python', 'YOLOv8-seg', 'SAM 3', 'DPT'],
+    background: '#EEF5D8',
+    ink: '#24320C',
+    shadow: '#C7D69D',
+  },
+  {
+    group: 'iPhone AR',
+    tools: ['SwiftUI', 'ARKit', 'RealityKit'],
+    background: '#E3F3F8',
+    ink: '#10324A',
+    shadow: '#B7D7E1',
+  },
+  {
+    group: 'Speech & Prompting',
+    tools: ['Apple Speech', 'SFSpeechRecognizer', 'AI Agent'],
+    background: '#F7E7EF',
+    ink: '#4B1735',
+    shadow: '#DDBDCC',
+  },
+  {
+    group: 'Early Prototype',
+    tools: ['Unity'],
+    background: '#F5EBDD',
+    ink: '#4C260C',
+    shadow: '#DEC8AB',
+  },
 ];
 
 export default function Post7() {
@@ -55,31 +135,118 @@ export default function Post7() {
     <>
       {overlay}
 
-      <div className="post-content">
+      <div className="post-content reroll-post">
         <EditorialSection id="why-reroll" kicker="CHAPTER 01" title="Why Reroll" kickerVariant="rust">
           <div style={{ maxWidth: 920, margin: '0 auto' }}>
-            <p style={bodyStyle}>
-              Reroll replaces complex 3D tools with a{' '}
-              <SketchUnderline color="orange">familiar directing workflow</SketchUnderline>
-              : place, move, frame, and speak.
-            </p>
             <div
-              data-anim="punch"
+              aria-label="Workflow comparison"
               style={{
-                marginTop: 36,
-                padding: isMobile ? '22px 18px' : '28px 34px',
-                border: '1px solid rgba(26, 20, 13, 0.18)',
-                borderLeft: '5px solid var(--rust)',
-                background: 'var(--bone)',
-                boxShadow: '5px 6px 0 rgba(26, 20, 13, 0.08)',
-                fontFamily: 'var(--sans)',
-                fontSize: 'clamp(16px, 2vw, 25px)',
-                letterSpacing: '0.08em',
-                color: 'var(--ink)',
-                textAlign: 'center',
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1fr) auto minmax(0, 1fr)',
+                gap: isMobile ? 14 : 16,
+                alignItems: 'stretch',
               }}
             >
-              Look → Place → Move → Frame → Speak
+              <article
+                data-anim="slide-left"
+                style={{
+                  padding: isMobile ? '24px 20px' : '30px 28px',
+                  border: '1px solid rgba(26, 20, 13, 0.16)',
+                  borderTop: '5px solid var(--teal-shadow)',
+                  background: 'var(--bone)',
+                  boxShadow: '5px 6px 0 rgba(26, 20, 13, 0.08)',
+                  borderRadius: 24,
+                  overflow: 'hidden',
+                }}
+              >
+                <Image
+                  src={getPublicAssetUrl('/Reroll/logo-display.webp')}
+                  alt="Reroll"
+                  width={360}
+                  height={165}
+                  sizes="140px"
+                  style={{
+                    display: 'block',
+                    width: isMobile ? 120 : 140,
+                    height: 'auto',
+                    margin: '0 0 14px',
+                  }}
+                />
+                <h3 style={{ margin: '0 0 18px', fontFamily: 'var(--sans)', fontSize: 'clamp(20px, 2vw, 28px)', lineHeight: 1.2, color: 'var(--ink)' }}>
+                  Reference image → AI-guided prompt
+                </h3>
+                <p style={{ ...bodyStyle, margin: 0, fontSize: '1rem', lineHeight: 1.55 }}>
+                  Start with one reference image. Use the phone{' '}
+                  <SketchUnderline color="green">AR camera</SketchUnderline>{' '}
+                  to edit objects and add voice tips. AI turns them into a stronger prompt for video generation.
+                </p>
+                <MediaFrame
+                  src="/Reroll/sam3.png"
+                  alt="SAM 3 segmentation of objects in the Reroll reference scene"
+                  caption="masked objects to be edited in phone AR scene"
+                  variant="contain"
+                  width="100%"
+                  style={{ marginTop: 24 }}
+                  onClick={() =>
+                    handleImageClick(
+                      '/Reroll/sam3.png',
+                      'SAM 3 segmentation of objects in the Reroll reference scene',
+                    )
+                  }
+                />
+              </article>
+
+              <div
+                aria-hidden="true"
+                style={{
+                  alignSelf: 'center',
+                  justifySelf: 'center',
+                  display: 'grid',
+                  placeItems: 'center',
+                  width: isMobile ? 58 : 68,
+                  height: isMobile ? 58 : 68,
+                  margin: isMobile ? '-2px 0' : 0,
+                  borderRadius: '50%',
+                  border: '3px solid var(--bone)',
+                  background: '#7457ff',
+                  color: '#fff',
+                  boxShadow: '0 7px 0 #3f2ab8, 0 10px 22px rgba(63, 42, 184, 0.22)',
+                  fontFamily: 'var(--sans)',
+                  fontSize: isMobile ? '1rem' : '1.15rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.08em',
+                  lineHeight: 1,
+                  zIndex: 1,
+                }}
+              >
+                VS
+              </div>
+
+              <article
+                data-anim="slide-right"
+                style={{
+                  padding: isMobile ? '24px 20px' : '30px 28px',
+                  border: '1px solid rgba(26, 20, 13, 0.16)',
+                  borderTop: '5px solid var(--rust)',
+                  background: 'var(--bone)',
+                  boxShadow: '5px 6px 0 rgba(26, 20, 13, 0.08)',
+                  borderRadius: 24,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                }}
+              >
+                <p style={{ margin: '0 0 10px', fontFamily: 'var(--sans)', fontSize: '0.75rem', letterSpacing: '0.16em', color: 'var(--rust)', textTransform: 'uppercase' }}>
+                  Traditional Director Tools
+                </p>
+                <h3 style={{ margin: '0 0 18px', fontFamily: 'var(--sans)', fontSize: 'clamp(20px, 2vw, 28px)', lineHeight: 1.2, color: 'var(--ink)' }}>
+                  3D scene → rendered previs video
+                </h3>
+                <p style={{ ...bodyStyle, margin: 0, fontSize: '1rem', lineHeight: 1.55 }}>
+                  Traditional director tools are harder for beginners. They may require building a scene in 3D software and rendering a previs video. Not everyone knows 3D, and the process takes time.
+                </p>
+              </article>
             </div>
           </div>
         </EditorialSection>
@@ -142,21 +309,28 @@ export default function Post7() {
           </p>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <MediaFrame
-              src="/Reroll/cameramove.png"
-              alt="Reroll AR scene editing and camera movement interface"
-              caption="Spatial editing and camera-movement previsualization on iPhone"
+              src="/Reroll/mainpath.webp"
+              alt="Reroll phone AR camera following a directed movement path"
+              caption="AR camera path for physical camera movement"
               variant="contain"
               tilt="left"
               dataAnim="rotate-in"
               width="min(1040px, 100%)"
               onClick={() =>
                 handleImageClick(
-                  '/Reroll/cameramove.png',
-                  'Spatial editing and camera-movement previsualization on iPhone',
+                  '/Reroll/mainpath.webp',
+                  'AR camera path for physical camera movement',
                 )
               }
             />
           </div>
+          <MediaGrid
+            items={DIRECT_AR_ITEMS}
+            isMobile={isMobile}
+            idPrefix="reroll-direct-ar"
+            onItemClick={handleImageClick}
+            gap={isMobile ? 24 : 32}
+          />
           <p style={{ ...bodyStyle, maxWidth: 920, margin: '46px auto 0' }}>
             A Unity test validated the JSON pipeline. The prototype then moved to ARKit and RealityKit for a phone-first experience.
           </p>
@@ -213,46 +387,116 @@ export default function Post7() {
                   key={input.title}
                   data-anim="slide-up"
                   style={{
-                    padding: isMobile ? '20px 18px' : '24px 22px',
-                    background: 'var(--bone)',
-                    border: '1px solid rgba(26, 20, 13, 0.14)',
-                    borderTop: '4px solid var(--teal-shadow)',
-                    boxShadow: '4px 5px 0 rgba(26, 20, 13, 0.07)',
+                    minHeight: isMobile ? 0 : 190,
+                    padding: isMobile ? '22px 20px' : '26px 24px',
+                    background: input.background,
+                    border: '2px solid rgba(255, 255, 255, 0.72)',
+                    borderRadius: isMobile ? 22 : 28,
+                    boxShadow: `0 10px 0 ${input.shadow}`,
+                    color: input.ink,
                   }}
                 >
-                  <span style={{ fontFamily: 'var(--sans)', color: 'var(--rust)', letterSpacing: '0.14em', fontSize: '0.72rem' }}>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 34,
+                      height: 34,
+                      borderRadius: '50%',
+                      background: 'rgba(255, 255, 255, 0.7)',
+                      fontFamily: 'var(--sans)',
+                      color: input.ink,
+                      letterSpacing: '0.08em',
+                      fontSize: '0.7rem',
+                    }}
+                  >
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <h3 style={{ margin: '10px 0 8px', fontFamily: 'var(--sans)', fontSize: '1rem', color: 'var(--ink)' }}>
+                  <h3 style={{ margin: '18px 0 8px', fontFamily: 'var(--sans)', fontSize: 'clamp(18px, 1.6vw, 24px)', lineHeight: 1.1, color: input.ink }}>
                     {input.title}
                   </h3>
-                  <p style={{ margin: 0, fontFamily: 'var(--serif)', lineHeight: 1.5, color: 'var(--ink)' }}>
+                  <p style={{ margin: 0, fontFamily: 'var(--serif)', lineHeight: 1.45, color: input.ink }}>
                     {input.detail}
                   </p>
                 </article>
               ))}
             </div>
-            <div style={{ textAlign: 'center', fontFamily: 'var(--sans)', color: 'var(--rust)', letterSpacing: '0.14em', fontSize: '0.8rem' }}>
-              ↓ AI AGENT SYNTHESIS ↓
-            </div>
-            <article
-              data-anim="punch"
+            <div
               style={{
-                padding: isMobile ? '24px 20px' : '30px 32px',
-                background: 'var(--ink)',
-                color: 'var(--bone)',
-                border: '1px solid var(--ink)',
-                borderLeft: '6px solid var(--rust)',
-                boxShadow: '6px 7px 0 rgba(26, 20, 13, 0.12)',
+                alignSelf: 'center',
+                padding: '10px 18px',
+                borderRadius: 999,
+                background: '#7457FF',
+                boxShadow: '0 6px 0 #3F2AB8',
+                textAlign: 'center',
+                fontFamily: 'var(--sans)',
+                color: '#FFFFFF',
+                letterSpacing: '0.14em',
+                fontSize: '0.76rem',
               }}
             >
-              <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--sans)', letterSpacing: '0.14em', textTransform: 'uppercase', fontSize: '0.82rem', color: 'var(--rust)' }}>
-                Final Refined Prompt
-              </h3>
-              <p style={{ margin: 0, fontFamily: 'var(--serif)', fontSize: 'clamp(17px, 1.5vw, 21px)', lineHeight: 1.55, color: 'var(--bone)' }}>
-                A generation-ready prompt that describes what is in the scene, how the camera moves, and what the creator wants to change.
-              </p>
-            </article>
+              ↓ AI AGENT SYNTHESIS ↓
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, minmax(0, 1fr))',
+                gap: isMobile ? 22 : 28,
+              }}
+            >
+              {PROMPT_OUTPUTS.map((output, index) => (
+                <button
+                  key={output.src}
+                  type="button"
+                  data-anim={index === 0 ? 'slide-left' : 'slide-right'}
+                  aria-label={`Enlarge ${output.label}`}
+                  onClick={() => handleImageClick(output.src, output.alt)}
+                  style={{
+                    width: '100%',
+                    padding: isMobile ? 10 : 12,
+                    border: '2px solid rgba(255, 255, 255, 0.78)',
+                    borderRadius: isMobile ? 24 : 30,
+                    background: output.background,
+                    boxShadow: `0 11px 0 ${output.shadow}`,
+                    cursor: 'zoom-in',
+                    textAlign: 'left',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      margin: '2px 4px 10px',
+                      padding: '7px 12px',
+                      borderRadius: 999,
+                      background: 'rgba(255, 255, 255, 0.78)',
+                      color: '#24170E',
+                      fontFamily: 'var(--sans)',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {output.label}
+                  </span>
+                  <Image
+                    src={getPublicAssetUrl(output.src)}
+                    alt={output.alt}
+                    width={output.width}
+                    height={output.height}
+                    sizes={isMobile ? 'calc(100vw - 48px)' : '46vw'}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      height: 'auto',
+                      margin: 0,
+                      borderRadius: isMobile ? 17 : 22,
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
           </div>
         </EditorialSection>
 
@@ -272,20 +516,40 @@ export default function Post7() {
                 data-anim="slide-up"
                 style={{
                   padding: isMobile ? '24px 20px' : '30px 28px',
-                  background: 'var(--bone)',
-                  border: '1px solid rgba(26, 20, 13, 0.14)',
-                  borderTop: `5px solid ${index % 2 === 0 ? 'var(--teal-shadow)' : 'var(--rust)'}`,
-                  boxShadow: '5px 6px 0 rgba(26, 20, 13, 0.07)',
+                  minHeight: isMobile ? 0 : 190,
+                  background: stack.background,
+                  border: '2px solid rgba(255, 255, 255, 0.74)',
+                  borderRadius: isMobile ? 22 : 28,
+                  boxShadow: `0 10px 0 ${stack.shadow}`,
+                  color: stack.ink,
                 }}
               >
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 34,
+                    height: 34,
+                    borderRadius: '50%',
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    fontFamily: 'var(--sans)',
+                    color: stack.ink,
+                    letterSpacing: '0.08em',
+                    fontSize: '0.7rem',
+                  }}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
                 <h3
                   style={{
-                    margin: '0 0 20px',
+                    margin: '18px 0 20px',
                     fontFamily: 'var(--sans)',
-                    fontSize: '0.82rem',
-                    letterSpacing: '0.16em',
+                    fontSize: 'clamp(18px, 1.6vw, 24px)',
+                    lineHeight: 1.1,
+                    letterSpacing: '-0.01em',
                     textTransform: 'uppercase',
-                    color: index % 2 === 0 ? 'var(--teal-shadow)' : 'var(--rust)',
+                    color: stack.ink,
                   }}
                 >
                   {stack.group}
@@ -295,12 +559,15 @@ export default function Post7() {
                     <span
                       key={tool}
                       style={{
-                        padding: '8px 12px',
-                        border: '1px solid rgba(26, 20, 13, 0.18)',
+                        padding: '9px 13px',
+                        border: '1px solid rgba(255, 255, 255, 0.8)',
                         borderRadius: 999,
+                        background: 'rgba(255, 255, 255, 0.68)',
+                        boxShadow: '0 3px 0 rgba(26, 20, 13, 0.12)',
                         fontFamily: 'var(--sans)',
                         fontSize: '0.88rem',
-                        color: 'var(--ink)',
+                        fontWeight: 600,
+                        color: stack.ink,
                       }}
                     >
                       {tool}

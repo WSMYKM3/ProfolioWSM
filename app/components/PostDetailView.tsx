@@ -40,6 +40,13 @@ function getImageSrc(src: string): string {
 function convertToEmbedUrl(url: string): string {
   if (!url) return url;
   if (url.includes('/embed/')) return url;
+  if (url.includes('player.bilibili.com/')) return url;
+  if (url.includes('bilibili.com/video/')) {
+    const bvid = url.match(/\/video\/(BV[a-zA-Z0-9]+)/)?.[1];
+    if (bvid) {
+      return `https://player.bilibili.com/player.html?bvid=${bvid}&page=1&high_quality=1&danmaku=0&autoplay=0`;
+    }
+  }
   if (url.includes('youtube.com/watch')) {
     const id = url.split('v=')[1]?.split('&')[0];
     if (id) return `https://www.youtube.com/embed/${id}`;
@@ -49,6 +56,10 @@ function convertToEmbedUrl(url: string): string {
     if (id) return `https://www.youtube.com/embed/${id}`;
   }
   return url;
+}
+
+function isIframeVideoUrl(url: string): boolean {
+  return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('player.bilibili.com');
 }
 
 // Split a description into ~roughly equal sentence-bounded segments for the
@@ -207,7 +218,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                   <span className="ed-hero__media-placeholder-label">{post.heroPlaceholder}</span>
                 </div>
               ) : heroVideoUrl ? (
-                heroVideoUrl.includes('youtube.com') || heroVideoUrl.includes('youtu.be') ? (
+                isIframeVideoUrl(heroVideoUrl) ? (
                   <iframe
                     src={heroVideoUrl}
                     title={post.videoTitle || post.title}
@@ -229,6 +240,26 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                 />
               )}
             </div>
+
+            {post.alternateVideoUrl && (
+              <a
+                className="ed-hero__alternate-video"
+                href={post.alternateVideoUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <svg
+                  className="ed-hero__youtube-icon"
+                  viewBox="0 0 24 17"
+                  aria-hidden="true"
+                >
+                  <path d="M23.5 2.66A3.02 3.02 0 0 0 21.38.52C19.5 0 12 0 12 0S4.5 0 2.62.52A3.02 3.02 0 0 0 .5 2.66 31.7 31.7 0 0 0 0 8.5a31.7 31.7 0 0 0 .5 5.84 3.02 3.02 0 0 0 2.12 2.14C4.5 17 12 17 12 17s7.5 0 9.38-.52a3.02 3.02 0 0 0 2.12-2.14A31.7 31.7 0 0 0 24 8.5a31.7 31.7 0 0 0-.5-5.84Z" fill="#FF0033" />
+                  <path d="m9.6 12.14 6.26-3.64L9.6 4.86v7.28Z" fill="#fff" />
+                </svg>
+                {post.alternateVideoLabel || 'Watch alternate video'}
+                <span aria-hidden="true">↗</span>
+              </a>
+            )}
 
             <div className="ed-hero__showcase-footer">
               {post.description && (isDatnie ? (

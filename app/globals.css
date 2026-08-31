@@ -7220,6 +7220,33 @@ header h1 {
 .editorial .sketch-underline.purple { color: var(--rust-deep); }
 .editorial .sketch-underline svg path { stroke: currentColor; }
 
+/* Reroll uses the same dopamine palette as its prompt cards for key phrases. */
+.editorial .reroll-post .sketch-underline {
+    padding: 0 0.14em 0.04em;
+    border-radius: 0.28em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+.editorial .reroll-post .sketch-underline.orange {
+    color: #4c260c;
+    background: #ffb45c;
+}
+.editorial .reroll-post .sketch-underline.blue {
+    color: #10324a;
+    background: #78d9ff;
+}
+.editorial .reroll-post .sketch-underline.green {
+    color: #24320c;
+    background: #dfff57;
+}
+.editorial .reroll-post .sketch-underline.purple {
+    color: #4b1735;
+    background: #ff8cc6;
+}
+.editorial .reroll-post .sketch-underline svg {
+    bottom: -5px;
+}
+
 /* ─── neutral typography for project detail pages ───
    Keep the editorial layout and palette, but replace the slanted display
    serif with the locally hosted sans families. This scope deliberately does
@@ -7402,6 +7429,34 @@ header h1 {
     font-size: clamp(10px, 1vw, 13px);
     letter-spacing: 0.17em;
     text-transform: uppercase;
+}
+.project-detail-page.editorial .ed-hero__alternate-video {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    margin: 12px 0 0 auto;
+    padding: 8px 13px;
+    border: 1px solid rgba(26, 20, 13, 0.2);
+    border-radius: 999px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.56);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+.project-detail-page.editorial .ed-hero__alternate-video:hover {
+    transform: translateY(-2px);
+    border-color: rgba(26, 20, 13, 0.42);
+    background: #fff;
+}
+.project-detail-page.editorial .ed-hero__youtube-icon {
+    width: 18px;
+    height: auto;
+    flex: 0 0 auto;
 }
 .project-detail-page.editorial .ed-hero__showcase-footer {
     display: grid;
@@ -7605,6 +7660,9 @@ header h1 {
     }
     .project-detail-page.editorial .ed-hero__media {
         border-radius: 10px;
+    }
+    .project-detail-page.editorial .ed-hero__alternate-video {
+        margin-left: 0;
     }
     .project-detail-page.editorial .ed-hero__showcase-footer {
         grid-template-columns: 1fr;

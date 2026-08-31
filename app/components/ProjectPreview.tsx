@@ -27,6 +27,17 @@ function convertToEmbedUrl(url: string): string {
     return url;
   }
 
+  if (url.includes('player.bilibili.com/')) {
+    return url;
+  }
+
+  if (url.includes('bilibili.com/video/')) {
+    const bvid = url.match(/\/video\/(BV[a-zA-Z0-9]+)/)?.[1];
+    if (bvid) {
+      return `https://player.bilibili.com/player.html?bvid=${bvid}&page=1&high_quality=1&danmaku=0&autoplay=0`;
+    }
+  }
+
   // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
   if (url.includes('youtube.com/watch')) {
     const videoId = url.split('v=')[1]?.split('&')[0];
@@ -90,7 +101,7 @@ export default function ProjectPreview({ post }: ProjectPreviewProps) {
         <div className="project-preview-media">
           {videoUrl ? (
             <div className="project-preview-video">
-              {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
+              {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') || videoUrl.includes('player.bilibili.com') ? (
                 <iframe
                   src={videoUrl}
                   title={post.title}
@@ -126,4 +137,3 @@ export default function ProjectPreview({ post }: ProjectPreviewProps) {
     </div>
   );
 }
-

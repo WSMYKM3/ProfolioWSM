@@ -102,6 +102,17 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
       return url;
     }
 
+    if (url.includes('player.bilibili.com/')) {
+      return url;
+    }
+
+    if (url.includes('bilibili.com/video/')) {
+      const bvid = url.match(/\/video\/(BV[a-zA-Z0-9]+)/)?.[1];
+      if (bvid) {
+        return `https://player.bilibili.com/player.html?bvid=${bvid}&page=1&high_quality=1&danmaku=0&autoplay=0`;
+      }
+    }
+
     // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
     if (url.includes('youtube.com/watch')) {
       const videoId = url.split('v=')[1]?.split('&')[0];
@@ -120,6 +131,14 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
 
     // Return original URL if no conversion needed
     return url;
+  };
+
+  const isIframeVideoUrl = (url: string): boolean =>
+    url.includes('youtube.com') || url.includes('youtu.be') || url.includes('player.bilibili.com');
+
+  const getPreviewEmbedUrl = (url: string): string => {
+    if (url.includes('player.bilibili.com')) return url;
+    return `${url}?autoplay=1&mute=1&controls=0&loop=1&playlist=${url.split('/embed/')[1]?.split('?')[0]}`;
   };
 
   // Get video URL - prefer videoUrls array first, then fall back to videoUrl
@@ -350,9 +369,9 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
                 }}
               >
                 <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
-                  {embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be') ? (
+                  {isIframeVideoUrl(embedUrl) ? (
                     <iframe
-                      src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/embed/')[1]?.split('?')[0]}`}
+                      src={getPreviewEmbedUrl(embedUrl)}
                       title={videoTitle}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -454,9 +473,9 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
               {/* Display Video if available, otherwise show placeholder */}
               {embedUrl ? (
                 <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
-                  {embedUrl.includes('youtube.com') || embedUrl.includes('youtu.be') ? (
+                  {isIframeVideoUrl(embedUrl) ? (
                     <iframe
-                      src={`${embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${embedUrl.split('/embed/')[1]?.split('?')[0]}`}
+                      src={getPreviewEmbedUrl(embedUrl)}
                       title={videoTitle}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

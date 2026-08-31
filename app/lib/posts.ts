@@ -23,6 +23,8 @@ export interface Post {
   quality?: 'high' | 'medium' | 'low'; // 内容质量等级，用于控制post card尺寸 (high=大, medium=中, low=小)
   videoUrl?: string; // YouTube/Vimeo embed URL or local MP4 path
   videoTitle?: string; // Title text displayed above video
+  alternateVideoUrl?: string; // Optional external viewing link shown below the hero video
+  alternateVideoLabel?: string;
   heroPlaceholder?: string; // Text-only hero media placeholder when the main film is not ready
   videoUrls?: string[]; // Array of video URLs for multiple videos (e.g., for Datnie)
   videoTitles?: string[]; // Array of video titles corresponding to videoUrls
@@ -79,8 +81,10 @@ export const posts: Post[] = [
     date: "Apr–Aug 2026",
     tags: ["ai", "xr", "featured"],
     quality: "high",
-    videoTitle: "Reroll main film",
-    heroPlaceholder: "Main film coming soon",
+    videoUrl: "https://player.bilibili.com/player.html?bvid=BV1uytw6FEZg&page=1&high_quality=1&danmaku=0&autoplay=0",
+    videoTitle: "Reroll main film on Bilibili",
+    alternateVideoUrl: "https://youtu.be/yvQJhBxugUM",
+    alternateVideoLabel: "Watch on YouTube",
     description: "Reroll turns a reference image into an editable iPhone AR scene, then records object edits, camera movement, and spoken direction for AI generation.",
     softwareTools: ["Python", "SwiftUI", "ARKit", "RealityKit"],
     features: ["AI Filmmaking", "Mobile AR", "Previsualization", "Computer Vision"],
@@ -245,7 +249,7 @@ export const posts: Post[] = [
     softwareTools: ["Unity6", "Blender"],
     features: ["AI Assistant", "XR Shopping Guide"],
     role: "Team leader of 5, XR developer",
-    identity: "creative-technologist",
+    identity: "builder",
     status: "published",
     linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/",
     sections: [

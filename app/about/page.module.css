@@ -442,10 +442,39 @@
 .projectGridTechnologist .projectCard:nth-child(3) { grid-column: 4 / 7; grid-row: 2; }
 .projectGridTechnologist .projectCard:nth-child(4) { grid-column: 1 / 4; grid-row: 3; }
 .projectGridTechnologist .projectCard:nth-child(5) { grid-column: 4 / 7; grid-row: 3; }
+.projectGridTechnologist .projectCard:nth-child(4):last-child { grid-column: 1 / 7; }
+
+.projectGridTechnologist .projectCard:first-child.projectCardPortrait {
+  justify-self: center;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 3 / 4;
+}
 
 .projectGridArtist .projectCard:nth-child(1) { grid-column: 1 / 4; grid-row: 1 / 4; }
 .projectGridArtist .projectCard:nth-child(2) { grid-column: 4 / 7; grid-row: 1 / 4; }
-.projectGridBuilder .projectCard:nth-child(1) { grid-column: 1 / 7; grid-row: 1 / 4; }
+.projectGridArtist .projectCard:nth-child(n) {
+  align-self: center;
+  aspect-ratio: 16 / 9;
+}
+
+.projectGridBuilder .projectCard:nth-child(1) {
+  grid-column: 1 / 4;
+  grid-row: 1 / 4;
+  justify-self: center;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+.projectGridBuilder .projectCard:nth-child(2) {
+  grid-column: 4 / 7;
+  grid-row: 1 / 4;
+  align-self: center;
+  aspect-ratio: 16 / 9;
+}
 
 .projectCard::before,
 .projectCard::after {
@@ -791,7 +820,20 @@
   }
 
   .projectGridArtist .projectCard:nth-child(n) { min-height: min(48vw, 340px); }
-  .projectGridBuilder .projectCard:nth-child(n) { min-height: min(48vw, 340px); }
+  .projectCardLandscape {
+    width: 100%;
+    min-height: 0 !important;
+    aspect-ratio: 16 / 9;
+  }
+
+  .projectCardPortrait,
+  .projectGridTechnologist .projectCard:first-child.projectCardPortrait {
+    justify-self: center;
+    width: min(54vw, 360px);
+    height: auto;
+    min-height: 0 !important;
+    aspect-ratio: 3 / 4;
+  }
 
   .projectTitle { font-size: clamp(14px, 2.4vw, 20px); }
 }
@@ -842,7 +884,10 @@
   }
 
   .projectGridTechnologist .projectCard:first-child { min-height: 280px; }
-  .projectGridBuilder .projectCard:nth-child(n) { min-height: 280px; }
+  .projectCardPortrait,
+  .projectGridTechnologist .projectCard:first-child.projectCardPortrait {
+    width: min(76vw, 320px);
+  }
 
   .projectTitle,
   .projectGridTechnologist .projectCard:first-child .projectTitle,
