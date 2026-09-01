@@ -12,10 +12,16 @@ interface ProjectPresentation {
   category: string;
   imagePosition: string;
   mediaAspect?: 'landscape' | 'portrait';
+  showFullImage?: boolean;
 }
 
 const projectPresentation: Record<string, ProjectPresentation> = {
-  'post-8': { category: 'Multi-Arm Robotics Simulation & Data Collection', imagePosition: 'center 44%', mediaAspect: 'portrait' },
+  'post-8': {
+    category: 'Multi-Arm Robotics Simulation & Data Collection',
+    imagePosition: 'center',
+    mediaAspect: 'portrait',
+    showFullImage: true,
+  },
   'post-7': { category: 'AR camera to guide AI generation with phone', imagePosition: 'center 44%', mediaAspect: 'portrait' },
   'post-1': { category: 'Mixed Reality Dating', imagePosition: 'center' },
   'post-2': { category: 'ASL learning app', imagePosition: 'center 38%' },
@@ -246,6 +252,9 @@ export default function AboutLiquidGlass() {
                 const mediaClass = presentation?.mediaAspect === 'portrait'
                   ? styles.projectCardPortrait
                   : styles.projectCardLandscape;
+                const fullImageClass = presentation?.showFullImage
+                  ? styles.projectCardFullImage
+                  : '';
                 const cardContent = (
                   <>
                     {isComingSoon ? (
@@ -257,7 +266,7 @@ export default function AboutLiquidGlass() {
                     ) : (
                       <img
                         className={styles.projectImage}
-                        src={getPublicAssetUrl(post.thumbnail)}
+                        src={getPublicAssetUrl(post.aboutThumbnail ?? post.thumbnail)}
                         alt=""
                         loading={index === 0 ? 'eager' : 'lazy'}
                       />
@@ -278,7 +287,7 @@ export default function AboutLiquidGlass() {
                   return (
                     <article
                       key={post.id}
-                      className={`${styles.projectCard} ${styles.projectPlaceholder} ${mediaClass}`}
+                      className={`${styles.projectCard} ${styles.projectPlaceholder} ${mediaClass} ${fullImageClass}`}
                       aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, Coming Soon`}
                     >
                       {cardContent}
@@ -290,7 +299,7 @@ export default function AboutLiquidGlass() {
                   <Link
                     key={post.id}
                     href={getPostPageRoute(post.id)}
-                    className={`${styles.projectCard} ${mediaClass}`}
+                    className={`${styles.projectCard} ${mediaClass} ${fullImageClass}`}
                     style={{ '--image-position': presentation?.imagePosition ?? 'center' } as CSSProperties}
                     aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, ${presentation?.category ?? ''}`}
                     onMouseEnter={() => setActiveProject(post)}

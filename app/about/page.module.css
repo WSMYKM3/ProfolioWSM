@@ -595,6 +595,21 @@
   transform: scale(1.055);
 }
 
+.projectCardFullImage {
+  align-self: center;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 3 / 4;
+}
+
+.projectCardFullImage .projectImage,
+.projectCardFullImage:is(:hover, :focus-visible) .projectImage {
+  object-fit: cover;
+  object-position: center;
+  transform: none;
+}
+
 .projectVeil {
   position: absolute;
   inset: 0;

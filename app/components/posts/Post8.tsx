@@ -9,12 +9,27 @@ import {
 } from '../editorial';
 import { SketchUnderline } from '../SketchUnderline';
 
-const dataGroups = [
-  ['Robot', 'Six joint observations and control actions'],
-  ['Workflow', 'State, action phase, and active target'],
-  ['Vision', 'Frame, class, confidence, and Track ID'],
-  ['Decision', 'World position, time remaining, execute or skip'],
-  ['Outcome', 'Result, failure reason, pick time, and cycle time'],
+const toolGroups = [
+  {
+    title: 'Simulation & Robotics',
+    tools: ['Unity 6', 'C#', 'SO-101', 'IK'],
+    tone: 'sage',
+  },
+  {
+    title: 'Vision & Tracking',
+    tools: ['Python', 'YOLO26n', 'ByteTrack'],
+    tone: 'blue',
+  },
+  {
+    title: 'Services & Communication',
+    tools: ['FastAPI', 'WebSocket', 'REST API'],
+    tone: 'pink',
+  },
+  {
+    title: 'Data & Monitoring',
+    tools: ['CSV', 'Real-time Telemetry', 'Browser Control Room'],
+    tone: 'sand',
+  },
 ];
 
 export default function Post8() {
@@ -41,7 +56,7 @@ export default function Post8() {
 
         </EditorialSection>
 
-        <EditorialSection id="vision-solution" kicker="CHAPTER 02" title="Vision Solution">
+        <EditorialSection id="vision-solution" kicker="CHAPTER 02" title="Vision & Robotics">
           <div className="sf-copy" data-anim="slide-up">
             <p>
               <SketchUnderline color="purple">A Python server</SketchUnderline> receives JPEG frames and ROI data from each Unity camera through WebSocket.
@@ -51,10 +66,7 @@ export default function Post8() {
             </p>
           </div>
 
-        </EditorialSection>
-
-        <EditorialSection id="robotics-picking" kicker="CHAPTER 03" title="Robotics Pick Demo" kickerVariant="rust">
-          <div className="sf-copy" data-anim="slide-up">
+          <div className="sf-copy sf-copy--pick" data-anim="slide-up">
             <p>
               Detection alone does not trigger a pick.{' '}
               <SketchUnderline color="orange">A red Latest Pick Line</SketchUnderline>{' '}
@@ -64,6 +76,22 @@ export default function Post8() {
               Unity predicts the time to that line. If it is too short, the arm{' '}
               <SketchUnderline color="pink">abandons the pick</SketchUnderline>.
             </p>
+          </div>
+
+          <div className="sf-primary-media">
+            <MediaGrid
+              items={[
+                {
+                  path: '/SortingFactory/redline.webp',
+                  alt: 'Unity sorting line showing YOLO detections and the red latest pick line',
+                  description: 'YOLO detection and the time-aware Latest Pick Line inside Unity',
+                },
+              ]}
+              columns={1}
+              isMobile={isMobile}
+              idPrefix="sorting-redline"
+              onItemClick={handleImageClick}
+            />
           </div>
 
           <div className="sf-code-panel" data-anim="slide-up">
@@ -105,52 +133,56 @@ StartPick(target, result =>
             </footer>
           </div>
 
-          <div className="sf-subchapter" data-anim="slide-up">
-            <span>CONTROL PANEL</span>
-            <h3>Web Control Panel</h3>
+          <div className="sf-copy sf-copy--single" data-anim="slide-up">
+            <p>
+              Every initiated action ends as a success, failure, or abandoned attempt. The outcome—together with its reason, Track ID, timing, and joint data—is written to that session&apos;s CSV file, creating structured episodes for future robotics training.
+            </p>
           </div>
 
+        </EditorialSection>
+
+        <EditorialSection id="web-control-panel" kicker="CHAPTER 03" title="Web Control Panel" kickerVariant="rust">
           <div className="sf-copy" data-anim="slide-up">
             <p>
-              The web panel shows each arm&apos;s{' '}
-              <SketchUnderline color="blue">camera, target, decision, action, and result</SketchUnderline>.
+              The control room gives me a live view of all three robotic arms, including each arm&apos;s{' '}
+              <SketchUnderline color="blue">work state, successful picks, and failed picks</SketchUnderline>.
             </p>
             <p>
-              <SketchUnderline color="pink">Skips and failures</SketchUnderline> keep their reason, Track ID, timing, and joint data. Global controls manage the session, conveyor, arms, and cameras.
+              <SketchUnderline color="pink">Success and failure rates</SketchUnderline> stay visible throughout the session, making it easier to monitor performance and preserve consistent statistics for later analysis.
             </p>
           </div>
 
-          <MediaGrid
-            items={[
-              {
-                path: '/SortingFactory/control-room.webp',
-                alt: 'Browser control room with live workstation cameras and pick results',
-                description: 'Live cameras, decisions, and pick results',
-              },
-              {
-                path: '/SortingFactory/data-logging.webp',
-                alt: 'Per-arm telemetry and recorded pick outcomes',
-                description: 'Skipped and failed picks stay in the session record',
-              },
-            ]}
-            columns={2}
-            isMobile={isMobile}
-            idPrefix="sorting-control-room"
-            onItemClick={handleImageClick}
-            gap={isMobile ? 30 : 42}
-          />
-
-          <div className="sf-data-rate" data-anim="punch">
-            <strong>10 Hz</strong>
-            <span>Structured recording for every robotic arm</span>
+          <div className="sf-primary-media">
+            <MediaGrid
+              items={[
+                {
+                  path: '/SortingFactory/controlroom.webp',
+                  alt: 'Browser control room showing the live status and pick statistics of three robotic arms',
+                  description: 'Live arm status, success rate, and failure rate across all three workstations',
+                },
+              ]}
+              columns={1}
+              isMobile={isMobile}
+              idPrefix="sorting-control-room"
+              onItemClick={handleImageClick}
+            />
           </div>
 
-          <div className="sf-data-grid">
-            {dataGroups.map(([title, detail], index) => (
-              <article key={title} data-anim={index % 2 === 0 ? 'slide-left' : 'slide-right'}>
-                <span className="sf-index">{String(index + 1).padStart(2, '0')}</span>
-                <strong>{title}</strong>
-                <p>{detail}</p>
+        </EditorialSection>
+
+        <EditorialSection id="tool-stack" kicker="CHAPTER 04" title="Tool Stack">
+          <div className="sf-tool-grid">
+            {toolGroups.map((group, index) => (
+              <article
+                key={group.title}
+                className={`sf-tool-card sf-tool-card--${group.tone}`}
+                data-anim={index % 2 === 0 ? 'slide-left' : 'slide-right'}
+              >
+                <span className="sf-tool-card__index">{String(index + 1).padStart(2, '0')}</span>
+                <h3>{group.title}</h3>
+                <div className="sf-tool-card__tags">
+                  {group.tools.map((tool) => <span key={tool}>{tool}</span>)}
+                </div>
               </article>
             ))}
           </div>
@@ -177,32 +209,16 @@ StartPick(target, result =>
         .sf-copy--single {
           display: block;
           max-width: 900px;
+          margin-top: 58px;
         }
-        .sf-index {
-          font-family: var(--sans);
-          font-size: 11px;
-          letter-spacing: 0.18em;
-          color: var(--rust);
-        }
-        .sf-subchapter {
-          max-width: 1020px;
-          margin: 90px auto 42px;
-          padding-top: 26px;
-          border-top: 1px solid var(--sf-border);
-        }
-        .sf-subchapter > span {
-          font: 500 11px/1 var(--sans);
-          letter-spacing: .22em;
-          color: var(--rust);
-        }
-        .sf-subchapter h3 {
-          margin: 15px 0 0;
-          font: italic 700 clamp(40px, 6vw, 76px)/1.08 var(--serif);
-          color: var(--ink);
+        .sf-copy--pick { margin-top: 86px; }
+        .sf-primary-media {
+          max-width: 1100px;
+          margin: 0 auto 72px;
         }
         .sf-code-panel {
-          max-width: 1040px;
-          margin: 0 auto 70px;
+          max-width: 780px;
+          margin: 0 auto;
           overflow: hidden;
           border: 1px solid rgba(26, 20, 13, .28);
           background: #171b19;
@@ -255,52 +271,69 @@ StartPick(target, result =>
           margin-right: 8px;
           color: var(--rust);
         }
-        .sf-data-rate {
-          max-width: 1020px;
-          margin: 70px auto 34px;
-          padding: 30px 36px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 24px;
-          background: var(--teal-shadow);
-          color: var(--bone);
-        }
-        .sf-data-rate strong {
-          font: italic 700 clamp(44px, 7vw, 82px)/1 var(--serif);
-          color: var(--tungsten);
-        }
-        .sf-data-rate span {
-          font: 500 12px/1.5 var(--sans);
-          letter-spacing: .14em;
-          text-transform: uppercase;
-        }
-        .sf-data-grid {
-          max-width: 1020px;
+        .sf-tool-grid {
+          max-width: 980px;
           margin: 0 auto;
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
+          gap: 26px;
         }
-        .sf-data-grid article {
-          padding: 24px;
-          background: var(--bone);
-          border: 1px solid var(--sf-border);
+        .sf-tool-card {
+          min-height: 220px;
+          padding: 30px;
+          border: 2px solid rgba(255, 255, 255, .9);
+          border-radius: 28px;
+          box-shadow: 0 10px 0 var(--sf-card-shadow);
         }
-        .sf-data-grid article:last-child { grid-column: 1 / -1; }
-        .sf-data-grid strong {
-          display: block;
-          margin-top: 14px;
-          font: italic 700 28px/1.1 var(--serif);
+        .sf-tool-card--sage {
+          --sf-card-shadow: #c5d696;
+          background: #edf4d6;
         }
-        .sf-data-grid p {
-          margin: 10px 0 0;
-          font: 14px/1.55 var(--sans);
-          color: var(--muted);
+        .sf-tool-card--blue {
+          --sf-card-shadow: #add8e7;
+          background: #e1f2f8;
+        }
+        .sf-tool-card--pink {
+          --sf-card-shadow: #ddb9cb;
+          background: #f7e6ef;
+        }
+        .sf-tool-card--sand {
+          --sf-card-shadow: #dfc49d;
+          background: #f5ead9;
+        }
+        .sf-tool-card__index {
+          display: inline-flex;
+          width: 36px;
+          height: 36px;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, .7);
+          font: 500 11px/1 var(--sans);
+          letter-spacing: .05em;
+        }
+        .sf-tool-card h3 {
+          margin: 24px 0 22px;
+          font: italic 700 clamp(23px, 2.8vw, 34px)/1.05 var(--serif);
+          text-transform: uppercase;
+          color: var(--ink);
+        }
+        .sf-tool-card__tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .sf-tool-card__tags span {
+          padding: 10px 14px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, .82);
+          box-shadow: 0 3px 0 rgba(26, 20, 13, .14);
+          font: 600 12px/1 var(--sans);
+          color: var(--ink);
         }
         @media (max-width: 820px) {
           .sf-copy,
-          .sf-data-grid { grid-template-columns: 1fr; }
+          .sf-tool-grid { grid-template-columns: 1fr; }
           .sf-code-panel__header { grid-template-columns: 1fr; }
           .sf-code-panel__header span:last-child { display: none; }
           .sf-code-panel__footer { grid-template-columns: 1fr; }
@@ -308,8 +341,7 @@ StartPick(target, result =>
             border-left: 0;
             border-top: 1px solid rgba(255, 255, 255, .12);
           }
-          .sf-data-grid article:last-child { grid-column: auto; }
-          .sf-data-rate { align-items: flex-start; flex-direction: column; }
+          .sf-tool-card { min-height: 0; }
         }
       `}</style>
     </>

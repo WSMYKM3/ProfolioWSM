@@ -17,6 +17,7 @@ export interface Post {
   title: string;
   thumbnail: string;
   compactThumbnail?: string; // Optional 4:3 artwork for small project cards
+  aboutThumbnail?: string; // Optional artwork used only by the About page gallery
   file: string;
   date: string;
   tags: string[];
@@ -52,14 +53,17 @@ export const posts: Post[] = [
   {
     id: "post-8",
     title: "Sorting Factory",
-    thumbnail: "/SortingFactory/thumbnail-vertical.webp",
+    thumbnail: "/SortingFactory/thumb5.webp",
+    aboutThumbnail: "/SortingFactory/thumbVertical.webp",
     file: "post-8",
     date: "OpenAI Build Week · July 2026",
     tags: ["ai", "robotics", "featured"],
     quality: "high",
-    videoUrl: "https://www.youtube.com/watch?v=sRn4y9llr-s",
-    videoTitle: "Sorting Factory — OpenAI Build Week demo",
-    description: "A Unity simulation that runs multiple SO-101 digital twins with Python vision and records pick data for robotics training.",
+    videoUrl: "https://www.bilibili.com/video/BV1Xbtu6HEr2/",
+    videoTitle: "Sorting Factory main film on Bilibili",
+    alternateVideoUrl: "https://www.youtube.com/watch?v=sRn4y9llr-s",
+    alternateVideoLabel: "Watch on YouTube",
+    description: "A Unity simulation that runs multiple SO-101 digital twins with YOLO vision and records pick data for robotics training.",
     shortDescription: "Parallel SO-101 digital twins for faster robotics data collection.",
     softwareTools: ["Unity6", "Python"],
     features: ["FastAPI", "YOLO26n", "ByteTrack", "WebSocket", "Multi-arm Robotics", "Real-time Telemetry"],
@@ -68,8 +72,9 @@ export const posts: Post[] = [
     status: "published",
     sections: [
       { id: "inspiration", label: "Inspiration" },
-      { id: "vision-solution", label: "Vision Solution" },
-      { id: "robotics-picking", label: "Robotics Pick Demo" }
+      { id: "vision-solution", label: "Vision & Robotics" },
+      { id: "web-control-panel", label: "Web Control Panel" },
+      { id: "tool-stack", label: "Tool Stack" }
     ]
   },
   {

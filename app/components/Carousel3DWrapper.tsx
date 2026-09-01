@@ -174,6 +174,7 @@ export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, t
               <PostSection
                 post={post}
                 index={index}
+                isActive={isActive}
                 onPostClick={(p) => {
                   console.log('🔵 Carousel received click for:', p.id, 'isActive:', isActive);
                   if (onPostClick) {

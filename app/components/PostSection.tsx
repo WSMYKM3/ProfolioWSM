@@ -10,6 +10,7 @@ import SoftwareIcon from './SoftwareIcon';
 interface PostSectionProps {
   post: Post;
   index: number;
+  isActive?: boolean;
   onPostClick?: (post: Post) => void;
   titleAction?: ReactNode;
 }
@@ -42,7 +43,7 @@ function formatDate(dateString: string): string {
   return `${month}/${day}/${year}`;
 }
 
-export default function PostSection({ post, index, onPostClick, titleAction }: PostSectionProps) {
+export default function PostSection({ post, index, isActive = true, onPostClick, titleAction }: PostSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const isComingSoon = post.status === 'coming-soon';
@@ -137,7 +138,12 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
     url.includes('youtube.com') || url.includes('youtu.be') || url.includes('player.bilibili.com');
 
   const getPreviewEmbedUrl = (url: string): string => {
-    if (url.includes('player.bilibili.com')) return url;
+    if (url.includes('player.bilibili.com')) {
+      const previewUrl = new URL(url);
+      previewUrl.searchParams.set('autoplay', '1');
+      previewUrl.searchParams.set('muted', '1');
+      return previewUrl.toString();
+    }
     return `${url}?autoplay=1&mute=1&controls=0&loop=1&playlist=${url.split('/embed/')[1]?.split('?')[0]}`;
   };
 
@@ -333,7 +339,7 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
           }} />
 
           {/* Mobile Video - Show below title on mobile only */}
-          {isMobile && embedUrl && (
+          {isMobile && embedUrl && isActive && (
             <motion.div
               className="cinematic-extra-mobile"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -427,7 +433,7 @@ export default function PostSection({ post, index, onPostClick, titleAction }: P
         </motion.div>
 
         {/* Optional: Secondary Visual or Detail - Desktop only */}
-        {!isMobile && embedUrl && (
+        {!isMobile && embedUrl && isActive && (
           <motion.div
             className="cinematic-extra"
             initial={{ opacity: 0, scale: 0.9 }}
