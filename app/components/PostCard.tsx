@@ -11,6 +11,7 @@ interface PostCardProps {
   checkboxId?: string;
   isActive?: boolean;
   indexLabel?: string;
+  preventNativeToggle?: boolean;
 }
 
 function formatDate(dateString: string): string {
@@ -34,7 +35,7 @@ function getImageSrc(src: string): string {
   return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
-export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false, indexLabel }: PostCardProps) {
+export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false, indexLabel, preventNativeToggle = false }: PostCardProps) {
   const formattedDate = formatDate(post.date);
   const thumbnail = 'compactThumbnail' in post && post.compactThumbnail
     ? post.compactThumbnail
@@ -90,7 +91,25 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
   }
 
   return (
-    <label htmlFor={toggleId} className={cardClassName} onClick={onClick}>
+    <label
+      htmlFor={toggleId}
+      className={cardClassName}
+      onClick={(event) => {
+        if (preventNativeToggle) {
+          event.preventDefault();
+        }
+        onClick();
+      }}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isViewed}
+    >
       <input
         type="checkbox"
         id={toggleId}

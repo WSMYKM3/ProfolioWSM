@@ -65,7 +65,7 @@ export const posts: Post[] = [
     alternateVideoLabel: "Watch on YouTube",
     description: "A Unity simulation that runs multiple SO-101 digital twins with YOLO vision and records pick data for robotics training.",
     shortDescription: "Parallel SO-101 digital twins for faster robotics data collection.",
-    softwareTools: ["Unity6", "Python"],
+    softwareTools: ["Unity6", "Python", "FastAPI", "WebSocket", "REST API", "YOLO"],
     features: ["FastAPI", "YOLO26n", "ByteTrack", "WebSocket", "Multi-arm Robotics", "Real-time Telemetry"],
     role: "AI & Robotics Engineer",
     identity: "builder",
@@ -91,7 +91,7 @@ export const posts: Post[] = [
     alternateVideoUrl: "https://youtu.be/yvQJhBxugUM",
     alternateVideoLabel: "Watch on YouTube",
     description: "Reroll turns a reference image into an editable iPhone AR scene, then records object edits, camera movement, and spoken direction for AI generation.",
-    softwareTools: ["Python", "SwiftUI", "ARKit", "RealityKit"],
+    softwareTools: ["Python", "SAM 3", "Swift", "Unity"],
     features: ["AI Filmmaking", "Mobile AR", "Previsualization", "Computer Vision"],
     role: "Creative Technologist / AI & AR Developer",
     shortDescription: "Use an iPhone as an AR camera to shape scenes and guide AI generation.",
@@ -319,7 +319,8 @@ export const placeholderPosts: Post[] = [
 ];
 
 export const workPosts: Post[] = [
-  ...posts.filter((post) => post.id !== 'post-6'),
+  ...posts.filter((post) => post.id === 'post-7'),
+  ...posts.filter((post) => post.id !== 'post-7' && post.id !== 'post-6'),
   ...placeholderPosts,
 ];
 

@@ -9,18 +9,30 @@ interface Carousel3DWrapperProps {
   posts: Post[];
   onPostClick?: (post: Post) => void;
   onIndexChange?: (index: number) => void;
+  activeIndex?: number;
   titleAction?: (post: Post) => ReactNode;
 }
 
-export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, titleAction }: Carousel3DWrapperProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, activeIndex, titleAction }: Carousel3DWrapperProps) {
+  const [uncontrolledIndex, setUncontrolledIndex] = useState(0);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const totalItems = posts.length;
+  const currentIndex = activeIndex ?? uncontrolledIndex;
   const rotationStep = totalItems > 0 ? 360 / totalItems : 0;
   const autoPlayDelay = 5000; // 5 seconds
+
+  const goToIndex = useCallback((index: number) => {
+    if (totalItems === 0) return;
+
+    const normalizedIndex = (index + totalItems) % totalItems;
+    if (activeIndex === undefined) {
+      setUncontrolledIndex(normalizedIndex);
+    }
+    onIndexChange?.(normalizedIndex);
+  }, [activeIndex, onIndexChange, totalItems]);
 
   // Detect window size and update on resize with debounce
   useEffect(() => {
@@ -80,27 +92,19 @@ export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, t
       clearTimeout(autoPlayTimerRef.current);
     }
     autoPlayTimerRef.current = setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % totalItems);
+      goToIndex(currentIndex + 1);
     }, autoPlayDelay);
-  }, [totalItems, autoPlayDelay]);
+  }, [autoPlayDelay, currentIndex, goToIndex]);
 
   // Next slide
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => {
-      const newIndex = (prev + 1) % totalItems;
-      return newIndex;
-    });
-    // Timer will be reset automatically when currentIndex changes
-  }, [totalItems]);
+    goToIndex(currentIndex + 1);
+  }, [currentIndex, goToIndex]);
 
   // Previous slide
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => {
-      const newIndex = (prev - 1 + totalItems) % totalItems;
-      return newIndex;
-    });
-    // Timer will be reset automatically when currentIndex changes
-  }, [totalItems]);
+    goToIndex(currentIndex - 1);
+  }, [currentIndex, goToIndex]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -137,13 +141,6 @@ export default function Carousel3DWrapper({ posts, onPostClick, onIndexChange, t
       }
     };
   }, [currentIndex, resetAutoPlay, totalItems]);
-
-  // Notify parent component when index changes
-  useEffect(() => {
-    if (onIndexChange) {
-      onIndexChange(currentIndex);
-    }
-  }, [currentIndex, onIndexChange]);
 
   if (totalItems === 0) {
     return null;

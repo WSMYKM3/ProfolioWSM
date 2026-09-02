@@ -9,26 +9,40 @@ import Modal from '@/app/components/Modal';
 import { workPosts, Post } from '@/app/lib/posts';
 import { shouldNavigateToPage, getPostPageRoute } from '@/app/lib/navigation';
 
+const workPagePosts: Post[] = workPosts.map((post) =>
+  post.id === 'post-7'
+    ? { ...post, thumbnail: '/Reroll/thumbnail.png' }
+    : post
+);
+
 export default function Work() {
   const router = useRouter();
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewedPosts, setViewedPosts] = useState<Set<string>>(new Set());
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const handlePostClick = (post: Post) => {
     if (post.status === 'coming-soon') return;
 
-    console.log('🔴 Work page handlePostClick:', post.id, post.title);
-    setViewedPosts(prev => new Set(prev).add(post.id));
-    
     if (shouldNavigateToPage(post.id)) {
       router.push(getPostPageRoute(post.id));
     } else {
       setSelectedPost(post);
       setIsModalOpen(true);
-      console.log('🔴 Modal should open now');
     }
+  };
+
+  const handleProjectCardClick = (post: Post, index: number) => {
+    if (post.status === 'coming-soon') return;
+
+    if (selectedCardId === post.id) {
+      handlePostClick(post);
+      return;
+    }
+
+    setSelectedCardId(post.id);
+    setActiveIndex(index);
   };
 
   const handleCloseModal = () => {
@@ -44,9 +58,10 @@ export default function Work() {
           <h1>THE WORK</h1>
         </header>
         <PostScrollContainer
-          posts={workPosts}
+          posts={workPagePosts}
           onPostClick={handlePostClick}
           onIndexChange={setActiveIndex}
+          activeIndex={activeIndex}
           titleAction={(post) => (
             post.status === 'published' ? (
               <button
@@ -69,9 +84,9 @@ export default function Work() {
             <p>Scroll or drag to explore</p>
           </div>
           <HorizontalPostGrid
-            posts={workPosts}
-            onPostClick={handlePostClick}
-            viewedPosts={viewedPosts}
+            posts={workPagePosts}
+            onPostClick={handleProjectCardClick}
+            selectedPostId={selectedCardId}
             activeIndex={activeIndex}
           />
         </section>

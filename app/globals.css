@@ -8662,8 +8662,8 @@ body.home-wheel-active {
 }
 
 .work-line-page .horizontal-post-grid .post-card input[type="checkbox"]:checked + .btn .bottom .dot {
-    background: #fff;
-    box-shadow: 0 0 9px rgba(255, 255, 255, 0.72);
+    background: #71bd81;
+    box-shadow: 0 0 9px rgba(113, 189, 129, 0.9);
 }
 
 .work-line-page .horizontal-post-grid-arrow {

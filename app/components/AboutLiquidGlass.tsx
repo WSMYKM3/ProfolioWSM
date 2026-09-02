@@ -236,83 +236,104 @@ export default function AboutLiquidGlass() {
               <p className={styles.edition} aria-label="Portfolio edition 2026">@26</p>
             </header>
 
-            <div
-              className={`${styles.projectGrid} ${
-                activeIdentity === 'artist'
-                  ? styles.projectGridArtist
-                  : activeIdentity === 'builder'
-                    ? styles.projectGridBuilder
-                    : styles.projectGridTechnologist
-              }`}
-              aria-label={`${identityOptions.find((option) => option.id === activeIdentity)?.label} project gallery`}
-            >
-              {displayedProjects.map((post, index) => {
-                const presentation = projectPresentation[post.id];
-                const isComingSoon = post.status === 'coming-soon';
-                const mediaClass = presentation?.mediaAspect === 'portrait'
-                  ? styles.projectCardPortrait
-                  : styles.projectCardLandscape;
-                const fullImageClass = presentation?.showFullImage
-                  ? styles.projectCardFullImage
-                  : '';
-                const cardContent = (
-                  <>
-                    {isComingSoon ? (
-                      <span className={styles.placeholderArtwork} aria-hidden="true">
-                        <span className={styles.placeholderMark}>+</span>
-                        <span className={styles.placeholderLine} />
-                        <span className={styles.placeholderLineShort} />
+            <div className={`${styles.projectGallery} ${activeIdentity === 'artist' ? styles.projectGalleryArtist : ''}`}>
+              <div
+                className={`${styles.projectGrid} ${
+                  activeIdentity === 'artist'
+                    ? styles.projectGridArtist
+                    : activeIdentity === 'builder'
+                      ? styles.projectGridBuilder
+                      : styles.projectGridTechnologist
+                }`}
+                aria-label={`${identityOptions.find((option) => option.id === activeIdentity)?.label} project gallery`}
+              >
+                {displayedProjects.map((post, index) => {
+                  const presentation = projectPresentation[post.id];
+                  const isComingSoon = post.status === 'coming-soon';
+                  const mediaClass = presentation?.mediaAspect === 'portrait'
+                    ? styles.projectCardPortrait
+                    : styles.projectCardLandscape;
+                  const fullImageClass = presentation?.showFullImage
+                    ? styles.projectCardFullImage
+                    : '';
+                  const cardContent = (
+                    <>
+                      {isComingSoon ? (
+                        <span className={styles.placeholderArtwork} aria-hidden="true">
+                          <span className={styles.placeholderMark}>+</span>
+                          <span className={styles.placeholderLine} />
+                          <span className={styles.placeholderLineShort} />
+                        </span>
+                      ) : (
+                        <img
+                          className={styles.projectImage}
+                          src={getPublicAssetUrl(post.aboutThumbnail ?? post.thumbnail)}
+                          alt=""
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                        />
+                      )}
+                      <span className={styles.projectVeil} aria-hidden="true" />
+                      <span className={styles.projectNumber}>{String(index + 1).padStart(2, '0')}</span>
+                      <span className={styles.projectContent}>
+                        <span className={styles.projectCategory}>{presentation?.category}</span>
+                        <span className={styles.projectTitle}>{post.title}</span>
+                        <span className={styles.projectCta} aria-hidden="true">
+                          {isComingSoon ? 'Coming Soon' : 'View project'}
+                        </span>
                       </span>
-                    ) : (
-                      <img
-                        className={styles.projectImage}
-                        src={getPublicAssetUrl(post.aboutThumbnail ?? post.thumbnail)}
-                        alt=""
-                        loading={index === 0 ? 'eager' : 'lazy'}
-                      />
-                    )}
-                    <span className={styles.projectVeil} aria-hidden="true" />
-                    <span className={styles.projectNumber}>{String(index + 1).padStart(2, '0')}</span>
-                    <span className={styles.projectContent}>
-                      <span className={styles.projectCategory}>{presentation?.category}</span>
-                      <span className={styles.projectTitle}>{post.title}</span>
-                      <span className={styles.projectCta} aria-hidden="true">
-                        {isComingSoon ? 'Coming Soon' : 'View project'}
-                      </span>
-                    </span>
-                  </>
-                );
+                    </>
+                  );
 
-                if (isComingSoon) {
+                  if (isComingSoon) {
+                    return (
+                      <article
+                        key={post.id}
+                        className={`${styles.projectCard} ${styles.projectPlaceholder} ${mediaClass} ${fullImageClass}`}
+                        aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, Coming Soon`}
+                      >
+                        {cardContent}
+                      </article>
+                    );
+                  }
+
                   return (
-                    <article
+                    <Link
                       key={post.id}
-                      className={`${styles.projectCard} ${styles.projectPlaceholder} ${mediaClass} ${fullImageClass}`}
-                      aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, Coming Soon`}
+                      href={getPostPageRoute(post.id)}
+                      className={`${styles.projectCard} ${mediaClass} ${fullImageClass}`}
+                      style={{ '--image-position': presentation?.imagePosition ?? 'center' } as CSSProperties}
+                      aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, ${presentation?.category ?? ''}`}
+                      onMouseEnter={() => setActiveProject(post)}
+                      onMouseLeave={(event) => {
+                        if (event.currentTarget !== document.activeElement) setActiveProject(null);
+                      }}
+                      onFocus={() => setActiveProject(post)}
+                      onBlur={() => setActiveProject(null)}
                     >
                       {cardContent}
-                    </article>
+                    </Link>
                   );
-                }
+                })}
+              </div>
 
-                return (
-                  <Link
-                    key={post.id}
-                    href={getPostPageRoute(post.id)}
-                    className={`${styles.projectCard} ${mediaClass} ${fullImageClass}`}
-                    style={{ '--image-position': presentation?.imagePosition ?? 'center' } as CSSProperties}
-                    aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, ${presentation?.category ?? ''}`}
-                    onMouseEnter={() => setActiveProject(post)}
-                    onMouseLeave={(event) => {
-                      if (event.currentTarget !== document.activeElement) setActiveProject(null);
-                    }}
-                    onFocus={() => setActiveProject(post)}
-                    onBlur={() => setActiveProject(null)}
-                  >
-                    {cardContent}
-                  </Link>
-                );
-              })}
+              {activeIdentity === 'artist' && (
+                <section className={styles.aiFilmSection} aria-labelledby="ai-film-ads-title">
+                  <div className={styles.aiFilmHeader}>
+                    <div>
+                      <span className={styles.aiFilmEyebrow}>New section</span>
+                      <h2 id="ai-film-ads-title">AI film / Ads</h2>
+                    </div>
+                  </div>
+                  <article className={styles.aiFilmOngoingCard} aria-label="AI film and advertising project, ongoing">
+                    <span className={styles.aiFilmProjectNumber}>01</span>
+                    <span className={styles.aiFilmProjectCopy}>
+                      <span>Ongoing Project</span>
+                      <small>New work and process coming soon</small>
+                    </span>
+                    <span className={styles.aiFilmProjectMark} aria-hidden="true">+</span>
+                  </article>
+                </section>
+              )}
             </div>
 
             <footer className={styles.glassFooter}>
