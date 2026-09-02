@@ -6603,6 +6603,49 @@ header h1 {
     z-index: 2;
 }
 
+/* ─── The Brighton Grab / AI glasses concept spot ─── */
+.editorial .aiglass-post .aiglass-copy {
+    max-width: 760px;
+    margin: 0 0 clamp(30px, 4vw, 48px);
+    font-family: var(--serif);
+    font-size: clamp(16px, 1.35vw, 19px);
+    line-height: 1.65;
+    color: var(--shadow-warm);
+}
+.editorial .aiglass-character-grid {
+    display: grid;
+    grid-template-columns: minmax(210px, 0.72fr) minmax(0, 1.45fr);
+    align-items: center;
+    gap: clamp(24px, 4vw, 52px);
+}
+.editorial .aiglass-character-portrait {
+    width: min(100%, 470px);
+    justify-self: center;
+}
+.editorial .aiglass-character-portrait .photo__frame {
+    aspect-ratio: 1318 / 1474;
+}
+.editorial .aiglass-gallery {
+    margin-top: 0 !important;
+}
+.editorial .aiglass-gallery .photo__frame {
+    background: #e9e5dc;
+}
+.editorial .aiglass-gallery--odd > :last-child {
+    grid-column: 1 / -1;
+}
+@media (max-width: 900px) {
+    .editorial .aiglass-character-grid {
+        grid-template-columns: 1fr;
+    }
+    .editorial .aiglass-character-portrait {
+        width: min(82vw, 430px);
+    }
+    .editorial .aiglass-gallery--odd > :last-child {
+        grid-column: auto;
+    }
+}
+
 /* ─── meta strip — merged into .ed-hero, reads as one compact header ─── */
 .editorial .ed-meta {
     position: relative;
@@ -8635,6 +8678,28 @@ body.home-wheel-active {
     font-weight: 500;
     line-height: 1.25;
     letter-spacing: -0.01em;
+}
+
+.work-line-page .horizontal-post-grid .post-card .post-card-subtitle {
+    display: block;
+    margin-top: 5px;
+    color: var(--work-copy-muted);
+    font-size: 0.64rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.work-line-page .cinematic-project-subtitle {
+    display: block;
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: clamp(0.72rem, 1vw, 0.92rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .work-line-page .horizontal-post-grid .post-card-index {

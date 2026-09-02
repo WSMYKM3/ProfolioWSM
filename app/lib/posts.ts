@@ -15,6 +15,7 @@ export type ProjectStatus = 'published' | 'coming-soon';
 export interface Post {
   id: string;
   title: string;
+  subtitle?: string;
   thumbnail: string;
   compactThumbnail?: string; // Optional 4:3 artwork for small project cards
   aboutThumbnail?: string; // Optional artwork used only by the About page gallery
@@ -50,6 +51,28 @@ export interface Post {
 }
 
 export const posts: Post[] = [
+  {
+    id: "post-9",
+    title: "It won’t wait",
+    subtitle: "AI Glass Ads",
+    thumbnail: "/AIGlass/aiglassthumb.png",
+    file: "post-9",
+    date: "Ongoing · 30 sec TikTok / Reels / Shorts",
+    tags: ["ai", "film", "advertising"],
+    quality: "high",
+    heroPlaceholder: "Film in progress · video placeholder",
+    description: "A 30-second AI-glasses concept spot set in Brighton, where a stolen fish sparks a street-wide chase and one calm wearer never misses the moment.",
+    features: ["AI Film", "Commercial Concept", "Storyboarding", "Vertical Ad"],
+    role: "Director / AI Filmmaker",
+    identity: "artist",
+    status: "published",
+    sections: [
+      { id: "character", label: "Character" },
+      { id: "fishing", label: "Fishing" },
+      { id: "chasing", label: "Chasing" },
+      { id: "busking", label: "Busking" }
+    ]
+  },
   {
     id: "post-8",
     title: "Sorting Factory",
@@ -320,7 +343,8 @@ export const placeholderPosts: Post[] = [
 
 export const workPosts: Post[] = [
   ...posts.filter((post) => post.id === 'post-7'),
-  ...posts.filter((post) => post.id !== 'post-7' && post.id !== 'post-6'),
+  ...posts.filter((post) => post.id === 'post-9'),
+  ...posts.filter((post) => post.id !== 'post-7' && post.id !== 'post-6' && post.id !== 'post-9'),
   ...placeholderPosts,
 ];
 

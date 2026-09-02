@@ -13,6 +13,7 @@ import Post5 from '@/app/components/posts/Post5'
 import Post6 from '@/app/components/posts/Post6'
 import Post7 from '@/app/components/posts/Post7'
 import Post8 from '@/app/components/posts/Post8'
+import Post9 from '@/app/components/posts/Post9'
 import SoftwareIcon from '@/app/components/SoftwareIcon'
 
 // Map post file identifiers to post IDs
@@ -32,6 +33,7 @@ const postComponents: Record<string, React.ComponentType> = {
   'post-6': Post6,
   'post-7': Post7,
   'post-8': Post8,
+  'post-9': Post9,
 }
 
 // Helper function to add basePath for GitHub Pages

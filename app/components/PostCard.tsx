@@ -74,7 +74,12 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
             />
           )}
         </div>
-        <div className="top">{post.title}</div>
+        <div className="top">
+          <span>{post.title}</span>
+          {'subtitle' in post && post.subtitle && (
+            <small className="post-card-subtitle">{post.subtitle}</small>
+          )}
+        </div>
         {isComingSoon && <span className="post-card-status">Coming Soon</span>}
         <div className="bottom">
           <i className="dot"></i>

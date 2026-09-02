@@ -16,6 +16,7 @@ interface ProjectPresentation {
 }
 
 const projectPresentation: Record<string, ProjectPresentation> = {
+  'post-9': { category: 'AI Glass Ads(AI Generative)', imagePosition: 'center' },
   'post-8': {
     category: 'Multi-Arm Robotics Simulation & Data Collection',
     imagePosition: 'center',
@@ -55,7 +56,10 @@ export default function AboutLiquidGlass() {
   const [activeProject, setActiveProject] = useState<Post | null>(null);
   const [activeIdentity, setActiveIdentity] = useState<ProjectIdentity>('creative-technologist');
 
-  const displayedProjects = workPosts.filter((post) => post.identity === activeIdentity);
+  const displayedProjects = workPosts.filter(
+    (post) => post.identity === activeIdentity && post.id !== 'post-9'
+  );
+  const aiFilmProject = workPosts.find((post) => post.id === 'post-9');
 
   const handleIdentityChange = (identity: ProjectIdentity) => {
     setActiveProject(null);
@@ -316,7 +320,7 @@ export default function AboutLiquidGlass() {
                 })}
               </div>
 
-              {activeIdentity === 'artist' && (
+              {activeIdentity === 'artist' && aiFilmProject && (
                 <section className={styles.aiFilmSection} aria-labelledby="ai-film-ads-title">
                   <div className={styles.aiFilmHeader}>
                     <div>
@@ -324,14 +328,30 @@ export default function AboutLiquidGlass() {
                       <h2 id="ai-film-ads-title">AI film / Ads</h2>
                     </div>
                   </div>
-                  <article className={styles.aiFilmOngoingCard} aria-label="AI film and advertising project, ongoing">
+                  <Link
+                    href={getPostPageRoute(aiFilmProject.id)}
+                    className={styles.aiFilmOngoingCard}
+                    aria-label={`Open ${aiFilmProject.title}, ${aiFilmProject.subtitle}, an ongoing project`}
+                    onMouseEnter={() => setActiveProject(aiFilmProject)}
+                    onMouseLeave={(event) => {
+                      if (event.currentTarget !== document.activeElement) setActiveProject(null);
+                    }}
+                    onFocus={() => setActiveProject(aiFilmProject)}
+                    onBlur={() => setActiveProject(null)}
+                  >
+                    <img
+                      className={styles.aiFilmProjectImage}
+                      src={getPublicAssetUrl(aiFilmProject.thumbnail)}
+                      alt=""
+                      loading="lazy"
+                    />
                     <span className={styles.aiFilmProjectNumber}>01</span>
                     <span className={styles.aiFilmProjectCopy}>
-                      <span>Ongoing Project</span>
-                      <small>New work and process coming soon</small>
+                      <span>{aiFilmProject.title}</span>
+                      <small>{aiFilmProject.subtitle}</small>
                     </span>
-                    <span className={styles.aiFilmProjectMark} aria-hidden="true">+</span>
-                  </article>
+                    <span className={styles.aiFilmProjectMark} aria-hidden="true">↗</span>
+                  </Link>
                 </section>
               )}
             </div>

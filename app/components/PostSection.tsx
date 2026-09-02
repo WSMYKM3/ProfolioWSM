@@ -325,6 +325,9 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
               letterSpacing: '-0.02em'
             }}>
               {post.title}
+              {post.subtitle && (
+                <small className="cinematic-project-subtitle">{post.subtitle}</small>
+              )}
             </h2>
             {titleAction}
           </div>

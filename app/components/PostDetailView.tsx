@@ -13,6 +13,7 @@ import Post5 from './posts/Post5';
 import Post6 from './posts/Post6';
 import Post7 from './posts/Post7';
 import Post8 from './posts/Post8';
+import Post9 from './posts/Post9';
 import PostSidebar from './PostSidebar';
 
 const postComponents: Record<string, React.ComponentType> = {
@@ -24,6 +25,7 @@ const postComponents: Record<string, React.ComponentType> = {
   'post-6': Post6,
   'post-7': Post7,
   'post-8': Post8,
+  'post-9': Post9,
 };
 
 interface PostDetailViewProps {
@@ -151,7 +153,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const heroVideoUrl = isMirror
     ? convertToEmbedUrl('https://www.youtube.com/watch?v=D7zAp-WNIjM')
     : videoUrl;
-  const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-4' || isToolbox || post.id === 'post-6' || post.id === 'post-7' || post.id === 'post-8';
+  const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-4' || isToolbox || post.id === 'post-6' || post.id === 'post-7' || post.id === 'post-8' || post.id === 'post-9';
   const showIntro = !hideGeneratedIntro && Boolean(post.description);
 
   // Sidebar nav: prepend the project title anchor, then read per-project
@@ -213,7 +215,9 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
             <div className="ed-hero__media">
               {post.heroPlaceholder ? (
                 <div className="ed-hero__media-placeholder" role="img" aria-label={post.heroPlaceholder}>
-                  <span className="ed-hero__media-placeholder-index">R / 07</span>
+                  <span className="ed-hero__media-placeholder-index">
+                    {post.id === 'post-9' ? 'FILM / 00' : 'R / 07'}
+                  </span>
                   <span className="ed-hero__media-placeholder-mark" aria-hidden="true">▶</span>
                   <span className="ed-hero__media-placeholder-label">{post.heroPlaceholder}</span>
                 </div>

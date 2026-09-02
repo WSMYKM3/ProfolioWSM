@@ -4,7 +4,7 @@
  */
 export function shouldNavigateToPage(postId: string): boolean {
   // All projects use page routes now
-  const pageRoutePosts = ['post-1', 'post-2', 'post-3', 'post-4', 'post-5', 'post-6', 'post-7', 'post-8'];
+  const pageRoutePosts = ['post-1', 'post-2', 'post-3', 'post-4', 'post-5', 'post-6', 'post-7', 'post-8', 'post-9'];
   return pageRoutePosts.includes(postId);
 }
 
