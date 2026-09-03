@@ -14,6 +14,7 @@ import Post6 from './posts/Post6';
 import Post7 from './posts/Post7';
 import Post8 from './posts/Post8';
 import Post9 from './posts/Post9';
+import Post10 from './posts/Post10';
 import PostSidebar from './PostSidebar';
 
 const postComponents: Record<string, React.ComponentType> = {
@@ -26,6 +27,7 @@ const postComponents: Record<string, React.ComponentType> = {
   'post-7': Post7,
   'post-8': Post8,
   'post-9': Post9,
+  'post-10': Post10,
 };
 
 interface PostDetailViewProps {
@@ -153,7 +155,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const heroVideoUrl = isMirror
     ? convertToEmbedUrl('https://www.youtube.com/watch?v=D7zAp-WNIjM')
     : videoUrl;
-  const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-4' || isToolbox || post.id === 'post-6' || post.id === 'post-7' || post.id === 'post-8' || post.id === 'post-9';
+  const hideGeneratedIntro = isDatnie || post.id === 'post-2' || post.id === 'post-4' || isToolbox || post.id === 'post-6' || post.id === 'post-7' || post.id === 'post-8' || post.id === 'post-9' || post.id === 'post-10';
   const showIntro = !hideGeneratedIntro && Boolean(post.description);
 
   // Sidebar nav: prepend the project title anchor, then read per-project

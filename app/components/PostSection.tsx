@@ -138,13 +138,27 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
     url.includes('youtube.com') || url.includes('youtu.be') || url.includes('player.bilibili.com');
 
   const getPreviewEmbedUrl = (url: string): string => {
+    const previewUrl = new URL(url);
+    previewUrl.searchParams.set('autoplay', '1');
+    previewUrl.searchParams.set('muted', '1');
+
     if (url.includes('player.bilibili.com')) {
-      const previewUrl = new URL(url);
-      previewUrl.searchParams.set('autoplay', '1');
-      previewUrl.searchParams.set('muted', '1');
+      previewUrl.searchParams.set('danmaku', '0');
       return previewUrl.toString();
     }
-    return `${url}?autoplay=1&mute=1&controls=0&loop=1&playlist=${url.split('/embed/')[1]?.split('?')[0]}`;
+
+    const videoId = previewUrl.pathname.split('/').filter(Boolean).at(-1);
+    previewUrl.searchParams.set('mute', '1');
+    previewUrl.searchParams.set('controls', '0');
+    previewUrl.searchParams.set('disablekb', '1');
+    previewUrl.searchParams.set('fs', '0');
+    previewUrl.searchParams.set('iv_load_policy', '3');
+    previewUrl.searchParams.set('modestbranding', '1');
+    previewUrl.searchParams.set('playsinline', '1');
+    previewUrl.searchParams.set('rel', '0');
+    previewUrl.searchParams.set('loop', '1');
+    if (videoId) previewUrl.searchParams.set('playlist', videoId);
+    return previewUrl.toString();
   };
 
   // Get video URL - prefer videoUrls array first, then fall back to videoUrl
@@ -152,6 +166,7 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
   const hasMultipleVideos = videoUrls.length > 0;
   const videoUrl = hasMultipleVideos ? videoUrls[0] : post.videoUrl;
   const embedUrl = (videoUrl && videoUrl.trim() !== '') ? convertToEmbedUrl(videoUrl) : null;
+  const previewScale = embedUrl?.includes('player.bilibili.com') ? 1.45 : 1.24;
   const videoTitle = post.videoTitle || post.title;
   const description = post.description || 'A creative project showcasing innovative design and technology.';
   const softwareTools = post.softwareTools || [];
@@ -382,6 +397,7 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                     <iframe
                       src={getPreviewEmbedUrl(embedUrl)}
                       title={videoTitle}
+                      tabIndex={-1}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -389,10 +405,11 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                         position: 'absolute',
                         top: '50%',
                         left: '50%',
-                        width: '177.78%',
+                        width: '100%',
                         height: '100%',
                         maxWidth: 'none',
-                        transform: 'translate(-50%, -50%)',
+                        transform: `translate(-50%, -50%) scale(${previewScale})`,
+                        transformOrigin: 'center',
                         border: 'none',
                         pointerEvents: 'none',
                         overflow: 'hidden'
@@ -415,6 +432,12 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                   )}
                 </div>
               </motion.div>
+              <button
+                type="button"
+                className="cinematic-preview-hit-target"
+                aria-label={`Open ${post.title} project`}
+                onClick={handleButtonClick}
+              />
             </motion.div>
           )}
 
@@ -486,6 +509,7 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                     <iframe
                       src={getPreviewEmbedUrl(embedUrl)}
                       title={videoTitle}
+                      tabIndex={-1}
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -493,9 +517,11 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                         position: 'absolute',
                         top: '50%',
                         left: '50%',
-                        width: '177.78%', // 16:9 aspect ratio (16/9 = 1.7778) to fill width
+                        width: '100%',
                         height: '100%',
-                        transform: 'translate(-50%, -50%)',
+                        maxWidth: 'none',
+                        transform: `translate(-50%, -50%) scale(${previewScale})`,
+                        transformOrigin: 'center',
                         border: 'none',
                         pointerEvents: 'none'
                       }}
@@ -523,6 +549,12 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                 </div>
               )}
             </motion.div>
+            <button
+              type="button"
+              className="cinematic-preview-hit-target"
+              aria-label={`Open ${post.title} project`}
+              onClick={handleButtonClick}
+            />
           </motion.div>
         )}
 

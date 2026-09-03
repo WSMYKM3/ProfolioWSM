@@ -559,8 +559,23 @@ header h1 {
 }
 
 .carousel-3d-wrapper-item .cinematic-extra {
-    width: 300px !important;
-    height: 180px !important;
+    width: clamp(300px, 30vw, 390px) !important;
+    height: clamp(180px, 18vw, 234px) !important;
+}
+
+.cinematic-preview-hit-target {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    cursor: pointer;
+}
+
+.cinematic-preview-hit-target:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 3px;
 }
 
 .carousel-3d-wrapper-item .cinematic-extra-mobile {
@@ -6476,6 +6491,7 @@ header h1 {
     inset: 0;
     width: 100%;
     height: 100%;
+    margin: 0;
     border: 0;
     object-fit: cover;
     border-radius: inherit;
@@ -8737,6 +8753,100 @@ body.home-wheel-active {
     height: 42px;
     border-radius: 0;
     font-size: 1.4rem;
+}
+
+/* Keep the Work landing view compact enough to preview the project rail
+   without changing the shared carousel or the mobile layout. */
+@media (min-width: 769px) {
+    .work-line-page .carousel-3d-wrapper-shell {
+        width: calc(100% + 120px);
+        height: clamp(460px, calc(60vh + 100px), 680px);
+        min-height: 0;
+        max-height: 680px;
+        margin-left: -60px;
+        margin-top: 48px;
+    }
+
+    .work-line-page .carousel-3d-wrapper-item .cinematic-background img {
+        object-fit: contain !important;
+        object-position: center;
+    }
+
+    .work-line-page .carousel-3d-wrapper-controls {
+        position: absolute;
+    }
+
+    .work-project-rail {
+        margin-top: -12px;
+        padding-top: 10px;
+        padding-bottom: 28px;
+    }
+
+    .work-project-rail-heading {
+        padding-bottom: 0;
+    }
+
+    .work-line-page .horizontal-post-grid-container {
+        padding-top: 8px;
+    }
+
+    .work-line-page .horizontal-post-grid-guide-line {
+        top: 6px;
+    }
+
+    .work-line-page .horizontal-post-grid-guide-node {
+        top: 2px;
+    }
+
+    .work-line-page .horizontal-post-grid-guide-node-end {
+        top: -13px;
+    }
+
+    .work-line-page .horizontal-post-grid {
+        gap: clamp(10px, 1.15vw, 16px);
+        padding-top: 4px;
+        padding-bottom: 14px;
+    }
+
+    .work-line-page .horizontal-post-grid .post-card {
+        width: clamp(190px, 16vw, 230px);
+        min-width: clamp(190px, 16vw, 230px);
+    }
+
+    .work-line-page .horizontal-post-grid .post-card .btn {
+        min-height: 170px;
+        padding: 11px;
+    }
+
+    .work-line-page .horizontal-post-grid .post-card-image-wrapper {
+        margin-bottom: 7px;
+    }
+
+    .work-line-page .horizontal-post-grid .post-card .top {
+        padding-right: 32px;
+        font-size: 0.8rem;
+    }
+
+    .work-line-page .horizontal-post-grid .post-card .post-card-subtitle {
+        margin-top: 3px;
+        font-size: 0.58rem;
+    }
+
+    .work-line-page .horizontal-post-grid .post-card-index {
+        right: 11px;
+        bottom: 11px;
+    }
+
+    .work-line-page .horizontal-post-grid .post-card .bottom {
+        margin-top: 8px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .work-line-page .carousel-3d-wrapper-shell {
+        width: calc(100% + 40px);
+        margin-left: -20px;
+    }
 }
 
 @media (max-width: 768px) {

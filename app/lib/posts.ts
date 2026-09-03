@@ -52,6 +52,31 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    id: "post-10",
+    title: "could've",
+    subtitle: "Save money you never had",
+    thumbnail: "/Couldve/icon-couldve.png",
+    compactThumbnail: "/Couldve/icon-couldve.png",
+    file: "post-10",
+    date: "2026 · iOS-first MVP",
+    tags: ["ai", "mobile", "product"],
+    quality: "high",
+    description: "Could've turns the money you almost spent into a fictional balance you can use later—a playful, local-first experiment in behavioral accounting.",
+    shortDescription: "A local-first iOS app that turns avoided purchases into a fictional spending balance.",
+    softwareTools: ["iOS Swift", "React Native"],
+    features: ["Behavioral Finance", "Local-first", "Mobile Product", "SQLite"],
+    role: "Product Designer & Mobile Developer",
+    identity: "builder",
+    status: "published",
+    sections: [
+      { id: "idea", label: "The Idea" },
+      { id: "loop", label: "Core Loop" },
+      { id: "real-world", label: "Real World Apps" },
+      { id: "design", label: "Design (UX) & Visual" },
+      { id: "build", label: "Build & Quality" }
+    ]
+  },
+  {
     id: "post-9",
     title: "It won’t wait",
     subtitle: "AI Glass Ads",

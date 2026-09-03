@@ -15,6 +15,23 @@ const workPagePosts: Post[] = workPosts.map((post) =>
     : post
 );
 
+function movePostAfter(items: Post[], movingId: string, targetId: string): Post[] {
+  const movingPost = items.find((post) => post.id === movingId);
+  if (!movingPost) return items;
+
+  const remainingPosts = items.filter((post) => post.id !== movingId);
+  const targetIndex = remainingPosts.findIndex((post) => post.id === targetId);
+  if (targetIndex === -1) return items;
+
+  return [
+    ...remainingPosts.slice(0, targetIndex + 1),
+    movingPost,
+    ...remainingPosts.slice(targetIndex + 1),
+  ];
+}
+
+const workRailPosts = movePostAfter(workPagePosts, 'post-9', 'post-3');
+
 export default function Work() {
   const router = useRouter();
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -33,7 +50,7 @@ export default function Work() {
     }
   };
 
-  const handleProjectCardClick = (post: Post, index: number) => {
+  const handleProjectCardClick = (post: Post) => {
     if (post.status === 'coming-soon') return;
 
     if (selectedCardId === post.id) {
@@ -42,13 +59,19 @@ export default function Work() {
     }
 
     setSelectedCardId(post.id);
-    setActiveIndex(index);
+    const carouselIndex = workRailPosts.findIndex((item) => item.id === post.id);
+    if (carouselIndex !== -1) {
+      setActiveIndex(carouselIndex);
+    }
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedPost(null);
   };
+
+  const activePostId = workRailPosts[activeIndex]?.id;
+  const activeRailIndex = workRailPosts.findIndex((post) => post.id === activePostId);
 
   return (
     <div className="layout">
@@ -58,7 +81,7 @@ export default function Work() {
           <h1>THE WORK</h1>
         </header>
         <PostScrollContainer
-          posts={workPagePosts}
+          posts={workRailPosts}
           onPostClick={handlePostClick}
           onIndexChange={setActiveIndex}
           activeIndex={activeIndex}
@@ -84,10 +107,10 @@ export default function Work() {
             <p>Scroll or drag to explore</p>
           </div>
           <HorizontalPostGrid
-            posts={workPagePosts}
+            posts={workRailPosts}
             onPostClick={handleProjectCardClick}
             selectedPostId={selectedCardId}
-            activeIndex={activeIndex}
+            activeIndex={activeRailIndex}
           />
         </section>
       </main>

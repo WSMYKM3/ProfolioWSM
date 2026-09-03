@@ -42,6 +42,7 @@ const iconImages: Record<string, string> = {
   'sam 3': '/icons/meta.svg',
   'sam3': '/icons/meta.svg',
   'swift': '/icons/swift-svgrepo-com.svg',
+  'ios swift': '/icons/swift-svgrepo-com.svg',
   'motion builder': '/icons/motion builder.svg',
   'motionbuilder': '/icons/motion builder.svg',
   'adobe premiere': '/icons/adobe-premiere.svg',

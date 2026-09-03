@@ -16,6 +16,11 @@ interface ProjectPresentation {
 }
 
 const projectPresentation: Record<string, ProjectPresentation> = {
+  'post-10': {
+    category: 'Behavioral Finance · Local-first iOS App',
+    imagePosition: 'center',
+    showFullImage: true,
+  },
   'post-9': { category: 'AI Glass Ads(AI Generative)', imagePosition: 'center' },
   'post-8': {
     category: 'Multi-Arm Robotics Simulation & Data Collection',
