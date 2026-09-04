@@ -53,16 +53,16 @@ export interface Post {
 export const posts: Post[] = [
   {
     id: "post-10",
-    title: "could've",
+    title: "Could've",
     subtitle: "Save money you never had",
-    thumbnail: "/Couldve/icon-couldve.png",
-    compactThumbnail: "/Couldve/icon-couldve.png",
+    thumbnail: "/Couldve/Thumb1.png",
+    compactThumbnail: "/Couldve/Thumb1.png",
     file: "post-10",
     date: "2026 · iOS-first MVP",
     tags: ["ai", "mobile", "product"],
     quality: "high",
-    description: "Could've turns the money you almost spent into a fictional balance you can use later—a playful, local-first experiment in behavioral accounting.",
-    shortDescription: "A local-first iOS app that turns avoided purchases into a fictional spending balance.",
+    description: "Turn skipped purchases into credit for later.",
+    shortDescription: "An iOS app that turns skipped purchases into spending credit.",
     softwareTools: ["iOS Swift", "React Native"],
     features: ["Behavioral Finance", "Local-first", "Mobile Product", "SQLite"],
     role: "Product Designer & Mobile Developer",
@@ -70,10 +70,9 @@ export const posts: Post[] = [
     status: "published",
     sections: [
       { id: "idea", label: "The Idea" },
-      { id: "loop", label: "Core Loop" },
-      { id: "real-world", label: "Real World Apps" },
-      { id: "design", label: "Design (UX) & Visual" },
-      { id: "build", label: "Build & Quality" }
+      { id: "loop", label: "Product Loop" },
+      { id: "design", label: "UX & Visual" },
+      { id: "build", label: "Build" }
     ]
   },
   {

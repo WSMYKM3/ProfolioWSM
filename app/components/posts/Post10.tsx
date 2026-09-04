@@ -5,19 +5,19 @@ import { EditorialSection } from '../editorial';
 import { getPublicAssetUrl } from '@/app/lib/publicAsset';
 
 const loopSteps = [
-  { index: '01', title: 'Almost buy', copy: 'A purchase is considered, then resisted.' },
-  { index: '02', title: 'Record it', copy: 'Name the temptation, enter the amount and optionally keep a photo.' },
-  { index: '03', title: 'Earn credit', copy: 'A hidden rate turns the avoided payment into spendable balance.' },
-  { index: '04', title: 'Choose again', copy: 'Keep growing the number—or redirect it into something else.' },
+  { index: '01', title: 'Almost buy', copy: 'Pause before checkout.' },
+  { index: '02', title: 'Record it', copy: 'Add a name and price.' },
+  { index: '03', title: 'Earn credit', copy: 'Turn restraint into balance.' },
+  { index: '04', title: 'Link to real-world app', copy: 'Use the balance in familiar services.' },
 ];
 
 const buildChecks = [
-  ['Ledger', 'Persistent transactions, totals and recovery'],
-  ['Commerce', 'Cart, atomic checkout and order history'],
-  ['Native feel', 'Haptics, animation and local reminders'],
-  ['Quality', 'Strict typing, linting and unit tests'],
-  ['Platforms', 'Production bundles for iOS and Android'],
-  ['Privacy', 'Accounts, settings and photos stay on-device'],
+  ['Ledger', 'Saved transactions and totals'],
+  ['Commerce', 'Cart, checkout and history'],
+  ['Native feel', 'Haptics, motion and reminders'],
+  ['Quality', 'Types, lint and tests'],
+  ['Platforms', 'iOS and Android builds'],
+  ['Privacy', 'On-device accounts and photos'],
 ];
 
 interface ScreenshotCardProps {
@@ -73,30 +73,28 @@ export default function Post10() {
                 you never had.
               </p>
               <p className="couldve-statement-note">
-                Could&apos;ve formalizes a familiar piece of mental accounting: “I almost spent it, so I
-                kind of saved it.” The result is useful enough to feel motivating and absurd enough to
-                make the logic visible.
+                Could&apos;ve turns resisted purchases into a playful balance—useful enough to motivate,
+                absurd enough to expose the logic.
               </p>
             </div>
 
             <figure className="couldve-idea-image" data-anim="slide-right">
               <Image
-                src={getPublicAssetUrl('/Couldve/kouScreenshots/mainpath.webp')}
-                alt="The project path that informed the Could've idea"
-                width={684}
-                height={1481}
+                src={getPublicAssetUrl('/Couldve/kouScreenshots/Main.png')}
+                alt="Could've main app home screen"
+                width={456}
+                height={914}
                 sizes="(max-width: 760px) 88vw, 380px"
                 priority
               />
-              <figcaption>From an observed moment to a product premise.</figcaption>
+              <figcaption>A moment of restraint becomes a product.</figcaption>
             </figure>
           </div>
         </EditorialSection>
 
-        <EditorialSection id="loop" kicker="CHAPTER 02" title="A Dopamine Loop">
+        <EditorialSection id="loop" kicker="CHAPTER 02" title="The Product Loop">
           <p className="couldve-lede" data-anim="slide-up">
-            The product borrows the speed and certainty of a transaction approval, then redirects that
-            feeling toward the choice not to spend.
+            Turn the choice not to buy into an immediate, spendable reward.
           </p>
 
           <div className="couldve-loop" role="list" aria-label="Could've core product loop">
@@ -112,102 +110,93 @@ export default function Post10() {
 
           <div className="couldve-loop-screens">
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/record.webp"
+              src="/Couldve/kouScreenshots/record.png"
               alt="Could've screen for recording a fifteen yuan purchase not made"
               eyebrow="INPUT / ONE QUICK DECISION"
-              title="Record the thing you resisted."
-              copy="A bottom sheet keeps the action close to the balance: label it, enter the amount and move on."
+              title="Record it."
+              copy="Add a name, amount and optional photo."
               tone="acid"
             />
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/earn.webp"
+              src="/Couldve/kouScreenshots/earn.png"
               alt="Could've reward screen crediting 97 percent of an avoided purchase"
               eyebrow="OUTPUT / IMMEDIATE REWARD"
-              title="Make restraint feel tangible."
-              copy="The percentage, credit and new balance land as one short celebratory beat."
+              title="Earn credit."
+              copy="See the reward and new balance instantly."
               tone="pink"
             />
           </div>
-        </EditorialSection>
 
-        <EditorialSection id="real-world" kicker="CHAPTER 03" title="Link to Real World Apps" kickerVariant="rust">
-          <div className="couldve-section-intro" data-anim="slide-up">
-            <p>
-              A balance matters when it can shape the next choice. Could&apos;ve links its fictional account
-              to familiar real-world app patterns—shopping, ride hailing and food delivery—so the money
-              users did not spend becomes a concrete permission to spend differently.
-            </p>
-            <span>ONE BALANCE<br />THREE DESTINATIONS</span>
+          <div className="couldve-section-intro couldve-real-world-intro" data-anim="slide-up">
+            <div>
+              <h3>Link to Real-World Apps</h3>
+              <p>Use one fictional balance across shopping, mobility and delivery.</p>
+            </div>
+            <span className="couldve-section-badge">ONE BALANCE<br />THREE APPS</span>
           </div>
 
           <div className="couldve-three-up">
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/Goubao.webp"
+              src="/Couldve/kouScreenshots/Goubao.png"
               alt="Guobao shopping screen inside Could've"
               eyebrow="01 / COMMERCE"
               title="Goubao"
-              copy="Turn an abstract balance into specific objects and deliberate trade-offs."
+              copy="Spend with intention."
               tone="acid"
             />
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/Dache.webp"
+              src="/Couldve/kouScreenshots/Dache.png"
               alt="Ride-hailing concept screen inside Could've"
               eyebrow="02 / MOBILITY"
               title="Dache"
-              copy="Reframe saved money as permission to make an immediate trip."
+              copy="Turn savings into a ride."
               tone="mint"
             />
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/Waimai.webp"
+              src="/Couldve/kouScreenshots/Waimai.png"
               alt="Food-delivery concept screen inside Could've"
               eyebrow="03 / DELIVERY"
               title="Waimai"
-              copy="Connect everyday restraint with a smaller, more joyful reward."
+              copy="Trade restraint for a small reward."
               tone="pink"
             />
           </div>
         </EditorialSection>
 
-        <EditorialSection id="design" kicker="CHAPTER 04" title="Design (UX) & Visual">
+        <EditorialSection id="design" kicker="CHAPTER 03" title="UX & Visual">
           <div className="couldve-design-principles">
             <article data-anim="slide-left">
               <span>UX PRINCIPLE 01</span>
               <h3>Keep the next action visible.</h3>
-              <p>
-                The home screen places recent non-purchases and the three destinations in one continuous
-                path. Users can understand what they earned, then decide where that balance should lead.
-              </p>
+              <p>Balance, recent saves and app links stay on one clear path.</p>
             </article>
             <article data-anim="slide-right">
               <span>UX PRINCIPLE 02</span>
               <h3>Let users set the absurdity limit.</h3>
-              <p>
-                A configurable overdraft acknowledges that the account is motivational, not financial
-                advice. Users choose how far below zero the experiment may go, keeping agency with them.
-              </p>
+              <p>Users set the overdraft limit and keep the experiment in their control.</p>
             </article>
           </div>
 
           <div className="couldve-ux-grid">
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/directToApp.webp"
+              src="/Couldve/kouScreenshots/directToApp.png"
               alt="Could've home screen directing users to commerce, ride and delivery experiences"
               eyebrow="FLOW / DIRECT TO APP"
-              title="Balance becomes a decision hub."
+              title="Choose where it goes."
               tone="mint"
             />
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/Touzhi.webp"
+              src="/Couldve/kouScreenshots/Touzhi.png"
               alt="Could've settings screen with a user-controlled overdraft limit"
               eyebrow="CONTROL / OVERDRAFT"
-              title="A boundary the user owns."
+              title="Set your own limit."
               tone="acid"
             />
             <ScreenshotCard
-              src="/Couldve/kouScreenshots/profile.webp"
+              src="/Couldve/kouScreenshots/profile.png"
               alt="Could've profile screen summarizing account behavior"
               eyebrow="REFLECTION / PROFILE"
-              title="Questionable numbers, clearly explained."
+              title="See the pattern."
               tone="paper"
             />
           </div>
@@ -215,15 +204,11 @@ export default function Post10() {
           <div className="couldve-visual-note" data-anim="punch">
             <span>VISUAL SYSTEM</span>
             <strong>Acid fields. Hard outlines. Oversized numbers.</strong>
-            <p>
-              Loud editorial color makes the reward loop energetic; paper-white utility screens lower the
-              volume when people need to review stats or change settings. The contrast creates one identity
-              without making every screen equally intense.
-            </p>
+            <p>Bold color energizes rewards; paper-white screens keep stats and settings calm.</p>
           </div>
         </EditorialSection>
 
-        <EditorialSection id="build" kicker="CHAPTER 05" title="Built Like a Real App" kickerVariant="rust">
+        <EditorialSection id="build" kicker="CHAPTER 04" title="Built Like a Real App" kickerVariant="rust">
           <div className="couldve-checks">
             {buildChecks.map(([title, copy], index) => (
               <article key={title} data-anim="slide-up">
@@ -284,17 +269,18 @@ export default function Post10() {
         .couldve-idea-image {
           width: min(100%, 372px);
           margin: 0 auto;
-          padding: 14px 14px 46px;
-          border: 2px solid var(--cv-ink);
-          background: #fff;
-          box-shadow: 10px 12px 0 var(--cv-pink);
+          padding: 0;
+          border: 0;
+          background: transparent;
+          box-shadow: none;
           transform: rotate(1.8deg);
         }
         .couldve-idea-image img {
           display: block;
           width: 100%;
           height: auto;
-          border: 1px solid rgba(10, 10, 10, .2);
+          margin: 0;
+          border: 0;
         }
         .couldve-idea-image figcaption {
           margin-top: 18px;
@@ -368,12 +354,12 @@ export default function Post10() {
         .couldve-shot--blue { background: #b9d3ff; }
         .couldve-shot--paper { background: var(--cv-paper); }
         .couldve-shot__media {
-          overflow: hidden;
-          border: 2px solid var(--cv-ink);
-          border-radius: 25px;
-          background: #0a0a0a;
+          overflow: visible;
+          border: 0;
+          border-radius: 0;
+          background: transparent;
         }
-        .couldve-shot__media img { display: block; width: 100%; height: auto; }
+        .couldve-shot__media img { display: block; width: 100%; height: auto; margin: 0; }
         .couldve-shot figcaption { padding: 24px 5px 5px; }
         .couldve-shot figcaption > span {
           display: block;
@@ -395,11 +381,20 @@ export default function Post10() {
           margin: 0 auto;
           align-items: center;
         }
+        .couldve-real-world-intro {
+          margin-top: clamp(72px, 9vw, 112px);
+        }
+        .couldve-section-intro h3 {
+          margin: 0 0 12px;
+          font: 900 clamp(30px, 4.2vw, 52px)/.95 var(--sans);
+          letter-spacing: -.04em;
+          text-transform: uppercase;
+        }
         .couldve-section-intro p {
           margin: 0;
           font: 500 clamp(18px, 1.75vw, 23px)/1.65 var(--serif);
         }
-        .couldve-section-intro span {
+        .couldve-section-badge {
           display: grid;
           width: 154px;
           height: 154px;
@@ -412,6 +407,7 @@ export default function Post10() {
           text-align: center;
           transform: rotate(7deg);
         }
+        .couldve-real-world-intro + .couldve-three-up { margin-top: 48px; }
         .couldve-design-principles {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -503,7 +499,7 @@ export default function Post10() {
           .couldve-loop-card { min-height: 190px; }
           .couldve-section-intro span { width: 122px; height: 122px; }
           .couldve-shot { box-shadow: 6px 7px 0 var(--cv-ink); }
-          .couldve-idea-image { box-shadow: 6px 7px 0 var(--cv-pink); }
+          .couldve-idea-image { box-shadow: none; }
           .couldve-design-principles article { min-height: 0; }
           .couldve-visual-note { box-shadow: 7px 8px 0 var(--cv-acid); }
         }

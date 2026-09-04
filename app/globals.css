@@ -7395,6 +7395,13 @@ header h1 {
     font-size: clamp(44px, 5.3vw, 78px);
     line-height: 0.94;
 }
+.project-detail-page.editorial .ed-hero__mark--couldve {
+    width: max-content;
+    max-width: 100%;
+    font-size: clamp(58px, 6vw, 92px);
+    line-height: 0.8;
+    letter-spacing: -0.06em !important;
+}
 .project-detail-page.editorial .ed-hero__facts {
     display: grid;
     gap: 26px;

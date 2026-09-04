@@ -152,6 +152,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const isDatnie = post.id === 'post-1';
   const isMirror = post.id === 'post-3';
   const isToolbox = post.id === 'post-5';
+  const isCouldve = post.id === 'post-10';
   const heroVideoUrl = isMirror
     ? convertToEmbedUrl('https://www.youtube.com/watch?v=D7zAp-WNIjM')
     : videoUrl;
@@ -187,8 +188,16 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
       <section className="ed-hero" id="project-title">
         <div className="ed-hero__layout">
           <div className="ed-hero__summary">
-            <h1 className={`ed-hero__mark${post.title.length > 18 ? ' ed-hero__mark--long' : ''}`} data-anim="slide-up">
-              {post.title}
+            <h1
+              className={`ed-hero__mark${post.title.length > 18 ? ' ed-hero__mark--long' : ''}${isCouldve ? ' ed-hero__mark--couldve' : ''}`}
+              data-anim="slide-up"
+              aria-label={post.title}
+            >
+              {isCouldve ? (
+                <span aria-hidden="true">
+                  Could'<br />ve
+                </span>
+              ) : post.title}
             </h1>
 
             <div className="ed-hero__facts">

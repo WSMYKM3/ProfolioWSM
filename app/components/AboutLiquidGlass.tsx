@@ -19,6 +19,7 @@ const projectPresentation: Record<string, ProjectPresentation> = {
   'post-10': {
     category: 'Behavioral Finance · Local-first iOS App',
     imagePosition: 'center',
+    mediaAspect: 'landscape',
     showFullImage: true,
   },
   'post-9': { category: 'AI Glass Ads(AI Generative)', imagePosition: 'center' },
@@ -285,7 +286,15 @@ export default function AboutLiquidGlass() {
                       <span className={styles.projectNumber}>{String(index + 1).padStart(2, '0')}</span>
                       <span className={styles.projectContent}>
                         <span className={styles.projectCategory}>{presentation?.category}</span>
-                        <span className={styles.projectTitle}>{post.title}</span>
+                        <span className={styles.projectTitle} aria-label={post.title}>
+                          {post.id === 'post-10' ? (
+                            <>
+                              <span aria-hidden="true">Could</span>
+                              <br aria-hidden="true" />
+                              <span aria-hidden="true">’ve</span>
+                            </>
+                          ) : post.title}
+                        </span>
                         <span className={styles.projectCta} aria-hidden="true">
                           {isComingSoon ? 'Coming Soon' : 'View project'}
                         </span>
@@ -297,6 +306,7 @@ export default function AboutLiquidGlass() {
                     return (
                       <article
                         key={post.id}
+                        data-project-id={post.id}
                         className={`${styles.projectCard} ${styles.projectPlaceholder} ${mediaClass} ${fullImageClass}`}
                         aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, Coming Soon`}
                       >
@@ -308,6 +318,7 @@ export default function AboutLiquidGlass() {
                   return (
                     <Link
                       key={post.id}
+                      data-project-id={post.id}
                       href={getPostPageRoute(post.id)}
                       className={`${styles.projectCard} ${mediaClass} ${fullImageClass}`}
                       style={{ '--image-position': presentation?.imagePosition ?? 'center' } as CSSProperties}
