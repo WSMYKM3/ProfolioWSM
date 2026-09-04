@@ -23,6 +23,7 @@ export const zhTranslations = {
   "View project": "查看项目",
   "Selected work": "精选作品",
   "Move to explore depth": "移动鼠标探索景深",
+  "Turn skipped purchases into credit for later.": "把放弃购买省下的钱，转成以后可用的消费额度。",
   "Mixed Reality Dating": "混合现实约会体验",
   "ASL Learning System": "ASL 手语学习系统",
   "Immersive AI Installation": "沉浸式 AI 装置",

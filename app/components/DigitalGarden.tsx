@@ -9,18 +9,19 @@ interface DigitalGardenProps {
   onPostClick: (post: DailyPracticePost) => void;
 }
 
-// Fixed positions based on reference design - natural scattered layout
+// Three-column desktop layout with enough vertical clearance for every card.
 const FIXED_POSITIONS = [
-  { top: 3, left: 5, rotation: -3 },      // Card 1
-  { top: 5, left: 45, rotation: 2 },      // Card 2
-  { top: 8, left: 72, rotation: 4 },      // Card 3
-  { top: 28, left: 8, rotation: 3 },      // Card 4
-  { top: 32, left: 28, rotation: -1 },    // Card 5
-  { top: 38, left: 70, rotation: 2 },     // Card 6
-  { top: 50, left: 42, rotation: 1 },     // Card 7
-  { top: 58, left: 68, rotation: -2 },    // Card 8
-  { top: 68, left: 8, rotation: -4 },     // Card 9
-  { top: 72, left: 40, rotation: 2 },     // Card 10
+  { top: 2, left: 3, rotation: -2 },
+  { top: 2, left: 37, rotation: 1 },
+  { top: 2, left: 71, rotation: 2 },
+  { top: 27, left: 3, rotation: 1 },
+  { top: 27, left: 37, rotation: -1 },
+  { top: 27, left: 71, rotation: 2 },
+  { top: 52, left: 3, rotation: -1 },
+  { top: 52, left: 37, rotation: 1 },
+  { top: 52, left: 71, rotation: -2 },
+  { top: 77, left: 3, rotation: 1 },
+  { top: 77, left: 37, rotation: -1 },
 ];
 
 // Map posts to categories based on tags

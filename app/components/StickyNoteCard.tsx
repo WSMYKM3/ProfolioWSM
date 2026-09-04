@@ -12,6 +12,8 @@ interface StickyNoteCardProps {
   category?: string;
 }
 
+const CARD_POSITIONS_STORAGE_KEY = 'explorationCardPositionsV2';
+
 function formatDate(dateString: string): string {
   if (dateString.includes('.') && !dateString.includes('-')) return dateString;
 
@@ -48,7 +50,7 @@ export default function StickyNoteCard({
   // Load saved position from localStorage or use initial position
   useEffect(() => {
     if (typeof window !== 'undefined' && cardRef.current) {
-      const savedPositions = JSON.parse(localStorage.getItem('cardPositions') || '{}');
+      const savedPositions = JSON.parse(localStorage.getItem(CARD_POSITIONS_STORAGE_KEY) || '{}');
       const cardIndex = post.id;
       
       if (savedPositions[cardIndex]) {
@@ -135,9 +137,9 @@ export default function StickyNoteCard({
         cardRef.current.style.top = topPercent + '%';
         
         // Save position
-        const savedPositions = JSON.parse(localStorage.getItem('cardPositions') || '{}');
+        const savedPositions = JSON.parse(localStorage.getItem(CARD_POSITIONS_STORAGE_KEY) || '{}');
         savedPositions[post.id] = { left: leftPercent, top: topPercent };
-        localStorage.setItem('cardPositions', JSON.stringify(savedPositions));
+        localStorage.setItem(CARD_POSITIONS_STORAGE_KEY, JSON.stringify(savedPositions));
       }
     }
     
@@ -175,7 +177,6 @@ export default function StickyNoteCard({
 
   const imageSrc = getImageSrc(post.thumbnail);
   const formattedDate = formatDate(post.date);
-  const metaLabel = post.metaLabel || `planted on ${formattedDate}`;
 
   return (
     <div
@@ -231,7 +232,9 @@ export default function StickyNoteCard({
               ))}
             </div>
           )}
-          <p className="card-date">{metaLabel}</p>
+          <p className="card-date">
+            {post.metaLabel ?? <><span>planted on</span> {formattedDate}</>}
+          </p>
         </div>
       </div>
     </div>

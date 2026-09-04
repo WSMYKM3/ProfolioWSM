@@ -100,7 +100,6 @@ export default function DigitalGardenModal({ post, isOpen, onClose }: DigitalGar
 
   const imageSrc = getImageSrc(post.thumbnail);
   const formattedDate = formatDate(post.date);
-  const metaLabel = post.metaLabel || `planted on ${formattedDate}`;
 
   return (
     <div
@@ -187,7 +186,9 @@ export default function DigitalGardenModal({ post, isOpen, onClose }: DigitalGar
               </a>
             )}
           </div>
-          <p className="digital-garden-modal-date">{metaLabel}</p>
+          <p className="digital-garden-modal-date">
+            {post.metaLabel ?? <><span>planted on</span> {formattedDate}</>}
+          </p>
           {post.description && (
             <p className="digital-garden-modal-description">{post.description}</p>
           )}

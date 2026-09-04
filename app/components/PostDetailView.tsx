@@ -153,6 +153,7 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
   const isMirror = post.id === 'post-3';
   const isToolbox = post.id === 'post-5';
   const isCouldve = post.id === 'post-10';
+  const isMotionCapture = post.id === 'post-4';
   const heroVideoUrl = isMirror
     ? convertToEmbedUrl('https://www.youtube.com/watch?v=D7zAp-WNIjM')
     : videoUrl;
@@ -182,20 +183,25 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
     <div
       className={`post-detail-view post-detail-view-page ${
         isDatnie ? 'post-detail-view--datnie' : isMirror ? 'post-detail-view--mirror' : 'post-detail-view--dim-description'
-      }`}
+      }${isMotionCapture ? ' post-detail-view--motion-capture' : ''}`}
     >
       {/* ─── HEADER — compact two-column project summary ─── */}
       <section className="ed-hero" id="project-title">
         <div className="ed-hero__layout">
           <div className="ed-hero__summary">
             <h1
-              className={`ed-hero__mark${post.title.length > 18 ? ' ed-hero__mark--long' : ''}${isCouldve ? ' ed-hero__mark--couldve' : ''}`}
+              className={`ed-hero__mark${post.title.length > 18 ? ' ed-hero__mark--long' : ''}${isCouldve ? ' ed-hero__mark--couldve' : ''}${isMotionCapture ? ' ed-hero__mark--motion-capture' : ''}`}
               data-anim="slide-up"
               aria-label={post.title}
             >
               {isCouldve ? (
                 <span aria-hidden="true">
                   Could'<br />ve
+                </span>
+              ) : isMotionCapture ? (
+                <span aria-hidden="true">
+                  The Shadow<br />of Horizon
+                  <span className="ed-hero__mark-detail">(Motion Capture)</span>
                 </span>
               ) : post.title}
             </h1>
@@ -431,9 +437,13 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
         (() => {
           const currentIndex = posts.findIndex((p) => p.id === post.id);
           const otherPosts = posts
-            .filter((p) => p.id !== post.id)
-            .slice(currentIndex)
-            .concat(posts.filter((p) => p.id !== post.id).slice(0, currentIndex))
+            .slice(currentIndex + 1)
+            .concat(posts.slice(0, currentIndex))
+            .filter(
+              (p) =>
+                p.id !== 'post-6' &&
+                !(isCouldve && p.id === 'post-9')
+            )
             .slice(0, 3);
           if (otherPosts.length === 0) return null;
           return (
@@ -459,8 +469,11 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                       <figcaption className="photo__caption">{p.title}</figcaption>
                     </figure>
                     {(() => {
-                      const cat = p.tags?.find((t) => t.toLowerCase() !== 'featured');
-                      return cat ? <span className="ed-explore__kicker-line">{cat.toUpperCase()}</span> : null;
+                      const fallbackCategory = p.tags?.find((t) => t.toLowerCase() !== 'featured');
+                      const category = p.cardDescription ?? fallbackCategory?.toUpperCase();
+                      return category ? (
+                        <span className="ed-explore__kicker-line">{category}</span>
+                      ) : null;
                     })()}
                     <h3 className="ed-explore__name">{p.title}</h3>
                     {p.description && <p className="ed-explore__desc">{p.description}</p>}

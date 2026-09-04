@@ -160,8 +160,8 @@ export default function ResumeSidebar({ sections }: ResumeSidebarProps) {
       </nav>
       <div className="resume-sidebar-download">
         <a 
-          href={getFileSrc("/XR Engineer_Siming Wang.pdf")}
-          download="XR Engineer_Siming Wang.pdf"
+          href={getFileSrc("/Siming_Wang_AI_Builder Resume.pdf")}
+          download="Siming_Wang_AI_Builder Resume.pdf"
           className="resume-sidebar-download-button"
         >
           Download Resume

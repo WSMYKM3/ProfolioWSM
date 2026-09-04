@@ -106,28 +106,6 @@
   to { transform: translateX(-50%); }
 }
 
-.studyVideo {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  margin-bottom: 14px;
-  border: 1px solid rgba(var(--white), 0.34);
-  border-radius: 13px;
-  background: rgba(12, 13, 10, 0.5);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.25);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
-
-.studyVideo iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
 .studyNote {
   display: flex;
   gap: 18px;
@@ -142,8 +120,8 @@
 .projectPreview {
   position: absolute;
   z-index: 3;
-  bottom: clamp(62px, 8vh, 92px);
-  left: clamp(340px, 28vw, 500px);
+  bottom: clamp(130px, 17vh, 180px);
+  left: clamp(28px, 4.5vw, 78px);
   width: min(240px, 18vw);
   color: rgb(var(--white));
   pointer-events: none;
@@ -217,7 +195,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transform: translateZ(24px);
+  transform: translate3d(0, clamp(-96px, -8vh, -56px), 24px);
 }
 
 .identityButton {
@@ -280,10 +258,10 @@
   --card-x: 0px;
   --card-y: 0px;
   position: relative;
-  width: min(45vw, 760px);
-  min-width: 620px;
-  height: min(82svh, 780px);
-  min-height: 620px;
+  width: min(54vw, 900px);
+  min-width: 700px;
+  height: min(85svh, 840px);
+  min-height: 650px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: clamp(10px, 1.35vh, 15px);
@@ -630,31 +608,37 @@
   font: 300 30px/1 var(--font-space-grotesk), sans-serif;
 }
 
-.projectGridBuilder .projectCard[data-project-id='post-10'] {
-  grid-column: 3 / 7;
+.projectGridBuilder {
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.projectGridBuilder .projectCard[data-project-id='post-7'] {
+  grid-column: 1 / 4;
   grid-row: 1 / 3;
+  align-self: center;
+  justify-self: center;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 2 / 3;
+}
+
+.projectGridBuilder .projectCard[data-project-id='post-8'] {
+  grid-column: 4 / 7;
+  grid-row: 1;
   align-self: center;
   width: 100%;
   height: auto;
   aspect-ratio: 1672 / 941;
 }
 
-.projectGridBuilder .projectCard[data-project-id='post-8'] {
-  grid-column: 1 / 3;
-  grid-row: 1 / 4;
+.projectGridBuilder .projectCard[data-project-id='post-10'] {
+  grid-column: 4 / 7;
+  grid-row: 2;
   align-self: center;
-  justify-self: center;
   width: 100%;
   height: auto;
-  max-width: 100%;
-  aspect-ratio: 3 / 4;
-}
-
-.projectGridBuilder .projectCard[data-project-id='post-5'] {
-  grid-column: 3 / 7;
-  grid-row: 3;
-  align-self: stretch;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1672 / 941;
 }
 
 .projectCard::before,
@@ -919,8 +903,8 @@
   .glassStage { padding-right: 28px; }
 
   .glassPanel {
-    width: min(55vw, 700px);
-    min-width: 570px;
+    width: min(59vw, 760px);
+    min-width: 640px;
   }
 
   .projectPreview { width: 180px; }

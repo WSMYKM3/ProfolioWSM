@@ -1,361 +1,282 @@
 'use client';
 
-import { useSketchUnderlineAnimation, SketchUnderline } from '@/app/components/SketchUnderline';
+import Link from 'next/link';
+import Image from 'next/image';
 import TopNav from '@/app/components/TopNav';
 import ResumeSidebar from '@/app/components/ResumeSidebar';
-import Image from 'next/image';
-
-// Helper function to add basePath for GitHub Pages
-// Uses runtime detection to work correctly in both dev and production
-function getImageSrc(src: string): string {
-  // If it's already a full URL (http/https), return as is
-  if (src.startsWith('http://') || src.startsWith('https://')) {
-    return src;
-  }
-  // Detect basePath from current location (runtime detection)
-  // This works correctly in both development and GitHub Pages
-  if (typeof window !== 'undefined') {
-    const pathname = window.location.pathname;
-    const basePath = pathname.startsWith('/ProfolioWSM') ? '/ProfolioWSM' : '';
-    return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
-  }
-  // Fallback for SSR (shouldn't happen in static export, but safe fallback)
-  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
-  return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
-}
+import { getPublicAssetUrl } from '@/app/lib/publicAsset';
 
 const resumeSections = [
-  { id: 'awards', label: 'Awards & Exhibitions' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Selected Projects' },
-  { id: 'skills', label: 'Core Skills' },
-  { id: 'education', label: 'Education' },
-  { id: 'tools', label: 'Tools & Technologies' },
+  { id: 'profile', label: 'Profile' },
+  { id: 'projects', label: 'AI Builder / Product Practice' },
+  { id: 'experience', label: 'Professional Experience' },
+  { id: 'capabilities', label: 'Capabilities' },
+  { id: 'education', label: 'Education & Certification' },
+];
+
+const resumeFile = '/Siming_Wang_AI_Builder Resume.pdf';
+
+const capabilityGroups = [
+  {
+    title: 'AI Building',
+    tools: [
+      { label: 'Claude Code', icon: '/icons/claude.svg' },
+      { label: 'Codex' },
+      { label: 'Generative AI' },
+      { label: 'ComfyUI' },
+      { label: 'Multimodal Workflows' },
+    ],
+  },
+  {
+    title: 'Code & Integration',
+    tools: [
+      { label: 'Python', icon: '/icons/python.svg' },
+      { label: 'TypeScript / JavaScript' },
+      { label: 'React Native' },
+      { label: 'Swift', icon: '/icons/swift-svgrepo-com.svg' },
+      { label: 'C#' },
+      { label: 'REST APIs' },
+      { label: 'Computer Vision' },
+    ],
+  },
+  {
+    title: 'Product & Creator',
+    tools: [
+      { label: 'MVP Prototyping' },
+      { label: 'Product Thinking' },
+      { label: 'Figma', icon: '/icons/figma.svg' },
+      { label: 'Xiaohongshu' },
+      { label: 'Bilibili' },
+      { label: 'YouTube' },
+    ],
+  },
+  {
+    title: 'Interactive & Spatial',
+    tools: [
+      { label: 'Unity', icon: '/icons/unity.svg' },
+      { label: 'Unreal Engine', icon: '/icons/unrealengine.svg' },
+      { label: 'TouchDesigner', icon: '/icons/touchdesigner.svg' },
+      { label: 'ARKit' },
+      { label: 'RealityKit' },
+      { label: 'Meta Quest', icon: '/icons/meta.svg' },
+      { label: 'Blender', icon: '/icons/blender.svg' },
+      { label: 'After Effects' },
+    ],
+  },
 ];
 
 export default function Resume() {
-  useSketchUnderlineAnimation();
-
   return (
     <div className="layout">
       <TopNav />
       <ResumeSidebar sections={resumeSections} />
+
       <main className="resume-page portfolio-light-surface">
         <div className="resume-container">
           <div className="resume-content">
-            {/* Awards & Exhibitions Section */}
-            <section id="awards" className="resume-section">
-              <h2 className="resume-section-title">Awards & Exhibitions</h2>
-              <div className="resume-awards-list">
-                <div className="resume-award-item">
-                  <h3 className="resume-award-name">
-                    Speaker, <SketchUnderline color="orange">AWE USA 2025</SketchUnderline>
-                  </h3>
-                  <p className="resume-award-project">
-                    Project &quot;<SketchUnderline color="purple">Signie</SketchUnderline>&quot;
+            <section id="profile" className="resume-section resume-profile-section">
+              <div className="resume-profile-header">
+                <div>
+                  <h1 className="resume-name">Siming Wang</h1>
+                  <p className="resume-title">
+                    AI Builder | Hackathon Winner | AI Products · Creator Tools · Rapid Prototyping
                   </p>
                 </div>
-                <div className="resume-award-item">
-                  <h3 className="resume-award-name">
-                    <SketchUnderline color="green">Immersive Arts UK</SketchUnderline>-supported Pop-up Exhibition
-                  </h3>
-                  <p className="resume-award-project">
-                    Project &quot;<SketchUnderline color="orange">I AND AI: MIRROR</SketchUnderline>&quot; (Inspace,
-                    Edinburgh)
-                  </p>
+                <a
+                  href={getPublicAssetUrl(resumeFile)}
+                  download="Siming_Wang_AI_Builder Resume.pdf"
+                  className="resume-download-button resume-profile-download"
+                >
+                  Download Resume
+                </a>
+              </div>
+
+              <div className="resume-contact-details">
+                <p><a className="resume-social-link" href="mailto:simingvv@gmail.com">simingvv@gmail.com</a></p>
+                <div className="resume-social-links">
+                  <Link className="resume-social-link" href="/">Portfolio</Link>
+                  <a className="resume-social-link" href="https://uk.linkedin.com/in/siming-wang-321a18303" target="_blank" rel="noreferrer">LinkedIn</a>
+                  <a className="resume-social-link" href="https://www.youtube.com/@WSMYKM3/videos" target="_blank" rel="noreferrer">YouTube</a>
+                  <a className="resume-social-link" href="https://www.xiaohongshu.com/user/profile/5f200b2d00000000010096b9" target="_blank" rel="noreferrer">Xiaohongshu</a>
+                  <a className="resume-social-link" href="https://space.bilibili.com/385278888" target="_blank" rel="noreferrer">Bilibili</a>
                 </div>
+              </div>
+
+              <div className="resume-profile-content">
+                <h2 className="resume-section-title">Profile</h2>
+                <p className="resume-profile-text">
+                  AI Builder and hackathon winner focused on AI-native products and creator tools. I find problems in real user behavior and creative workflows, use AI coding and multimodal workflows to build working MVPs quickly, then keep iterating through demos, content, and feedback.
+                </p>
               </div>
             </section>
 
-            {/* Professional Experience Section */}
+            <section id="projects" className="resume-section">
+              <h2 className="resume-section-title">AI Builder / Product Practice</h2>
+              <div className="resume-projects-list">
+                <article className="resume-project-item">
+                  <div className="resume-project-header">
+                    <h3 className="resume-project-title">
+                      <Link href="/projects/post-7">Reroll - AI Creator Tool / AR Directing Prototype</Link>
+                    </h3>
+                    <span className="resume-project-tech">KXSB AI Community</span>
+                  </div>
+                  <p className="resume-project-description">
+                    3D previs has validated the need for directorial control, but non-3D users still have to build a scene first. Starting from one reference image, I use segmentation and depth estimation with iPhone AR to move objects, plan camera moves, and generate prompts for AI video.
+                  </p>
+                  <div className="resume-project-tools">
+                    {['SwiftUI', 'ARKit', 'RealityKit', 'Python', 'SAM 3', 'DPT', 'Generative Video'].map((tool) => (
+                      <span className="resume-project-tool" key={tool}>{tool}</span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="resume-project-item">
+                  <div className="resume-project-header">
+                    <h3 className="resume-project-title">
+                      <Link href="/projects/post-2">Signie - XR / AI Product Prototype</Link>
+                    </h3>
+                    <span className="resume-project-tech">XR-Cohort Hackathon Winner · AWE USA 2025 Award Winner & Presenter</span>
+                  </div>
+                  <p className="resume-project-description">
+                    Starting from the feedback gap in ASL learning - learners can understand a demonstration but struggle to judge whether they performed it correctly - I built an XR learning and real-time translation prototype from zero to one. It combines gesture recognition, micro-gestures, speech recognition, and an animation state machine in Unity and Meta Quest, and was iterated into the version presented at AWE USA 2025.
+                  </p>
+                  <div className="resume-project-tools">
+                    {['Unity 6', 'Meta Quest', 'Wit.ai', 'Hand Tracking', 'Micro-Gestures'].map((tool) => (
+                      <span className="resume-project-tool" key={tool}>{tool}</span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="resume-project-item">
+                  <div className="resume-project-header">
+                    <h3 className="resume-project-title">
+                      <Link href="/projects/post-10">Could’ve - Consumer Product MVP</Link>
+                    </h3>
+                    <span className="resume-project-tech">iOS Prototype · Product Thinking</span>
+                  </div>
+                  <p className="resume-project-description">
+                    Inspired by Korea’s dopamine site FoodNeverArrives, I turned the lack of immediate reward after resisting a purchase into a working MVP. Skipped purchases become an accumulating balance, while rewards, spending thresholds, weekly reviews, and links to real apps create a save, choose, then spend loop.
+                  </p>
+                  <div className="resume-project-tools">
+                    {['React Native', 'Expo', 'TypeScript', 'Local-first', 'Swift'].map((tool) => (
+                      <span className="resume-project-tool" key={tool}>{tool}</span>
+                    ))}
+                  </div>
+                </article>
+
+                <article className="resume-project-item">
+                  <div className="resume-project-header">
+                    <h3 className="resume-project-title">
+                      <Link href="/projects/post-3">I AND AI: MIRROR - Interactive AI Installation</Link>
+                    </h3>
+                    <span className="resume-project-tech">Immersive Arts UK-supported</span>
+                  </div>
+                  <p className="resume-project-description">
+                    To solve multi-system state synchronization and reliability problems in live AI interaction, I built a voice-triggered OSC state machine with Unreal Engine MetaHuman and TouchDesigner. During a three-day public exhibition at Inspace Edinburgh, the installation recorded 422 interactions and 287 completed experiences.
+                  </p>
+                  <div className="resume-project-tools">
+                    {['Unreal Engine', 'MetaHuman', 'TouchDesigner', 'Python', 'OSC'].map((tool) => (
+                      <span className="resume-project-tool" key={tool}>{tool}</span>
+                    ))}
+                  </div>
+                </article>
+              </div>
+            </section>
+
             <section id="experience" className="resume-section">
               <h2 className="resume-section-title">Professional Experience</h2>
               <div className="resume-experience-list">
-                <div className="resume-experience-item">
+                <article className="resume-experience-item">
                   <div className="resume-experience-header">
-                    <h3 className="resume-experience-title">XR Engineer</h3>
-                    <span className="resume-experience-period">Mar 2026 – Present · 2 mos</span>
+                    <h3 className="resume-experience-title">XR Engineer (Project-based, Full-time)</h3>
+                    <span className="resume-experience-period">Mar 2026 - Jun 2026</span>
                   </div>
-                  <p className="resume-experience-company">
-                    TeknTrash Robotics · Part-time · London Area, United Kingdom · Remote
-                  </p>
+                  <p className="resume-experience-company">TeknTrash Robotics · London / Remote</p>
                   <ul className="resume-experience-description">
-                    <li>
-                      Led the development of{' '}
-                      <SketchUnderline color="blue" path="M 2 6 Q 45 2, 100 7 T 198 4">
-                        XR applications
-                      </SketchUnderline>{' '}
-                      for robotic systems, enhancing human-robot interaction.
-                    </li>
-                    <li>
-                      Integrated XR hardware with robotic platforms to achieve{' '}
-                      <SketchUnderline color="green" path="M 3 5 Q 55 9, 105 3 Q 155 8, 197 5">
-                        real-time control
-                      </SketchUnderline>{' '}
-                      and responsiveness.
-                    </li>
-                    <li>
-                      Built{' '}
-                      <SketchUnderline color="purple" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                        Vision-Language-Action (VLA)
-                      </SketchUnderline>{' '}
-                      models using XR data, improving robotic perception and{' '}
-                      <SketchUnderline color="orange" path="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6">
-                        multimodal learning
-                      </SketchUnderline>
-                      .
-                    </li>
-                    <li>
-                      Collaborated cross-functionally, maintaining documentation to accelerate development and team
-                      efficiency.
-                    </li>
+                    <li>Mapped XR control and data-collection problems from robot-operator workflows into a headset interface, real-time control, and testing process, then completed platform integration and iterative validation.</li>
                   </ul>
-                </div>
-                <div className="resume-experience-item">
+                </article>
+
+                <article className="resume-experience-item">
                   <div className="resume-experience-header">
                     <h3 className="resume-experience-title">Technical Artist / Creative Technologist (Freelance)</h3>
-                    <span className="resume-experience-period">Mar 2025 – Jan 2026</span>
+                    <span className="resume-experience-period">Mar 2025 - Jan 2026</span>
                   </div>
-                  <p className="resume-experience-company">6Liè Projects · Remote (UK)</p>
+                  <p className="resume-experience-company">6Liè Projects · UK / Remote</p>
                   <ul className="resume-experience-description">
-                    <li>
-                      Developed{' '}
-                      <SketchUnderline color="green" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                        real-time interactive systems
-                      </SketchUnderline>{' '}
-                      using Unreal Engine for immersive and{' '}
-                      <SketchUnderline color="blue">XR</SketchUnderline> projects.
-                    </li>
-                    <li>
-                      Contributed to{' '}
-                      <SketchUnderline color="orange" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                        UKRI Immersive Tech Network
-                      </SketchUnderline>{' '}
-                      and Immersive Arts supported works.
-                    </li>
-                    <li>
-                      Integrated <SketchUnderline color="purple">AI-driven</SketchUnderline> components into real-time
-                      pipelines.
-                    </li>
+                    <li>Turned exhibition concepts into testable real-time interaction modules, integrating Unreal Engine MetaHuman, TouchDesigner, Python voice components, and OSC while debugging system state and validating on-site reliability.</li>
                   </ul>
-                </div>
-                <div className="resume-experience-item">
+                </article>
+
+                <article className="resume-experience-item">
                   <div className="resume-experience-header">
                     <h3 className="resume-experience-title">Visual Artist / Creative Technologist (Internship)</h3>
-                    <span className="resume-experience-period">Sep 2021 – Jul 2022</span>
+                    <span className="resume-experience-period">Sep 2021 - Jul 2022</span>
                   </div>
-                  <p className="resume-experience-company">Shanghai Chaomo Studio · Shanghai, China</p>
+                  <p className="resume-experience-company">Shanghai Chaomo Studio · Shanghai</p>
                   <ul className="resume-experience-description">
-                    <li>
-                      Built{' '}
-                      <SketchUnderline color="blue" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                        interactive and generative prototypes
-                      </SketchUnderline>{' '}
-                      using JavaScript and Python.
-                    </li>
-                    <li>
-                      Designed visual systems for thematic{' '}
-                      <SketchUnderline color="pink" path="M 3 5 Q 55 9, 105 3 Q 155 8, 197 5">
-                        exhibitions and installations
-                      </SketchUnderline>
-                      .
-                    </li>
+                    <li>Built interactive and generative prototypes rapidly with JavaScript and Python in response to exhibition narratives and on-site interaction needs, then iterated the visual system and interaction experience.</li>
                   </ul>
-                </div>
+                </article>
               </div>
             </section>
 
-            {/* Selected Project Experience Section */}
-            <section id="projects" className="resume-section">
-              <h2 className="resume-section-title">Selected Project Experience</h2>
-              <div className="resume-projects-list">
-                <div className="resume-project-item">
-                  <div className="resume-project-header">
-                    <h3 className="resume-project-title">Signie — Shippable XR / AI Product (AWE USA 2025)</h3>
+            <section id="capabilities" className="resume-section">
+              <h2 className="resume-section-title">Capabilities</h2>
+              <div className="resume-tools-content">
+                {capabilityGroups.map((group) => (
+                  <div className="resume-tools-group" key={group.title}>
+                    <h3 className="resume-tools-group-title">{group.title}</h3>
+                    <div className="resume-tools-grid">
+                      {group.tools.map((tool) => (
+                        <span className="resume-tool-item" key={tool.label}>
+                          {tool.icon && (
+                            <Image
+                              src={getPublicAssetUrl(tool.icon)}
+                              alt=""
+                              width={20}
+                              height={20}
+                              className="resume-tool-icon"
+                            />
+                          )}
+                          {tool.label}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <p className="resume-project-description">
-                    Designed and shipped a{' '}
-                    <SketchUnderline color="orange" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                      real-world XR product
-                    </SketchUnderline>{' '}
-                    enabling real-time interaction and translation workflows.
-                  </p>
-                  <ul className="resume-project-features">
-                    <li>
-                      Built real-time interaction logic, animation pipelines, and system-level workflows using Unity /
-                      Unreal Engine to support responsive, user-driven experiences.
-                    </li>
-                    <li>
-                      Integrated <SketchUnderline color="purple">AI-driven</SketchUnderline> components to support
-                      adaptive real-time behavior and deployment-ready product use.
-                    </li>
-                  </ul>
-                </div>
-                <div className="resume-project-item">
-                  <div className="resume-project-header">
-                    <h3 className="resume-project-title">Datnie</h3>
-                  </div>
-                  <p className="resume-project-description">
-                    Developed a product-style XR prototype exploring real-time,{' '}
-                    <SketchUnderline color="green" path="M 3 6 Q 50 2, 95 7 Q 150 3, 197 6">
-                      gesture-driven interaction
-                    </SketchUnderline>{' '}
-                    within a scalable experience framework.
-                  </p>
-                  <ul className="resume-project-features">
-                    <li>Implemented interaction systems, animation logic, and real-time visual feedback using game engine-based pipelines.</li>
-                    <li>
-                      Designed for <SketchUnderline color="blue">scalability</SketchUnderline> and system behavior,
-                      beyond one-off visual demos.
-                    </li>
-                  </ul>
-                </div>
-                <div className="resume-project-item">
-                  <div className="resume-project-header">
-                    <h3 className="resume-project-title">I AND AI: MIRROR — Immersive Interactive Installation (Inspace, Edinburgh)</h3>
-                  </div>
-                  <p className="resume-project-description">
-                    Created an{' '}
-                    <SketchUnderline color="orange" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                      immersive interactive installation
-                    </SketchUnderline>{' '}
-                    integrating spatial interaction, real-time graphics, and multimedia systems.
-                  </p>
-                  <ul className="resume-project-features">
-                    <li>
-                      Built a virtual avatar using Unreal Engine{' '}
-                      <SketchUnderline color="purple">MetaHuman</SketchUnderline>, implementing real-time lip sync to
-                      enable embodied digital communication and interaction.
-                    </li>
-                    <li>
-                      Designed a state-driven interaction system in{' '}
-                      <SketchUnderline color="green">TouchDesigner</SketchUnderline>, using wake-word detection to
-                      control avatar behavior and interaction flow.
-                    </li>
-                    <li>Exhibited with support from Immersive Arts UK at Inspace, Edinburgh.</li>
-                  </ul>
-                </div>
+                ))}
               </div>
             </section>
 
-            {/* Core Skills Section */}
-            <section id="skills" className="resume-section">
-              <h2 className="resume-section-title">Core Skills</h2>
-              <ul className="resume-skills-list">
-                <li>
-                  Creative Technology &{' '}
-                  <SketchUnderline color="orange">XR Development</SketchUnderline>
-                </li>
-                <li>
-                  <SketchUnderline color="blue" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                    Real-Time Interactive Systems
-                  </SketchUnderline>
-                </li>
-                <li>
-                  <SketchUnderline color="green" path="M 3 5 Q 55 9, 105 3 Q 155 8, 197 5">
-                    Prototyping & Product-Oriented Development
-                  </SketchUnderline>
-                </li>
-                <li>
-                  <SketchUnderline color="purple" path="M 2 4 Q 70 9, 130 3 Q 170 8, 198 5">
-                    Interactive Installation & Immersive Experience Design
-                  </SketchUnderline>
-                </li>
-              </ul>
-            </section>
-
-            {/* Education Section */}
             <section id="education" className="resume-section">
-              <h2 className="resume-section-title">Education</h2>
+              <h2 className="resume-section-title">Education & Certification</h2>
               <div className="resume-education-list">
-                <div className="resume-education-item">
+                <article className="resume-education-item">
                   <h3 className="resume-education-degree">MFA Computational Arts</h3>
                   <p className="resume-education-school">Goldsmiths, University of London</p>
-                  <p className="resume-education-details">2022–2024</p>
-                </div>
-                <div className="resume-education-item">
+                  <p className="resume-education-details">2022 - 2024</p>
+                </article>
+                <article className="resume-education-item">
                   <h3 className="resume-education-degree">BA Visual Communication Design</h3>
                   <p className="resume-education-school">East China University of Science and Technology</p>
-                  <p className="resume-education-details">2019–2022</p>
-                </div>
+                  <p className="resume-education-details">2019 - 2022</p>
+                </article>
+                <article className="resume-education-item resume-certificate-item">
+                  <Image
+                    src={getPublicAssetUrl('/harvardx-logo.png')}
+                    alt="HarvardX"
+                    width={259}
+                    height={50}
+                    className="resume-certificate-logo"
+                  />
+                  <h3 className="resume-education-degree">HarvardX / edX Verified Certificate</h3>
+                  <p className="resume-education-school">Machine Learning and AI with Python (CS109xa)</p>
+                  <p className="resume-education-details">
+                    Aug 2026 · <a className="resume-social-link" href="https://courses.edx.org/certificates/6d4b237aa2264298a998a6c645fd9718" target="_blank" rel="noreferrer">Credential</a>
+                  </p>
+                </article>
               </div>
             </section>
-
-            {/* Tools & Technologies Section */}
-            <section id="tools" className="resume-section">
-              <h2 className="resume-section-title">Tools & Technologies</h2>
-              <div className="resume-tools-content">
-                <div className="resume-tools-group">
-                  <h3 className="resume-tools-group-title">Development & Design</h3>
-                  <div className="resume-tools-grid">
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/github.svg")} alt="GitHub" width={20} height={20} className="resume-tool-icon" />
-                      GitHub
-                    </span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/figma.svg")} alt="Figma" width={20} height={20} className="resume-tool-icon" />
-                      Figma
-                    </span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/claude.svg")} alt="Claude" width={20} height={20} className="resume-tool-icon" />
-                      <Image src={getImageSrc("/icons/obsidian.svg")} alt="Obsidian" width={20} height={20} className="resume-tool-icon" />
-                      Claude + Obsidian
-                    </span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/photoshop.svg")} alt="Photoshop" width={20} height={20} className="resume-tool-icon" />
-                      Photoshop
-                    </span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/adobe-premiere.svg")} alt="Premiere Pro" width={20} height={20} className="resume-tool-icon" />
-                      Premiere Pro
-                    </span>
-                  </div>
-                </div>
-                <div className="resume-tools-group">
-                  <h3 className="resume-tools-group-title">Game Engines</h3>
-                  <div className="resume-tools-grid">
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/unity.svg")} alt="Unity" width={20} height={20} className="resume-tool-icon" />
-                      Unity (URP, Animation, VFX, XR Interaction Toolkit)
-                    </span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/unrealengine.svg")} alt="Unreal Engine" width={20} height={20} className="resume-tool-icon" />
-                      Unreal Engine (Blueprints, C++)
-                    </span>
-                  </div>
-                </div>
-                <div className="resume-tools-group">
-                  <h3 className="resume-tools-group-title">Creative Tools</h3>
-                  <div className="resume-tools-grid">
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/touchdesigner.svg")} alt="TouchDesigner" width={20} height={20} className="resume-tool-icon" />
-                      TouchDesigner
-                    </span>
-                    <span className="resume-tool-item">Houdini & Houdini Engine (UE / Unity)</span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/blender.svg")} alt="Blender" width={20} height={20} className="resume-tool-icon" />
-                      Blender
-                    </span>
-                    <span className="resume-tool-item">Maya</span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/motion builder.svg")} alt="MotionBuilder" width={20} height={20} className="resume-tool-icon" />
-                      MotionBuilder
-                    </span>
-                  </div>
-                </div>
-                <div className="resume-tools-group">
-                  <h3 className="resume-tools-group-title">Programming Languages</h3>
-                  <div className="resume-tools-grid">
-                    <span className="resume-tool-item">C#</span>
-                    <span className="resume-tool-item">
-                      <Image src={getImageSrc("/icons/python.svg")} alt="Python" width={20} height={20} className="resume-tool-icon" />
-                      Python
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </section>
-
           </div>
         </div>
       </main>

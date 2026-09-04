@@ -9,7 +9,6 @@ import { getPublicAssetUrl } from '@/app/lib/publicAsset';
 import styles from '@/app/about/page.module.css';
 
 interface ProjectPresentation {
-  category: string;
   imagePosition: string;
   mediaAspect?: 'landscape' | 'portrait';
   showFullImage?: boolean;
@@ -17,31 +16,27 @@ interface ProjectPresentation {
 
 const projectPresentation: Record<string, ProjectPresentation> = {
   'post-10': {
-    category: 'Behavioral Finance · Local-first iOS App',
     imagePosition: 'center',
     mediaAspect: 'landscape',
-    showFullImage: true,
   },
-  'post-9': { category: 'AI Glass Ads(AI Generative)', imagePosition: 'center' },
+  'post-9': { imagePosition: 'center' },
   'post-8': {
-    category: 'Multi-Arm Robotics Simulation & Data Collection',
     imagePosition: 'center',
-    mediaAspect: 'portrait',
-    showFullImage: true,
+    mediaAspect: 'landscape',
   },
-  'post-7': { category: 'AR camera to guide AI generation with phone', imagePosition: 'center 44%', mediaAspect: 'portrait' },
-  'post-1': { category: 'Mixed Reality Dating', imagePosition: 'center' },
-  'post-2': { category: 'ASL learning app', imagePosition: 'center 38%' },
-  'post-3': { category: 'Immersive AI Installation', imagePosition: 'center' },
-  'post-4': { category: 'Motion Capture', imagePosition: 'center' },
-  'post-5': { category: 'AI Shopping Assistant', imagePosition: 'center' },
-  'post-6': { category: 'XR Game Design', imagePosition: 'center' },
-  'upcoming-1': { category: 'In Development', imagePosition: 'center' },
+  'post-7': { imagePosition: 'center 44%', mediaAspect: 'portrait' },
+  'post-1': { imagePosition: 'center' },
+  'post-2': { imagePosition: 'center 38%' },
+  'post-3': { imagePosition: 'center' },
+  'post-4': { imagePosition: 'center' },
+  'post-5': { imagePosition: 'center' },
+  'post-6': { imagePosition: 'center' },
+  'upcoming-1': { imagePosition: 'center' },
 };
 
 const identityOptions: Array<{ id: ProjectIdentity; label: string; colorClass: string }> = [
-  { id: 'creative-technologist', label: 'Creative Technologist', colorClass: styles.identityButtonRed },
   { id: 'builder', label: 'AI / Builder', colorClass: styles.identityButtonBlue },
+  { id: 'creative-technologist', label: 'Creative Technologist', colorClass: styles.identityButtonRed },
   { id: 'artist', label: 'Artist', colorClass: styles.identityButtonYellow },
 ];
 
@@ -60,7 +55,7 @@ export default function AboutLiquidGlass() {
   const sceneRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [activeProject, setActiveProject] = useState<Post | null>(null);
-  const [activeIdentity, setActiveIdentity] = useState<ProjectIdentity>('creative-technologist');
+  const [activeIdentity, setActiveIdentity] = useState<ProjectIdentity>('builder');
 
   const displayedProjects = workPosts.filter(
     (post) => post.identity === activeIdentity && post.id !== 'post-9'
@@ -172,7 +167,7 @@ export default function AboutLiquidGlass() {
         />
         <div className={styles.wash} aria-hidden="true" />
 
-        <aside className={styles.studyBlock} aria-label="Portfolio video">
+        <aside className={styles.studyBlock} aria-label="Portfolio image highlights">
           <div className={styles.studyStrip} aria-label="Portfolio image highlights">
             <div className={styles.studyStripTrack}>
               {[0, 1].map((copyIndex) => (
@@ -194,14 +189,6 @@ export default function AboutLiquidGlass() {
               ))}
             </div>
           </div>
-          <div className={styles.studyVideo}>
-            <iframe
-              src="https://www.youtube.com/embed/ThW5sgK06q0?autoplay=1&mute=1&loop=1&playsinline=1&playlist=ThW5sgK06q0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title="Siming Wang portfolio video"
-            />
-          </div>
           <p className={styles.studyNote}>
             <span>Portfolio study</span>
             <span>01 / 26</span>
@@ -215,7 +202,7 @@ export default function AboutLiquidGlass() {
         >
           <span className={styles.projectPreviewLine} aria-hidden="true" />
           <p className={styles.projectPreviewCategory}>
-            {activeProject ? projectPresentation[activeProject.id]?.category : ''}
+            {activeProject?.cardDescription ?? ''}
           </p>
           <h2 className={styles.projectPreviewTitle}>{activeProject?.title ?? ''}</h2>
         </aside>
@@ -285,7 +272,7 @@ export default function AboutLiquidGlass() {
                       <span className={styles.projectVeil} aria-hidden="true" />
                       <span className={styles.projectNumber}>{String(index + 1).padStart(2, '0')}</span>
                       <span className={styles.projectContent}>
-                        <span className={styles.projectCategory}>{presentation?.category}</span>
+                        <span className={styles.projectCategory}>{post.cardDescription}</span>
                         <span className={styles.projectTitle} aria-label={post.title}>
                           {post.id === 'post-10' ? (
                             <>
@@ -322,7 +309,7 @@ export default function AboutLiquidGlass() {
                       href={getPostPageRoute(post.id)}
                       className={`${styles.projectCard} ${mediaClass} ${fullImageClass}`}
                       style={{ '--image-position': presentation?.imagePosition ?? 'center' } as CSSProperties}
-                      aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, ${presentation?.category ?? ''}`}
+                      aria-label={`${String(index + 1).padStart(2, '0')}. ${post.title}, ${post.cardDescription ?? ''}`}
                       onMouseEnter={() => setActiveProject(post)}
                       onMouseLeave={(event) => {
                         if (event.currentTarget !== document.activeElement) setActiveProject(null);

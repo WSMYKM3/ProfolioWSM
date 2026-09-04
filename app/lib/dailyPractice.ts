@@ -9,9 +9,21 @@ export interface DailyPracticePost {
   githubUrl?: string; // Optional, for GitHub repository URLs
   file?: string; // Optional, for modal content
   metaLabel?: string; // Optional replacement for the default "planted on" date line
+  projectId?: string; // Optional link to a full portfolio project
 }
 
 export const dailyPracticePosts: DailyPracticePost[] = [
+  {
+    id: "daily-tool-box",
+    title: "The Tool Box",
+    thumbnail: "/toolboxthumb.png",
+    date: "3 days",
+    metaLabel: "3-day project",
+    tags: ["xr", "ai", "shopping assistant"],
+    description: "AI assistant for customer purchasing",
+    projectId: "post-5",
+    file: "post-5"
+  },
   {
     id: "daily-1",
     title: "upcoming",

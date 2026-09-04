@@ -9,7 +9,7 @@ export interface SidebarSection {
   subsections?: SidebarSubsection[];
 }
 
-export type ProjectIdentity = 'creative-technologist' | 'artist' | 'builder';
+export type ProjectIdentity = 'creative-technologist' | 'artist' | 'builder' | 'exploration';
 export type ProjectStatus = 'published' | 'coming-soon';
 
 export interface Post {
@@ -22,6 +22,7 @@ export interface Post {
   file: string;
   date: string;
   tags: string[];
+  cardDescription?: string; // Shared small copy for About hover and Explore more cards
   quality?: 'high' | 'medium' | 'low'; // 内容质量等级，用于控制post card尺寸 (high=大, medium=中, low=小)
   videoUrl?: string; // YouTube/Vimeo embed URL or local MP4 path
   videoTitle?: string; // Title text displayed above video
@@ -60,6 +61,7 @@ export const posts: Post[] = [
     file: "post-10",
     date: "2026 · iOS-first MVP",
     tags: ["ai", "mobile", "product"],
+    cardDescription: "Turn skipped purchases into credit for later.",
     quality: "high",
     description: "Turn skipped purchases into credit for later.",
     shortDescription: "An iOS app that turns skipped purchases into spending credit.",
@@ -83,6 +85,7 @@ export const posts: Post[] = [
     file: "post-9",
     date: "Ongoing · 30 sec TikTok / Reels / Shorts",
     tags: ["ai", "film", "advertising"],
+    cardDescription: "AI Glass Ads(AI Generative)",
     quality: "high",
     heroPlaceholder: "Film in progress · video placeholder",
     description: "A 30-second AI-glasses concept spot set in Brighton, where a stolen fish sparks a street-wide chase and one calm wearer never misses the moment.",
@@ -101,10 +104,11 @@ export const posts: Post[] = [
     id: "post-8",
     title: "Sorting Factory",
     thumbnail: "/SortingFactory/thumb5.webp",
-    aboutThumbnail: "/SortingFactory/thumbVertical.webp",
+    aboutThumbnail: "/SortingFactory/thumb5.webp",
     file: "post-8",
     date: "OpenAI Build Week · July 2026",
     tags: ["ai", "robotics", "featured"],
+    cardDescription: "Multi-Arm Robotics Simulation & Data Collection",
     quality: "high",
     videoUrl: "https://www.bilibili.com/video/BV1Xbtu6HEr2/",
     videoTitle: "Sorting Factory main film on Bilibili",
@@ -132,6 +136,7 @@ export const posts: Post[] = [
     file: "post-7",
     date: "Apr–Aug 2026",
     tags: ["ai", "xr", "featured"],
+    cardDescription: "AR camera to guide AI generation with phone",
     quality: "high",
     videoUrl: "https://player.bilibili.com/player.html?bvid=BV1uytw6FEZg&page=1&high_quality=1&danmaku=0&autoplay=0",
     videoTitle: "Reroll main film on Bilibili",
@@ -142,7 +147,7 @@ export const posts: Post[] = [
     features: ["AI Filmmaking", "Mobile AR", "Previsualization", "Computer Vision"],
     role: "Creative Technologist / AI & AR Developer",
     shortDescription: "Use an iPhone as an AR camera to shape scenes and guide AI generation.",
-    identity: "creative-technologist",
+    identity: "builder",
     status: "published",
     sections: [
       { id: "why-reroll", label: "Why Reroll" },
@@ -161,6 +166,7 @@ export const posts: Post[] = [
     file: "post-1",
     date: "1 month for XRCC 2025 hackathon",
     tags: ["xr", "featured", "animation"],
+    cardDescription: "Mixed Reality Dating",
     quality: "medium", // 高质量内容，显示为大尺寸
     videoUrl: "https://www.youtube.com/embed/TrJPls4p5ak",
     videoTitle: "Datnie- XR Dating app",
@@ -198,6 +204,7 @@ export const posts: Post[] = [
     file: "post-2",
     date: "March–Jun 2025",
     tags: ["xr", "featured"],
+    cardDescription: "ASL learning app",
     quality: "high",
     videoUrl: "https://www.youtube.com/watch?v=BpG5c0Rr4E8",
     videoUrls: [
@@ -237,6 +244,7 @@ export const posts: Post[] = [
     file: "post-3",
     date: "Apr–Oct 2025, and is updating for confirmed future exhibition",
     tags: ["ai", "exploration","featured"],
+    cardDescription: "Immersive AI Installation",
     quality: "high", // 高质量内容，显示为大尺寸
     videoUrl: "", // Will be updated with actual YouTube URL
     videoTitle: "I AND AI: MIRROR",
@@ -273,6 +281,7 @@ export const posts: Post[] = [
     file: "post-4",
     date: "3 months in 2024",
     tags: ["animation"],
+    cardDescription: "Motion Capture",
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/embed/J0UV4jHnues",
     videoTitle: "Behind the scenes",
@@ -296,12 +305,13 @@ export const posts: Post[] = [
     file: "post-5",
     date: "3 days for XR Creator Con 2025 hackthon in Berlin - Strauss Track",
     tags: ["xr", "ai"],
+    cardDescription: "AI Shopping Assistant",
     quality: "medium",
     description: "AI assistant for customer purchasing",
     softwareTools: ["Unity6", "Blender"],
     features: ["AI Assistant", "XR Shopping Guide"],
     role: "Team leader of 5, XR developer",
-    identity: "builder",
+    identity: "exploration",
     status: "published",
     linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/",
     sections: [
@@ -317,6 +327,7 @@ export const posts: Post[] = [
     file: "post-6",
     date: "2 months",
     tags: ["xr"],
+    cardDescription: "XR Game Design",
     quality: "medium", // 中等质量，显示为中等尺寸
     videoUrl: "https://www.youtube.com/watch?v=-4Z7SdWcgyU", // Will be updated with actual YouTube URL
     videoTitle: "Aether Tag",
@@ -359,6 +370,7 @@ export const placeholderPosts: Post[] = [
     file: '',
     date: 'Coming Soon',
     tags: [],
+    cardDescription: 'In Development',
     description: 'Project details will be added soon.',
     identity: 'creative-technologist',
     status: 'coming-soon',

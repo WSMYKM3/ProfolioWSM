@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { zhTranslations } from './translations';
 import { rerollTranslations } from './rerollTranslations';
 import { sortingFactoryTranslations } from './sortingFactoryTranslations';
+import { siteAuditTranslations } from './siteAuditTranslations';
 
 type Language = 'en' | 'zh';
 
@@ -21,6 +22,7 @@ const translations: Record<string, string> = {
   ...zhTranslations,
   ...rerollTranslations,
   ...sortingFactoryTranslations,
+  ...siteAuditTranslations,
 };
 
 const reverseTranslations: ReadonlyMap<string, string> = new Map(
@@ -40,10 +42,19 @@ function translateTextNode(node: Text, language: Language) {
   const trimmed = rawText.trim();
   if (!trimmed) return;
 
-  const original = originalTextByNode.get(node) || reverseTranslations.get(trimmed) || trimmed;
-  const translated = language === 'zh' ? translations[original] : original;
-  if (!translated) return;
+  const storedOriginal = originalTextByNode.get(node);
+  const storedTranslation = storedOriginal ? translations[storedOriginal] : undefined;
+  const nodeStillHasStoredText = Boolean(
+    storedOriginal && (trimmed === storedOriginal || trimmed === storedTranslation)
+  );
+  const original = nodeStillHasStoredText
+    ? storedOriginal!
+    : reverseTranslations.get(trimmed) || trimmed;
+  const translated = language === 'zh' ? translations[original] || original : original;
 
+  // React can reuse one Text node for different hover content. Refresh the
+  // remembered source whenever its current value no longer matches the old
+  // English/Chinese pair, so one project's translation cannot leak to another.
   originalTextByNode.set(node, original);
   const nextText = rawText.replace(trimmed, translated);
   if (nextText !== rawText) {
