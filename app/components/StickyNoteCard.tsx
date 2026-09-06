@@ -12,7 +12,7 @@ interface StickyNoteCardProps {
   category?: string;
 }
 
-const CARD_POSITIONS_STORAGE_KEY = 'explorationCardPositionsV2';
+const CARD_POSITIONS_STORAGE_KEY = 'explorationCardPositionsV3';
 
 function formatDate(dateString: string): string {
   if (dateString.includes('.') && !dateString.includes('-')) return dateString;

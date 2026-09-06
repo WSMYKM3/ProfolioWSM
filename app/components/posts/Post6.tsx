@@ -27,11 +27,11 @@ function convertToEmbedUrl(url: string): string {
 }
 
 const INTRO_ITEMS: MediaGridItem[] = [
-  { path: '/AetherTag/elemental counter system.png', description: 'Elemental counter system diagram' },
+  { path: '/AetherTag/elemental counter system.webp', description: 'Elemental counter system diagram' },
 ];
 
 const TECHNICAL_ITEMS: MediaGridItem[] = [
-  { path: '/AetherTag/Technical Design.png', description: 'Technical solution' },
+  { path: '/AetherTag/Technical Design.webp', description: 'Technical solution' },
   { path: '/AetherTag/prototype2.png', description: 'Combat system' },
   { path: '/AetherTag/userJourney.png', description: 'User journey' },
 ];

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { DailyPracticePost } from '@/app/lib/dailyPractice';
 import StickyNoteCard from './StickyNoteCard';
 
@@ -38,41 +37,15 @@ function getPostCategory(post: DailyPracticePost): string {
 }
 
 export default function DigitalGarden({ posts, onPostClick }: DigitalGardenProps) {
-  const [activeFilter, setActiveFilter] = useState<string>('all');
-  const [filteredPosts, setFilteredPosts] = useState<DailyPracticePost[]>(posts);
-  
-  const filterCategories = ['all', 'game', 'coding', '3d', 'animation', 'shader', 'more'];
-
-  useEffect(() => {
-    if (activeFilter === 'all') {
-      setFilteredPosts(posts);
-    } else {
-      setFilteredPosts(posts.filter(post => getPostCategory(post) === activeFilter));
-    }
-  }, [activeFilter, posts]);
+  const visiblePosts = posts.filter((post) => post.title.toLowerCase() !== 'upcoming');
 
   return (
     <div className="digital-garden-page">
-      {/* Filter Tags */}
-      <div className="filter-container">
-        {filterCategories.map(category => (
-          <button
-            key={category}
-            className={`filter-tag ${activeFilter === category ? 'active' : ''}`}
-            onClick={() => setActiveFilter(category)}
-            data-filter={category}
-          >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </button>
-        ))}
-      </div>
-
       {/* Garden Container */}
       <main className="garden">
         <div className="garden-container">
-          {posts.map((post, index) => {
+          {visiblePosts.map((post, index) => {
             const position = FIXED_POSITIONS[index % FIXED_POSITIONS.length];
-            const isHidden = !filteredPosts.includes(post);
             
             return (
               <StickyNoteCard
@@ -80,7 +53,7 @@ export default function DigitalGarden({ posts, onPostClick }: DigitalGardenProps
                 post={post}
                 initialPosition={position}
                 onCardClick={onPostClick}
-                isFiltered={isHidden}
+                isFiltered={false}
                 category={getPostCategory(post)}
               />
             );

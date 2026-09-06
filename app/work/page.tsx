@@ -11,7 +11,7 @@ import { shouldNavigateToPage, getPostPageRoute } from '@/app/lib/navigation';
 
 const workPagePosts: Post[] = workPosts.map((post) =>
   post.id === 'post-7'
-    ? { ...post, thumbnail: '/Reroll/thumbnail.png' }
+    ? { ...post, thumbnail: '/Reroll/thumbnail.webp' }
     : post
 );
 

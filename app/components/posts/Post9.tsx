@@ -9,28 +9,28 @@ import {
 } from '../editorial';
 
 const fishingImages = [
-  { path: '/AIGlass/fishing/1.jpeg', alt: 'Fisherman and dog facing Brighton Pier at the start of the advert' },
-  { path: '/AIGlass/fishing/2.png', alt: 'Fisherman reacting as the quiet opening turns into chaos' },
+  { path: '/AIGlass/fishing/1.webp', alt: 'Fisherman and dog facing Brighton Pier at the start of the advert' },
+  { path: '/AIGlass/fishing/2.webp', alt: 'Fisherman reacting as the quiet opening turns into chaos' },
   { path: '/AIGlass/fishing/3.png', alt: 'Split frame of the fisherman and dog as a seagull steals the fish' },
-  { path: '/AIGlass/fishing/4.jpeg', alt: 'Dog poised to chase on Brighton beach' },
+  { path: '/AIGlass/fishing/4.webp', alt: 'Dog poised to chase on Brighton beach' },
 ];
 
 const chasingImages = [
-  { path: '/AIGlass/chasing/1.jpeg', alt: 'Dog starting the chase near Brighton Pier' },
+  { path: '/AIGlass/chasing/1.webp', alt: 'Dog starting the chase near Brighton Pier' },
   { path: '/AIGlass/chasing/2.png', alt: 'Seagull flying low through a Brighton street' },
-  { path: '/AIGlass/chasing/3.png', alt: 'Fisherman following the dog through the Brighton Lanes' },
-  { path: '/AIGlass/chasing/4.png', alt: 'Crowd watching a street performer make a giant bubble' },
-  { path: '/AIGlass/chasing/5.png', alt: 'Split frame of the seagull with the fish and the surprised fisherman' },
+  { path: '/AIGlass/chasing/3.webp', alt: 'Fisherman following the dog through the Brighton Lanes' },
+  { path: '/AIGlass/chasing/4.webp', alt: 'Crowd watching a street performer make a giant bubble' },
+  { path: '/AIGlass/chasing/5.webp', alt: 'Split frame of the seagull with the fish and the surprised fisherman' },
 ];
 
 const buskingImages = [
-  { path: '/AIGlass/busking/1.png', alt: 'Street performer shaping a giant iridescent bubble in the Brighton Lanes' },
-  { path: '/AIGlass/busking/2.png', alt: 'Low chase shot of the dog running between the crowd' },
-  { path: '/AIGlass/busking/3.png', alt: 'The crowd reaching for phones as the spectacle unfolds' },
-  { path: '/AIGlass/busking/4.png', alt: 'People fumbling to record the moment on their phones' },
-  { path: '/AIGlass/busking/5.jpeg', alt: 'The giant bubble filling the frame before it bursts' },
-  { path: '/AIGlass/busking/6.png', alt: 'The giant bubble bursting above the cobblestones' },
-  { path: '/AIGlass/busking/7.png', alt: 'AI-glasses wearer standing calmly in front of the scrambling crowd' },
+  { path: '/AIGlass/busking/1.webp', alt: 'Street performer shaping a giant iridescent bubble in the Brighton Lanes' },
+  { path: '/AIGlass/busking/2.webp', alt: 'Low chase shot of the dog running between the crowd' },
+  { path: '/AIGlass/busking/3.webp', alt: 'The crowd reaching for phones as the spectacle unfolds' },
+  { path: '/AIGlass/busking/4.webp', alt: 'People fumbling to record the moment on their phones' },
+  { path: '/AIGlass/busking/5.webp', alt: 'The giant bubble filling the frame before it bursts' },
+  { path: '/AIGlass/busking/6.webp', alt: 'The giant bubble bursting above the cobblestones' },
+  { path: '/AIGlass/busking/7.webp', alt: 'AI-glasses wearer standing calmly in front of the scrambling crowd' },
 ];
 
 export default function Post9() {
@@ -49,12 +49,12 @@ export default function Post9() {
           </p>
           <div className="aiglass-character-grid">
             <MediaFrame
-              src="/AIGlass/character/1.png"
+              src="/AIGlass/character/1.webp"
               alt="Full-length character study of the Brighton fisherman"
               variant="contain"
               className="aiglass-character-portrait"
               dataAnim="slide-left"
-              onClick={() => handleImageClick('/AIGlass/character/1.png', 'Full-length character study of the Brighton fisherman')}
+              onClick={() => handleImageClick('/AIGlass/character/1.webp', 'Full-length character study of the Brighton fisherman')}
             />
             <MediaFrame
               src="/AIGlass/character/2.webp"

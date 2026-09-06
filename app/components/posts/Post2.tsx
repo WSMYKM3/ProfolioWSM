@@ -31,7 +31,7 @@ const STAGE1_RECORDING_ITEMS: MediaGridItem[] = [
   { path: '/webm/Signie/hand1.webm', description: 'Hand guiding animation', isVideo: true },
   { path: '/webm/Signie/hand2.webm', description: 'Hand guiding animation with customized hand model', isVideo: true },
   { path: '/webm/Signie/fb2.webm', description: 'Full body animation recorded by Meta Quest headset', isVideo: true },
-  { path: '/Signiepics/handrecord.png', description: 'I record via Unity recorder + FBX converter, all in Unity' },
+  { path: '/Signiepics/handrecord.webp', description: 'I record via Unity recorder + FBX converter, all in Unity' },
 ];
 
 const STAGE1_BUBBLE_ITEMS: MediaGridItem[] = [

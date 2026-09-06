@@ -40,20 +40,25 @@ const identityOptions: Array<{ id: ProjectIdentity; label: string; colorClass: s
   { id: 'artist', label: 'Artist', colorClass: styles.identityButtonYellow },
 ];
 
-// Replace `src: null` with paths from the future image folder.
-// Example: { id: '01', src: '/portfolio-strip/image-01.webp', alt: 'Project process' }
-const studyStripImages = [
-  { id: '01', src: null, alt: 'Portfolio image placeholder 01' },
-  { id: '02', src: null, alt: 'Portfolio image placeholder 02' },
-  { id: '03', src: null, alt: 'Portfolio image placeholder 03' },
-  { id: '04', src: null, alt: 'Portfolio image placeholder 04' },
-  { id: '05', src: null, alt: 'Portfolio image placeholder 05' },
-  { id: '06', src: null, alt: 'Portfolio image placeholder 06' },
+const studyStripRows = [
+  [
+    { id: '01', projectId: 'post-9', src: '/AIGlass/aiglassthumb.webp', alt: 'AI Glass film project' },
+    { id: '02', projectId: 'post-7', src: '/Reroll/thumbnail.webp', alt: 'Reroll AI filmmaking project' },
+    { id: '03', projectId: 'post-8', src: '/SortingFactory/thumb5.webp', alt: 'Sorting Factory robotics project' },
+    { id: '04', projectId: 'post-10', src: '/Couldve/Thumb1.webp', alt: 'Couldve mobile product project' },
+  ],
+  [
+    { id: '05', projectId: 'post-1', src: '/datnie.png', alt: 'Datnie mixed reality dating project' },
+    { id: '06', projectId: 'post-2', src: '/linkedinthumbnail.png', alt: 'Signie sign-language learning project' },
+    { id: '07', projectId: 'post-3', src: '/iandaithumb.jpg', alt: 'I and AI interactive installation' },
+    { id: '08', projectId: 'post-5', src: '/toolboxthumb.png', alt: 'The Toolbox mixed reality project' },
+  ],
 ] as const;
 
 export default function AboutLiquidGlass() {
   const sceneRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const studyStripRef = useRef<HTMLDivElement>(null);
   const [activeProject, setActiveProject] = useState<Post | null>(null);
   const [activeIdentity, setActiveIdentity] = useState<ProjectIdentity>('builder');
 
@@ -155,6 +160,142 @@ export default function AboutLiquidGlass() {
     };
   }, []);
 
+  useEffect(() => {
+    const strip = studyStripRef.current;
+    if (!strip) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (reduceMotion.matches || !finePointer.matches) return;
+
+    const cards = Array.from(strip.querySelectorAll<HTMLElement>('[data-study-card]'));
+    const physics = cards.map((card) => ({
+      card,
+      image: card.querySelector<HTMLElement>('[data-study-card-image]'),
+      x: 0,
+      y: 0,
+      impulseX: 0,
+      impulseY: 0,
+      springX: 0,
+      springY: 0,
+    }));
+    const pointer = {
+      x: 0,
+      y: 0,
+      movementX: 0,
+      movementY: 0,
+      seen: false,
+    };
+    let animationFrame = 0;
+    let previousTime = performance.now();
+
+    const animateCards = (time: number) => {
+      const delta = Math.min(2, Math.max(0.5, (time - previousTime) / 16.667));
+      previousTime = time;
+      const moveX = Math.max(-18, Math.min(18, pointer.movementX));
+      const moveY = Math.max(-18, Math.min(18, pointer.movementY));
+      pointer.movementX = 0;
+      pointer.movementY = 0;
+      let isMoving = false;
+
+      physics.forEach((item) => {
+        const bounds = item.card.getBoundingClientRect();
+        const centerX = bounds.left + bounds.width / 2;
+        const centerY = bounds.top + bounds.height / 2;
+
+        if (pointer.seen) {
+          const normalizedX = (pointer.x - centerX) / (bounds.width * 1.45);
+          const normalizedY = (pointer.y - centerY) / (bounds.height * 1.9);
+          const distance = Math.hypot(normalizedX, normalizedY);
+          const proximity = Math.pow(Math.max(0, 1 - distance), 4) * 0.2;
+
+          item.impulseX += moveX * proximity;
+          item.impulseY += moveY * proximity;
+        }
+
+        item.impulseX *= Math.pow(0.78, delta);
+        item.impulseY *= Math.pow(0.78, delta);
+        item.x += item.impulseX * delta;
+        item.y += item.impulseY * delta;
+
+        item.springX *= Math.pow(0.72, delta);
+        item.springY *= Math.pow(0.72, delta);
+        item.springX += -item.x * 0.12 * delta;
+        item.springY += -item.y * 0.12 * delta;
+        item.x += item.springX * delta;
+        item.y += item.springY * delta;
+
+        item.x = Math.max(-4, Math.min(4, item.x));
+        item.y = Math.max(-3, Math.min(3, item.y));
+
+        if (Math.abs(item.x) < 0.01) item.x = 0;
+        if (Math.abs(item.y) < 0.01) item.y = 0;
+
+        const speed = Math.min(
+          1,
+          Math.hypot(item.impulseX + item.springX, item.impulseY + item.springY) / 6,
+        );
+        const rotation = Math.max(-0.8, Math.min(0.8, (item.springX - item.springY) * -0.18));
+
+        item.image?.style.setProperty('--study-x', `${item.x.toFixed(2)}px`);
+        item.image?.style.setProperty('--study-y', `${item.y.toFixed(2)}px`);
+        item.image?.style.setProperty('--study-rotation', `${rotation.toFixed(2)}deg`);
+        item.image?.style.setProperty('--study-stretch', (1 + speed * 0.018).toFixed(3));
+        item.image?.style.setProperty('--study-squash', (1 - speed * 0.012).toFixed(3));
+
+        if (
+          Math.abs(item.x) > 0.01 ||
+          Math.abs(item.y) > 0.01 ||
+          Math.abs(item.impulseX) > 0.01 ||
+          Math.abs(item.impulseY) > 0.01 ||
+          Math.abs(item.springX) > 0.01 ||
+          Math.abs(item.springY) > 0.01
+        ) {
+          isMoving = true;
+        }
+      });
+
+      if (pointer.seen || isMoving) {
+        animationFrame = window.requestAnimationFrame(animateCards);
+      } else {
+        animationFrame = 0;
+      }
+    };
+
+    const requestFrame = () => {
+      if (animationFrame) return;
+      previousTime = performance.now();
+      animationFrame = window.requestAnimationFrame(animateCards);
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (pointer.seen) {
+        pointer.movementX += event.clientX - pointer.x;
+        pointer.movementY += event.clientY - pointer.y;
+      }
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointer.seen = true;
+      requestFrame();
+    };
+
+    const handlePointerLeave = () => {
+      pointer.seen = false;
+      pointer.movementX = 0;
+      pointer.movementY = 0;
+      requestFrame();
+    };
+
+    strip.addEventListener('pointermove', handlePointerMove, { passive: true });
+    strip.addEventListener('pointerleave', handlePointerLeave);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      strip.removeEventListener('pointermove', handlePointerMove);
+      strip.removeEventListener('pointerleave', handlePointerLeave);
+    };
+  }, []);
+
   return (
     <div className="layout">
       <TopNav />
@@ -168,26 +309,42 @@ export default function AboutLiquidGlass() {
         <div className={styles.wash} aria-hidden="true" />
 
         <aside className={styles.studyBlock} aria-label="Portfolio image highlights">
-          <div className={styles.studyStrip} aria-label="Portfolio image highlights">
-            <div className={styles.studyStripTrack}>
-              {[0, 1].map((copyIndex) => (
+          <div ref={studyStripRef} className={styles.studyStrip} aria-label="Portfolio image highlights">
+            {studyStripRows.map((row, rowIndex) => (
+              <div className={styles.studyStripRow} key={rowIndex}>
                 <div
-                  className={styles.studyStripSet}
-                  key={copyIndex}
-                  aria-hidden={copyIndex === 1}
+                  className={`${styles.studyStripTrack} ${
+                    rowIndex === 1 ? styles.studyStripTrackReverse : ''
+                  }`}
                 >
-                  {studyStripImages.map((item) => (
-                    <div className={styles.studyStripItem} key={`${copyIndex}-${item.id}`}>
-                      {item.src ? (
-                        <img src={getPublicAssetUrl(item.src)} alt={item.alt} />
-                      ) : (
-                        <span aria-label={item.alt}>{item.id}</span>
-                      )}
+                  {[0, 1].map((copyIndex) => (
+                    <div
+                      className={styles.studyStripSet}
+                      key={copyIndex}
+                      aria-hidden={copyIndex === 1}
+                    >
+                      {row.map((item) => (
+                        <Link
+                          className={styles.studyStripItem}
+                          key={`${copyIndex}-${item.id}`}
+                          href={getPostPageRoute(item.projectId)}
+                          aria-label={`View ${item.alt}`}
+                          tabIndex={copyIndex === 1 ? -1 : undefined}
+                          data-study-card
+                        >
+                          <img
+                            src={getPublicAssetUrl(item.src)}
+                            alt={item.alt}
+                            draggable={false}
+                            data-study-card-image
+                          />
+                        </Link>
+                      ))}
                     </div>
                   ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
           <p className={styles.studyNote}>
             <span>Portfolio study</span>
@@ -195,40 +352,42 @@ export default function AboutLiquidGlass() {
           </p>
         </aside>
 
-        <aside
-          className={`${styles.projectPreview} ${activeProject ? styles.projectPreviewVisible : ''}`}
-          aria-live="polite"
-          aria-hidden={!activeProject}
-        >
-          <span className={styles.projectPreviewLine} aria-hidden="true" />
-          <p className={styles.projectPreviewCategory}>
-            {activeProject?.cardDescription ?? ''}
-          </p>
-          <h2 className={styles.projectPreviewTitle}>{activeProject?.title ?? ''}</h2>
-        </aside>
-
         <section className={styles.glassStage} aria-label="Selected portfolio projects">
-          <div className={styles.identitySwitcher} aria-label="Filter projects by identity">
-            {identityOptions.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                className={`${styles.identityButton} ${option.colorClass} ${activeIdentity === option.id ? styles.identityButtonActive : ''}`}
-                aria-pressed={activeIdentity === option.id}
-                onClick={() => handleIdentityChange(option.id)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
+          <aside
+            className={`${styles.projectPreview} ${activeProject ? styles.projectPreviewVisible : ''}`}
+            aria-live="polite"
+            aria-hidden={!activeProject}
+          >
+            <span className={styles.projectPreviewLine} aria-hidden="true" />
+            <p className={styles.projectPreviewCategory}>
+              {activeProject?.cardDescription ?? ''}
+            </p>
+            <h2 className={styles.projectPreviewTitle}>{activeProject?.title ?? ''}</h2>
+          </aside>
 
           <div className={styles.glassPanel} ref={panelRef}>
             <div className={styles.glassShine} aria-hidden="true" />
 
             <header className={styles.glassHeader}>
-              <div className={styles.headerCopy}>
-                <p className={styles.eyebrow}>Creative Technologist &amp; Engineer</p>
-                <h1>Siming Wang</h1>
+              <div className={styles.headerMain}>
+                <div className={styles.headerCopy}>
+                  <p className={styles.eyebrow}>Creative Technologist &amp; Engineer</p>
+                  <h1>Siming Wang</h1>
+                </div>
+
+                <div className={styles.identitySwitcher} aria-label="Filter projects by identity">
+                  {identityOptions.map((option) => (
+                    <button
+                      key={option.id}
+                      type="button"
+                      className={`${styles.identityButton} ${option.colorClass} ${activeIdentity === option.id ? styles.identityButtonActive : ''}`}
+                      aria-pressed={activeIdentity === option.id}
+                      onClick={() => handleIdentityChange(option.id)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
               <p className={styles.edition} aria-label="Portfolio edition 2026">@26</p>
             </header>

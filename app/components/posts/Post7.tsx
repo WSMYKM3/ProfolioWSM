@@ -15,13 +15,13 @@ import { SketchUnderline } from '../SketchUnderline';
 
 const IMAGE_TO_SCENE_ITEMS: MediaGridItem[] = [
   {
-    path: '/Reroll/originpic.png',
+    path: '/Reroll/originpic.webp',
     alt: 'Original reference image used by Reroll',
     description: 'Original reference image',
     variant: 'contain',
   },
   {
-    path: '/Reroll/output_objectdetection.png',
+    path: '/Reroll/output_objectdetection.webp',
     alt: 'YOLOv8-seg detection and DPT relative-depth result',
     description: 'YOLOv8-seg detection + DPT relative depth',
     variant: 'contain',
@@ -78,7 +78,7 @@ const PROMPT_OUTPUTS = [
     shadow: '#FF6B45',
   },
   {
-    src: '/Reroll/en.png',
+    src: '/Reroll/en.webp',
     alt: 'English refined prompt generated from the Reroll scene',
     label: 'English Prompt',
     width: 1497,
@@ -181,7 +181,7 @@ export default function Post7() {
                   to edit objects and add voice tips. AI turns them into a stronger prompt for video generation.
                 </p>
                 <MediaFrame
-                  src="/Reroll/sam3.png"
+                  src="/Reroll/sam3.webp"
                   alt="SAM 3 segmentation of objects in the Reroll reference scene"
                   caption="masked objects to be edited in phone AR scene"
                   variant="contain"
@@ -189,7 +189,7 @@ export default function Post7() {
                   style={{ marginTop: 24 }}
                   onClick={() =>
                     handleImageClick(
-                      '/Reroll/sam3.png',
+                      '/Reroll/sam3.webp',
                       'SAM 3 segmentation of objects in the Reroll reference scene',
                     )
                   }
@@ -284,7 +284,7 @@ export default function Post7() {
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <MediaFrame
-              src="/Reroll/objectdetection.jpg"
+              src="/Reroll/objectdetection.webp"
               alt="SAM 3 object masks preserving the shape of detected scene objects"
               caption="Update: SAM 3 masks preserve object silhouettes for AR"
               variant="contain"
@@ -293,7 +293,7 @@ export default function Post7() {
               width="min(1080px, 100%)"
               onClick={() =>
                 handleImageClick(
-                  '/Reroll/objectdetection.jpg',
+                  '/Reroll/objectdetection.webp',
                   'SAM 3 object masks preserving object silhouettes for AR',
                 )
               }
@@ -344,7 +344,7 @@ export default function Post7() {
           </p>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <MediaFrame
-              src="/Reroll/stt.png"
+              src="/Reroll/stt.webp"
               alt="Speech-to-text note attached to an AR object"
               caption="Object-bound speech-to-text directing note"
               variant="contain"
@@ -353,7 +353,7 @@ export default function Post7() {
               width="min(1040px, 100%)"
               onClick={() =>
                 handleImageClick(
-                  '/Reroll/stt.png',
+                  '/Reroll/stt.webp',
                   'Object-bound speech-to-text directing note',
                 )
               }

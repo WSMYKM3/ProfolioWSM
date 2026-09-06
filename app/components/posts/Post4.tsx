@@ -9,7 +9,7 @@ import {
 } from '../editorial';
 
 const MOCAP_ITEMS: MediaGridItem[] = [
-  { path: '/mocapgifs/mocapclean.png', description: 'Overview' },
+  { path: '/mocapgifs/mocapclean.webp', description: 'Overview' },
   { path: '/webm/MotionCapture/motioncapture.webm', description: 'Motion capture', isVideo: true },
   { path: '/webm/MotionCapture/mb1.webm', description: 'Retargeting', isVideo: true },
   { path: '/webm/MotionCapture/mb2.webm', description: 'Data cleaning', isVideo: true },
@@ -19,7 +19,7 @@ const MOCAP_ITEMS: MediaGridItem[] = [
 
 const METAHUMAN_ITEMS: MediaGridItem[] = [
   { path: '/webm/MotionCapture/facialmotion.webm', description: 'Facial motion', isVideo: true },
-  { path: '/mocapgifs/facemesh.png', description: 'Face mesh' },
+  { path: '/mocapgifs/facemesh.webp', description: 'Face mesh' },
   { path: '/webm/MotionCapture/sequence.webm', description: 'Sequence', isVideo: true },
 ];
 

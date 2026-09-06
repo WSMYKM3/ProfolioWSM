@@ -230,7 +230,7 @@ export default function Post3() {
           <EditorialSubtitle id="installation-draft">Installation Draft</EditorialSubtitle>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <MediaFrame
-              src="/IandAI/Draft.png"
+              src="/IandAI/Draft.webp"
               alt="Installation Draft Design"
               caption="Installation draft"
               variant="default"
@@ -238,7 +238,7 @@ export default function Post3() {
               dataAnim="rotate-in"
               className="mirror-installation-draft-frame"
               width="min(900px, 96%)"
-              onClick={() => handleImageClick('/IandAI/Draft.png', 'Installation Draft Design')}
+              onClick={() => handleImageClick('/IandAI/Draft.webp', 'Installation Draft Design')}
             />
           </div>
 

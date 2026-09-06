@@ -9303,7 +9303,9 @@ body.home-wheel-active {
 }
 
 .explorations-line-page .card-img {
+    height: clamp(190px, 16vw, 220px);
     border-radius: 15px 15px 0 0;
+    object-fit: cover;
     opacity: 0.78;
     filter: saturate(0.72) contrast(1.03);
     transition: opacity 240ms ease, filter 240ms ease;

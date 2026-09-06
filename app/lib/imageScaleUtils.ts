@@ -35,7 +35,7 @@ export function getImageScale(imageSrc: string): number {
     return 1.2;
   }
   // Signie large images - use smaller scale
-  if (imageSrc.includes('/Signiepics/handrecord.png') || imageSrc.includes('/Signiepics/mixwords.png')) {
+  if (imageSrc.includes('/Signiepics/handrecord.webp') || imageSrc.includes('/Signiepics/mixwords.png')) {
     return 0.8; // No scale for these large images
   }
   // Post3 IandAI images - use moderate scale to avoid over-enlargement
@@ -54,4 +54,3 @@ export function getImageScale(imageSrc: string): number {
   // Default scale for other images/gifs
   return 2;
 }
-
