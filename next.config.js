@@ -1,14 +1,20 @@
+const isCloudflarePages = process.env.CF_PAGES === '1';
+const basePath = process.env.NODE_ENV === 'production' && !isCloudflarePages
+  ? '/ProfolioWSM'
+  : '';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
-  // Only use basePath in production builds (for GitHub Pages)
-  // In development, basePath is empty so routes work at localhost:3000/work
-  basePath: process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '',
+  // Cloudflare Pages serves from `/`; GitHub project Pages serves from `/ProfolioWSM`.
+  basePath,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   images: {
     unoptimized: true,
   },
 }
 
 module.exports = nextConfig
-

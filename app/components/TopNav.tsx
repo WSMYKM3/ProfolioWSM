@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/app/lib/i18n/LanguageProvider';
 
 function getImgSrc(src: string): string {
-  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
   return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 

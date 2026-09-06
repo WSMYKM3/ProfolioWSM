@@ -27,7 +27,7 @@ function getFileSrc(src: string): string {
     return encodeURI(full);
   }
   // Fallback for SSR (shouldn't happen in static export, but safe fallback)
-  const basePath = process.env.NODE_ENV === 'production' ? '/ProfolioWSM' : '';
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
   const full = src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
   return encodeURI(full);
 }
