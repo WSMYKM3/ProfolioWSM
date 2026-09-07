@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { Post } from '@/app/lib/posts';
 import SoftwareIcon from './SoftwareIcon';
@@ -43,9 +43,14 @@ function formatDate(dateString: string): string {
   return `${month}/${day}/${year}`;
 }
 
+function isVideoAsset(src: string): boolean {
+  return /\.(mp4|webm)(?:$|[?#])/i.test(src);
+}
+
 export default function PostSection({ post, index, isActive = true, onPostClick, titleAction }: PostSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState(0);
   const isComingSoon = post.status === 'coming-soon';
 
   // Detect mobile device
@@ -94,83 +99,45 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
     y.set(0);
   };
 
-  // Helper function to convert YouTube watch URL to embed URL
-  const convertToEmbedUrl = (url: string): string => {
-    if (!url) return url;
-
-    // If already an embed URL, return as is
-    if (url.includes('/embed/')) {
-      return url;
-    }
-
-    if (url.includes('player.bilibili.com/')) {
-      return url;
-    }
-
-    if (url.includes('bilibili.com/video/')) {
-      const bvid = url.match(/\/video\/(BV[a-zA-Z0-9]+)/)?.[1];
-      if (bvid) {
-        return `https://player.bilibili.com/player.html?bvid=${bvid}&page=1&high_quality=1&danmaku=0&autoplay=0`;
-      }
-    }
-
-    // Convert watch URL (https://www.youtube.com/watch?v=VIDEO_ID) to embed URL
-    if (url.includes('youtube.com/watch')) {
-      const videoId = url.split('v=')[1]?.split('&')[0];
-      if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
-    }
-
-    // Convert short URL (https://youtu.be/VIDEO_ID) to embed URL
-    if (url.includes('youtu.be/')) {
-      const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-      if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
-    }
-
-    // Return original URL if no conversion needed
-    return url;
-  };
-
-  const isIframeVideoUrl = (url: string): boolean =>
-    url.includes('youtube.com') || url.includes('youtu.be') || url.includes('player.bilibili.com');
-
-  const getPreviewEmbedUrl = (url: string): string => {
-    const previewUrl = new URL(url);
-    previewUrl.searchParams.set('autoplay', '1');
-    previewUrl.searchParams.set('muted', '1');
-
-    if (url.includes('player.bilibili.com')) {
-      previewUrl.searchParams.set('danmaku', '0');
-      return previewUrl.toString();
-    }
-
-    const videoId = previewUrl.pathname.split('/').filter(Boolean).at(-1);
-    previewUrl.searchParams.set('mute', '1');
-    previewUrl.searchParams.set('controls', '0');
-    previewUrl.searchParams.set('disablekb', '1');
-    previewUrl.searchParams.set('fs', '0');
-    previewUrl.searchParams.set('iv_load_policy', '3');
-    previewUrl.searchParams.set('modestbranding', '1');
-    previewUrl.searchParams.set('playsinline', '1');
-    previewUrl.searchParams.set('rel', '0');
-    previewUrl.searchParams.set('loop', '1');
-    if (videoId) previewUrl.searchParams.set('playlist', videoId);
-    return previewUrl.toString();
-  };
-
-  // Get video URL - prefer videoUrls array first, then fall back to videoUrl
-  const videoUrls = post.videoUrls || [];
-  const hasMultipleVideos = videoUrls.length > 0;
-  const videoUrl = hasMultipleVideos ? videoUrls[0] : post.videoUrl;
-  const embedUrl = (videoUrl && videoUrl.trim() !== '') ? convertToEmbedUrl(videoUrl) : null;
-  const previewScale = embedUrl?.includes('player.bilibili.com') ? 1.45 : 1.24;
-  const videoTitle = post.videoTitle || post.title;
-  const description = post.description || 'A creative project showcasing innovative design and technology.';
+  const rawPreviewMedia = post.previewMedia || post.thumbnail;
+  const previewMediaItems = Array.isArray(rawPreviewMedia)
+    ? rawPreviewMedia.filter(Boolean)
+    : (rawPreviewMedia ? [rawPreviewMedia] : []);
+  const safePreviewIndex = previewMediaItems.length > 0
+    ? previewIndex % previewMediaItems.length
+    : 0;
+  const previewMedia = previewMediaItems[safePreviewIndex] || '';
+  const previewMediaSrc = previewMedia ? getImageSrc(previewMedia) : '';
+  const previewPosterSrc = post.previewPoster
+    ? getImageSrc(post.previewPoster)
+    : (post.thumbnail ? getImageSrc(post.thumbnail) : undefined);
+  const previewIsVideo = isVideoAsset(previewMedia);
+  const previewAltItems = Array.isArray(post.previewMediaAlt)
+    ? post.previewMediaAlt
+    : (post.previewMediaAlt ? [post.previewMediaAlt] : []);
+  const previewAlt = previewAltItems[safePreviewIndex] || `${post.title} project preview`;
+  const previewFitItems = Array.isArray(post.previewMediaFit)
+    ? post.previewMediaFit
+    : (post.previewMediaFit ? [post.previewMediaFit] : []);
+  const previewFit = previewFitItems[safePreviewIndex] || 'cover';
+  const previewLayout = post.previewMediaLayout || 'slideshow';
+  const usesSeparateCards = previewLayout === 'cards';
+  const usesPortraitFrame = previewLayout === 'portrait';
+  const description = post.previewDescription || post.description || 'A creative project showcasing innovative design and technology.';
   const softwareTools = post.softwareTools || [];
   const features = post.features || [];
+
+  useEffect(() => {
+    setPreviewIndex(0);
+
+    if (!isActive || previewLayout !== 'slideshow' || previewMediaItems.length < 2) return;
+
+    const intervalId = window.setInterval(() => {
+      setPreviewIndex((currentIndex) => (currentIndex + 1) % previewMediaItems.length);
+    }, 3200);
+
+    return () => window.clearInterval(intervalId);
+  }, [isActive, post.id, previewLayout, previewMediaItems.length]);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log('✅ Button clicked for:', post.id, post.title);
@@ -182,6 +149,107 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
     } else {
       console.error('❌ onPostClick is undefined!');
     }
+  };
+
+  const renderPreviewItem = (media: string, itemIndex: number) => {
+    const mediaSrc = getImageSrc(media);
+    const mediaAlt = previewAltItems[itemIndex] || `${post.title} project preview`;
+    const mediaFit = previewFitItems[itemIndex] || 'cover';
+
+    return isVideoAsset(media) ? (
+      <video
+        src={mediaSrc}
+        poster={previewPosterSrc}
+        aria-label={mediaAlt}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        style={{ width: '100%', height: '100%', objectFit: mediaFit, display: 'block' }}
+      />
+    ) : (
+      <Image
+        src={mediaSrc}
+        alt={mediaAlt}
+        fill
+        sizes={isMobile ? 'calc(100vw - 40px)' : '500px'}
+        style={{ objectFit: mediaFit }}
+      />
+    );
+  };
+
+  const renderPreviewMedia = () => {
+    if (previewMediaItems.length > 1 && previewLayout !== 'slideshow') {
+      const isColumns = previewLayout === 'columns' || usesSeparateCards;
+
+      return (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'grid',
+            gridTemplateColumns: isColumns ? `repeat(${previewMediaItems.length}, minmax(0, 1fr))` : '1fr',
+            gridTemplateRows: isColumns ? '1fr' : `repeat(${previewMediaItems.length}, minmax(0, 1fr))`,
+            gap: usesSeparateCards ? (isMobile ? '10px' : '18px') : '4px',
+            backgroundColor: usesSeparateCards ? 'transparent' : 'rgba(255,255,255,0.12)'
+          }}
+        >
+          {previewMediaItems.map((media, itemIndex) => (
+            <div
+              key={media}
+              style={{
+                position: 'relative',
+                minWidth: 0,
+                minHeight: 0,
+                overflow: 'hidden',
+                borderRadius: usesSeparateCards ? '18px' : 0,
+                backgroundColor: usesSeparateCards ? 'rgba(12,12,12,0.78)' : '#080808',
+                border: usesSeparateCards ? '1px solid rgba(255,255,255,0.22)' : 'none',
+                boxShadow: usesSeparateCards ? '0 18px 36px rgba(0,0,0,0.38)' : 'none'
+              }}
+            >
+              {renderPreviewItem(media, itemIndex)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={previewMediaSrc}
+          initial={{ opacity: 0, scale: 1.015 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
+          style={{ position: 'absolute', inset: 0 }}
+        >
+          {previewIsVideo ? (
+            <video
+              src={previewMediaSrc}
+              poster={previewPosterSrc}
+              aria-label={previewAlt}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              style={{ width: '100%', height: '100%', objectFit: previewFit, display: 'block' }}
+            />
+          ) : (
+            <Image
+              src={previewMediaSrc}
+              alt={previewAlt}
+              fill
+              sizes={isMobile ? 'calc(100vw - 40px)' : '500px'}
+              style={{ objectFit: previewFit }}
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
+    );
   };
 
   return (
@@ -356,10 +424,10 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
             maxWidth: '90%'
           }} />
 
-          {/* Mobile Video - Show below title on mobile only */}
-          {isMobile && embedUrl && isActive && (
+          {/* Mobile project preview */}
+          {isMobile && previewMediaSrc && isActive && !isComingSoon && (
             <motion.div
-              className="cinematic-extra-mobile"
+              className={`cinematic-extra-mobile${usesSeparateCards ? ' cinematic-extra-mobile--cards' : ''}${usesPortraitFrame ? ' cinematic-extra-mobile--portrait' : ''}`}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -367,15 +435,15 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
               style={{
                 width: '100%',
                 maxWidth: '100%',
-                height: '120px',
-                maxHeight: '120px',
+                height: usesSeparateCards ? '300px' : (usesPortraitFrame ? '280px' : '120px'),
+                maxHeight: usesSeparateCards ? '300px' : (usesPortraitFrame ? '280px' : '120px'),
                 borderRadius: '12px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
                 marginBottom: '16px',
-                overflow: 'hidden',
+                overflow: usesSeparateCards ? 'visible' : 'hidden',
                 position: 'relative',
                 zIndex: 1,
               }}
@@ -385,51 +453,15 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                   width: '100%',
                   height: '100%',
                   borderRadius: '16px',
-                  overflow: 'hidden',
-                  backgroundColor: 'rgba(20,20,20,0.5)',
+                  overflow: usesSeparateCards ? 'visible' : 'hidden',
+                  backgroundColor: usesSeparateCards ? 'transparent' : 'rgba(20,20,20,0.5)',
                   backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+                  border: usesSeparateCards ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                  boxShadow: usesSeparateCards ? 'none' : '0 20px 40px rgba(0,0,0,0.4)',
                 }}
               >
-                <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
-                  {isIframeVideoUrl(embedUrl) ? (
-                    <iframe
-                      src={getPreviewEmbedUrl(embedUrl)}
-                      title={videoTitle}
-                      tabIndex={-1}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{ 
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        width: '100%',
-                        height: '100%',
-                        maxWidth: 'none',
-                        transform: `translate(-50%, -50%) scale(${previewScale})`,
-                        transformOrigin: 'center',
-                        border: 'none',
-                        pointerEvents: 'none',
-                        overflow: 'hidden'
-                      }}
-                    />
-                  ) : (
-                    <video
-                      src={embedUrl}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      style={{ 
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block'
-                      }}
-                    />
-                  )}
+                <div style={{ width: '100%', height: '100%', position: 'relative', overflow: usesSeparateCards ? 'visible' : 'hidden', borderRadius: '12px' }}>
+                  {renderPreviewMedia()}
                 </div>
               </motion.div>
               <button
@@ -458,10 +490,10 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
           </div>
         </motion.div>
 
-        {/* Optional: Secondary Visual or Detail - Desktop only */}
-        {!isMobile && embedUrl && isActive && (
+        {/* Project preview - Desktop only */}
+        {!isMobile && previewMediaSrc && isActive && !isComingSoon && (
           <motion.div
-            className="cinematic-extra"
+            className={`cinematic-extra${usesSeparateCards ? ' cinematic-extra--cards' : ''}${usesPortraitFrame ? ' cinematic-extra--portrait' : ''}`}
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -472,8 +504,8 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{
-                width: '500px',
-                height: '300px',
+                width: usesSeparateCards ? '680px' : (usesPortraitFrame ? '360px' : '500px'),
+                height: usesSeparateCards ? '420px' : (usesPortraitFrame ? '430px' : '300px'),
                 borderRadius: '16px',
                 display: 'flex',
                 alignItems: 'center',
@@ -492,62 +524,19 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
                 width: '100%',
                 height: '100%',
                 borderRadius: '16px',
-                overflow: 'hidden',
-                backgroundColor: 'rgba(20,20,20,0.5)',
+                overflow: usesSeparateCards ? 'visible' : 'hidden',
+                backgroundColor: usesSeparateCards ? 'transparent' : 'rgba(20,20,20,0.5)',
                 backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+                border: usesSeparateCards ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                boxShadow: usesSeparateCards ? 'none' : '0 20px 40px rgba(0,0,0,0.4)',
                 rotateX,
                 rotateY,
               }}
               whileHover={{ scale: 1.05 }}
             >
-              {/* Display Video if available, otherwise show placeholder */}
-              {embedUrl ? (
-                <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
-                  {isIframeVideoUrl(embedUrl) ? (
-                    <iframe
-                      src={getPreviewEmbedUrl(embedUrl)}
-                      title={videoTitle}
-                      tabIndex={-1}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{ 
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        width: '100%',
-                        height: '100%',
-                        maxWidth: 'none',
-                        transform: `translate(-50%, -50%) scale(${previewScale})`,
-                        transformOrigin: 'center',
-                        border: 'none',
-                        pointerEvents: 'none'
-                      }}
-                    />
-                  ) : (
-                    <video
-                      src={embedUrl}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      style={{ 
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block'
-                      }}
-                    />
-                  )}
-                </div>
-              ) : (
-                <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
-                  <div style={{ fontSize: '4rem', marginBottom: '10px', opacity: 0.3 }}>+</div>
-                  <div>More Details</div>
-                </div>
-              )}
+              <div style={{ width: '100%', height: '100%', position: 'relative', overflow: usesSeparateCards ? 'visible' : 'hidden' }}>
+                {renderPreviewMedia()}
+              </div>
             </motion.div>
             <button
               type="button"

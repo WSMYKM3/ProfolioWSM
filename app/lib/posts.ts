@@ -33,6 +33,12 @@ export interface Post {
   videoTitles?: string[]; // Array of video titles corresponding to videoUrls
   gifUrl?: string; // GIF image URL for cinematic-extra section
   description?: string; // Project description for intro section
+  previewDescription?: string; // Concise copy used only by the Work page carousel
+  previewMedia?: string | string[]; // Local image(s) or looping video used only by the Work page carousel
+  previewPoster?: string; // Poster image shown while a Work page preview video loads
+  previewMediaAlt?: string | string[];
+  previewMediaFit?: 'cover' | 'contain' | Array<'cover' | 'contain'>;
+  previewMediaLayout?: 'slideshow' | 'stack' | 'columns' | 'cards' | 'portrait';
   softwareTools?: string[]; // Array of software tool names (e.g., ["Unity", "Unreal", "Blender"])
   features?: string[]; // Array of feature tags (e.g., ["#XR Hands", "#Trailer Animation"])
   galleryImages?: string[]; // Array of image URLs for the detail view gallery
@@ -64,6 +70,16 @@ export const posts: Post[] = [
     cardDescription: "Turn skipped purchases into credit for later.",
     quality: "high",
     description: "Turn skipped purchases into credit for later.",
+    previewMedia: [
+      "/Couldve/kouScreenshots/record.webp",
+      "/Couldve/kouScreenshots/earn.webp"
+    ],
+    previewMediaAlt: [
+      "Could've quick non-purchase entry screen",
+      "Could've saved-credit confirmation screen"
+    ],
+    previewMediaFit: ["contain", "contain"],
+    previewMediaLayout: "cards",
     shortDescription: "An iOS app that turns skipped purchases into spending credit.",
     softwareTools: ["iOS Swift", "React Native"],
     features: ["Behavioral Finance", "Local-first", "Mobile Product", "SQLite"],
@@ -89,6 +105,8 @@ export const posts: Post[] = [
     quality: "high",
     heroPlaceholder: "Film in progress · video placeholder",
     description: "A 30-second AI-glasses concept spot set in Brighton, where a stolen fish sparks a street-wide chase and one calm wearer never misses the moment.",
+    previewMedia: "/AIGlass/chasing/3.webp",
+    previewMediaAlt: "A Brighton street chase from the It won’t wait concept film",
     features: ["AI Film", "Commercial Concept", "Storyboarding", "Vertical Ad"],
     role: "Director / AI Filmmaker",
     identity: "artist",
@@ -115,6 +133,8 @@ export const posts: Post[] = [
     alternateVideoUrl: "https://www.youtube.com/watch?v=sRn4y9llr-s",
     alternateVideoLabel: "Watch on YouTube",
     description: "A Unity simulation that runs multiple SO-101 digital twins with YOLO vision and records pick data for robotics training.",
+    previewMedia: "/SortingFactory/buildwithgpt.webp",
+    previewMediaAlt: "Sorting Factory robotic arms training with GPT",
     shortDescription: "Parallel SO-101 digital twins for faster robotics data collection.",
     softwareTools: ["Unity6", "Python", "FastAPI", "WebSocket", "REST API", "YOLO"],
     features: ["FastAPI", "YOLO26n", "ByteTrack", "WebSocket", "Multi-arm Robotics", "Real-time Telemetry"],
@@ -143,6 +163,9 @@ export const posts: Post[] = [
     alternateVideoUrl: "https://youtu.be/yvQJhBxugUM",
     alternateVideoLabel: "Watch on YouTube",
     description: "Reroll turns a reference image into an editable iPhone AR scene, then records object edits, camera movement, and spoken direction for AI generation.",
+    previewMedia: "/Reroll/mainpath.webp",
+    previewMediaAlt: "Reroll AR camera path editing interface",
+    previewMediaFit: "cover",
     softwareTools: ["Python", "SAM 3", "Swift", "Unity"],
     features: ["AI Filmmaking", "Mobile AR", "Previsualization", "Computer Vision"],
     role: "Creative Technologist / AI & AR Developer",
@@ -172,6 +195,9 @@ export const posts: Post[] = [
     videoTitle: "Datnie- XR Dating app",
     gifUrl: "/gifs/datnie.gif", // GIF for cinematic-extra section
     description: "Datnie matches you by learning both your and your crush’s vibe from past conversations, so there’s no need to repeat yourself.",
+    previewMedia: "/webm/Datnie/pivot.webm",
+    previewPoster: "/webm/Datnie/pivot-thumb.jpg",
+    previewMediaAlt: "Datnie profile-card pivot interaction",
     softwareTools: ["Unity6", "Unreal Engine", "Blender"],
     features: ["Mixed Reality", "Spatial Design", "XR Hands"],
     galleryImages: [
@@ -216,6 +242,10 @@ export const posts: Post[] = [
       "Fullplay video"
     ],
     description: "Signie is an immersive ASL learning and real-time translation system powered by hand tracking, micro-gestures, and AI feedback. It evolved from concept validation to interactive learning experiences, and ultimately to AI-glasses-based live translation.",
+    previewDescription: "Built with Unity hand tracking, micro-gestures, and AI feedback to teach ASL and support real-time translation.",
+    previewMedia: "/webm/Signie/test1.webm",
+    previewPoster: "/webm/Signie/test1-thumb.jpg",
+    previewMediaAlt: "Signie ASL gesture learning test",
     softwareTools: ["Unity6", "Blender"],
     features: ["Hand Tracking", "Gesture Recognition", "Micro-Gestures", "Voice-to-Text", "Virtual Guide", "Animation State Machine"],
     role: "XR developer",
@@ -250,6 +280,9 @@ export const posts: Post[] = [
     videoTitle: "I AND AI: MIRROR",
     gifUrl: "/gifs/tall-project.gif", // GIF for cinematic-extra section
     description: "AI can be a collaborator or a mirror—mentor, listener, lover. Before AI becomes anything, we assign it an \"AI\"dentity. What if identity itself is co-authored between \"I\" and \"AI\"? I & AI: Mirror is an immersive experience exploring human–AI intimacy. Audiences engage with a generative mirror-self that listens, learns, and reflects their presence, transforming interactions into real-time, shared expressions of identity.",
+    previewDescription: "Built with Unreal Engine, TouchDesigner, and Python to create a real-time AI mirror that listens, responds, and reflects the viewer.",
+    previewMedia: "/IandAI/speak.webp",
+    previewMediaAlt: "I AND AI: MIRROR live performance",
     softwareTools: ["Unreal Engine", "Touchdesigner", "Blender", "Python"],
     features: ["Real-time Metahuman lipsync", "Touchdesigner-UE communication"],
     role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)",
@@ -287,6 +320,9 @@ export const posts: Post[] = [
     videoTitle: "Behind the scenes",
     gifUrl: "/gifs/video-showcase.gif", // GIF for cinematic-extra section
     description: "A comprehensive video production showcasing motion capture and Metahuman animation.",
+    previewMedia: "/webm/MotionCapture/motioncapture.webm",
+    previewPoster: "/webm/MotionCapture/motioncapture-thumb.jpg",
+    previewMediaAlt: "Real-time OptiTrack motion capture driving an Unreal Engine character",
     softwareTools: ["Unreal Engine", "Motion Builder", "Optitrack Motion Capture"],
     features: ["Motion Capture", "Metahuman Animation"],
     role: "Motion Capture, Metahuman Prototyper, Animator",
@@ -308,6 +344,9 @@ export const posts: Post[] = [
     cardDescription: "AI Shopping Assistant",
     quality: "medium",
     description: "AI assistant for customer purchasing",
+    previewMedia: "/TheToolbox/webm/aiassistant.webm",
+    previewPoster: "/TheToolbox/webm/aiassistant-thumb.jpg",
+    previewMediaAlt: "The Tool Box mixed-reality AI shopping assistant",
     softwareTools: ["Unity6", "Blender"],
     features: ["AI Assistant", "XR Shopping Guide"],
     role: "Team leader of 5, XR developer",

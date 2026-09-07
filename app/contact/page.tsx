@@ -2,15 +2,53 @@
 
 import TopNav from '@/app/components/TopNav';
 import { motion } from 'framer-motion';
+import { FormEvent, useState } from 'react';
+
+type SubmitState = 'idle' | 'sending' | 'success' | 'error';
+
+const CONTACT_ENDPOINT = 'https://formsubmit.co/ajax/simingvv@gmail.com';
 
 export default function Contact() {
+  const [formStatus, setFormStatus] = useState<SubmitState>('idle');
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+
+    if (form.get('_honey')) return;
+
+    setFormStatus('sending');
+
+    try {
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: form,
+      });
+      const result = await response.json().catch(() => null);
+      const wasAccepted = result?.success === true || result?.success === 'true';
+
+      if (!response.ok || !wasAccepted) {
+        throw new Error('Contact form submission failed');
+      }
+
+      formElement.reset();
+      setFormStatus('success');
+    } catch {
+      setFormStatus('error');
+    }
+  };
+
   return (
     <div className="layout">
       <TopNav />
       <main className="placeholder-content contact-page">
         <div className="contact-header">
           <h1>Contact</h1>
-          <p className="contact-email">simingvv@gmail.com</p>
+          <a className="contact-email" href="mailto:simingvv@gmail.com">
+            simingvv@gmail.com
+          </a>
         </div>
         <div className="contact-icons">
           <motion.a
@@ -56,6 +94,75 @@ export default function Contact() {
             </svg>
           </motion.a>
         </div>
+
+        <motion.section
+          className="contact-form-section"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.15 }}
+          aria-labelledby="contact-form-title"
+        >
+          <div className="contact-form-intro">
+            <p className="contact-form-eyebrow">Have a project in mind?</p>
+            <h2 id="contact-form-title">Send me a message</h2>
+            <p>I&apos;d love to hear what you&apos;re working on. Your message will be delivered directly to my inbox.</p>
+          </div>
+
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <input
+              className="contact-form-honey"
+              type="text"
+              name="_honey"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
+            <input type="hidden" name="_subject" value="New message from simingwang.com" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_url" value="https://simingwang.com/contact" />
+
+            <div className="contact-form-row">
+              <label className="contact-field">
+                <span>Name</span>
+                <input name="name" type="text" autoComplete="name" placeholder="Your name" required />
+              </label>
+              <label className="contact-field">
+                <span>Email</span>
+                <input name="email" type="email" autoComplete="email" placeholder="you@example.com" required />
+              </label>
+            </div>
+
+            <label className="contact-field">
+              <span>Subject</span>
+              <input name="subject" type="text" placeholder="What would you like to talk about?" required />
+            </label>
+
+            <label className="contact-field">
+              <span>Message</span>
+              <textarea name="message" rows={6} placeholder="Tell me a little about your idea..." required />
+            </label>
+
+            <div className="contact-form-footer">
+              <button className="contact-submit" type="submit" disabled={formStatus === 'sending'}>
+                {formStatus === 'sending' ? 'Sending…' : 'Send message'}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+              <div className="contact-form-status" aria-live="polite">
+                {formStatus === 'success' && (
+                  <p className="contact-form-status-success">Message sent — thank you. I&apos;ll reply as soon as I can.</p>
+                )}
+                {formStatus === 'error' && (
+                  <p className="contact-form-status-error">
+                    I couldn&apos;t send this message.{' '}
+                    <a href="mailto:simingvv@gmail.com">Email me directly</a>.
+                  </p>
+                )}
+              </div>
+            </div>
+          </form>
+        </motion.section>
       </main>
     </div>
   );

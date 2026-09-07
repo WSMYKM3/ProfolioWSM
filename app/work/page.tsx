@@ -9,28 +9,32 @@ import Modal from '@/app/components/Modal';
 import { workPosts, Post } from '@/app/lib/posts';
 import { shouldNavigateToPage, getPostPageRoute } from '@/app/lib/navigation';
 
-const workPagePosts: Post[] = workPosts.map((post) =>
-  post.id === 'post-7'
-    ? { ...post, thumbnail: '/Reroll/thumbnail.webp' }
-    : post
+const workPageOrder = [
+  'post-7',  // Reroll
+  'post-2',  // Signie
+  'post-1',  // Datnie
+  'post-8',  // Sorting Factory
+  'post-10', // Could've
+  'post-3',  // I AND AI: MIRROR
+  'post-9',  // It won't wait
+  'post-4',  // The Shadow of Horizon
+  'post-5',  // The Tool Box
+] as const;
+
+const workPageOrderIndex = new Map<string, number>(
+  workPageOrder.map((id, index) => [id, index]),
 );
 
-function movePostAfter(items: Post[], movingId: string, targetId: string): Post[] {
-  const movingPost = items.find((post) => post.id === movingId);
-  if (!movingPost) return items;
-
-  const remainingPosts = items.filter((post) => post.id !== movingId);
-  const targetIndex = remainingPosts.findIndex((post) => post.id === targetId);
-  if (targetIndex === -1) return items;
-
-  return [
-    ...remainingPosts.slice(0, targetIndex + 1),
-    movingPost,
-    ...remainingPosts.slice(targetIndex + 1),
-  ];
-}
-
-const workRailPosts = movePostAfter(workPagePosts, 'post-9', 'post-3');
+const workRailPosts: Post[] = workPosts
+  .map((post) =>
+    post.id === 'post-7'
+      ? { ...post, thumbnail: '/Reroll/thumbnail.webp' }
+      : post
+  )
+  .sort((a, b) =>
+    (workPageOrderIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+    (workPageOrderIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+  );
 
 export default function Work() {
   const router = useRouter();
@@ -101,11 +105,7 @@ export default function Work() {
             ) : null
           )}
         />
-        <section className="work-project-rail" aria-labelledby="selected-work-title">
-          <div className="work-project-rail-heading">
-            <h2 id="selected-work-title">Selected work</h2>
-            <p>Scroll or drag to explore</p>
-          </div>
+        <section className="work-project-rail" aria-label="Project selection">
           <HorizontalPostGrid
             posts={workRailPosts}
             onPostClick={handleProjectCardClick}

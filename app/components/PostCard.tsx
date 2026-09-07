@@ -45,7 +45,8 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
   const quality = 'quality' in post ? post.quality : undefined;
   const qualityClass = quality ? `post-card-${quality}` : '';
   const activeClass = isActive ? 'is-active' : '';
-  const cardClassName = `post-card ${qualityClass} ${activeClass} ${isComingSoon ? 'post-card-coming-soon' : ''}`.trim();
+  const selectedClass = isViewed ? 'is-selected' : '';
+  const cardClassName = `post-card ${qualityClass} ${activeClass} ${selectedClass} ${isComingSoon ? 'post-card-coming-soon' : ''}`.trim();
   
   // Generate unique checkbox ID if not provided
   const toggleId = checkboxId || `toggle-${post.id}`;
@@ -79,6 +80,9 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
           )}
         </div>
         {isComingSoon && <span className="post-card-status">Coming Soon</span>}
+        {isViewed && (
+          <span className="post-card-selection-hint">Selected — click again</span>
+        )}
         <div className="bottom">
           <i className="dot"></i>
         </div>
@@ -87,7 +91,7 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
 
   if (isComingSoon) {
     return (
-      <article className={cardClassName} aria-label={`${post.title}, Coming Soon`}>
+      <article className={cardClassName} data-post-id={post.id} aria-label={`${post.title}, Coming Soon`}>
         {cardBody}
       </article>
     );
@@ -97,6 +101,7 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
     <label
       htmlFor={toggleId}
       className={cardClassName}
+      data-post-id={post.id}
       onClick={(event) => {
         if (preventNativeToggle) {
           event.preventDefault();
@@ -112,6 +117,7 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
       role="button"
       tabIndex={0}
       aria-pressed={isViewed}
+      aria-label={isViewed ? `${post.title}. Selected. Click again to open.` : post.title}
     >
       <input
         type="checkbox"

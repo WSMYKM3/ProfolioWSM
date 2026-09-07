@@ -42,6 +42,22 @@ export default function HorizontalPostGrid({
     }
   }, [posts]);
 
+  useEffect(() => {
+    if (!selectedPostId || !scrollContainerRef.current) return;
+
+    const selectedCard = scrollContainerRef.current.querySelector<HTMLElement>(
+      `[data-post-id="${selectedPostId}"]`
+    );
+    if (!selectedCard) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    selectedCard.scrollIntoView({
+      behavior: reduceMotion ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    });
+  }, [selectedPostId]);
+
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
@@ -64,11 +80,6 @@ export default function HorizontalPostGrid({
 
   return (
     <div className="horizontal-post-grid-container">
-      <div className="horizontal-post-grid-guide" aria-hidden="true">
-        <span className="horizontal-post-grid-guide-node horizontal-post-grid-guide-node-start" />
-        <span className="horizontal-post-grid-guide-line" />
-        <span className="horizontal-post-grid-guide-node horizontal-post-grid-guide-node-end" />
-      </div>
       {canScrollLeft && (
         <button 
           className="horizontal-post-grid-arrow horizontal-post-grid-arrow-left"
