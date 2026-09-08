@@ -406,26 +406,10 @@ export const posts: Post[] = [
   }
 ];
 
-export const placeholderPosts: Post[] = [
-  {
-    id: 'upcoming-1',
-    title: 'Upcoming Project 01',
-    thumbnail: '',
-    file: '',
-    date: 'Coming Soon',
-    tags: [],
-    cardDescription: 'In Development',
-    description: 'Project details will be added soon.',
-    identity: 'creative-technologist',
-    status: 'coming-soon',
-  },
-];
-
 export const workPosts: Post[] = [
   ...posts.filter((post) => post.id === 'post-7'),
   ...posts.filter((post) => post.id === 'post-9'),
   ...posts.filter((post) => post.id !== 'post-7' && post.id !== 'post-6' && post.id !== 'post-9'),
-  ...placeholderPosts,
 ];
 
 export function getPostById(id: string): Post | undefined {

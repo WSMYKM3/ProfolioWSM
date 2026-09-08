@@ -11,7 +11,7 @@
 
 .background,
 .wash {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
 }
@@ -323,6 +323,16 @@
   text-wrap: balance;
 }
 
+.projectPreviewCompact {
+  width: clamp(190px, 17vw, 270px);
+}
+
+.projectPreviewCompact .projectPreviewTitle {
+  font-size: clamp(23px, 2.15vw, 36px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
 .glassStage {
   position: relative;
   min-height: 100svh;
@@ -496,8 +506,8 @@
   position: relative;
   width: min(54vw, 900px);
   min-width: 700px;
-  height: min(85svh, 840px);
-  min-height: 650px;
+  height: min(90svh, 880px);
+  min-height: 700px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: clamp(10px, 1.35vh, 15px);
@@ -527,8 +537,8 @@
 }
 
 .glassPanelCreative {
-  height: auto;
-  min-height: min(94svh, 920px);
+  height: min(84svh, 760px);
+  min-height: min(600px, calc(100svh - 96px));
 }
 
 .glassPanel::before,
@@ -586,13 +596,16 @@
 
 .projectGalleryCreative {
   display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   grid-template-rows: auto auto;
   align-content: start;
   gap: clamp(8px, 0.8vw, 12px);
+  transform: translate3d(var(--card-x), var(--card-y), 34px);
+  transition: transform 620ms cubic-bezier(0.2, 0.75, 0.22, 1);
 }
 
 .projectGalleryCreative > .projectGrid {
-  height: auto;
+  display: contents;
 }
 
 .glassHeader {
@@ -701,13 +714,11 @@
 }
 
 .projectGridCreative {
-  grid-template-rows: repeat(2, auto);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: auto auto;
+  align-content: start;
+  width: 100%;
 }
-
-.projectGridCreative .projectCard:nth-child(1) { grid-column: 1 / 4; grid-row: 1; }
-.projectGridCreative .projectCard:nth-child(2) { grid-column: 4 / 7; grid-row: 1; }
-.projectGridCreative .projectCard:nth-child(3) { grid-column: 1 / 4; grid-row: 2; }
-.projectGridCreative .projectCard:nth-child(4) { grid-column: 4 / 7; grid-row: 2; }
 
 .projectGridCreative .projectCard:nth-child(n) {
   align-self: start;
@@ -715,6 +726,11 @@
   height: auto;
   aspect-ratio: 16 / 9;
 }
+
+.projectGridCreative .projectCard:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+.projectGridCreative .projectCard:nth-child(2) { grid-column: 3 / 5; grid-row: 1; }
+.projectGridCreative .projectCard:nth-child(3) { grid-column: 5 / 7; grid-row: 1; }
+.projectGridCreative .projectCard:nth-child(4) { grid-column: 1 / 4; grid-row: 2; }
 
 .projectGridArtist {
   grid-template-rows: auto;
@@ -729,6 +745,7 @@
 
 .aiFilmSection {
   position: relative;
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   width: 100%;
@@ -738,6 +755,19 @@
   padding-top: clamp(7px, 0.7vw, 10px);
   border-top: 1px solid rgba(var(--white), 0.32);
   transform: translate3d(var(--card-x), var(--card-y), 28px);
+}
+
+.projectGalleryCreative .aiFilmOngoingCard {
+  width: 100%;
+  max-width: none;
+}
+
+.projectGalleryCreative .aiFilmSection {
+  grid-column: 4 / 7;
+  grid-row: 2;
+  align-self: start;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .aiFilmHeader {
@@ -970,7 +1000,7 @@
     0 18px 35px rgba(0, 0, 0, 0.2),
     0 0 0 1px rgba(255, 255, 255, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  transform: translate3d(0, -5px, 40px) scale(1.025);
+  transform: translate3d(0, -4px, 40px);
 }
 
 .projectCard:focus-visible {
@@ -1328,12 +1358,21 @@
     transform: none !important;
   }
 
+  .projectGridCreative {
+    width: 100%;
+  }
+
   .projectGallery > .projectGrid {
     height: auto;
   }
 
   .projectGalleryCreative {
     display: block;
+    transform: none;
+  }
+
+  .projectGalleryCreative > .projectGrid {
+    display: grid;
   }
 
   .projectGalleryCreative .aiFilmSection {
@@ -1347,6 +1386,10 @@
   .aiFilmOngoingCard {
     width: min(50%, 340px);
     min-height: 0;
+  }
+
+  .projectGalleryCreative .aiFilmOngoingCard {
+    width: min(50%, 340px);
   }
 
   .projectCard,
@@ -1433,6 +1476,10 @@
     width: 100%;
   }
 
+  .projectGalleryCreative .aiFilmOngoingCard {
+    width: 100%;
+  }
+
   .glassHeader { padding-inline: 3px; }
   .glassHeader h1 { font-size: clamp(29px, 10vw, 42px); }
   .eyebrow { font-size: 10px; }
@@ -1460,6 +1507,11 @@
   .projectGridTechnologist .projectCard:first-child {
     grid-column: 1;
     min-height: 205px;
+  }
+
+  .projectGridCreative .projectCard:nth-child(n) {
+    flex-basis: 100%;
+    width: 100%;
   }
 
   .projectGridTechnologist .projectCard:first-child { min-height: 280px; }

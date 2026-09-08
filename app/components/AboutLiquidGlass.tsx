@@ -31,7 +31,6 @@ const projectPresentation: Record<string, ProjectPresentation> = {
   'post-4': { imagePosition: 'center' },
   'post-5': { imagePosition: 'center' },
   'post-6': { imagePosition: 'center' },
-  'upcoming-1': { imagePosition: 'center' },
 };
 
 const identityOptions: Array<{
@@ -405,7 +404,9 @@ export default function AboutLiquidGlass() {
 
         <section className={styles.glassStage} aria-label="Selected portfolio projects">
           <aside
-            className={`${styles.projectPreview} ${activeProject ? styles.projectPreviewVisible : ''}`}
+            className={`${styles.projectPreview} ${activeProject ? styles.projectPreviewVisible : ''} ${
+              activeProject?.id === 'post-4' ? styles.projectPreviewCompact : ''
+            }`}
             aria-live="polite"
             aria-hidden={!activeProject}
           >
