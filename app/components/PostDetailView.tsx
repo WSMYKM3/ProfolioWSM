@@ -211,10 +211,22 @@ export default function PostDetailView({ post, isPageView = false }: PostDetailV
                 <span className="ed-meta__label">Role</span>
                 <p className="ed-meta__value">{post.role || 'Creative Technologist'}</p>
               </div>
+              {post.team && (
+                <div className="ed-hero__fact" data-anim="slide-up">
+                  <span className="ed-meta__label">Team</span>
+                  <p className="ed-meta__value">{post.team}</p>
+                </div>
+              )}
               <div className="ed-hero__fact" data-anim="slide-up">
                 <span className="ed-meta__label">Timeline</span>
                 <p className="ed-meta__value">{post.date}</p>
               </div>
+              {post.outcome && (
+                <div className="ed-hero__fact ed-hero__fact--outcome" data-anim="slide-up">
+                  <span className="ed-meta__label">Outcome</span>
+                  <p className="ed-meta__value">{post.outcome}</p>
+                </div>
+              )}
               {post.softwareTools && post.softwareTools.length > 0 && (
                 <div className="ed-hero__fact" data-anim="slide-up">
                   <span className="ed-meta__label">Tools</span>

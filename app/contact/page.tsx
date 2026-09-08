@@ -13,6 +13,7 @@ export default function Contact() {
           <a className="contact-email" href="mailto:simingvv@gmail.com">
             simingvv@gmail.com
           </a>
+          <p className="contact-note">Open to AI product roles and creative technology collaborations.</p>
         </div>
         <div className="contact-icons">
           <motion.a

@@ -7,14 +7,14 @@ import PostCard from './PostCard';
 interface HorizontalPostGridProps {
   posts: Post[];
   onPostClick: (post: Post, index: number) => void;
-  selectedPostId?: string | null;
+  onPostHover?: (post: Post, index: number) => void;
   activeIndex?: number;
 }
 
 export default function HorizontalPostGrid({ 
   posts, 
   onPostClick, 
-  selectedPostId = null,
+  onPostHover,
   activeIndex = 0
 }: HorizontalPostGridProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -41,22 +41,6 @@ export default function HorizontalPostGrid({
       };
     }
   }, [posts]);
-
-  useEffect(() => {
-    if (!selectedPostId || !scrollContainerRef.current) return;
-
-    const selectedCard = scrollContainerRef.current.querySelector<HTMLElement>(
-      `[data-post-id="${selectedPostId}"]`
-    );
-    if (!selectedCard) return;
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    selectedCard.scrollIntoView({
-      behavior: reduceMotion ? 'auto' : 'smooth',
-      block: 'nearest',
-      inline: 'center',
-    });
-  }, [selectedPostId]);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -98,8 +82,7 @@ export default function HorizontalPostGrid({
             key={post.id}
             post={post}
             onClick={() => onPostClick(post, index)}
-            isViewed={selectedPostId === post.id}
-            checkboxId={`toggle-${post.id}`}
+            onPreview={() => onPostHover?.(post, index)}
             isActive={index === activeIndex}
             indexLabel={String(index + 1).padStart(2, '0')}
             preventNativeToggle

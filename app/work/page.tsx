@@ -12,8 +12,8 @@ import { shouldNavigateToPage, getPostPageRoute } from '@/app/lib/navigation';
 const workPageOrder = [
   'post-7',  // Reroll
   'post-2',  // Signie
-  'post-1',  // Datnie
   'post-8',  // Sorting Factory
+  'post-1',  // Datnie
   'post-10', // Could've
   'post-3',  // I AND AI: MIRROR
   'post-9',  // It won't wait
@@ -40,7 +40,6 @@ export default function Work() {
   const router = useRouter();
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const handlePostClick = (post: Post) => {
@@ -51,21 +50,6 @@ export default function Work() {
     } else {
       setSelectedPost(post);
       setIsModalOpen(true);
-    }
-  };
-
-  const handleProjectCardClick = (post: Post) => {
-    if (post.status === 'coming-soon') return;
-
-    if (selectedCardId === post.id) {
-      handlePostClick(post);
-      return;
-    }
-
-    setSelectedCardId(post.id);
-    const carouselIndex = workRailPosts.findIndex((item) => item.id === post.id);
-    if (carouselIndex !== -1) {
-      setActiveIndex(carouselIndex);
     }
   };
 
@@ -108,8 +92,8 @@ export default function Work() {
         <section className="work-project-rail" aria-label="Project selection">
           <HorizontalPostGrid
             posts={workRailPosts}
-            onPostClick={handleProjectCardClick}
-            selectedPostId={selectedCardId}
+            onPostClick={handlePostClick}
+            onPostHover={(_, index) => setActiveIndex(index)}
             activeIndex={activeRailIndex}
           />
         </section>

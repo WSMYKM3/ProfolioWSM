@@ -1746,6 +1746,15 @@ header h1 {
     color: #ffffff;
 }
 
+.contact-note {
+    max-width: 520px;
+    margin: 16px auto 0;
+    color: #969696;
+    font-family: var(--font-inter), sans-serif;
+    font-size: clamp(0.82rem, 1.3vw, 1rem);
+    line-height: 1.55;
+}
+
 .contact-icons {
     display: flex;
     justify-content: center;
@@ -2375,6 +2384,14 @@ header h1 {
     transition: transform 0.3s ease;
     transform: scale(0.9);
     backface-visibility: visible;
+}
+
+.horizontal-post-grid button.post-card {
+    padding: 0;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
 }
 
 .horizontal-post-grid .post-card:hover {

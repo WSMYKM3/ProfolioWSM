@@ -7,6 +7,7 @@ import { DailyPracticePost } from '@/app/lib/dailyPractice';
 interface PostCardProps {
   post: Post | DailyPracticePost;
   onClick: () => void;
+  onPreview?: () => void;
   isViewed?: boolean;
   checkboxId?: string;
   isActive?: boolean;
@@ -33,7 +34,7 @@ function getImageSrc(src: string): string {
   return src.startsWith('/') ? `${basePath}${src}` : `${basePath}/${src}`;
 }
 
-export default function PostCard({ post, onClick, isViewed = false, checkboxId, isActive = false, indexLabel, preventNativeToggle = false }: PostCardProps) {
+export default function PostCard({ post, onClick, onPreview, isViewed = false, checkboxId, isActive = false, indexLabel, preventNativeToggle = false }: PostCardProps) {
   const formattedDate = formatDate(post.date);
   const thumbnail = 'compactThumbnail' in post && post.compactThumbnail
     ? post.compactThumbnail
@@ -91,9 +92,30 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
 
   if (isComingSoon) {
     return (
-      <article className={cardClassName} data-post-id={post.id} aria-label={`${post.title}, Coming Soon`}>
+      <article
+        className={cardClassName}
+        data-post-id={post.id}
+        aria-label={`${post.title}, Coming Soon`}
+        onMouseEnter={onPreview}
+      >
         {cardBody}
       </article>
+    );
+  }
+
+  if (preventNativeToggle) {
+    return (
+      <button
+        type="button"
+        className={cardClassName}
+        data-post-id={post.id}
+        onClick={onClick}
+        onMouseEnter={onPreview}
+        onFocus={onPreview}
+        aria-label={post.title}
+      >
+        {cardBody}
+      </button>
     );
   }
 
@@ -102,6 +124,8 @@ export default function PostCard({ post, onClick, isViewed = false, checkboxId, 
       htmlFor={toggleId}
       className={cardClassName}
       data-post-id={post.id}
+      onMouseEnter={onPreview}
+      onFocus={onPreview}
       onClick={(event) => {
         if (preventNativeToggle) {
           event.preventDefault();

@@ -35,7 +35,7 @@ const projectPresentation: Record<string, ProjectPresentation> = {
 };
 
 const identityOptions: Array<{
-  id: ProjectIdentity;
+  id: Extract<ProjectIdentity, 'builder' | 'creative-technologist'>;
   label: string;
   description: string;
   colorClass: string;
@@ -49,16 +49,21 @@ const identityOptions: Array<{
   {
     id: 'creative-technologist',
     label: 'Creative Technologist',
-    description: 'I turn technology into interactive experiences.',
+    description: 'I use creative technology to build interactive experiences.',
     colorClass: styles.identityButtonRed,
   },
-  {
-    id: 'artist',
-    label: 'Artist',
-    description: 'I use image and motion to explore new ideas.',
-    colorClass: styles.identityButtonYellow,
-  },
 ];
+
+type ProjectView = 'featured' | Extract<ProjectIdentity, 'builder' | 'creative-technologist'>;
+
+const featuredOption = {
+  id: 'featured' as const,
+  label: 'Featured',
+  description: 'Three projects that best represent my AI product, XR, and robotics work.',
+  colorClass: styles.identityButtonYellow,
+};
+
+const featuredProjectIds = ['post-7', 'post-2', 'post-8'] as const;
 
 const studyStripRows = [
   [
@@ -80,17 +85,27 @@ export default function AboutLiquidGlass() {
   const panelRef = useRef<HTMLDivElement>(null);
   const studyStripRef = useRef<HTMLDivElement>(null);
   const [activeProject, setActiveProject] = useState<Post | null>(null);
-  const [activeIdentity, setActiveIdentity] = useState<ProjectIdentity>('builder');
+  const [activeView, setActiveView] = useState<ProjectView>('featured');
 
-  const displayedProjects = workPosts.filter(
-    (post) => post.identity === activeIdentity && post.id !== 'post-9'
-  );
+  const displayedProjects = activeView === 'featured'
+    ? featuredProjectIds
+        .map((id) => workPosts.find((post) => post.id === id))
+        .filter((post): post is Post => Boolean(post))
+    : workPosts.filter((post) => {
+        if (post.id === 'post-9') return false;
+        if (activeView === 'creative-technologist') {
+          return post.identity === 'creative-technologist' || post.identity === 'artist';
+        }
+        return post.identity === 'builder';
+      });
   const aiFilmProject = workPosts.find((post) => post.id === 'post-9');
-  const activeIdentityOption = identityOptions.find((option) => option.id === activeIdentity)!;
+  const activeViewOption = activeView === 'featured'
+    ? featuredOption
+    : identityOptions.find((option) => option.id === activeView)!;
 
-  const handleIdentityChange = (identity: ProjectIdentity) => {
+  const handleViewChange = (view: ProjectView) => {
     setActiveProject(null);
-    setActiveIdentity(identity);
+    setActiveView(view);
   };
 
   useEffect(() => {
@@ -330,14 +345,18 @@ export default function AboutLiquidGlass() {
         <div className={styles.wash} aria-hidden="true" />
 
         <section className={styles.homeIntro} aria-labelledby="home-intro-title">
+          <div className={styles.homeIntroMeta}>
+            <p className={styles.homeIntroLocation}>Based in Shanghai</p>
+            <p className={styles.homeIntroRole}>AI Builder · Creative Technologist</p>
+          </div>
           <h2 id="home-intro-title">
-            <span>Building with AI.</span>
-            <span>Thinking through creativity.</span>
+            <span>Building useful products with AI.</span>
+            <span>Creative technology, applied.</span>
           </h2>
           <p className={styles.homeIntroText}>
-            I combine engineering, design, and storytelling to turn emerging technology into
-            playful, human-centered products and experiences.
+            I turn real user and creator-workflow problems into working AI products and interactive prototypes.
           </p>
+          <p className={styles.trustLine}>Hackathon Winner · OpenAI Build Week · AWE USA Presenter</p>
         </section>
 
         <aside className={styles.studyBlock} aria-label="Portfolio image highlights">
@@ -397,39 +416,51 @@ export default function AboutLiquidGlass() {
             <h2 className={styles.projectPreviewTitle}>{activeProject?.title ?? ''}</h2>
           </aside>
 
-          <div className={styles.glassPanel} ref={panelRef}>
+          <div
+            className={`${styles.glassPanel} ${activeView === 'creative-technologist' ? styles.glassPanelCreative : ''}`}
+            ref={panelRef}
+          >
             <div className={styles.glassShine} aria-hidden="true" />
 
             <header className={styles.glassHeader}>
               <div className={styles.headerMain}>
-                <div className={styles.headerCopy}>
-                  <p className={styles.eyebrow}>AI-Native Builder / Creative Technologist</p>
-                  <h1>Siming Wang</h1>
-                </div>
-
-                <div className={`${styles.identityColumn} ${activeIdentityOption.colorClass}`}>
+                <div className={`${styles.identityColumn} ${activeViewOption.colorClass}`}>
                   <div className={styles.identitySwitcher} aria-label="Filter projects by identity">
+                    <button
+                      type="button"
+                      className={`${styles.featuredButton} ${activeView === 'featured' ? styles.featuredButtonActive : ''}`}
+                      aria-pressed={activeView === 'featured'}
+                      aria-controls="identity-description project-gallery"
+                      onClick={() => handleViewChange('featured')}
+                    >
+                      Featured
+                    </button>
                     {identityOptions.map((option) => (
                       <button
                         key={option.id}
                         type="button"
-                        className={`${styles.identityButton} ${option.colorClass} ${activeIdentity === option.id ? styles.identityButtonActive : ''}`}
-                        aria-pressed={activeIdentity === option.id}
+                        className={`${styles.identityButton} ${option.colorClass} ${activeView === option.id ? styles.identityButtonActive : ''}`}
+                        aria-pressed={activeView === option.id}
                         aria-controls="identity-description project-gallery"
-                        onClick={() => handleIdentityChange(option.id)}
+                        onClick={() => handleViewChange(option.id)}
                       >
                         {option.label}
                       </button>
                     ))}
                   </div>
-                  <p
-                    id="identity-description"
-                    key={activeIdentity}
-                    className={styles.identityDescription}
-                    aria-live="polite"
-                  >
-                    {activeIdentityOption.description}
-                  </p>
+                  <div className={styles.headerLowerRow}>
+                    <div className={styles.headerCopy}>
+                      <h1>Siming Wang</h1>
+                    </div>
+                    <p
+                      id="identity-description"
+                      key={activeView}
+                      className={styles.identityDescription}
+                      aria-live="polite"
+                    >
+                      {activeViewOption.description}
+                    </p>
+                  </div>
                 </div>
               </div>
               <p className={styles.edition} aria-label="Portfolio edition 2026">@26</p>
@@ -437,17 +468,17 @@ export default function AboutLiquidGlass() {
 
             <div
               id="project-gallery"
-              className={`${styles.projectGallery} ${activeIdentity === 'artist' ? styles.projectGalleryArtist : ''}`}
+              className={`${styles.projectGallery} ${activeView === 'creative-technologist' ? styles.projectGalleryCreative : ''}`}
             >
               <div
                 className={`${styles.projectGrid} ${
-                  activeIdentity === 'artist'
-                    ? styles.projectGridArtist
-                    : activeIdentity === 'builder'
+                  activeView === 'featured'
+                    ? styles.projectGridFeatured
+                    : activeView === 'builder'
                       ? styles.projectGridBuilder
-                      : styles.projectGridTechnologist
+                      : styles.projectGridCreative
                 }`}
-                aria-label={`${activeIdentityOption.label} project gallery`}
+                aria-label={`${activeViewOption.label} project gallery`}
               >
                 {displayedProjects.map((post, index) => {
                   const presentation = projectPresentation[post.id];
@@ -475,9 +506,7 @@ export default function AboutLiquidGlass() {
                         />
                       )}
                       <span className={styles.projectVeil} aria-hidden="true" />
-                      <span className={styles.projectNumber}>{String(index + 1).padStart(2, '0')}</span>
                       <span className={styles.projectContent}>
-                        <span className={styles.projectCategory}>{post.cardDescription}</span>
                         <span className={styles.projectTitle} aria-label={post.title}>
                           {post.id === 'post-10' ? (
                             <>
@@ -486,9 +515,6 @@ export default function AboutLiquidGlass() {
                               <span aria-hidden="true">’ve</span>
                             </>
                           ) : post.title}
-                        </span>
-                        <span className={styles.projectCta} aria-hidden="true">
-                          {isComingSoon ? 'Coming Soon' : 'View project'}
                         </span>
                       </span>
                     </>
@@ -528,7 +554,7 @@ export default function AboutLiquidGlass() {
                 })}
               </div>
 
-              {activeIdentity === 'artist' && aiFilmProject && (
+              {activeView === 'creative-technologist' && aiFilmProject && (
                 <section className={styles.aiFilmSection} aria-labelledby="ai-film-ads-title">
                   <div className={styles.aiFilmHeader}>
                     <div>
@@ -553,12 +579,9 @@ export default function AboutLiquidGlass() {
                       alt=""
                       loading="lazy"
                     />
-                    <span className={styles.aiFilmProjectNumber}>01</span>
                     <span className={styles.aiFilmProjectCopy}>
                       <span>{aiFilmProject.title}</span>
-                      <small>{aiFilmProject.subtitle}</small>
                     </span>
-                    <span className={styles.aiFilmProjectMark} aria-hidden="true">↗</span>
                   </Link>
                 </section>
               )}

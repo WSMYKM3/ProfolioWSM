@@ -43,6 +43,8 @@ export interface Post {
   features?: string[]; // Array of feature tags (e.g., ["#XR Hands", "#Trailer Animation"])
   galleryImages?: string[]; // Array of image URLs for the detail view gallery
   role?: string; // Project contribution/role (e.g., "UX/XR Lead")
+  team?: string; // Optional project team summary
+  outcome?: string; // Concise, recruiter-facing project result
   achievement?: string; // Project achievement or recognition (e.g., "AWE 2025 USA presentation")
   stage3VideoUrl?: string; // Stage 3 video URL for Signie project
   linkedInUrl?: string; // LinkedIn post URL for embedding
@@ -99,9 +101,9 @@ export const posts: Post[] = [
     subtitle: "AI Glass Ads",
     thumbnail: "/AIGlass/aiglassthumb.webp",
     file: "post-9",
-    date: "Ongoing · 30 sec TikTok / Reels / Shorts",
+    date: "Ongoing · 30-second social film",
     tags: ["ai", "film", "advertising"],
-    cardDescription: "AI Glass Ads(AI Generative)",
+    cardDescription: "AI Glass Ads (AI-Generated)",
     quality: "high",
     heroPlaceholder: "Film in progress · video placeholder",
     description: "A 30-second AI-glasses concept spot set in Brighton, where a stolen fish sparks a street-wide chase and one calm wearer never misses the moment.",
@@ -124,7 +126,7 @@ export const posts: Post[] = [
     thumbnail: "/SortingFactory/thumb5.webp",
     aboutThumbnail: "/SortingFactory/thumb5.webp",
     file: "post-8",
-    date: "OpenAI Build Week · July 2026",
+    date: "OpenAI Build Week · Jul 2026",
     tags: ["ai", "robotics", "featured"],
     cardDescription: "Multi-Arm Robotics Simulation & Data Collection",
     quality: "high",
@@ -139,6 +141,7 @@ export const posts: Post[] = [
     softwareTools: ["Unity6", "Python", "FastAPI", "WebSocket", "REST API", "YOLO"],
     features: ["FastAPI", "YOLO26n", "ByteTrack", "WebSocket", "Multi-arm Robotics", "Real-time Telemetry"],
     role: "AI & Robotics Engineer",
+    outcome: "Working multi-arm Unity simulation with YOLO vision and a robotics data-collection pipeline built during OpenAI Build Week.",
     identity: "builder",
     status: "published",
     sections: [
@@ -156,7 +159,7 @@ export const posts: Post[] = [
     file: "post-7",
     date: "Apr–Aug 2026",
     tags: ["ai", "xr", "featured"],
-    cardDescription: "AR camera to guide AI generation with phone",
+    cardDescription: "AR Camera for AI Video Direction",
     quality: "high",
     videoUrl: "https://player.bilibili.com/player.html?bvid=BV1uytw6FEZg&page=1&high_quality=1&danmaku=0&autoplay=0",
     videoTitle: "Reroll main film on Bilibili",
@@ -169,6 +172,7 @@ export const posts: Post[] = [
     softwareTools: ["Python", "SAM 3", "Swift", "Unity"],
     features: ["AI Filmmaking", "Mobile AR", "Previsualization", "Computer Vision"],
     role: "Creative Technologist / AI & AR Developer",
+    outcome: "Working iPhone AR prototype that turns object edits, camera moves, and voice direction into AI-video prompts.",
     shortDescription: "Use an iPhone as an AR camera to shape scenes and guide AI generation.",
     identity: "builder",
     status: "published",
@@ -187,12 +191,12 @@ export const posts: Post[] = [
     title: "Datnie",
     thumbnail: "/datnie.png", // Local image from public folder
     file: "post-1",
-    date: "1 month for XRCC 2025 hackathon",
+    date: "XRCC Hackathon · 1 month · 2025",
     tags: ["xr", "featured", "animation"],
     cardDescription: "Mixed Reality Dating",
     quality: "medium", // 高质量内容，显示为大尺寸
     videoUrl: "https://www.youtube.com/embed/TrJPls4p5ak",
-    videoTitle: "Datnie- XR Dating app",
+    videoTitle: "Datnie — XR Dating App",
     gifUrl: "/gifs/datnie.gif", // GIF for cinematic-extra section
     description: "Datnie matches you by learning both your and your crush’s vibe from past conversations, so there’s no need to repeat yourself.",
     previewMedia: "/webm/Datnie/pivot.webm",
@@ -206,7 +210,7 @@ export const posts: Post[] = [
       "https://via.placeholder.com/600x400/2a2a2a/888888?text=Process+2",
       "https://via.placeholder.com/600x800/2a2a2a/888888?text=Vertical+Process"
     ],
-    role: "XR developer, Director, Animator",
+    role: "XR Developer / Director / Animator",
     identity: "creative-technologist",
     status: "published",
     sections: [
@@ -228,9 +232,9 @@ export const posts: Post[] = [
     title: "Signie",
     thumbnail: "linkedinthumbnail.png",
     file: "post-2",
-    date: "March–Jun 2025",
+    date: "Mar–Jun 2025",
     tags: ["xr", "featured"],
-    cardDescription: "ASL learning app",
+    cardDescription: "ASL Learning & Live Translation",
     quality: "high",
     videoUrl: "https://www.youtube.com/watch?v=BpG5c0Rr4E8",
     videoUrls: [
@@ -238,8 +242,8 @@ export const posts: Post[] = [
       "https://www.youtube.com/watch?v=GxtJhHQGz3o"
     ],
     videoTitles: [
-      "AWE USA present video",
-      "Fullplay video"
+      "AWE USA Presentation",
+      "Full Playthrough"
     ],
     description: "Signie is an immersive ASL learning and real-time translation system powered by hand tracking, micro-gestures, and AI feedback. It evolved from concept validation to interactive learning experiences, and ultimately to AI-glasses-based live translation.",
     previewDescription: "Built with Unity hand tracking, micro-gestures, and AI feedback to teach ASL and support real-time translation.",
@@ -248,7 +252,8 @@ export const posts: Post[] = [
     previewMediaAlt: "Signie ASL gesture learning test",
     softwareTools: ["Unity6", "Blender"],
     features: ["Hand Tracking", "Gesture Recognition", "Micro-Gestures", "Voice-to-Text", "Virtual Guide", "Animation State Machine"],
-    role: "XR developer",
+    role: "XR Developer",
+    outcome: "XR-Cohort Hackathon Winner · AWE USA 2025 Award Winner & Presenter.",
     identity: "creative-technologist",
     status: "published",
     achievement: "AWE 2025 USA presentation",
@@ -272,7 +277,7 @@ export const posts: Post[] = [
     title: "I AND AI: MIRROR",
     thumbnail: "/iandaithumb.jpg",
     file: "post-3",
-    date: "Apr–Oct 2025, and is updating for confirmed future exhibition",
+    date: "Apr–Oct 2025 · Continuing for future exhibitions",
     tags: ["ai", "exploration","featured"],
     cardDescription: "Immersive AI Installation",
     quality: "high", // 高质量内容，显示为大尺寸
@@ -283,9 +288,9 @@ export const posts: Post[] = [
     previewDescription: "Built with Unreal Engine, TouchDesigner, and Python to create a real-time AI mirror that listens, responds, and reflects the viewer.",
     previewMedia: "/IandAI/speak.webp",
     previewMediaAlt: "I AND AI: MIRROR live performance",
-    softwareTools: ["Unreal Engine", "Touchdesigner", "Blender", "Python"],
-    features: ["Real-time Metahuman lipsync", "Touchdesigner-UE communication"],
-    role: "Game Engine Development & AI Integration(Touchdesigner state machine creator)",
+    softwareTools: ["Unreal Engine", "TouchDesigner", "Blender", "Python"],
+    features: ["Real-Time MetaHuman Lip Sync", "TouchDesigner–UE Communication"],
+    role: "Creative Technologist / Real-Time Systems Developer",
     shortDescription: "A real-time AI mirror that listens, responds, and reflects the user through voice-driven interaction and digital embodiment.",
     identity: "artist",
     status: "published",
@@ -309,10 +314,10 @@ export const posts: Post[] = [
   // 第二行（从左到右）
   {
     id: "post-4",
-    title: "The Shadow of Horizon(Motion Capture)",
+    title: "The Shadow of Horizon (Motion Capture)",
     thumbnail: "/mocapthumbnail.png",
     file: "post-4",
-    date: "3 months in 2024",
+    date: "3 months · 2024",
     tags: ["animation"],
     cardDescription: "Motion Capture",
     quality: "medium", // 中等质量，显示为中等尺寸
@@ -323,9 +328,9 @@ export const posts: Post[] = [
     previewMedia: "/webm/MotionCapture/motioncapture.webm",
     previewPoster: "/webm/MotionCapture/motioncapture-thumb.jpg",
     previewMediaAlt: "Real-time OptiTrack motion capture driving an Unreal Engine character",
-    softwareTools: ["Unreal Engine", "Motion Builder", "Optitrack Motion Capture"],
-    features: ["Motion Capture", "Metahuman Animation"],
-    role: "Motion Capture, Metahuman Prototyper, Animator",
+    softwareTools: ["Unreal Engine", "MotionBuilder", "OptiTrack Motion Capture"],
+    features: ["Motion Capture", "MetaHuman Animation"],
+    role: "Motion Capture / MetaHuman Prototyper / Animator",
     identity: "artist",
     status: "published",
     sections: [
@@ -339,7 +344,7 @@ export const posts: Post[] = [
     title: "The Tool Box",
     thumbnail: "/toolboxthumb.png",
     file: "post-5",
-    date: "3 days for XR Creator Con 2025 hackthon in Berlin - Strauss Track",
+    date: "XR Creator Con Hackathon · 3 days · 2025",
     tags: ["xr", "ai"],
     cardDescription: "AI Shopping Assistant",
     quality: "medium",
@@ -349,7 +354,7 @@ export const posts: Post[] = [
     previewMediaAlt: "The Tool Box mixed-reality AI shopping assistant",
     softwareTools: ["Unity6", "Blender"],
     features: ["AI Assistant", "XR Shopping Guide"],
-    role: "Team leader of 5, XR developer",
+    role: "Team Lead / XR Developer",
     identity: "exploration",
     status: "published",
     linkedInUrl: "https://www.linkedin.com/feed/update/urn:li:activity:7345802706638307331/",
@@ -373,7 +378,7 @@ export const posts: Post[] = [
     description: "A non-violent competitive laser tag game using an elemental counter system (Water > Fire > Wind) where type advantages reward strategy by doubling damage.",
     softwareTools: ["Unity2022"],
     features: ["Elemental Counter System"],
-    role: "XR developer",
+    role: "XR Developer",
     identity: "creative-technologist",
     status: "published",
     sections: [

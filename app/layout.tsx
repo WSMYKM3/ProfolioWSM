@@ -68,8 +68,8 @@ const spaceGrotesk = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Siming Wang — Creative Technologist & XR Developer',
-  description: 'Portfolio of Siming Wang, Creative Technologist and XR Developer building games, XR products, and interactive installations.',
+  title: 'Siming Wang — AI Builder & Creative Technologist',
+  description: 'Portfolio of Siming Wang, an AI Builder creating AI products, creator tools, and interactive prototypes through creative technology.',
   icons: { icon: '/favicon.ico' },
 }
 

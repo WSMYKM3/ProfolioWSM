@@ -79,7 +79,7 @@ export default function Resume() {
                 <div>
                   <h1 className="resume-name">Siming Wang</h1>
                   <p className="resume-title">
-                    AI Builder | Hackathon Winner | AI Products · Creator Tools · Rapid Prototyping
+                    AI Builder · Creative Technologist | Hackathon Winner | AI Products · Creator Tools
                   </p>
                 </div>
                 <a
@@ -105,7 +105,7 @@ export default function Resume() {
               <div className="resume-profile-content">
                 <h2 className="resume-section-title">Profile</h2>
                 <p className="resume-profile-text">
-                  AI Builder and hackathon winner focused on AI-native products and creator tools. I find problems in real user behavior and creative workflows, use AI coding and multimodal workflows to build working MVPs quickly, then keep iterating through demos, content, and feedback.
+                  AI Builder and hackathon winner focused on AI-native products and creator tools. I combine creative technology with AI coding and multimodal workflows to turn real user and creator-workflow problems into working MVPs, then iterate through demos and feedback.
                 </p>
               </div>
             </section>
@@ -116,7 +116,7 @@ export default function Resume() {
                 <article className="resume-project-item">
                   <div className="resume-project-header">
                     <h3 className="resume-project-title">
-                      <Link href="/projects/post-7">Reroll - AI Creator Tool / AR Directing Prototype</Link>
+                      <Link href="/projects/post-7">Reroll — AI Creator Tool / AR Directing Prototype</Link>
                     </h3>
                     <span className="resume-project-tech">KXSB AI Community</span>
                   </div>
@@ -133,7 +133,7 @@ export default function Resume() {
                 <article className="resume-project-item">
                   <div className="resume-project-header">
                     <h3 className="resume-project-title">
-                      <Link href="/projects/post-2">Signie - XR / AI Product Prototype</Link>
+                      <Link href="/projects/post-2">Signie — XR / AI Product Prototype</Link>
                     </h3>
                     <span className="resume-project-tech">XR-Cohort Hackathon Winner · AWE USA 2025 Award Winner & Presenter</span>
                   </div>
@@ -150,15 +150,15 @@ export default function Resume() {
                 <article className="resume-project-item">
                   <div className="resume-project-header">
                     <h3 className="resume-project-title">
-                      <Link href="/projects/post-10">Could’ve - Consumer Product MVP</Link>
+                      <Link href="/projects/post-8">Sorting Factory — AI & Robotics Simulation</Link>
                     </h3>
-                    <span className="resume-project-tech">iOS Prototype · Product Thinking</span>
+                    <span className="resume-project-tech">OpenAI Build Week · Working Prototype</span>
                   </div>
                   <p className="resume-project-description">
-                    Inspired by Korea’s dopamine site FoodNeverArrives, I turned the lack of immediate reward after resisting a purchase into a working MVP. Skipped purchases become an accumulating balance, while rewards, spending thresholds, weekly reviews, and links to real apps create a save, choose, then spend loop.
+                    Built a multi-arm Unity simulation with SO-101 digital twins, YOLO vision, real-time telemetry, and a robotics data-collection pipeline during OpenAI Build Week. The prototype supports parallel testing and structured pick-data capture for robotics training.
                   </p>
                   <div className="resume-project-tools">
-                    {['React Native', 'Expo', 'TypeScript', 'Local-first', 'Swift'].map((tool) => (
+                    {['Unity 6', 'Python', 'FastAPI', 'WebSocket', 'YOLO'].map((tool) => (
                       <span className="resume-project-tool" key={tool}>{tool}</span>
                     ))}
                   </div>
@@ -167,7 +167,7 @@ export default function Resume() {
                 <article className="resume-project-item">
                   <div className="resume-project-header">
                     <h3 className="resume-project-title">
-                      <Link href="/projects/post-3">I AND AI: MIRROR - Interactive AI Installation</Link>
+                      <Link href="/projects/post-3">I AND AI: MIRROR — Interactive AI Installation</Link>
                     </h3>
                     <span className="resume-project-tech">Immersive Arts UK-supported</span>
                   </div>
@@ -188,8 +188,8 @@ export default function Resume() {
               <div className="resume-experience-list">
                 <article className="resume-experience-item">
                   <div className="resume-experience-header">
-                    <h3 className="resume-experience-title">XR Engineer (Project-based, Full-time)</h3>
-                    <span className="resume-experience-period">Mar 2026 - Jun 2026</span>
+                    <h3 className="resume-experience-title">XR Engineer (Project-Based, Full-Time)</h3>
+                    <span className="resume-experience-period">Mar–Jun 2026</span>
                   </div>
                   <p className="resume-experience-company">TeknTrash Robotics · London / Remote</p>
                   <ul className="resume-experience-description">
@@ -200,7 +200,7 @@ export default function Resume() {
                 <article className="resume-experience-item">
                   <div className="resume-experience-header">
                     <h3 className="resume-experience-title">Technical Artist / Creative Technologist (Freelance)</h3>
-                    <span className="resume-experience-period">Mar 2025 - Jan 2026</span>
+                    <span className="resume-experience-period">Mar 2025–Jan 2026</span>
                   </div>
                   <p className="resume-experience-company">6Liè Projects · UK / Remote</p>
                   <ul className="resume-experience-description">
@@ -211,7 +211,7 @@ export default function Resume() {
                 <article className="resume-experience-item">
                   <div className="resume-experience-header">
                     <h3 className="resume-experience-title">Visual Artist / Creative Technologist (Internship)</h3>
-                    <span className="resume-experience-period">Sep 2021 - Jul 2022</span>
+                    <span className="resume-experience-period">Sep 2021–Jul 2022</span>
                   </div>
                   <p className="resume-experience-company">Shanghai Chaomo Studio · Shanghai</p>
                   <ul className="resume-experience-description">
@@ -254,12 +254,12 @@ export default function Resume() {
                 <article className="resume-education-item">
                   <h3 className="resume-education-degree">MFA Computational Arts</h3>
                   <p className="resume-education-school">Goldsmiths, University of London</p>
-                  <p className="resume-education-details">2022 - 2024</p>
+                  <p className="resume-education-details">2022–2024</p>
                 </article>
                 <article className="resume-education-item">
                   <h3 className="resume-education-degree">BA Visual Communication Design</h3>
                   <p className="resume-education-school">East China University of Science and Technology</p>
-                  <p className="resume-education-details">2019 - 2022</p>
+                  <p className="resume-education-details">2019–2022</p>
                 </article>
                 <article className="resume-education-item resume-certificate-item">
                   <Image
