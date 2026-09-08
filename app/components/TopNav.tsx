@@ -56,6 +56,41 @@ export default function TopNav() {
             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/>
           </svg>
         </a>
+        <a
+          href="https://space.bilibili.com/385278888"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="top-nav-social-icon top-nav-social-icon-bilibili"
+          aria-label="Bilibili"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.2 6 6.4 4.2M15.8 6l1.8-1.8M5 7h14a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M8 12v2M16 12v2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+          </svg>
+        </a>
+        <a
+          href="https://www.xiaohongshu.com/user/profile/5f200b2d00000000010096b9"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="top-nav-social-icon top-nav-social-icon-xiaohongshu"
+          aria-label="Xiaohongshu"
+        >
+          <svg data-i18n-skip width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="22" height="22" rx="5.5" fill="#ff2442"/>
+            <text
+              x="12"
+              y="14.7"
+              textAnchor="middle"
+              fill="#ffffff"
+              fontSize="7.1"
+              fontWeight="900"
+              letterSpacing="-0.45"
+              fontFamily="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            >
+              小红书
+            </text>
+          </svg>
+        </a>
       </div>
       <div className="top-nav-wrapper">
       <nav className="top-nav" aria-label="Primary">

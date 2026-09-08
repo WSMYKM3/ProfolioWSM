@@ -416,7 +416,7 @@ export default function PostSection({ post, index, isActive = true, onPostClick,
           </div>
 
           {/* Horizontal divider line under project title */}
-          <div style={{
+          <div className="cinematic-title-divider" style={{
             width: '100%',
             height: '1px',
             backgroundColor: 'rgba(255,255,255,0.2)',

@@ -1309,6 +1309,19 @@
     width: min(76vw, 320px);
   }
 
+  /* The desktop Builder layout gives Reroll height: 100%. In a one-column,
+     auto-height mobile grid that can collapse the card out of view. */
+  .projectGridBuilder .projectCard[data-project-id='post-7'] {
+    grid-column: 1;
+    grid-row: auto;
+    align-self: auto;
+    justify-self: center;
+    width: min(76vw, 320px);
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 2 / 3;
+  }
+
   .projectTitle,
   .projectGridTechnologist .projectCard:first-child .projectTitle,
   .projectGridArtist .projectTitle,

@@ -2,44 +2,8 @@
 
 import TopNav from '@/app/components/TopNav';
 import { motion } from 'framer-motion';
-import { FormEvent, useState } from 'react';
-
-type SubmitState = 'idle' | 'sending' | 'success' | 'error';
-
-const CONTACT_ENDPOINT = 'https://formsubmit.co/ajax/simingvv@gmail.com';
 
 export default function Contact() {
-  const [formStatus, setFormStatus] = useState<SubmitState>('idle');
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formElement = event.currentTarget;
-    const form = new FormData(formElement);
-
-    if (form.get('_honey')) return;
-
-    setFormStatus('sending');
-
-    try {
-      const response = await fetch(CONTACT_ENDPOINT, {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body: form,
-      });
-      const result = await response.json().catch(() => null);
-      const wasAccepted = result?.success === true || result?.success === 'true';
-
-      if (!response.ok || !wasAccepted) {
-        throw new Error('Contact form submission failed');
-      }
-
-      formElement.reset();
-      setFormStatus('success');
-    } catch {
-      setFormStatus('error');
-    }
-  };
-
   return (
     <div className="layout">
       <TopNav />
@@ -93,76 +57,49 @@ export default function Contact() {
               <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/>
             </svg>
           </motion.a>
+          <motion.a
+            href="https://space.bilibili.com/385278888"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-icon contact-icon-bilibili"
+            aria-label="Bilibili"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+          >
+            <svg width="96" height="96" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8.2 6 6.4 4.2M15.8 6l1.8-1.8M5 7h14a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M8 12v2M16 12v2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
+          </motion.a>
+          <motion.a
+            href="https://www.xiaohongshu.com/user/profile/5f200b2d00000000010096b9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-icon contact-icon-xiaohongshu"
+            aria-label="Xiaohongshu"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+          >
+            <svg data-i18n-skip width="96" height="96" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="1" width="22" height="22" rx="5.5" fill="#ff2442"/>
+              <text
+                x="12"
+                y="14.7"
+                textAnchor="middle"
+                fill="#ffffff"
+                fontSize="7.1"
+                fontWeight="900"
+                letterSpacing="-0.45"
+                fontFamily="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+              >
+                小红书
+              </text>
+            </svg>
+          </motion.a>
         </div>
 
-        <motion.section
-          className="contact-form-section"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.15 }}
-          aria-labelledby="contact-form-title"
-        >
-          <div className="contact-form-intro">
-            <p className="contact-form-eyebrow">Have a project in mind?</p>
-            <h2 id="contact-form-title">Send me a message</h2>
-            <p>I&apos;d love to hear what you&apos;re working on. Your message will be delivered directly to my inbox.</p>
-          </div>
-
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <input
-              className="contact-form-honey"
-              type="text"
-              name="_honey"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-            />
-            <input type="hidden" name="_subject" value="New message from simingwang.com" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_url" value="https://simingwang.com/contact" />
-
-            <div className="contact-form-row">
-              <label className="contact-field">
-                <span>Name</span>
-                <input name="name" type="text" autoComplete="name" placeholder="Your name" required />
-              </label>
-              <label className="contact-field">
-                <span>Email</span>
-                <input name="email" type="email" autoComplete="email" placeholder="you@example.com" required />
-              </label>
-            </div>
-
-            <label className="contact-field">
-              <span>Subject</span>
-              <input name="subject" type="text" placeholder="What would you like to talk about?" required />
-            </label>
-
-            <label className="contact-field">
-              <span>Message</span>
-              <textarea name="message" rows={6} placeholder="Tell me a little about your idea..." required />
-            </label>
-
-            <div className="contact-form-footer">
-              <button className="contact-submit" type="submit" disabled={formStatus === 'sending'}>
-                {formStatus === 'sending' ? 'Sending…' : 'Send message'}
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </button>
-              <div className="contact-form-status" aria-live="polite">
-                {formStatus === 'success' && (
-                  <p className="contact-form-status-success">Message sent — thank you. I&apos;ll reply as soon as I can.</p>
-                )}
-                {formStatus === 'error' && (
-                  <p className="contact-form-status-error">
-                    I couldn&apos;t send this message.{' '}
-                    <a href="mailto:simingvv@gmail.com">Email me directly</a>.
-                  </p>
-                )}
-              </div>
-            </div>
-          </form>
-        </motion.section>
       </main>
     </div>
   );
